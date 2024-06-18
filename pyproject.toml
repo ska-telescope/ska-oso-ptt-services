@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ska-oso-ptt-services"
-version = "0.0.1"
+version = "1.0.0"
 description = "The Project Tracking Tool Services is the server component of the Project Tracking Tool. It provides backend service for the PTT in order to manage its current functionality."
 authors = ["Shalu Mishra <shalu_mishra@persistent.com>"]
 license= "MIT"
