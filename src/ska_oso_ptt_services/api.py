@@ -9,18 +9,22 @@ import logging
 import traceback
 from functools import wraps
 from http import HTTPStatus
-from typing import Callable
+from typing import Callable, Tuple, Union
 
 from pydantic import ValidationError
 
 LOGGER = logging.getLogger(__name__)
 
+Response = Tuple[Union[dict], int]
 
-def error_handler(api_fn: Callable[[str], "Response"]):  # pylint: disable=F821
+
+def error_handler(api_fn: Callable[[str], Response]):  # pylint: disable=F821
     """
-    A decorator function to catch general errors and wrap in the correct HTTP response
+    A decorator function to catch general errors and wrap in the
+    correct HTTP response.
 
-    :param api_fn: A function which accepts an entity identifier and returns an HTTP response
+    :param api_fn: A function which accepts an entity identifier and
+        returns an HTTP response
     """
 
     @wraps(api_fn)
@@ -73,12 +77,7 @@ def get_sbds(**kwargs):
     :param kwargs: Parameters to query the ODA by.
     :return: The SBDefinition wrapped in a Response, or appropriate error Response
     """
-    if not isinstance(maybe_qry_params := get_qry_params(kwargs), QueryParams):
-        return maybe_qry_params
-
-    with oda.uow as uow:
-        sbds = uow.sbds.query(maybe_qry_params)
-    return sbds, HTTPStatus.OK
+    return "OK", HTTPStatus.OK
 
 
 def error_response(
