@@ -1,9 +1,9 @@
 [tool.poetry]
 name = "ska-oso-ptt-services"
-version = "0.0.1"
+version = "1.0.0"
 description = "The Project Tracking Tool Services is the server component of the Project Tracking Tool. It provides backend service for the PTT in order to manage its current functionality."
 authors = ["Shalu Mishra <shalu_mishra@persistent.com>"]
-license= "MIT"
+license = "BSD-3-Clause"
 readme = "README.md"
 
 [[tool.poetry.source]]
@@ -17,6 +17,17 @@ url = 'https://pypi.org/simple'
 [tool.poetry.dependencies]
 python = "^3.10"
 connexion = {extras = ["swagger-ui"], version = "^2.14.0"}
+pydantic = {extras = ["email"], version = "^2.7.1"}
+pydantic-core = "^2.18.2"
+ska-ser-logging = "^0.4.1"
+gunicorn = "^20.1.0"
+requests = "^2.27.1"
+prance = {version = "^23.6.21.0", extras = ["osv"]}
+fire = "^0.5.0"
+python-dateutil = "^2.8.2"
+ska-ser-skuid = "^3.3.3"
+# Pinning older version because of https://github.com/python-openapi/openapi-spec-validator/issues/201
+jsonschema = "4.17.3"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.3.0"
@@ -26,9 +37,9 @@ pylint = "^2.17.4"
 pylint-junit = "^0.3.2"
 pytest = "^7.3.1"
 pytest-cov = "^4.1.0"
-flake8-docstrings = "^1.7.0"
-flake8-rst-docstrings = "^0.3.0"
-flake8-pyproject = "^1.2.3"
+coverage = "^6.1.1"
+pytest-json-report = "^1.4.1"
+pytest-timeout = "^2.0.1"
 
 [tool.poetry.group.docs.dependencies]
 recommonmark = "^0.7.1"
