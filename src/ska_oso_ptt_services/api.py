@@ -18,7 +18,7 @@ LOGGER = logging.getLogger(__name__)
 Response = Tuple[Union[dict], int]
 
 
-def error_handler(api_fn: Callable[[str], Response]):  # pylint: disable=F821
+def error_handler(api_fn: Callable[[str], Response]):
     """
     A decorator function to catch general errors and wrap in the
     correct HTTP response.
@@ -35,36 +35,18 @@ def error_handler(api_fn: Callable[[str], Response]):  # pylint: disable=F821
             )
             return api_fn(*args, **kwargs)
         except KeyError as err:
-            # TODO there is a risk that the KeyError is not from the
-            #  ODA not being able to find the entity. After BTN-1502 the
-            #  ODA should raise its own exceptions which we can catch here
-            is_not_found_in_oda = any(
-                "not found" in str(arg).lower() for arg in err.args
-            )
-            if is_not_found_in_oda:
-                return {
-                    "detail": (
-                        "Not Found. The requested identifier"
-                        f" {next(iter(kwargs.values()))} could not be found."
-                    ),
-                }, HTTPStatus.NOT_FOUND
-            else:
-                LOGGER.exception(
-                    "KeyError raised by api function call, but not due to the "
-                    "sbd_id not being found in the ODA."
-                )
-                return error_response(err)
-        except (ValueError, ValidationError) as e:
+            return error_response(err)
+        except (ValueError, ValidationError) as error:
             LOGGER.exception(
                 "ValueError occurred when adding entity, likely some semantic"
                 " validation failed"
             )
-            return error_response(e, HTTPStatus.UNPROCESSABLE_ENTITY)
-        except Exception as e:
+            return error_response(error, HTTPStatus.UNPROCESSABLE_ENTITY)
+        except Exception as error:
             LOGGER.exception(
                 "Exception occurred when calling the API function %s", api_fn
             )
-            return error_response(e)
+            return error_response(error)
 
     return wrapper
 
@@ -77,7 +59,7 @@ def get_sbds(**kwargs):
     :param kwargs: Parameters to query the ODA by.
     :return: The SBDefinition wrapped in a Response, or appropriate error Response
     """
-    return "OK", HTTPStatus.OK
+    return f"{kwargs} OK", HTTPStatus.OK
 
 
 def error_response(

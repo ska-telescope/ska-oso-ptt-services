@@ -12,7 +12,10 @@ app = create_app()
 
 
 class UniformLogger(glogging.Logger):
+    """Custom logger class to override gunicorn logging level."""
+
     def setup(self, cfg):
+        """Setup method for UniformLogger class"""
         # override the configuration but inherit gunicorn logging level
         super().setup(cfg)
         configure_logging(level=self.loglevel)
