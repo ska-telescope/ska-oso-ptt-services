@@ -27,7 +27,7 @@ def resolve_openapi_spec() -> Dict[str, Any]:
     return parser.specification
 
 
-class CustomRequestBodyValidator:  # pylint: disable=too-few-public-methods
+class CustomRequestBodyValidator:
     """
     There is a (another) issue with Connexion where it cannot validate against a
     spec with polymorphism, like the SBDefinition.
