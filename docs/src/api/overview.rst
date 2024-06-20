@@ -1,6 +1,5 @@
 ska_oso_ptt_services Package
 ============================
 
-.. automodule:: ska_oso_ptt_services
+.. automodule:: ska_oso_ptt_services.api
     :members:
-    :special-members:
