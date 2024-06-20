@@ -3,8 +3,9 @@ import os
 import sys
 
 sys.path.insert(0, os.path.abspath('../../src'))
+sys.path.insert(0, os.path.abspath("."))
 
-autodoc_mock_imports = ["prance", "connexion", "ska-oso-ptt-services"]
+autodoc_mock_imports = ["prance", "connexion"]
 
 # -- General configuration ------------------------------------------------
 
