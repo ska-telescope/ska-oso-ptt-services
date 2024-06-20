@@ -7,7 +7,7 @@ import logging
 from gunicorn import glogging
 from ska_ser_logging import configure_logging, get_default_formatter
 
-from ska_oso_ptt_services import create_app
+from ska_oso_ptt_services.rest import create_app
 
 app = create_app()
 
