@@ -5,7 +5,7 @@ Welcome to ska-oso-ptt-services's documentation!
    :maxdepth: 1
    :caption: Contents:
 
-   api/overview
+   api/index
 
 
 Indices and tables

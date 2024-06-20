@@ -24,7 +24,7 @@ html_css_files = [
 html_theme = "ska_ser_sphinx_theme"
 html_theme_options = {}
  
-autodoc_mock_imports = ["prance", "connexion"]
+# autodoc_mock_imports = ["prance", "connexion"]
  
 intersphinx_mapping = {'python': ('https://docs.python.org/3.10', None)}
  
