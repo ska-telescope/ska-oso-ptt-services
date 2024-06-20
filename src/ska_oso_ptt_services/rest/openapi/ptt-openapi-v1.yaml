@@ -20,7 +20,7 @@ paths:
         precedence of user > created_on > modified_on. Also requests without
         parameters will return an error rather than returning all objects. This behaviour will
         change in the future..
-      operationId: ska_oso_ptt_services.api.get_sbds
+      operationId: ska_oso_ptt_services.rest.api.resources.get_sbds
       parameters:
         - $ref: '#/components/parameters/user'
         - $ref: '#/components/parameters/MatchType'
