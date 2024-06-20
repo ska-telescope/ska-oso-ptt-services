@@ -1,4 +1,4 @@
-"""ska_oso_ptt_services"""
+"""ska-oso-ptt-services"""
 
 import os
 from importlib.metadata import version
