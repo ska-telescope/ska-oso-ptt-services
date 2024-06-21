@@ -7,7 +7,6 @@ info:
     url: https://opensource.org/licenses/BSD-3-Clause
   version: 1.0.0
 servers:
-# This default is overwritten when the application is deployed to include the actual namespace if it is different to the 'ska-osd' default
 - url: /ska-oso-ptt-services/ptt/api/v1
 paths:
   /sbds:
