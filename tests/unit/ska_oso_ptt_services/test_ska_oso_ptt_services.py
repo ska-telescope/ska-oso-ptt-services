@@ -25,4 +25,4 @@ def test_content(version: str) -> None:
 
     :param version: the version fixture
     """
-    assert version == "0.0.1"
+    assert version == "1.0.0"

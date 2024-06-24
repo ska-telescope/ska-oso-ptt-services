@@ -1,9 +1,9 @@
 [tool.poetry]
 name = "ska-oso-ptt-services"
 version = "1.0.0"
-description = "The Project Tracking Tool Services is the server component of the Project Tracking Tool. It provides backend service for the PTT in order to manage its current functionality."
-authors = ["Shalu Mishra <shalu_mishra@persistent.com>"]
-license= "MIT"
+description = "Project Tracking Tool"
+authors = ["Team Nakshatra"]
+license= "BSD-3-Clause"
 readme = "README.md"
 
 [[tool.poetry.source]]
@@ -17,18 +17,25 @@ url = 'https://pypi.org/simple'
 [tool.poetry.dependencies]
 python = "^3.10"
 connexion = {extras = ["swagger-ui"], version = "^2.14.0"}
+ska-ser-logging = "^0.4.1"
+gunicorn = "^20.1.0"
+requests = "^2.27.1"
+prance = {version = "^23.6.21.0", extras = ["osv"]}
+python-dateutil = "^2.8.2"
+# Pinning older version because of https://github.com/python-openapi/openapi-spec-validator/issues/201
+jsonschema = "4.17.3"
 
 [tool.poetry.group.dev.dependencies]
-black = "^23.3.0"
-flake8 = "^6.0.0"
-isort = "^5.12.0"
-pylint = "^2.17.4"
+black = "^22.6.0"
+pylint = "^2.8.2"
+pytest = "^7.1.0"
+pytest-cov = "^2.10.1"
+isort = "^5.6.4"
+flake8 = "^5.0.4"
 pylint-junit = "^0.3.2"
-pytest = "^7.3.1"
-pytest-cov = "^4.1.0"
-flake8-docstrings = "^1.7.0"
-flake8-rst-docstrings = "^0.3.0"
-flake8-pyproject = "^1.2.3"
+coverage = "^6.1.1"
+pytest-json-report = "^1.4.1"
+platformdirs = "^2.5.1"
 
 [tool.poetry.group.docs.dependencies]
 recommonmark = "^0.7.1"
@@ -60,6 +67,39 @@ enable = ["useless-suppression"]
 min-similarity-lines = 7
 ignore-imports = "yes"
 
+[tool.black]
+line-length = 88
+preview = true
+target-version = ['py310']
+include = '\.pyi?$'
+extend-exclude = '''
+(
+  /(
+      \.eggs         # exclude a few common directories in the
+    | \.git          # root of the project
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | _build
+    | buck-out
+    | build
+    | dist
+    | src/ska_oso_slt_services/rest/openapi/__submodules__
+  )/
+  | foo.py           # also separately exclude a file named foo.py in
+                     # the root of the project
+)
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 88
+skip = "src/ska_oso_slt_services/rest/openapi/__submodules__"
+
+[tool.pylint]
+disable = "C,R,W3101,W0511"
+
 [build-system]
-requires = ["poetry-core"]
+requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
