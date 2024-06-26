@@ -1,5 +1,7 @@
-# Version History
 
-## unreleased
+############
+Change Log
+############
 
-* Bootstrap repo with ska-cookiecutter-pypackage
+All notable changes to this project will be documented in this file.
+This project adheres to `Semantic Versioning <http://semver.org/>`_.
