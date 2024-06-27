@@ -1,6 +1,6 @@
 apiVersion: v2
 name: ska-oso-ptt-services-umbrella
-description: Helm umbrella chart for the Optt Services
+description: Helm umbrella chart for the PTT Services
 type: application
 version: 1.0.0
 appVersion: 1.0.0
