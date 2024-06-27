@@ -1,0 +1,456 @@
+[
+    {
+        "keyword": "Feature",
+        "uri": "tests/features/signal_chain.feature",
+        "name": "ITF Test Equipment testing flow integration",
+        "id": "tests/features/signal_chain.feature",
+        "line": 1,
+        "description": "",
+        "tags": [],
+        "elements": [
+            {
+                "keyword": "Scenario",
+                "id": "test_connection_between_siggen_and_spectana[25000000.0-75000000.0-50000000.0--20.0]",
+                "name": "Test connection between Signal Generator and Spectrum Analyser",
+                "line": 4,
+                "description": "",
+                "tags": [
+                    {
+                        "name": "XTP-13587",
+                        "line": 3
+                    },
+                    {
+                        "name": "forked",
+                        "line": 3
+                    }
+                ],
+                "type": "scenario",
+                "steps": [
+                    {
+                        "keyword": "Given",
+                        "name": "the Signal Generator is online",
+                        "line": 5,
+                        "match": {
+                            "location": ""
+                        },
+                        "result": {
+                            "status": "passed",
+                            "duration": 73689755
+                        }
+                    },
+                    {
+                        "keyword": "And",
+                        "name": "the Signal Generator is initialised",
+                        "line": 6,
+                        "match": {
+                            "location": ""
+                        },
+                        "result": {
+                            "status": "passed",
+                            "duration": 1001046107
+                        }
+                    },
+                    {
+                        "keyword": "And",
+                        "name": "the Signal Generator RF output is OFF",
+                        "line": 7,
+                        "match": {
+                            "location": ""
+                        },
+                        "result": {
+                            "status": "passed",
+                            "duration": 906831
+                        }
+                    },
+                    {
+                        "keyword": "And",
+                        "name": "the Spectrum Analyser is online",
+                        "line": 8,
+                        "match": {
+                            "location": ""
+                        },
+                        "result": {
+                            "status": "passed",
+                            "duration": 51786912
+                        }
+                    },
+                    {
+                        "keyword": "And",
+                        "name": "the Spectrum Analyser is initialised",
+                        "line": 9,
+                        "match": {
+                            "location": ""
+                        },
+                        "result": {
+                            "status": "passed",
+                            "duration": 2545191181
+                        }
+                    },
+                    {
+                        "keyword": "When",
+                        "name": "the user specifies the Spectrum Analyser stop frequency as 75000000.0 Hz",
+                        "line": 10,
+                        "match": {
+                            "location": ""
+                        },
+                        "result": {
+                            "status": "passed",
+                            "duration": 8592865329
+                        }
+                    },
+                    {
+                        "keyword": "And",
+                        "name": "the user specifies the Spectrum Analyser start frequency as 25000000.0 Hz",
+                        "line": 11,
+                        "match": {
+                            "location": ""
+                        },
+                        "result": {
+                            "status": "passed",
+                            "duration": 2897974928
+                        }
+                    },
+                    {
+                        "keyword": "And",
+                        "name": "the user specifies the Signal Generator frequency as 50000000.0 Hz",
+                        "line": 12,
+                        "match": {
+                            "location": ""
+                        },
+                        "result": {
+                            "status": "passed",
+                            "duration": 296441410
+                        }
+                    },
+                    {
+                        "keyword": "And",
+                        "name": "the user specifies the Signal Generator power as -20.0 dBm",
+                        "line": 13,
+                        "match": {
+                            "location": ""
+                        },
+                        "result": {
+                            "status": "passed",
+                            "duration": 1098503097
+                        }
+                    },
+                    {
+                        "keyword": "And",
+                        "name": "the user turns the Signal Generator RF output ON",
+                        "line": 14,
+                        "match": {
+                            "location": ""
+                        },
+                        "result": {
+                            "status": "passed",
+                            "duration": 1097279841
+                        }
+                    },
+                    {
+                        "keyword": "Then",
+                        "name": "the Spectrum Analyser peak frequency is approximately 50000000.0 Hz",
+                        "line": 15,
+                        "match": {
+                            "location": ""
+                        },
+                        "result": {
+                            "status": "passed",
+                            "duration": 10008690479
+                        }
+                    },
+                    {
+                        "keyword": "And",
+                        "name": "the Spectrum Analyser peak power is no more than -20.0 dBm",
+                        "line": 16,
+                        "match": {
+                            "location": ""
+                        },
+                        "result": {
+                            "status": "passed",
+                            "duration": 430479
+                        }
+                    }
+                ]
+            },
+            {
+                "keyword": "Scenario",
+                "id": "test_connection_between_siggen_and_spectana[50000000.0-200000000.0-100000000.0--10.0]",
+                "name": "Test connection between Signal Generator and Spectrum Analyser",
+                "line": 4,
+                "description": "",
+                "tags": [
+                    {
+                        "name": "XTP-13587",
+                        "line": 3
+                    },
+                    {
+                        "name": "forked",
+                        "line": 3
+                    }
+                ],
+                "type": "scenario",
+                "steps": [
+                    {
+                        "keyword": "Given",
+                        "name": "the Signal Generator is online",
+                        "line": 5,
+                        "match": {
+                            "location": ""
+                        },
+                        "result": {
+                            "status": "passed",
+                            "duration": 88884597
+                        }
+                    },
+                    {
+                        "keyword": "And",
+                        "name": "the Signal Generator is initialised",
+                        "line": 6,
+                        "match": {
+                            "location": ""
+                        },
+                        "result": {
+                            "status": "passed",
+                            "duration": 991279129
+                        }
+                    },
+                    {
+                        "keyword": "And",
+                        "name": "the Signal Generator RF output is OFF",
+                        "line": 7,
+                        "match": {
+                            "location": ""
+                        },
+                        "result": {
+                            "status": "passed",
+                            "duration": 890017
+                        }
+                    },
+                    {
+                        "keyword": "And",
+                        "name": "the Spectrum Analyser is online",
+                        "line": 8,
+                        "match": {
+                            "location": ""
+                        },
+                        "result": {
+                            "status": "passed",
+                            "duration": 51124679
+                        }
+                    },
+                    {
+                        "keyword": "And",
+                        "name": "the Spectrum Analyser is initialised",
+                        "line": 9,
+                        "match": {
+                            "location": ""
+                        },
+                        "result": {
+                            "status": "passed",
+                            "duration": 2347168120
+                        }
+                    },
+                    {
+                        "keyword": "When",
+                        "name": "the user specifies the Spectrum Analyser stop frequency as 200000000.0 Hz",
+                        "line": 10,
+                        "match": {
+                            "location": ""
+                        },
+                        "result": {
+                            "status": "passed",
+                            "duration": 8590170145
+                        }
+                    },
+                    {
+                        "keyword": "And",
+                        "name": "the user specifies the Spectrum Analyser start frequency as 50000000.0 Hz",
+                        "line": 11,
+                        "match": {
+                            "location": ""
+                        },
+                        "result": {
+                            "status": "passed",
+                            "duration": 2900131918
+                        }
+                    },
+                    {
+                        "keyword": "And",
+                        "name": "the user specifies the Signal Generator frequency as 100000000.0 Hz",
+                        "line": 12,
+                        "match": {
+                            "location": ""
+                        },
+                        "result": {
+                            "status": "passed",
+                            "duration": 495540154
+                        }
+                    },
+                    {
+                        "keyword": "And",
+                        "name": "the user specifies the Signal Generator power as -10.0 dBm",
+                        "line": 13,
+                        "match": {
+                            "location": ""
+                        },
+                        "result": {
+                            "status": "passed",
+                            "duration": 1098672807
+                        }
+                    },
+                    {
+                        "keyword": "And",
+                        "name": "the user turns the Signal Generator RF output ON",
+                        "line": 14,
+                        "match": {
+                            "location": ""
+                        },
+                        "result": {
+                            "status": "passed",
+                            "duration": 1100695547
+                        }
+                    },
+                    {
+                        "keyword": "Then",
+                        "name": "the Spectrum Analyser peak frequency is approximately 100000000.0 Hz",
+                        "line": 15,
+                        "match": {
+                            "location": ""
+                        },
+                        "result": {
+                            "status": "passed",
+                            "duration": 10010945149
+                        }
+                    },
+                    {
+                        "keyword": "And",
+                        "name": "the Spectrum Analyser peak power is no more than -10.0 dBm",
+                        "line": 16,
+                        "match": {
+                            "location": ""
+                        },
+                        "result": {
+                            "status": "passed",
+                            "duration": 882561
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "keyword": "Feature",
+        "uri": "tests/features/test_equipment_example.feature",
+        "name": "ITF Low environment testing",
+        "id": "tests/features/test_equipment_example.feature",
+        "line": 1,
+        "description": "",
+        "tags": [],
+        "elements": [
+            {
+                "keyword": "Scenario",
+                "id": "test_itf_test_equipment_are_reporting_correct_models[low-itf/siggen/1-Tektronix,TSG4104A,s/nC010133,ver2.03.26]",
+                "name": "ITF Test Equipment are reporting correct models",
+                "line": 4,
+                "description": "",
+                "tags": [
+                    {
+                        "name": "XTP-13588",
+                        "line": 3
+                    }
+                ],
+                "type": "scenario",
+                "steps": [
+                    {
+                        "keyword": "Given",
+                        "name": "the Test Equipment low-itf/siggen/1",
+                        "line": 5,
+                        "match": {
+                            "location": ""
+                        },
+                        "result": {
+                            "status": "passed",
+                            "duration": 24352753
+                        }
+                    },
+                    {
+                        "keyword": "When",
+                        "name": "the Test Equipment is initialised",
+                        "line": 6,
+                        "match": {
+                            "location": ""
+                        },
+                        "result": {
+                            "status": "passed",
+                            "duration": 4774259
+                        }
+                    },
+                    {
+                        "keyword": "Then",
+                        "name": "the Test Equipment reports itself as Tektronix,TSG4104A,s/nC010133,ver2.03.26",
+                        "line": 7,
+                        "match": {
+                            "location": ""
+                        },
+                        "result": {
+                            "status": "passed",
+                            "duration": 632563
+                        }
+                    }
+                ]
+            },
+            {
+                "keyword": "Scenario",
+                "id": "test_itf_test_equipment_are_reporting_correct_models[low-itf/spectana/1-TEKTRONIX,SPECMON26B,PQ00112, FV:3.9.0031.0]",
+                "name": "ITF Test Equipment are reporting correct models",
+                "line": 4,
+                "description": "",
+                "tags": [
+                    {
+                        "name": "XTP-13588",
+                        "line": 3
+                    }
+                ],
+                "type": "scenario",
+                "steps": [
+                    {
+                        "keyword": "Given",
+                        "name": "the Test Equipment low-itf/spectana/1",
+                        "line": 5,
+                        "match": {
+                            "location": ""
+                        },
+                        "result": {
+                            "status": "passed",
+                            "duration": 4560630
+                        }
+                    },
+                    {
+                        "keyword": "When",
+                        "name": "the Test Equipment is initialised",
+                        "line": 6,
+                        "match": {
+                            "location": ""
+                        },
+                        "result": {
+                            "status": "passed",
+                            "duration": 5318563
+                        }
+                    },
+                    {
+                        "keyword": "Then",
+                        "name": "the Test Equipment reports itself as TEKTRONIX,SPECMON26B,PQ00112, FV:3.9.0031.0",
+                        "line": 7,
+                        "match": {
+                            "location": ""
+                        },
+                        "result": {
+                            "status": "passed",
+                            "duration": 623872
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+]

@@ -1,0 +1,16 @@
+apiVersion: v2
+name: deps-test
+description: A Helm chart for testing helm-update-deps
+type: application
+version: 0.0.1
+appVersion: 0.0.1
+dependencies:
+- name: deps-component1
+  version: 0.4.1
+  repository: https://artefact.skao.int/repository/helm-internal
+- name: deps-component2
+  version: 0.2.1
+  repository: https://artefact.skao.int/repository/helm-internal
+- name: deps
+  version: 0.2.1
+  repository: file://../deps
