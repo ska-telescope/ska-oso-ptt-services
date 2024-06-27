@@ -1,7 +1,7 @@
 global:
   cluster_domain: techops.internal.skao.int
 
-ska-oso-services:
+ska-oso-ptt-services:
   rest:
     oda:
       backendType: rest
