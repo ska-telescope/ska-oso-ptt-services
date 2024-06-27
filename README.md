@@ -41,12 +41,7 @@ make python-test
 make python-lint
 ```
 
-To run a helm chart unit tests to verify helm chart configuration:
 
-```
-helm plugin install https://github.com/helm-unittest/helm-unittest.git
-make k8s-chart-test
-```
 
 ### Deploy to Kubernetes
 
