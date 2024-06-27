@@ -4,7 +4,6 @@ Functions which the HTTP requests to individual resources are mapped to.
 See the operationId fields of the Open API spec for the specific mappings.
 """
 
-# pylint: disable=broad-except
 import logging
 from functools import wraps
 from http import HTTPStatus
