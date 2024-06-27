@@ -31,6 +31,6 @@ else:
     # presume being run from gunicorn
     # use gunicorn logging level for app and module loggers
     gunicorn_logger = logging.getLogger("gunicorn.error")
-    app.app.logger.setLevel(gunicorn_logger.level)
+    app.logger.setLevel(gunicorn_logger.level)
     logger = logging.getLogger("ska_oso_ptt_services")
     logger.setLevel(gunicorn_logger.level)
