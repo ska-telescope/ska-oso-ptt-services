@@ -1,0 +1,89 @@
+"""
+The flask_oda module contains code used to interface Flask applications with
+the ODA.
+"""
+import logging
+import os
+
+from flask import _app_ctx_stack, current_app  # pylint: disable=no-name-in-module
+
+from ska_db_oda.unit_of_work.filesystemunitofwork import FilesystemUnitOfWork
+from ska_db_oda.unit_of_work.memoryunitofwork import MemorySession, MemoryUnitOfWork
+from ska_db_oda.unit_of_work.postgresunitofwork import (
+    PostgresUnitOfWork,
+    create_connection_pool,
+)
+from ska_db_oda.unit_of_work.restunitofwork import RESTUnitOfWork
+
+LOGGER = logging.getLogger(__name__)
+
+# BACKEND_VAR = "ODA_BACKEND_TYPE"
+
+
+class FlaskODA(object):
+    """
+    FlaskODA is asmall Flask extension that makes the ODA backend available to
+    Flask apps.
+
+    This extension present two properties that can be used by Flask code to access
+    the ODA. The extension should ensure that the correct scope is used; that is,
+    one unique repository per Flask app and a unique UnitOfWork per HTTP request.
+
+    The backend type is set by the ODA_BACKEND_TYPE environment variable.
+    """
+
+    def __init__(self, app=None):
+        self.app = app
+        if app is not None:
+            self.init_app(app)
+
+    def init_app(self, app):
+        """
+        Initialise ODA Flask extension.
+        """
+        # app.config[BACKEND_VAR] = os.environ.get(
+        #     BACKEND_VAR, default=app.config.setdefault(BACKEND_VAR, "memory")
+        # )
+
+        app.extensions["oda"] = self
+        print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$  in init_app $$$$$$$$$$$$$$$$$$$$$$$$$$$$ ")
+
+    @property
+    def uow(self):
+        # Lazy creation of one UnitOfWork instance per HTTP request
+        # UoW instances are not shared as concurrent modification of a single
+        # UoW could easily lead to corruption
+        print("&&&&&&&&&&&&&&&&&&&&  in UOWWWWW &&&&&&&&&&&&&&&&&&&&&&&&&&&")
+        # import pdb
+        # pdb.set_trace()
+        ctx = _app_ctx_stack.top
+        if ctx is not None:
+        #     if not hasattr(ctx, "uow"):
+        #         if current_app.config[BACKEND_VAR] == "filesystem":
+        #             uow = FilesystemUnitOfWork()
+        #         elif current_app.config[BACKEND_VAR] == "postgres":
+        #             uow = PostgresUnitOfWork(self.connection_pool)
+        #         elif current_app.config[BACKEND_VAR] == "rest":
+        #             uow = RESTUnitOfWork()
+        #         else:
+            #uow = PostgresUnitOfWork(self.memory_session)
+            uow = PostgresUnitOfWork(self.connection_pool)
+            ctx.uow = uow
+
+            return ctx.uow
+
+    @property
+    def connection_pool(self):
+        # Lazy creation of one psycopg ConnectionPool instance per Flask application
+        print("&&&&&&&&&&&&&&&&&&&&  in UOWWWWW &&&&&&&&&&&&&&&&&&&&&&&&&&&")
+        if not hasattr(current_app, "connection_pool"):
+            current_app.connection_pool = create_connection_pool()
+        return current_app.connection_pool
+
+    # @property
+    # def memory_session(self):
+    #     # Lazy creation of one MemorySession instance per Flask application,
+    #     # so that data is persisted for the lifespan of the application.
+    #     if not hasattr(current_app, "memory_session"):
+    #         current_app.memory_session = MemorySession()
+    #     return current_app.memory_session
