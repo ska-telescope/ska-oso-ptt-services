@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "ska-oso-ptt-services.name" . }}-{{ .Values.rest.component }}-{{ .Release.Name }}-environment
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "ska-oso-ptt-services.labels" . | indent 4 }}
+    component:  {{ template "ska-oso-ptt-services.name" . }}
+    domain: environment
+    function: ska-oso-ptt-services-environment
+    intent: production
+data:
+  KUBE_NAMESPACE: {{ .Release.Namespace }}
