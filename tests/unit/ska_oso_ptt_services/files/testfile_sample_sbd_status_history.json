@@ -1,0 +1,26 @@
+[
+  {
+    "current_status": "draft",
+    "metadata": {
+      "created_by": "DefaultUser",
+      "created_on": "2024-07-02T18:01:47.873431Z",
+      "last_modified_by": "DefaultUser",
+      "last_modified_on": "2024-07-02T18:01:47.873431Z",
+      "version": 1
+    },
+    "previous_status": "draft",
+    "sbd_ref": "sbd-t0001-20240702-00002"
+  },
+  {
+    "current_status": "complete",
+    "metadata": {
+      "created_by": "DefaultUser",
+      "created_on": "2024-07-02T18:01:47.873431Z",
+      "last_modified_by": "DefaultUser",
+      "last_modified_on": "2024-07-02T18:05:42.230594Z",
+      "version": 1
+    },
+    "previous_status": "draft",
+    "sbd_ref": "sbd-t0001-20240702-00002"
+  }
+]
