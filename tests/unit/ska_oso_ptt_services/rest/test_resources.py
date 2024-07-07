@@ -295,10 +295,11 @@ class TestExecutionBlockAPI:
             "traceback": {
                 "full_traceback": (
                     "Traceback (most recent call last):\n  File"
-                    ' "/home/manish/skao/ska-oso-ptt-services/src/ska_oso_ptt_services/rest/api/resources.py",'
-                    " line 67, in wrapper\n    return api_fn(*args, **kwargs)\n  File"
-                    ' "/home/manish/skao/ska-oso-ptt-services/src/ska_oso_ptt_services/rest/api/resources.py",'
-                    " line 187, in put_eb_history\n   "
+                    ' "/home/shalu/skao/ska-oso-ptt-services/src/ska_oso_ptt_services'
+                    ' /rest/api/resources.py", line 67, in wrapper\n    return'
+                    " api_fn(*args, **kwargs)\n  File"
+                    ' "/home/shalu/skao/ska-oso-ptt-services/src/ska_oso_ptt_services'
+                    ' /rest/api/resources.py", line 187, in put_eb_history\n   '
                     ' current_status=ebStatus(body["current_status"]),\nKeyError:'
                     " 'current_status'\n"
                 ),
