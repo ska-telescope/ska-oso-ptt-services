@@ -238,7 +238,7 @@ class TestExecutionBlockAPI:
         assert result.status_code == HTTPStatus.NOT_FOUND
 
     @mock.patch("ska_oso_ptt_services.rest.api.resources.oda")
-    def test_put_sbi_history(self, mock_oda, client):
+    def test_put_eb_history(self, mock_oda, client):
         valid_put_eb_history_response = load_string_from_file(
             "../files/testfile_sample_eb_status.json"
         )
