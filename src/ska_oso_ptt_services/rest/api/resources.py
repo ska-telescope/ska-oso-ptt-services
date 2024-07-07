@@ -6,17 +6,16 @@ See the operationId fields of the Open API spec for the specific mappings.
 
 # pylint: disable=broad-except
 import logging
-from functools import wraps
-from http import HTTPStatus
-from typing import Any, Callable, Dict, Tuple, Union
 
-from prance import ValidationError
+from http import HTTPStatus
+from typing import Any, Dict, Tuple, Union
+
 from ska_db_oda.domain import StatusHistoryException
 from ska_db_oda.domain.query import QueryParams, QueryParamsFactory
 from ska_db_oda.rest.api.resources import (
     check_for_mismatch,
     error_response,
-    validation_response,
+    validation_response, error_handler,
 )
 from ska_oso_pdm import SBDStatusHistory
 from ska_oso_pdm.entity_status_history import SBDStatus, SBIStatusHistory, SBIStatus
@@ -29,13 +28,20 @@ Response = Tuple[Union[dict, list], int]
 
 
 class PTTQueryParamsFactory(QueryParamsFactory):
+    """
+    Class for checking Query Parameters
+    overrides QueryParamsFactory
+    """
     @staticmethod
     def from_dict(kwargs: dict) -> QueryParams:
+        """
+        Returns QueryParams instance if validation successfull
+        raises: ValueError for incorrect values
+        """
         result = QueryParamsFactory.from_dict(kwargs=kwargs)
         return result
 
 
-# for query params exyension
 def get_qry_params(kwargs: dict) -> Union[QueryParams, Response]:
     """
     Convert the parameters from the request into QueryParams.
@@ -58,58 +64,6 @@ def get_qry_params(kwargs: dict) -> Union[QueryParams, Response]:
         )
 
 
-def error_handler(api_fn: Callable[[str], Response]) -> Callable[[str], Response]:
-    """
-    A decorator function to catch general errors and wrap in the correct HTTP response
-
-    :param api_fn: A function which accepts an entity identifier and returns an HTTP response
-    """
-
-    @wraps(api_fn)
-    def wrapper(*args, **kwargs):
-        try:
-            LOGGER.debug(
-                "Request to %s with args: %s and kwargs: %s", api_fn, args, kwargs
-            )
-            return api_fn(*args, **kwargs)
-        except KeyError as err:
-            # TODO there is a risk that the KeyError is not from the
-            #  ODA not being able to find the entity. After BTN-1502 the
-            #  ODA should raise its own exceptions which we can catch here
-            is_not_found_in_oda = any(
-                "not found" in str(arg).lower() for arg in err.args
-            )
-            if is_not_found_in_oda:
-                return {
-                    "detail": (
-                        "Not Found. The requested identifier"
-                        f" {next(iter(kwargs.values()))} could not be found."
-                    ),
-                }, HTTPStatus.NOT_FOUND
-            else:
-                LOGGER.exception(
-                    "KeyError raised by api function call, but not due to the "
-                    "sbd_id not being found in the ODA."
-                )
-                return error_response(err)
-        except (ValueError, ValidationError) as e:
-            LOGGER.exception(
-                "ValueError occurred when adding entity, likely some semantic"
-                " validation failed"
-            )
-
-            return error_response(e, HTTPStatus.UNPROCESSABLE_ENTITY)
-
-        except StatusHistoryException as e:
-            return {"detail": str(e.args[0])}, HTTPStatus.UNPROCESSABLE_ENTITY
-
-        except Exception as e:
-            LOGGER.exception(
-                "Exception occurred when calling the API function %s", api_fn
-            )
-            return error_response(e)
-
-    return wrapper
 
 
 @error_handler
@@ -121,18 +75,9 @@ def get_sbd_with_status(sbd_id: str) -> Response:
     :return: The SBDefinition with status wrapped in a Response, or appropriate error Response
     """
     with oda.uow as uow:
-        import pdb
-
-        pdb.set_trace()
-        print("$!!!!!!!!!!! in get_sbd_with_status !!!!!!")
         sbd = uow.sbds.get(sbd_id)
-        print(f"@@@@@@@@@@@@@@@@@@@@@@@ \n\n\n {sbd=}")
         sbd_json = sbd.model_dump(mode="json")
-        print(f"@@@@@@@@@@@@@@@@@@@@@@@ \n\n\n {sbd_json=}")
-        sbd_json["status"] = _get_sbd_status(sbd_id, sbd_json["metadata"]["version"])[
-            "current_status"
-        ]
-        print(f"@@@@@@@@@@@@@@@@@@@@@@@ \n\n\n {sbd_json=}")
+        sbd_json["status"] = _get_sbd_status(sbd_id, sbd_json["metadata"]["version"])["current_status"]
     return sbd_json, HTTPStatus.OK
 
 
@@ -150,38 +95,36 @@ def get_sbds_with_status(**kwargs) -> Response:
 
     with oda.uow as uow:
         sbds = uow.sbds.query(maybe_qry_params)
-        print(f"@@@@@@@@@@@@@@@@@@@@@@@ \n\n\n {sbds=}")
-        sbd_with_status = [
-            {
-                **sbd.model_dump(mode="json"),
-                "status": _get_sbd_status(sbd.sbd_id, sbd.metadata.version)[
-                    "current_status"
-                ],
-            }
-            for sbd in sbds
-        ]
+        sbd_with_status = [{**sbd.model_dump(mode="json"), "status": _get_sbd_status(sbd.sbd_id, sbd.metadata.version)["current_status"],} for sbd in sbds]
     return sbd_with_status, HTTPStatus.OK
 
 
 def _get_sbd_status(sbd_id: str, version: str = None) -> Dict[str, Any]:
     """
-    Takes an SBDefinition ID and Version and returns status
+    Takes an SBDefinition ID and Version and returns statusz
+    :param sbd_id: Scheduling Block ID
+    :param version: SBD version
+
+    Returns retrieved SBD status in Dictionary format
     """
     with oda.uow as uow:
-        retrieved_sbd = uow.sbds_status_history.get(
-            entity_id=sbd_id, version=version, is_status_history=False
-        )
-        print(f"##############################{type(retrieved_sbd)=} {retrieved_sbd}")
+        retrieved_sbd = uow.sbds_status_history.get(entity_id=sbd_id, version=version, is_status_history=False)
         return retrieved_sbd.model_dump()
 
 
 @error_handler
 def get_sbd_status(sbd_id: str, version: str = None) -> Dict[str, Any]:
+    """
+    Function that a GET status/sbds/<sbd_id> request is routed to.
+    This method is used to GET the current status for the given sbd_id
+
+    :param sbd_id: Requested identifier from the path parameter
+    :param version: Requested identifier from the path parameter
+    :return: The current entity status, SBDStatusHistory wrapped in a Response, or appropriate error Response
+    """
+
     sbd_status = _get_sbd_status(sbd_id=sbd_id, version=version)
 
-    # if not sbd_status:
-    #     raise KeyError("not found")
-    print(f"##############################{type(sbd_status)=}")
     return sbd_status, HTTPStatus.OK
 
 
@@ -196,16 +139,8 @@ def put_sbd_history(sbd_id: str, version: int, body: dict) -> Response:
     :return: The ExecutionBlock wrapped in a Response, or appropriate error Response
     """
     try:
-        sbd_status_history = SBDStatusHistory(
-            sbd_ref=sbd_id,
-            previous_status=SBDStatus(body["previous_status"]),
-            current_status=SBDStatus(body["current_status"]),
-            metadata={"version": version},
-        )
-        print(
-            f"##############################{type(sbd_status_history)=} \n"
-            f" {sbd_status_history=}\n\n\n"
-        )
+        sbd_status_history = SBDStatusHistory(sbd_ref=sbd_id, previous_status=SBDStatus(body["previous_status"]), current_status=SBDStatus(body["current_status"]), metadata={"version": version},)
+
     except ValueError as err:
         raise StatusHistoryException(err)  # pylint: disable=W0707
 
@@ -213,20 +148,13 @@ def put_sbd_history(sbd_id: str, version: int, body: dict) -> Response:
         return response
 
     with oda.uow as uow:
-        import pdb
-
-        pdb.set_trace()
-        print(f"##############################{type(uow.sbds)=} \n {uow.sbds=}\n\n\n")
         if sbd_id not in uow.sbds:
             raise KeyError(
                 f"Not found. The requested sbd_id {sbd_id} could not be found."
             )
 
         persisted_sbd = uow.sbds_status_history.add(sbd_status_history)
-        print(
-            f"##############################{type(persisted_sbd)=} \n"
-            f" {persisted_sbd=}\n\n\n"
-        )
+
         uow.commit()
 
     return persisted_sbd, HTTPStatus.OK
@@ -245,21 +173,13 @@ def get_sbd_status_history(**kwargs) -> Response:
         return maybe_qry_params
 
     with oda.uow as uow:
-        print("$$$$$$$$$$$$$$$$$$$ Inside UOW $$$$$$$$$$$$$$$$$$$")
         sbds_status_history = uow.sbds_status_history.query(
             maybe_qry_params, is_status_history=True
         )
 
         if not sbds_status_history:
             raise KeyError("not found")
-        print(
-            f"##############################{type(sbds_status_history)=} {sbds_status_history}"
-        )
     return sbds_status_history, HTTPStatus.OK
-    # return jsonify({"a": 1}), HTTPStatus.OK
-
-
-############SBI#######################
 
 
 @error_handler
@@ -267,7 +187,7 @@ def put_sbi_history(sbi_id: str, version: int, body: dict) -> Response:
     """
     Function that a PUT status/sbds/<sbd_id> request is routed to.
 
-    :param sbd_id: Requested identifier from the path parameter
+    :param sbi_id: Requested identifier from the path parameter
     :param version: Requested identifier from the path parameter
     :param body: ExecutionBlock to persist from the request body
     :return: The ExecutionBlock wrapped in a Response, or appropriate error Response
@@ -279,7 +199,6 @@ def put_sbi_history(sbi_id: str, version: int, body: dict) -> Response:
             current_status=SBIStatus(body["current_status"]),
             metadata={"version": version},
         )
-        print(f"##############################{type(sbi_status_history)=} \n {sbi_status_history=}\n\n\n")
     except ValueError as err:
         raise StatusHistoryException(err)  # pylint: disable=W0707
 
@@ -287,20 +206,12 @@ def put_sbi_history(sbi_id: str, version: int, body: dict) -> Response:
         return response
 
     with oda.uow as uow:
-        import pdb
-
-        pdb.set_trace()
-        print(f"##############################{type(uow.sbis)=} \n {uow.sbis=}\n\n\n")
         if sbi_id not in uow.sbis:
             raise KeyError(
                 f"Not found. The requested sbi_id {sbi_id} could not be found."
             )
 
         persisted_sbi = uow.sbis_status_history.add(sbi_status_history)
-        print(
-            f"##############################{type(persisted_sbi)=} \n"
-            f" {persisted_sbi=}\n\n\n"
-        )
         uow.commit()
 
     return persisted_sbi, HTTPStatus.OK

@@ -10,16 +10,14 @@ from ska_db_oda.rest import PdmJsonEncoder
 
 from ska_oso_ptt_services.rest.flask_oda import FlaskODA
 
-
 KUBE_NAMESPACE = os.getenv("KUBE_NAMESPACE", "ska-oso-ptt-services")
 PTT_MAJOR_VERSION = version("ska-oso-ptt-services").split(".")[0]
 # The base path includes the namespace which is known at runtime
 # to avoid clashes in deployments, for example in CICD
 API_PATH = f"/{KUBE_NAMESPACE}/ptt/api/v{PTT_MAJOR_VERSION}"
 
-
-
 oda = FlaskODA()
+
 
 def resolve_openapi_spec() -> Dict[str, Any]:
     """
@@ -76,7 +74,6 @@ def create_app(open_api_spec=None) -> App:
         pythonic_params=True,
         validator_map=validator_map,
     )
-    print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$  in create app $$$$$$$$$$$$$$$$$$$$$$$$$$$$ ")
     oda.init_app(connexion.app)
 
     return connexion

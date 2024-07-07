@@ -9,8 +9,6 @@ from ska_ser_logging import configure_logging, get_default_formatter
 
 from ska_oso_ptt_services.rest import create_app
 
-from ska_oso_ptt_services.rest import create_app
-
 app = create_app()
 
 
@@ -28,7 +26,7 @@ class UniformLogger(glogging.Logger):
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0")
+    app.run(host="0.0.0.0", debug=True)
 else:
     # presume being run from gunicorn
     # use gunicorn logging level for app and module loggers
