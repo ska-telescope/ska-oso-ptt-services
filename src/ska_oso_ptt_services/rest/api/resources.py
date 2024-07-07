@@ -6,7 +6,6 @@ See the operationId fields of the Open API spec for the specific mappings.
 
 # pylint: disable=broad-except
 import logging
-
 from http import HTTPStatus
 from typing import Any, Dict, Tuple, Union
 
@@ -14,11 +13,11 @@ from ska_db_oda.domain import StatusHistoryException
 from ska_db_oda.domain.query import QueryParams, QueryParamsFactory
 from ska_db_oda.rest.api.resources import (
     check_for_mismatch,
-    error_response,
-    validation_response, error_handler,
+    error_handler,
+    validation_response,
 )
 from ska_oso_pdm import SBDStatusHistory
-from ska_oso_pdm.entity_status_history import SBDStatus, SBIStatusHistory, SBIStatus
+from ska_oso_pdm.entity_status_history import SBDStatus, SBIStatus, SBIStatusHistory
 
 from ska_oso_ptt_services.rest import oda
 
@@ -32,6 +31,7 @@ class PTTQueryParamsFactory(QueryParamsFactory):
     Class for checking Query Parameters
     overrides QueryParamsFactory
     """
+
     @staticmethod
     def from_dict(kwargs: dict) -> QueryParams:
         """
@@ -64,20 +64,21 @@ def get_qry_params(kwargs: dict) -> Union[QueryParams, Response]:
         )
 
 
-
-
 @error_handler
 def get_sbd_with_status(sbd_id: str) -> Response:
     """
     Function that a GET /sbds/<sbd_id> request is routed to.
 
     :param sbd_id: Requested identifier from the path parameter
-    :return: The SBDefinition with status wrapped in a Response, or appropriate error Response
+    :return: The SBDefinition with status wrapped in a Response, or appropriate error
+     Response
     """
     with oda.uow as uow:
         sbd = uow.sbds.get(sbd_id)
         sbd_json = sbd.model_dump(mode="json")
-        sbd_json["status"] = _get_sbd_status(sbd_id, sbd_json["metadata"]["version"])["current_status"]
+        sbd_json["status"] = _get_sbd_status(sbd_id, sbd_json["metadata"]["version"])[
+            "current_status"
+        ]
     return sbd_json, HTTPStatus.OK
 
 
@@ -87,7 +88,8 @@ def get_sbds_with_status(**kwargs) -> Response:
     Function that a GET /sbds request is routed to.
 
     :param kwargs: Parameters to query the ODA by.
-    :return: All SBDefinitions present with status wrapped in a Response, or appropriate error Response
+    :return: All SBDefinitions present with status wrapped in a Response, or appropriate
+     error Response
     """
     maybe_qry_params = get_qry_params(kwargs)
     if not isinstance(maybe_qry_params, QueryParams):
@@ -95,7 +97,15 @@ def get_sbds_with_status(**kwargs) -> Response:
 
     with oda.uow as uow:
         sbds = uow.sbds.query(maybe_qry_params)
-        sbd_with_status = [{**sbd.model_dump(mode="json"), "status": _get_sbd_status(sbd.sbd_id, sbd.metadata.version)["current_status"],} for sbd in sbds]
+        sbd_with_status = [
+            {
+                **sbd.model_dump(mode="json"),
+                "status": _get_sbd_status(sbd.sbd_id, sbd.metadata.version)[
+                    "current_status"
+                ],
+            }
+            for sbd in sbds
+        ]
     return sbd_with_status, HTTPStatus.OK
 
 
@@ -108,7 +118,9 @@ def _get_sbd_status(sbd_id: str, version: str = None) -> Dict[str, Any]:
     Returns retrieved SBD status in Dictionary format
     """
     with oda.uow as uow:
-        retrieved_sbd = uow.sbds_status_history.get(entity_id=sbd_id, version=version, is_status_history=False)
+        retrieved_sbd = uow.sbds_status_history.get(
+            entity_id=sbd_id, version=version, is_status_history=False
+        )
         return retrieved_sbd.model_dump()
 
 
@@ -120,7 +132,8 @@ def get_sbd_status(sbd_id: str, version: str = None) -> Dict[str, Any]:
 
     :param sbd_id: Requested identifier from the path parameter
     :param version: Requested identifier from the path parameter
-    :return: The current entity status, SBDStatusHistory wrapped in a Response, or appropriate error Response
+    :return: The current entity status, SBDStatusHistory wrapped in a Response, or
+    appropriate error Response
     """
 
     sbd_status = _get_sbd_status(sbd_id=sbd_id, version=version)
@@ -139,7 +152,12 @@ def put_sbd_history(sbd_id: str, version: int, body: dict) -> Response:
     :return: The ExecutionBlock wrapped in a Response, or appropriate error Response
     """
     try:
-        sbd_status_history = SBDStatusHistory(sbd_ref=sbd_id, previous_status=SBDStatus(body["previous_status"]), current_status=SBDStatus(body["current_status"]), metadata={"version": version},)
+        sbd_status_history = SBDStatusHistory(
+            sbd_ref=sbd_id,
+            previous_status=SBDStatus(body["previous_status"]),
+            current_status=SBDStatus(body["current_status"]),
+            metadata={"version": version},
+        )
 
     except ValueError as err:
         raise StatusHistoryException(err)  # pylint: disable=W0707
@@ -167,7 +185,8 @@ def get_sbd_status_history(**kwargs) -> Response:
     This method is used to GET status history for the given entity
 
     :param kwargs: Parameters to query the ODA by.
-    :return: The status history, SBDStatusHistory wrapped in a Response, or appropriate error Response
+    :return: The status history, SBDStatusHistory wrapped in a Response, or appropriate
+     error Response
     """
     if not isinstance(maybe_qry_params := get_qry_params(kwargs), QueryParams):
         return maybe_qry_params

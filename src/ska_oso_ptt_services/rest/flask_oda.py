@@ -4,13 +4,11 @@ the ODA.
 """
 import logging
 
-
 from flask import _app_ctx_stack, current_app  # pylint: disable=no-name-in-module
 from ska_db_oda.unit_of_work.postgresunitofwork import (
     PostgresUnitOfWork,
     create_connection_pool,
 )
-
 
 LOGGER = logging.getLogger(__name__)
 
