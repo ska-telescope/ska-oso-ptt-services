@@ -1,0 +1,16 @@
+SBDStatusHistory:
+  type: object
+  required:
+    - previous_status
+    - current_status
+  properties:
+    previous_status:
+      description: Previous Status of the SBD Entity.
+      example: draft
+      type: string
+    current_status:
+      description: Current Status of the SBD Entity.
+      example: complete
+      type: string
+
+

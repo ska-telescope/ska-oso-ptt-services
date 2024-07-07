@@ -68,36 +68,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         "500":
           $ref: '#/components/responses/InternalServerError'
-    put:
-      summary: Updates an SBDefinition by identifier
-      description: |
-        Updates the SBDefinition with the given identifier
-        in the underlying data store, creating a new version.
-        If the identifier does not exist in the data store, a not found error will be returned.
-      operationId: ska_oso_ptt_services.rest.api.resources.put_sbd_history
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-        #              $ref: './oso-components-openapi-v1.yaml#/components/schemas/SBDefinition'
-        required: true
-      responses:
-        "200":
-          description: OK, the SBDefinition was created or updated
-          content:
-            application/json:
-              schema:
-                type: object
-        #                $ref: './oso-components-openapi-v1.yaml#/components/schemas/SBDefinition'
-        "400":
-          $ref: '#/components/responses/BadRequest'
-        "404":
-          $ref: '#/components/responses/NotFound'
-        "422":
-          $ref: '#/components/responses/UnprocessableEntity'
-        "500":
-          $ref: '#/components/responses/InternalServerError'
+
   /status/history/sbds:
     get:
       summary: Get SBDefinition status history by the query parameter.
@@ -125,6 +96,125 @@ paths:
           $ref: '#/components/responses/BadRequest'
         "500":
           $ref: '#/components/responses/InternalServerError'
+  /status/sbds/{sbd_id}:
+    parameters:
+      - name: sbd_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+    put:
+      summary: Update SBDefinition status by identifier
+      description: |
+        Updates the SBDefinition status with the given identifier
+        in the underlying data store, creating a new version.
+        If the identifier does not exist in the data store, a not found error will be returned.
+      operationId: ska_oso_ptt_services.rest.api.resources.put_sbd_history
+      parameters:
+        - $ref: '#/components/parameters/version'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: './sbd-status-openapi-v1.yaml#/SBDStatusHistory'
+        required: true
+      responses:
+        "200":
+          description: OK, the SBDefinition Status was created or updated
+          content:
+            application/json:
+              schema:
+                $ref: './sbd-status-openapi-v1.yaml#/SBDStatusHistory'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "422":
+          $ref: '#/components/responses/UnprocessableEntity'
+        "500":
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      summary: Get SBDefinition by identifier
+      description: |
+        Retrieves the SBDefinition status with the given identifier from the underlying data store, if available
+      operationId: ska_oso_ptt_services.rest.api.resources.get_sbd_status
+      parameters:
+        - $ref: '#/components/parameters/version'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "500":
+          $ref: '#/components/responses/InternalServerError'
+
+  /status/sbis/{sbi_id}:
+    parameters:
+      - name: sbi_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+    put:
+      summary: Update SBInstance status by identifier
+      description: |
+        Updates the SBInstance status with the given identifier
+        in the underlying data store, mutating the existing first version.
+        If the identifier does not exist in the data store, a not found error will be returned.
+      operationId: ska_oso_ptt_services.rest.api.resources.put_sbi_history
+      parameters:
+        - $ref: '#/components/parameters/version'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: './sbi-status-openapi-v1.yaml#/SBIStatusHistory'
+        required: true
+      responses:
+        "200":
+          description: OK, the SBInstance Status was created or updated
+          content:
+            application/json:
+              schema:
+                $ref: './sbi-status-openapi-v1.yaml#/SBIStatusHistory'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "422":
+          $ref: '#/components/responses/UnprocessableEntity'
+        "500":
+          $ref: '#/components/responses/InternalServerError'
+#    get:
+#      summary: Get SBInstance by identifier
+#      description: |
+#        Retrieves the SBInstance status with the given identifier from the underlying data store, if available
+#      operationId: ska_oso_ptt_services.rest.api.resources.get_sbi_status
+#      parameters:
+#        - $ref: '#/components/parameters/version'
+#      responses:
+#        "200":
+#          description: OK
+#          content:
+#            application/json:
+#              schema:
+#                type: array
+#                items:
+#                  type: object
+#        "400":
+#          $ref: '#/components/responses/BadRequest'
+#        "500":
+#          $ref: '#/components/responses/InternalServerError'
 
 components:
   parameters:

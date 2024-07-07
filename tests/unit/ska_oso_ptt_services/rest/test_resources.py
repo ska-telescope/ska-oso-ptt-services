@@ -9,7 +9,7 @@ from unittest import mock
 import pytest
 from deepdiff import DeepDiff
 from ska_oso_pdm import Metadata, SBDefinition
-from ska_oso_pdm.entity_status_history import SBDStatus, SBDStatusHistory
+from ska_oso_pdm.entity_status_history import SBDStatus, SBDStatusHistory, SBIStatusHistory, SBIStatus
 
 from ska_oso_ptt_services.rest import create_app
 
@@ -339,3 +339,90 @@ class TestSBDefinitionAPI:
         assert_json_is_equal(result.text, json.dumps(error), exclude_path)
 
     # print(result.text)
+
+
+
+class TestSBIDefinitionAPI:
+    @mock.patch("ska_oso_ptt_services.rest.api.resources.oda")
+    def test_put_sbi_history(self, mock_oda, client):
+        valid_put_sbi_history_response = load_string_from_file(
+            "../files/testfile_sample_sbi_status_history.json"
+        )
+
+        # mock sbd_status_history
+        # mock_sbd_status_history = SBDStatusHistory(metadata=Metadata(version=1, created_by=None, created_on=datetime.datetime(2024, 7, 3, 12, 23, 38, 773706, tzinfo=datetime.timezone.utc), last_modified_by=None, last_modified_on=datetime.datetime(2024, 7, 3, 12, 23, 38, 773750, tzinfo=datetime.timezone.utc)), sbd_ref='sbd-t0001-20240702-00002', current_status=SBDStatus.COMPLETE, previous_status=SBDStatus.DRAFT)
+
+        # Mock oda
+        uow_mock = mock.MagicMock()
+        uow_mock.sbis = ["sbi-mvp01-20220923-00002"]
+
+        # Create consistent datetime objects
+        created_on = datetime.datetime(
+            2024, 7, 2, 18, 1, 47, 873431, tzinfo=zoneinfo.ZoneInfo(key="GMT")
+        )
+        last_modified_on = datetime.datetime(
+            2024, 7, 3, 12, 23, 38, 785233, tzinfo=datetime.timezone.utc
+        )
+
+        # Setting up nested mocks
+        sbis_status_history_mock = mock.MagicMock()
+        sbis_status_history_mock.add.return_value = SBIStatusHistory(
+            metadata=Metadata(
+                version=1,
+                created_by="DefaultUser",
+                created_on=created_on,
+                last_modified_by="DefaultUser",
+                last_modified_on=last_modified_on,
+            ),
+            sbi_ref="sbi-mvp01-20220923-00002",
+            current_status=SBIStatus.EXECUTING,
+            previous_status=SBIStatus.CREATED,
+        )
+
+        uow_mock.sbis_status_history = sbis_status_history_mock
+        uow_mock.commit.return_value = "200"
+        mock_oda.uow.__enter__.return_value = uow_mock
+
+        url = "/ska-oso-ptt-services/ptt/api/v1/status/sbis/sbi-mvp01-20220923-00002"
+        params = {"version": "1"}
+        data = {"current_status": "executing", "previous_status": "created"}
+        exclude_paths = [
+            "root['metadata']['created_on']",
+            "root['metadata']['last_modified_on']",
+        ]
+
+        result = client.put(url, query_string=params, json=data)
+        import pdb
+        pdb.set_trace()
+        assert_json_is_equal(result.text, valid_put_sbi_history_response, exclude_paths)
+        assert result.status_code == HTTPStatus.OK
+
+    def test_invalid_put_sbi_history(self, client):
+        query_params = {"version": "1"}
+        data = {"current1_status": "complete", "previous_status": "draft"}
+
+        error = {
+            "detail": "KeyError('current_status') with args ('current_status',)",
+            "title": "Internal Server Error",
+            "traceback": {
+                "full_traceback": (
+                    "Traceback (most recent call last):\n  File"
+                    ' "/home/manish/skao/ska-oso-ptt-services/src/ska_oso_ptt_services/rest/api/resources.py",'
+                    " line 67, in wrapper\n    return api_fn(*args, **kwargs)\n  File"
+                    ' "/home/manish/skao/ska-oso-ptt-services/src/ska_oso_ptt_services/rest/api/resources.py",'
+                    " line 187, in put_sbd_history\n   "
+                    ' current_status=SBIStatus(body["current_status"]),\nKeyError:'
+                    " 'current_status'\n"
+                ),
+                "key": "Internal Server Error",
+                "type": "<class 'KeyError'>",
+            },
+        }
+
+        result = client.put(
+            f"{BASE_API_URL}/status/sbds/sbd-t0001-20240702-00002",
+            query_string=query_params,
+            json=data,
+        )
+        exclude_path = ["root['traceback']"]
+        assert_json_is_equal(result.text, json.dumps(error), exclude_path)

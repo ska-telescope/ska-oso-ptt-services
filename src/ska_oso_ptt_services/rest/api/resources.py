@@ -19,7 +19,7 @@ from ska_db_oda.rest.api.resources import (
     validation_response,
 )
 from ska_oso_pdm import SBDStatusHistory
-from ska_oso_pdm.entity_status_history import SBDStatus
+from ska_oso_pdm.entity_status_history import SBDStatus, SBIStatusHistory, SBIStatus
 
 from ska_oso_ptt_services.rest import oda
 
@@ -29,10 +29,10 @@ Response = Tuple[Union[dict, list], int]
 
 
 class PTTQueryParamsFactory(QueryParamsFactory):
-    pass
-    # @staticmethod
-    # def from_dict():
-    #     super().from_dict(kwargs=)
+    @staticmethod
+    def from_dict(kwargs: dict) -> QueryParams:
+        result = QueryParamsFactory.from_dict(kwargs=kwargs)
+        return result
 
 
 # for query params exyension
@@ -257,3 +257,50 @@ def get_sbd_status_history(**kwargs) -> Response:
         )
     return sbds_status_history, HTTPStatus.OK
     # return jsonify({"a": 1}), HTTPStatus.OK
+
+
+############SBI#######################
+
+
+@error_handler
+def put_sbi_history(sbi_id: str, version: int, body: dict) -> Response:
+    """
+    Function that a PUT status/sbds/<sbd_id> request is routed to.
+
+    :param sbd_id: Requested identifier from the path parameter
+    :param version: Requested identifier from the path parameter
+    :param body: ExecutionBlock to persist from the request body
+    :return: The ExecutionBlock wrapped in a Response, or appropriate error Response
+    """
+    try:
+        sbi_status_history = SBIStatusHistory(
+            sbi_ref=sbi_id,
+            previous_status=SBIStatus(body["previous_status"]),
+            current_status=SBIStatus(body["current_status"]),
+            metadata={"version": version},
+        )
+        print(f"##############################{type(sbi_status_history)=} \n {sbi_status_history=}\n\n\n")
+    except ValueError as err:
+        raise StatusHistoryException(err)  # pylint: disable=W0707
+
+    if response := check_for_mismatch(sbi_id, sbi_status_history.sbi_ref):
+        return response
+
+    with oda.uow as uow:
+        import pdb
+
+        pdb.set_trace()
+        print(f"##############################{type(uow.sbis)=} \n {uow.sbis=}\n\n\n")
+        if sbi_id not in uow.sbis:
+            raise KeyError(
+                f"Not found. The requested sbi_id {sbi_id} could not be found."
+            )
+
+        persisted_sbi = uow.sbis_status_history.add(sbi_status_history)
+        print(
+            f"##############################{type(persisted_sbi)=} \n"
+            f" {persisted_sbi=}\n\n\n"
+        )
+        uow.commit()
+
+    return persisted_sbi, HTTPStatus.OK
