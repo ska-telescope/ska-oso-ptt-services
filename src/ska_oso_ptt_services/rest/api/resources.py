@@ -8,12 +8,16 @@ See the operationId fields of the Open API spec for the specific mappings.
 import logging
 from functools import wraps
 from http import HTTPStatus
-from typing import Callable, Tuple, Union, Dict, Any
+from typing import Any, Callable, Dict, Tuple, Union
 
 from prance import ValidationError
 from ska_db_oda.domain import StatusHistoryException
-from ska_db_oda.domain.query import QueryParams
-from ska_db_oda.rest.api.resources import get_qry_params, check_for_mismatch, error_response
+from ska_db_oda.domain.query import QueryParams, QueryParamsFactory
+from ska_db_oda.rest.api.resources import (
+    check_for_mismatch,
+    error_response,
+    validation_response,
+)
 from ska_oso_pdm import SBDStatusHistory
 from ska_oso_pdm.entity_status_history import SBDStatus
 
@@ -21,7 +25,37 @@ from ska_oso_ptt_services.rest import oda
 
 LOGGER = logging.getLogger(__name__)
 
-Response = Tuple[Union[dict,list], int]
+Response = Tuple[Union[dict, list], int]
+
+
+class PTTQueryParamsFactory(QueryParamsFactory):
+    pass
+    # @staticmethod
+    # def from_dict():
+    #     super().from_dict(kwargs=)
+
+
+# for query params exyension
+def get_qry_params(kwargs: dict) -> Union[QueryParams, Response]:
+    """
+    Convert the parameters from the request into QueryParams.
+
+    Currently only a single instance of QueryParams is supported, so
+    subsequent parameters will be ignored.
+
+    :param kwargs: Dict with parameters from HTTP GET request
+    :return: An instance of QueryParams
+    :raises: TypeError if a supported QueryParams cannot be extracted
+    """
+
+    try:
+        return PTTQueryParamsFactory.from_dict(kwargs)
+    except ValueError as err:
+        return validation_response(
+            "Not Supported",
+            err.args[0],
+            HTTPStatus.BAD_REQUEST,
+        )
 
 
 def error_handler(api_fn: Callable[[str], Response]) -> Callable[[str], Response]:
@@ -77,6 +111,7 @@ def error_handler(api_fn: Callable[[str], Response]) -> Callable[[str], Response
 
     return wrapper
 
+
 @error_handler
 def get_sbd_with_status(sbd_id: str) -> Response:
     """
@@ -86,9 +121,18 @@ def get_sbd_with_status(sbd_id: str) -> Response:
     :return: The SBDefinition with status wrapped in a Response, or appropriate error Response
     """
     with oda.uow as uow:
+        import pdb
+
+        pdb.set_trace()
+        print("$!!!!!!!!!!! in get_sbd_with_status !!!!!!")
         sbd = uow.sbds.get(sbd_id)
+        print(f"@@@@@@@@@@@@@@@@@@@@@@@ \n\n\n {sbd=}")
         sbd_json = sbd.model_dump(mode="json")
-        sbd_json["status"] = _get_sbd_status(sbd_id, sbd_json["metadata"]["version"])
+        print(f"@@@@@@@@@@@@@@@@@@@@@@@ \n\n\n {sbd_json=}")
+        sbd_json["status"] = _get_sbd_status(sbd_id, sbd_json["metadata"]["version"])[
+            "current_status"
+        ]
+        print(f"@@@@@@@@@@@@@@@@@@@@@@@ \n\n\n {sbd_json=}")
     return sbd_json, HTTPStatus.OK
 
 
@@ -106,8 +150,15 @@ def get_sbds_with_status(**kwargs) -> Response:
 
     with oda.uow as uow:
         sbds = uow.sbds.query(maybe_qry_params)
+        print(f"@@@@@@@@@@@@@@@@@@@@@@@ \n\n\n {sbds=}")
         sbd_with_status = [
-            {**sbd.model_dump(mode='json'), "status": _get_sbd_status(sbd.sbd_id, sbd.metadata.version)} for sbd in sbds
+            {
+                **sbd.model_dump(mode="json"),
+                "status": _get_sbd_status(sbd.sbd_id, sbd.metadata.version)[
+                    "current_status"
+                ],
+            }
+            for sbd in sbds
         ]
     return sbd_with_status, HTTPStatus.OK
 
@@ -118,16 +169,19 @@ def _get_sbd_status(sbd_id: str, version: str = None) -> Dict[str, Any]:
     """
     with oda.uow as uow:
         retrieved_sbd = uow.sbds_status_history.get(
-            entity_id=sbd_id,
-            version=version,
-            is_status_history=False
+            entity_id=sbd_id, version=version, is_status_history=False
         )
-        return retrieved_sbd.model_dump() if retrieved_sbd else None
-   # return 1
+        print(f"##############################{type(retrieved_sbd)=} {retrieved_sbd}")
+        return retrieved_sbd.model_dump()
+
 
 @error_handler
 def get_sbd_status(sbd_id: str, version: str = None) -> Dict[str, Any]:
-    sbd_status = _get_sbd_status(sbd_id=sbd_id,version=version)
+    sbd_status = _get_sbd_status(sbd_id=sbd_id, version=version)
+
+    # if not sbd_status:
+    #     raise KeyError("not found")
+    print(f"##############################{type(sbd_status)=}")
     return sbd_status, HTTPStatus.OK
 
 
@@ -148,7 +202,10 @@ def put_sbd_history(sbd_id: str, version: int, body: dict) -> Response:
             current_status=SBDStatus(body["current_status"]),
             metadata={"version": version},
         )
-
+        print(
+            f"##############################{type(sbd_status_history)=} \n"
+            f" {sbd_status_history=}\n\n\n"
+        )
     except ValueError as err:
         raise StatusHistoryException(err)  # pylint: disable=W0707
 
@@ -156,16 +213,23 @@ def put_sbd_history(sbd_id: str, version: int, body: dict) -> Response:
         return response
 
     with oda.uow as uow:
+        import pdb
+
+        pdb.set_trace()
+        print(f"##############################{type(uow.sbds)=} \n {uow.sbds=}\n\n\n")
         if sbd_id not in uow.sbds:
             raise KeyError(
                 f"Not found. The requested sbd_id {sbd_id} could not be found."
             )
 
         persisted_sbd = uow.sbds_status_history.add(sbd_status_history)
+        print(
+            f"##############################{type(persisted_sbd)=} \n"
+            f" {persisted_sbd=}\n\n\n"
+        )
         uow.commit()
 
     return persisted_sbd, HTTPStatus.OK
-
 
 
 @error_handler
@@ -181,7 +245,15 @@ def get_sbd_status_history(**kwargs) -> Response:
         return maybe_qry_params
 
     with oda.uow as uow:
-        sbd_ids = uow.sbds_status_history.query(
+        print("$$$$$$$$$$$$$$$$$$$ Inside UOW $$$$$$$$$$$$$$$$$$$")
+        sbds_status_history = uow.sbds_status_history.query(
             maybe_qry_params, is_status_history=True
         )
-    return sbd_ids, HTTPStatus.OK
+
+        if not sbds_status_history:
+            raise KeyError("not found")
+        print(
+            f"##############################{type(sbds_status_history)=} {sbds_status_history}"
+        )
+    return sbds_status_history, HTTPStatus.OK
+    # return jsonify({"a": 1}), HTTPStatus.OK
