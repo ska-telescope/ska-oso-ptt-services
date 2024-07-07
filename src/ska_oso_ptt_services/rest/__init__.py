@@ -6,12 +6,17 @@ from typing import Any, Dict
 
 import prance
 from connexion import App
+from ska_db_oda.rest import PdmJsonEncoder
+
+from ska_oso_ptt_services.rest.flask_oda import FlaskODA
 
 KUBE_NAMESPACE = os.getenv("KUBE_NAMESPACE", "ska-oso-ptt-services")
 PTT_MAJOR_VERSION = version("ska-oso-ptt-services").split(".")[0]
 # The base path includes the namespace which is known at runtime
 # to avoid clashes in deployments, for example in CICD
 API_PATH = f"/{KUBE_NAMESPACE}/ptt/api/v{PTT_MAJOR_VERSION}"
+
+oda = FlaskODA()
 
 
 def resolve_openapi_spec() -> Dict[str, Any]:
@@ -39,7 +44,7 @@ class CustomRequestBodyValidator:
         return function
 
 
-def create_app(open_api_spec=None):
+def create_app(open_api_spec=None) -> App:
     """
     Create the Connexion application with required config
     """
@@ -47,20 +52,28 @@ def create_app(open_api_spec=None):
     if open_api_spec is None:
         open_api_spec = resolve_openapi_spec()
 
+    connexion = App(__name__, specification_dir="openapi/")
+
+    connexion.app.json_encoder = PdmJsonEncoder
+
+    def set_default_headers_on_response(response):
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        response.headers["Access-Control-Allow-Headers"] = "*"
+        response.headers["Access-Control-Allow-Methods"] = "*"
+        return response
+
+    connexion.app.after_request(set_default_headers_on_response)
+
     validator_map = {
         "body": CustomRequestBodyValidator,
     }
-
-    connexion = App(__name__, specification_dir="openapi/")
-
     connexion.add_api(
         open_api_spec,
-        arguments={"title": "OpenAPI PTT"},
+        arguments={"title": "OpenAPI ODT"},
         base_path=API_PATH,
         pythonic_params=True,
         validator_map=validator_map,
     )
+    oda.init_app(connexion.app)
 
-    app = connexion.app
-
-    return app
+    return connexion
