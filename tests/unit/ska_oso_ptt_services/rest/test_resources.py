@@ -1,15 +1,12 @@
-import datetime
+
 import json
-import zoneinfo
 from http import HTTPStatus
 from importlib.metadata import version
 from unittest import mock
 
-from ska_oso_pdm import Metadata, SBDefinition
+from ska_oso_pdm import SBDefinition
 from ska_oso_pdm.entity_status_history import (
-    SBDStatus,
     SBDStatusHistory,
-    SBIStatus,
     SBIStatusHistory,
 )
 
@@ -218,26 +215,9 @@ class TestSBDefinitionAPI:
         uow_mock = mock.MagicMock()
         uow_mock.sbds = ["sbd-t0001-20240702-00002"]
 
-        # Create consistent datetime objects
-        created_on = datetime.datetime(
-            2024, 7, 2, 18, 1, 47, 873431, tzinfo=zoneinfo.ZoneInfo(key="GMT")
-        )
-        last_modified_on = datetime.datetime(
-            2024, 7, 3, 12, 23, 38, 785233, tzinfo=datetime.timezone.utc
-        )
-
         sbds_status_history_mock = mock.MagicMock()
-        sbds_status_history_mock.add.return_value = SBDStatusHistory(
-            metadata=Metadata(
-                version=1,
-                created_by="DefaultUser",
-                created_on=created_on,
-                last_modified_by="DefaultUser",
-                last_modified_on=last_modified_on,
-            ),
-            sbd_ref="sbd-t0001-20240702-00002",
-            current_status=SBDStatus.COMPLETE,
-            previous_status=SBDStatus.DRAFT,
+        sbds_status_history_mock.add.return_value = (
+            SBDStatusHistory.model_validate_json(valid_put_sbd_history_response)
         )
 
         uow_mock.sbds_status_history = sbds_status_history_mock
@@ -286,27 +266,11 @@ class TestSBIDefinitionAPI:
         uow_mock = mock.MagicMock()
         uow_mock.sbis = ["sbi-mvp01-20220923-00002"]
 
-        created_on = datetime.datetime(
-            2024, 7, 2, 18, 1, 47, 873431, tzinfo=zoneinfo.ZoneInfo(key="GMT")
-        )
-        last_modified_on = datetime.datetime(
-            2024, 7, 3, 12, 23, 38, 785233, tzinfo=datetime.timezone.utc
-        )
-
         sbis_status_history_mock = mock.MagicMock()
-        sbis_status_history_mock.add.return_value = SBIStatusHistory(
-            metadata=Metadata(
-                version=1,
-                created_by="DefaultUser",
-                created_on=created_on,
-                last_modified_by="DefaultUser",
-                last_modified_on=last_modified_on,
-            ),
-            sbi_ref="sbi-mvp01-20220923-00002",
-            current_status=SBIStatus.EXECUTING,
-            previous_status=SBIStatus.CREATED,
-        )
 
+        sbis_status_history_mock.add.return_value = (
+            SBIStatusHistory.model_validate_json(valid_put_sbi_history_response)
+        )
         uow_mock.sbis_status_history = sbis_status_history_mock
         uow_mock.commit.return_value = "200"
         mock_oda.uow.__enter__.return_value = uow_mock
