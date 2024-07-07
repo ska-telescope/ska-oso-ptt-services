@@ -1,14 +1,10 @@
-
 import json
 from http import HTTPStatus
 from importlib.metadata import version
 from unittest import mock
 
 from ska_oso_pdm import SBDefinition
-from ska_oso_pdm.entity_status_history import (
-    SBDStatusHistory,
-    SBIStatusHistory,
-)
+from ska_oso_pdm.entity_status_history import SBDStatusHistory, SBIStatusHistory
 
 from tests.unit.ska_oso_ptt_services.util import (
     assert_json_is_equal,
@@ -143,6 +139,7 @@ class TestSBDefinitionAPI:
         result = client.get(
             f"{BASE_API_URL}/status/history/sbds",
             query_string={"entity_id": "sbd-t0001-20240702-00002", "version": "1"},
+            headers={"accept": "application/json"},
         )
 
         assert_json_is_equal(result.text, valid_sbd_status_history)
@@ -157,6 +154,7 @@ class TestSBDefinitionAPI:
         result = client.get(
             f"{BASE_API_URL}/status/history/sbds",
             query_string={"entity_id": "sbd-t0001-20240702-00100", "version": "1"},
+            headers={"accept": "application/json"},
         )
 
         error = {
@@ -179,6 +177,7 @@ class TestSBDefinitionAPI:
         result = client.get(
             f"{BASE_API_URL}/status/sbds/sbd-t0001-20240702-00002",
             query_string={"version": "1"},
+            headers={"accept": "application/json"},
         )
 
         assert_json_is_equal(result.text, valid_sbd_status)
@@ -195,6 +194,7 @@ class TestSBDefinitionAPI:
         result = client.get(
             f"{BASE_API_URL}/status/sbds/{invalid_sbd_id}",
             query_string={"version": "1"},
+            headers={"accept": "application/json"},
         )
 
         error = {
@@ -224,15 +224,19 @@ class TestSBDefinitionAPI:
         uow_mock.commit.return_value = "200"
         mock_oda.uow.__enter__.return_value = uow_mock
 
-        url = "/ska-oso-ptt-services/ptt/api/v1/status/sbds/sbd-t0001-20240702-00002"
-        params = {"version": "1"}
+        query_params = {"version": "1"}
         data = {"current_status": "complete", "previous_status": "draft"}
         exclude_paths = [
             "root['metadata']['created_on']",
             "root['metadata']['last_modified_on']",
         ]
 
-        result = client.put(url, query_string=params, json=data)
+        result = client.put(
+            f"{BASE_API_URL}/status/sbds/sbd-t0001-20240702-00002",
+            query_string=query_params,
+            json=data,
+            headers={"accept": "application/json"},
+        )
         assert_json_is_equal(result.text, valid_put_sbd_history_response, exclude_paths)
         assert result.status_code == HTTPStatus.OK
 
@@ -250,6 +254,7 @@ class TestSBDefinitionAPI:
             f"{BASE_API_URL}/status/sbds/sbd-t0001-20240702-00002",
             query_string=query_params,
             json=data,
+            headers={"accept": "application/json"},
         )
         exclude_path = ["root['traceback']"]
         assert_json_is_equal(result.text, json.dumps(error), exclude_path)
@@ -286,6 +291,7 @@ class TestSBIDefinitionAPI:
             f"{BASE_API_URL}/status/sbis/sbi-mvp01-20220923-00002",
             query_string=query_params,
             json=data,
+            headers={"accept": "application/json"},
         )
         assert_json_is_equal(result.text, valid_put_sbi_history_response, exclude_paths)
         assert result.status_code == HTTPStatus.OK
@@ -304,6 +310,7 @@ class TestSBIDefinitionAPI:
             f"{BASE_API_URL}/status/sbds/sbd-t0001-20240702-00002",
             query_string=query_params,
             json=data,
+            headers={"accept": "application/json"},
         )
         exclude_path = ["root['traceback']"]
         assert_json_is_equal(result.text, json.dumps(error), exclude_path)
