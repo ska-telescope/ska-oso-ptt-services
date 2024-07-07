@@ -218,7 +218,7 @@ paths:
       summary: Get SBInstance by identifier
       description: |
         Retrieves the SBInstance status with the given identifier from the underlying data store, if available
-      operationId: ska_db_oda.rest.api.resources.get_sbi_status
+      operationId: ska_oso_ptt_services.rest.api.resources.get_sbi_status
       parameters:
       - $ref: '#/components/parameters/version'
       responses:
@@ -239,7 +239,7 @@ paths:
     get:
       summary: Get SBInstance status history by the query parameter
       description: "Retrieves the SBInstance status history which match the query parameters.\nCurrently only two single query field is permitted, eg entity_id and version, \nextra parameters passed to the request will be ignored.\nIf version parameter is not passed then the api retrieves the SBInstance status history\nfor the latest available SBInstance  version.Also requests without\nparameters will return an error rather than returning all objects.\n"
-      operationId: ska_db_oda.rest.api.resources.get_sbi_status_history
+      operationId: ska_oso_ptt_services.rest.api.resources.get_sbi_status_history
       parameters:
       - $ref: '#/components/parameters/entity_id'
       - $ref: '#/components/parameters/version'

@@ -379,7 +379,7 @@ class TestSBInstanceAPI:
     @mock.patch("ska_oso_ptt_services.rest.api.resources._get_sbi_status")
     def test_get_sbi_with_status(self, mock_get_sbi_status, mock_oda, client):
         valid_sbi = load_string_from_file(
-            "../files/testfile_sample_sbi_json_with_status.json"
+            "../files/testfile_sample_sbi_with_status.json"
         )
 
         sbi_mock = mock.MagicMock()
@@ -390,7 +390,7 @@ class TestSBInstanceAPI:
         mock_oda.uow.__enter__.return_value = uow_mock
 
         result = client.get(
-            f"{BASE_API_URL}/sbis/sbi-t0001-20240702-00002",
+            f"{BASE_API_URL}/sbis/sbi-mvp01-20240426-5016",
             headers={"accept": "application/json"},
         )
         assert_json_is_equal(result.text, valid_sbi)
@@ -436,7 +436,7 @@ class TestSBInstanceAPI:
         mock_oda.uow.__enter__.return_value = uow_mock
         result = client.get(
             f"{BASE_API_URL}/status/history/sbis",
-            query_string={"entity_id": "sbi-t0001-20240702-00002", "version": "1"},
+            query_string={"entity_id": "sbi-mvp01-20240426-5016", "version": "1"},
         )
 
         assert_json_is_equal(result.text, valid_sbi_status_history)
@@ -449,13 +449,12 @@ class TestSBInstanceAPI:
         mock_oda.uow.__enter__.return_value = uow_mock
         result = client.get(
             f"{BASE_API_URL}/status/history/sbis",
-            query_string={"entity_id": "sbi-t0001-20240702-00100", "version": "1"},
+            query_string={"entity_id": "sbi-t000-00100", "version": "1"},
         )
 
         error = {
             "detail": (
-                "Not Found. The requested identifier sbi-t0001-20240702-00100 could not"
-                " be found."
+                "Not Found. The requested identifier sbi-t000-00100 could not be found."
             )
         }
         assert json.loads(result.text) == error
@@ -469,7 +468,7 @@ class TestSBInstanceAPI:
         mock_get_sbi_status.return_value = json.loads(valid_sbi_status)
 
         result = client.get(
-            f"{BASE_API_URL}/status/sbis/sbi-t0001-20240702-00002",
+            f"{BASE_API_URL}/status/sbis/sbi-mvp01-20240426-5016",
             query_string={"version": "1"},
         )
 

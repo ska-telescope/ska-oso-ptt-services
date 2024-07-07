@@ -286,16 +286,16 @@ def _get_sbi_status(sbi_id: str, version: str = None) -> Dict[str, Any]:
         retrieved_sbi = uow.sbis_status_history.get(
             entity_id=sbi_id, version=version, is_status_history=False
         )
-        return retrieved_sbi.model_dump()["current_status"] if retrieved_sbi else None
+    return retrieved_sbi.model_dump()
 
 
 @error_handler
 def get_sbi_status(sbi_id: str, version: int = None) -> Response:
     """
-    Function that a GET status/ebs/<eb_id> request is routed to.
-    This method is used to GET the current status for the given eb_id
+    Function that a GET status/sbi/<sbi_id> request is routed to.
+    This method is used to GET the current status for the given sbi_id
 
-    :param eb_id: Requested identifier from the path parameter
+    :param sb_id: Requested identifier from the path parameter
     :param version: Requested identifier from the path parameter
     :return: The current entity status,OSOEBStatusHistory wrapped in a
         Response, or appropriate error Response
