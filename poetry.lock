@@ -19,14 +19,14 @@ reference = "PyPI-public"
 
 [[package]]
 name = "annotated-types"
-version = "0.6.0"
-description = "Reusable constraint types to use with typing.Annotated"
+version = "0.7.0"
+description = ""
 category = "main"
 optional = false
-python-versions = ">=3.8"
+python-versions = "*"
 files = [
-    {file = "annotated_types-0.6.0-py3-none-any.whl", hash = "sha256:0641064de18ba7a25dee8f96403ebc39113d0cb953a01429249d5c7564666a43"},
-    {file = "annotated_types-0.6.0.tar.gz", hash = "sha256:563339e807e53ffd9c267e99fc6d9ea23eb8443c08f112651963e24e22f84a5d"},
+    {file = "annotated_types-0.7.0-py3-none-any.whl", hash = "sha256:1f02e8b43a8fbbc3f3e0d4f0f4bfc8131bcb4eebe8849b8e5c773f3a1c582a53"},
+    {file = "annotated_types-0.7.0.tar.gz", hash = "sha256:aff07c09a53a08bc8cfccb9c85b05f1aa9a2a6f23728d790723543408344ce89"},
 ]
 
 [package.source]
@@ -585,32 +585,6 @@ url = "https://pypi.org/simple"
 reference = "PyPI-public"
 
 [[package]]
-name = "dnspython"
-version = "2.6.1"
-description = "DNS toolkit"
-category = "main"
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "dnspython-2.6.1-py3-none-any.whl", hash = "sha256:5ef3b9680161f6fa89daf8ad451b5f1a33b18ae8a1c6778cdf4b43f08c0a6e50"},
-    {file = "dnspython-2.6.1.tar.gz", hash = "sha256:e8f0f9c23a7b7cb99ded64e6c3a6f3e701d78f50c55e002b839dea7225cff7cc"},
-]
-
-[package.extras]
-dev = ["black (>=23.1.0)", "coverage (>=7.0)", "flake8 (>=7)", "mypy (>=1.8)", "pylint (>=3)", "pytest (>=7.4)", "pytest-cov (>=4.1.0)", "sphinx (>=7.2.0)", "twine (>=4.0.0)", "wheel (>=0.42.0)"]
-dnssec = ["cryptography (>=41)"]
-doh = ["h2 (>=4.1.0)", "httpcore (>=1.0.0)", "httpx (>=0.26.0)"]
-doq = ["aioquic (>=0.9.25)"]
-idna = ["idna (>=3.6)"]
-trio = ["trio (>=0.23)"]
-wmi = ["wmi (>=1.5.1)"]
-
-[package.source]
-type = "legacy"
-url = "https://pypi.org/simple"
-reference = "PyPI-public"
-
-[[package]]
 name = "docutils"
 version = "0.18.1"
 description = "Docutils -- Python Documentation Utilities"
@@ -621,27 +595,6 @@ files = [
     {file = "docutils-0.18.1-py2.py3-none-any.whl", hash = "sha256:23010f129180089fbcd3bc08cfefccb3b890b0050e1ca00c867036e9d161b98c"},
     {file = "docutils-0.18.1.tar.gz", hash = "sha256:679987caf361a7539d76e584cbeddc311e3aee937877c87346f31debc63e9d06"},
 ]
-
-[package.source]
-type = "legacy"
-url = "https://pypi.org/simple"
-reference = "PyPI-public"
-
-[[package]]
-name = "email-validator"
-version = "2.2.0"
-description = "A robust email address syntax and deliverability validation library."
-category = "main"
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "email_validator-2.2.0-py3-none-any.whl", hash = "sha256:561977c2d73ce3611850a06fa56b414621e0c8faa9d66f2611407d87465da631"},
-    {file = "email_validator-2.2.0.tar.gz", hash = "sha256:cb690f344c617a714f22e66ae771445a1ceb46821152df8e165c5f9a364582b7"},
-]
-
-[package.dependencies]
-dnspython = ">=2.0.0"
-idna = ">=2.0.0"
 
 [package.source]
 type = "legacy"
@@ -2202,14 +2155,14 @@ reference = "PyPI-public"
 
 [[package]]
 name = "ska-db-oda"
-version = "4.1.0"
+version = "5.0.0"
 description = "SKA Database OSO Data Archive"
 category = "main"
 optional = false
 python-versions = ">=3.10,<4.0"
 files = [
-    {file = "ska_db_oda-4.1.0-py3-none-any.whl", hash = "sha256:06f50dc8be78cff4e2d360fada45fbf2ff39767bfae9e45c0455a9db7720f533"},
-    {file = "ska_db_oda-4.1.0.tar.gz", hash = "sha256:d72a7bac06e793b857adb8fb86da6f14cef6927a220fa2bf03e72c11237e49de"},
+    {file = "ska_db_oda-5.0.0-py3-none-any.whl", hash = "sha256:0fdab4a9eef10630e7923c3b8fdef0d3cde0221de80d2f2c92e75092b2e7887b"},
+    {file = "ska_db_oda-5.0.0.tar.gz", hash = "sha256:235ec569aab706812d00ad3d240cc5955ec4f8d482534fa0d103a95431d1cccc"},
 ]
 
 [package.dependencies]
@@ -2222,7 +2175,7 @@ psycopg = {version = ">=3.0.15,<4.0.0", extras = ["binary"]}
 psycopg-pool = ">=3.1.1,<4.0.0"
 python-dateutil = ">=2.8.2,<3.0.0"
 requests = ">=2.27.1,<3.0.0"
-ska-oso-pdm = "13.0.0"
+ska-oso-pdm = "14.0.1"
 ska-ser-logging = ">=0.4.1,<0.5.0"
 ska-ser-skuid = ">=3.3.3,<4.0.0"
 
@@ -2233,23 +2186,19 @@ reference = 'skao'
 
 [[package]]
 name = "ska-oso-pdm"
-version = "13.0.0"
+version = "14.0.1"
 description = "SKA Project Data Model serialisation library"
 category = "main"
 optional = false
 python-versions = ">=3.10,<4.0"
 files = [
-    {file = "ska_oso_pdm-13.0.0-py3-none-any.whl", hash = "sha256:32683d596ad70b98557220c76bc18066bbd7f4d63cd0635cd382d191505abd60"},
-    {file = "ska_oso_pdm-13.0.0.tar.gz", hash = "sha256:410e7b82ae04c6cdfcdfe07f4d77f468a23e79b672ca513a3aa0d187e316f190"},
+    {file = "ska_oso_pdm-14.0.1-py3-none-any.whl", hash = "sha256:95d3dc8f881c5089edf878ba3604aa32dd3d46ba9f2fa5ded6da67d9bb93f2bd"},
+    {file = "ska_oso_pdm-14.0.1.tar.gz", hash = "sha256:4fc8e9d5c9f8a900030fef3d586bb3e3ba1dbd0abf5944630fe9122f02021108"},
 ]
 
 [package.dependencies]
-annotated-types = ">=0.6.0,<0.7.0"
 astropy = ">=5.0.3,<6.0.0"
-email-validator = ">=2.1.1,<3.0.0"
 pydantic = {version = ">=2.7.1,<3.0.0", extras = ["email"]}
-pydantic-core = ">=2.18.2,<3.0.0"
-typing-extensions = ">=4.11.0,<5.0.0"
 
 [package.source]
 type = "legacy"
@@ -2891,4 +2840,4 @@ reference = "PyPI-public"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "a83e24cb1a0409a8234c8400cf1731936dbc52a2659462e8fd4e01d9bf06bca0"
+content-hash = "cf7e8b815dbfc3d9ad83b2daba723813923ada084c4868b93276a768b8d88be8"
