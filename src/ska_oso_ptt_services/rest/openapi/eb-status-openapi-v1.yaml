@@ -1,0 +1,16 @@
+OSOEBStatusHistory:
+  type: object
+  required:
+    - previous_status
+    - current_status
+  properties:
+    previous_status:
+      description: Previous Status of the EB Entity.
+      example: created
+      type: string
+    current_status:
+      description: Current Status of the EB Entity.
+      example: fully_observed
+      type: string
+   
+    
