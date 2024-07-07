@@ -28,7 +28,9 @@ ska-db-oda = "5.0.0"
 deepdiff = "^7.0.1"
 pydantic-core = "^2.20.1"
 annotated-types = "^0.7.0"
+
 pydantic = {extras = ["email"], version = "^2.8.2"}
+email-validator = "^2.2.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^22.6.0"
