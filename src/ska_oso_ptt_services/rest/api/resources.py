@@ -42,10 +42,11 @@ class PTTQueryParamsFactory(QueryParamsFactory):
     def from_dict(kwargs: dict) -> QueryParams:
         """
         Returns QueryParams instance if validation successfull
+        param kwargs: Parameters Passed
         raises: ValueError for incorrect values
         """
-        result = QueryParamsFactory.from_dict(kwargs=kwargs)
-        return result
+
+        return QueryParamsFactory.from_dict(kwargs=kwargs)
 
 
 def get_qry_params(kwargs: dict) -> Union[QueryParams, Response]:

@@ -69,7 +69,7 @@ def create_app(open_api_spec=None) -> App:
     }
     connexion.add_api(
         open_api_spec,
-        arguments={"title": "OpenAPI ODT"},
+        arguments={"title": "OpenAPI PTT"},
         base_path=API_PATH,
         pythonic_params=True,
         validator_map=validator_map,

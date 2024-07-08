@@ -212,6 +212,7 @@ class TestSBDefinitionAPI:
 
     @mock.patch("ska_oso_ptt_services.rest.api.resources.oda")
     def test_put_sbd_history(self, mock_oda, client):
+        """Verifying that put_sbd_history updates the sbd status correctly"""
         valid_put_sbd_history_response = load_string_from_file(
             "files/testfile_sample_sbd_status.json"
         )
@@ -449,6 +450,7 @@ class TestSBInstanceAPI:
 
     @mock.patch("ska_oso_ptt_services.rest.api.resources.oda")
     def test_put_sbi_history(self, mock_oda, client):
+        """Verifying that put_sbi_history updates the sbi status correctly"""
         valid_put_sbi_history_response = load_string_from_file(
             "files/testfile_sample_sbi_status_history.json"
         )
@@ -694,6 +696,7 @@ class TestExecutionBlockAPI:
 
     @mock.patch("ska_oso_ptt_services.rest.api.resources.oda")
     def test_put_eb_history(self, mock_oda, client):
+        """Verifying that put_eb_history updates the eb status correctly"""
         valid_put_eb_history_response = load_string_from_file(
             "files/testfile_sample_eb_status.json"
         )
