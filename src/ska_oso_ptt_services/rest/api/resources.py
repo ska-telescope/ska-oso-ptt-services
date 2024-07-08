@@ -155,8 +155,8 @@ def put_sbd_history(sbd_id: str, version: int, body: dict) -> Response:
 
     :param sbd_id: Requested identifier from the path parameter
     :param version: Requested identifier from the path parameter
-    :param body: ExecutionBlock to persist from the request body
-    :return: The ExecutionBlock wrapped in a Response, or appropriate error Response
+    :param body: SBDefinition to persist from the request body
+    :return: The SBDefinition wrapped in a Response, or appropriate error Response
     """
     try:
         sbd_status_history = SBDStatusHistory(
@@ -215,8 +215,8 @@ def put_sbi_history(sbi_id: str, version: int, body: dict) -> Response:
 
     :param sbi_id: Requested identifier from the path parameter
     :param version: Requested identifier from the path parameter
-    :param body: ExecutionBlock to persist from the request body
-    :return: The ExecutionBlock wrapped in a Response, or appropriate error Response
+    :param body: SBInstance to persist from the request body
+    :return: The SBInstance wrapped in a Response, or appropriate error Response
     """
     try:
         sbi_status_history = SBIStatusHistory(
@@ -388,7 +388,7 @@ def get_sbi_with_status(sbi_id: str) -> Response:
     Function that a GET /sbis/<sbi_id> request is routed to.
 
     :param sbd_id: Requested identifier from the path parameter
-    :return: The SBDefinition with status wrapped in a Response,
+    :return: The SBInstance with status wrapped in a Response,
          or appropriate error Response
     """
     with oda.uow as uow:
@@ -406,7 +406,7 @@ def get_sbis_with_status(**kwargs) -> Response:
     Function that a GET /sbis request is routed to.
 
     :param kwargs: Parameters to query the ODA by.
-    :return: All ExecutionBlocks present with status wrapped in a Response,
+    :return: All SBInstance present with status wrapped in a Response,
          or appropriate error Response
     """
     maybe_qry_params = get_qry_params(kwargs)

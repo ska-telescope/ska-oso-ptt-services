@@ -20,6 +20,11 @@ BASE_API_URL = f"/ska-oso-ptt-services/ptt/api/v{OSO_SERVICES_MAJOR_VERSION}"
 
 
 class TestSBDefinitionAPI:
+    """This class contains unit tests for the SBDefinitionAPI resource,
+    which is responsible for handling requests related to
+    Scheduling Block Definitions.
+    """
+
     @mock.patch("ska_oso_ptt_services.rest.api.resources.oda")
     @mock.patch("ska_oso_ptt_services.rest.api.resources._get_sbd_status")
     def test_get_sbds_with_status(self, mock_get_sbd_status, mock_oda, client):
@@ -130,6 +135,9 @@ class TestSBDefinitionAPI:
 
     @mock.patch("ska_oso_ptt_services.rest.api.resources.oda")
     def test_get_sbd_status_history(self, mock_oda, client):
+        """Verifying that get_sbd_status_history API returns requested
+        SBD status history
+        """
         valid_sbd_status_history = load_string_from_file(
             "files/testfile_sample_sbd_status_history.json"
         )
@@ -151,7 +159,9 @@ class TestSBDefinitionAPI:
 
     @mock.patch("ska_oso_ptt_services.rest.api.resources.oda")
     def test_invalid_get_sbd_status_history(self, mock_oda, client):
-        """Verifying that et_sbd_status_history throws error if invalid data passed"""
+        """Verifying that test_invalid_get_sbd_status_history throws error
+        if invalid data passed
+        """
         uow_mock = mock.MagicMock()
         uow_mock.sbds_status_history.query.return_value = []
         mock_oda.uow.__enter__.return_value = uow_mock
@@ -172,6 +182,8 @@ class TestSBDefinitionAPI:
 
     @mock.patch("ska_oso_ptt_services.rest.api.resources._get_sbd_status")
     def test_get_sbd_status(self, mock_get_sbd_status, client):
+        """Verifying that test_get_sbd_status API returns requested SBD status"""
+
         valid_sbd_status = load_string_from_file(
             "files/testfile_sample_sbd_status.json"
         )
@@ -267,9 +279,15 @@ class TestSBDefinitionAPI:
 
 
 class TestSBInstanceAPI:
+    """This class contains unit tests for the SBInstanceAPI resource,
+    which is responsible for handling requests related to
+    Scheduling Block Insatnces.
+    """
+
     @mock.patch("ska_oso_ptt_services.rest.api.resources.oda")
     @mock.patch("ska_oso_ptt_services.rest.api.resources._get_sbi_status")
     def test_get_sbis_with_status(self, mock_get_sbi_status, mock_oda, client):
+        """Verifying that get_sbis_with_status API returns All SBIs with status"""
         valid_sbis = load_string_from_file(
             "files/testfile_sample_multiple_sbis_with_status.json"
         )
@@ -299,7 +317,10 @@ class TestSBInstanceAPI:
         assert result.status_code == HTTPStatus.OK
 
     def test_invalid_get_sbis_with_status(self, client):
-        # Define the query parameters
+        """Verifying that get_sbis_with_status throws error if
+        invalid data passed
+        """
+
         query_params = {
             "match_type": "equals",
             "created_before": "2022-03-28T15:43:53.971548+00:00",
@@ -328,6 +349,8 @@ class TestSBInstanceAPI:
     @mock.patch("ska_oso_ptt_services.rest.api.resources.oda")
     @mock.patch("ska_oso_ptt_services.rest.api.resources._get_sbi_status")
     def test_get_sbi_with_status(self, mock_get_sbi_status, mock_oda, client):
+        """Verifying that get_sbi_with_status API returns requested SBI with status"""
+
         valid_sbi = load_string_from_file("files/testfile_sample_sbi_with_status.json")
 
         sbi_mock = mock.MagicMock()
@@ -346,6 +369,8 @@ class TestSBInstanceAPI:
 
     @mock.patch("ska_oso_ptt_services.rest.api.resources.oda")
     def test_get_sbi_with_invalid_status(self, mock_oda, client):
+        """Verifying that get_sbi_with_status throws error if invalid data passed"""
+
         invalid_sbi_id = "invalid-sbi-id-12345"
 
         uow_mock = mock.MagicMock()
@@ -373,6 +398,10 @@ class TestSBInstanceAPI:
 
     @mock.patch("ska_oso_ptt_services.rest.api.resources.oda")
     def test_get_sbi_status_history(self, mock_oda, client):
+        """Verifying that get_sbi_status_history API returns requested
+        SBI status history
+        """
+
         valid_sbi_status_history = load_string_from_file(
             "files/testfile_sample_sbi_status_history.json"
         )
@@ -393,6 +422,9 @@ class TestSBInstanceAPI:
 
     @mock.patch("ska_oso_ptt_services.rest.api.resources.oda")
     def test_invalid_get_sbi_status_history(self, mock_oda, client):
+        """Verifying that test_invalid_get_sbi_status_history throws error
+        if invalid data passed
+        """
         uow_mock = mock.MagicMock()
         uow_mock.sbis_status_history.query.return_value = []
         mock_oda.uow.__enter__.return_value = uow_mock
@@ -412,6 +444,8 @@ class TestSBInstanceAPI:
 
     @mock.patch("ska_oso_ptt_services.rest.api.resources._get_sbi_status")
     def test_get_sbi_status(self, mock_get_sbi_status, client):
+        """Verifying that test_get_sbi_status API returns requested SBI status"""
+
         valid_sbi_status = load_string_from_file(
             "files/testfile_sample_sbi_status.json"
         )
@@ -428,6 +462,7 @@ class TestSBInstanceAPI:
 
     @mock.patch("ska_oso_ptt_services.rest.api.resources._get_sbi_status")
     def test_invalid_get_sbi_status(self, mock_get_sbi_status, client):
+        """Verifying that get_sbi_status throws error if invalid data passed"""
         invalid_sbi_id = "sbi-t0001-20240702-00100"
         mock_get_sbi_status.side_effect = KeyError(
             f"Not Found. The requested identifier {invalid_sbi_id} could not be found."
@@ -505,9 +540,15 @@ class TestSBInstanceAPI:
 
 
 class TestExecutionBlockAPI:
+    """This class contains unit tests for the ExecutionBlockAPI resource,
+    which is responsible for handling requests related to
+    Execution Block.
+    """
+
     @mock.patch("ska_oso_ptt_services.rest.api.resources.oda")
     @mock.patch("ska_oso_ptt_services.rest.api.resources._get_eb_status")
     def test_get_ebs_with_status(self, mock_get_eb_status, mock_oda, client):
+        """Verifying that get_ebs_with_status API returns All EBs with status"""
         valid_ebs = load_string_from_file(
             "files/testfile_sample_multiple_ebs_with_status.json"
         )
@@ -537,7 +578,8 @@ class TestExecutionBlockAPI:
         assert result.status_code == HTTPStatus.OK
 
     def test_invalid_get_ebs_with_status(self, client):
-        # Define the query parameters
+        """Verifying that get_ebs_with_status throws error if invalid data passed"""
+
         query_params = {
             "match_type": "equals",
             "created_before": "2022-03-28T15:43:53.971548+00:00",
@@ -566,6 +608,7 @@ class TestExecutionBlockAPI:
     @mock.patch("ska_oso_ptt_services.rest.api.resources.oda")
     @mock.patch("ska_oso_ptt_services.rest.api.resources._get_eb_status")
     def test_get_eb_with_status(self, mock_get_eb_status, mock_oda, client):
+        """Verifying that get_eb_with_status API returns requested EB with status"""
         valid_eb_with_status = load_string_from_file(
             "files/testfile_sample_eb_with_status.json"
         )
@@ -586,6 +629,7 @@ class TestExecutionBlockAPI:
 
     @mock.patch("ska_oso_ptt_services.rest.api.resources.oda")
     def test_get_eb_with_invalid_status(self, mock_oda, client):
+        """Verifying that get_eb_with_status throws error if invalid data passed"""
         invalid_eb_id = "invalid-eb-id-12345"
 
         uow_mock = mock.MagicMock()
@@ -613,12 +657,8 @@ class TestExecutionBlockAPI:
 
     @mock.patch("ska_oso_ptt_services.rest.api.resources.oda")
     def test_get_eb_status_history(self, mock_oda, client):
-        """
-        uow_mock = mock.MagicMock()
-        uow_mock.ebs.get.return_value = TestDataFactory.ebefinition() #uow.ebs.get
-        mock_oda.uow.__enter__.return_value = uow_mock
-
-        result = client.get(f"{ebS_API_URL}/eb-1234")
+        """Verifying that get_eb_status_history API returns requested
+        EB status history
         """
         valid_eb_status_history = load_string_from_file(
             "files/testfile_sample_eb_status_history.json"
@@ -641,6 +681,9 @@ class TestExecutionBlockAPI:
 
     @mock.patch("ska_oso_ptt_services.rest.api.resources.oda")
     def test_invalid_get_eb_status_history(self, mock_oda, client):
+        """Verifying that test_invalid_get_eb_status_history throws error
+        if invalid data passed
+        """
         uow_mock = mock.MagicMock()
         uow_mock.ebs_status_history.query.return_value = []
         mock_oda.uow.__enter__.return_value = uow_mock
@@ -660,6 +703,8 @@ class TestExecutionBlockAPI:
 
     @mock.patch("ska_oso_ptt_services.rest.api.resources._get_eb_status")
     def test_get_eb_status(self, mock_get_eb_status, client):
+        """Verifying that test_eb_sbd_status API returns requested EB status"""
+
         valid_eb_status = load_string_from_file("files/testfile_sample_eb_status.json")
         mock_get_eb_status.return_value = json.loads(valid_eb_status)
 
@@ -674,6 +719,7 @@ class TestExecutionBlockAPI:
 
     @mock.patch("ska_oso_ptt_services.rest.api.resources._get_eb_status")
     def test_invalid_get_eb_status(self, mock_get_eb_status, client):
+        """Verifying that get_eb_status throws error if invalid data passed"""
         invalid_eb_id = "eb-t0001-20240702-00100"
         mock_get_eb_status.side_effect = KeyError(
             f"Not Found. The requested identifier {invalid_eb_id} could not be found."
@@ -731,6 +777,7 @@ class TestExecutionBlockAPI:
         assert result.status_code == HTTPStatus.OK
 
     def test_invalid_put_eb_history(self, client):
+        """Verifying that put_eb_history error if invalid data passed"""
         query_params = {"version": "1"}
         data = {"current1_status": "fully_observed", "previous_status": "created"}
 
