@@ -27,10 +27,21 @@ Response = Tuple[Union[dict, list], int]
 
 
 class PTTQueryParamsFactory(QueryParamsFactory):
-    pass
+    """
+    Class for checking Query Parameters
+    overrides QueryParamsFactory
+    """
+
+    @staticmethod
+    def from_dict(kwargs: dict) -> QueryParams:
+        """
+        Returns QueryParams instance if validation successfull
+        raises: ValueError for incorrect values
+        """
+        result = QueryParamsFactory.from_dict(kwargs=kwargs)
+        return result
 
 
-# for query params exyension
 def get_qry_params(kwargs: dict) -> Union[QueryParams, Response]:
     """
     Convert the parameters from the request into QueryParams.
@@ -107,7 +118,8 @@ def get_eb_with_status(eb_id: str) -> Response:
     Function that a GET /ebs/<eb_id> request is routed to.
 
     :param eb_id: Requested identifier from the path parameter
-    :return: The ExecutionBlock wrapped in a Response, or appropriate error Response
+    :return: The ExecutionBlock with status wrapped in a Response,
+        or appropriate error Response
     """
     with oda.uow as uow:
         eb = uow.ebs.get(eb_id)
@@ -149,6 +161,11 @@ def get_ebs_with_status(**kwargs) -> Response:
 def _get_eb_status(eb_id: str, version: str = None) -> Dict[str, Any]:
     """
     Takes an EB ID and Version and returns status
+    :param sbd_id: Execution Block ID
+    :param version: EB version
+
+    Returns retrieved EB status in Dictionary format
+
     """
     with oda.uow as uow:
         retrieved_eb = uow.ebs_status_history.get(
@@ -169,6 +186,7 @@ def get_eb_status(eb_id: str, version: int = None) -> Response:
     :return: The current entity status,OSOEBStatusHistory wrapped in a
         Response, or appropriate error Response
     """
+
     eb_status = _get_eb_status(eb_id=eb_id, version=version)
     return eb_status, HTTPStatus.OK
 
@@ -280,7 +298,12 @@ def get_sbis_with_status(**kwargs) -> Response:
 
 def _get_sbi_status(sbi_id: str, version: str = None) -> Dict[str, Any]:
     """
-    Takes an EB ID and Version and returns status
+    Takes an SBInstance ID and Version and returns status
+    param sbd_id: SBInstance ID
+    :param version: SBI version
+
+    Returns retrieved SBI status in Dictionary format
+
     """
     with oda.uow as uow:
         retrieved_sbi = uow.sbis_status_history.get(
@@ -297,7 +320,7 @@ def get_sbi_status(sbi_id: str, version: int = None) -> Response:
 
     :param sb_id: Requested identifier from the path parameter
     :param version: Requested identifier from the path parameter
-    :return: The current entity status,OSOEBStatusHistory wrapped in a
+    :return: The current entity status,SBIStatusHistory wrapped in a
         Response, or appropriate error Response
     """
     sbi_status = _get_sbi_status(sbi_id=sbi_id, version=version)
@@ -307,11 +330,11 @@ def get_sbi_status(sbi_id: str, version: int = None) -> Response:
 @error_handler
 def get_sbi_status_history(**kwargs) -> Response:
     """
-    Function that a GET /status/ebs request is routed to.
+    Function that a GET /status/history/sbis request is routed to.
     This method is used to GET status history for the given entity
 
     :param kwargs: Parameters to query the ODA by.
-    :return: The status history, OSOEBStatusHistory wrapped in a Response,
+    :return: The status history, SBIStatusHistory wrapped in a Response,
         or appropriate error Response
     """
     if not isinstance(maybe_qry_params := get_qry_params(kwargs), QueryParams):

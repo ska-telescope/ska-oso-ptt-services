@@ -1,52 +1,18 @@
-import datetime
 import json
-import os
-import zoneinfo
 from http import HTTPStatus
 from importlib.metadata import version
 from unittest import mock
 
-import pytest
-from deepdiff import DeepDiff
-from ska_oso_pdm import Metadata, OSOExecutionBlock, SBInstance
-from ska_oso_pdm.entity_status_history import OSOEBStatus, OSOEBStatusHistory
+from ska_oso_pdm import OSOExecutionBlock, SBInstance
+from ska_oso_pdm.entity_status_history import OSOEBStatusHistory
 
-from ska_oso_ptt_services.rest import create_app
+from tests.unit.ska_oso_ptt_services.util import (
+    assert_json_is_equal,
+    load_string_from_file,
+)
 
 OSO_SERVICES_MAJOR_VERSION = version("ska-oso-ptt-services").split(".")[0]
 BASE_API_URL = f"/ska-oso-ptt-services/ptt/api/v{OSO_SERVICES_MAJOR_VERSION}"
-
-
-def load_string_from_file(filename):
-    """
-    Return a file from the current directory as a string
-    """
-    cwd, _ = os.path.split(__file__)
-    path = os.path.join(cwd, filename)
-    with open(path, "r", encoding="utf-8") as json_file:
-        json_data = json_file.read()
-        return json_data
-
-
-def assert_json_is_equal(json_a, json_b, exclude_paths=None):
-    """
-    Utility function to compare two JSON objects
-    """
-    # Load the JSON strings into Python dictionaries
-    obj_a = json.loads(json_a)  # remains string #result.text
-    obj_b = json.loads(json_b)  # converts to list
-
-    diff = DeepDiff(obj_a, obj_b, ignore_order=True, exclude_paths=exclude_paths)
-
-    # Raise an assertion error if there are differences
-    assert {} == diff, f"JSON not equal: {diff}"
-
-
-@pytest.fixture
-def client():
-    app = create_app()
-    with app.app.test_client() as client:
-        yield client
 
 
 class TestExecutionBlockAPI:
@@ -54,7 +20,7 @@ class TestExecutionBlockAPI:
     @mock.patch("ska_oso_ptt_services.rest.api.resources._get_eb_status")
     def test_get_ebs_with_status(self, mock_get_eb_status, mock_oda, client):
         valid_ebs = load_string_from_file(
-            "../files/testfile_sample_multiple_ebs_with_status.json"
+            "files/testfile_sample_multiple_ebs_with_status.json"
         )
 
         execution_block = [OSOExecutionBlock(**x) for x in json.loads(valid_ebs)]
@@ -112,7 +78,7 @@ class TestExecutionBlockAPI:
     @mock.patch("ska_oso_ptt_services.rest.api.resources._get_eb_status")
     def test_get_eb_with_status(self, mock_get_eb_status, mock_oda, client):
         valid_eb_with_status = load_string_from_file(
-            "../files/testfile_sample_eb_with_status.json"
+            "files/testfile_sample_eb_with_status.json"
         )
 
         eb_mock = mock.MagicMock()
@@ -166,7 +132,7 @@ class TestExecutionBlockAPI:
         result = client.get(f"{ebS_API_URL}/eb-1234")
         """
         valid_eb_status_history = load_string_from_file(
-            "../files/testfile_sample_eb_status_history.json"
+            "files/testfile_sample_eb_status_history.json"
         )
 
         uow_mock = mock.MagicMock()
@@ -203,9 +169,7 @@ class TestExecutionBlockAPI:
 
     @mock.patch("ska_oso_ptt_services.rest.api.resources._get_eb_status")
     def test_get_eb_status(self, mock_get_eb_status, client):
-        valid_eb_status = load_string_from_file(
-            "../files/testfile_sample_eb_status.json"
-        )
+        valid_eb_status = load_string_from_file("files/testfile_sample_eb_status.json")
         mock_get_eb_status.return_value = json.loads(valid_eb_status)
 
         result = client.get(
@@ -240,33 +204,15 @@ class TestExecutionBlockAPI:
     @mock.patch("ska_oso_ptt_services.rest.api.resources.oda")
     def test_put_eb_history(self, mock_oda, client):
         valid_put_eb_history_response = load_string_from_file(
-            "../files/testfile_sample_eb_status.json"
+            "files/testfile_sample_eb_status.json"
         )
 
         uow_mock = mock.MagicMock()
         uow_mock.ebs = ["eb-mvp01-20240426-5004"]
 
-        # Create consistent datetime objects
-        created_on = datetime.datetime(
-            2024, 7, 2, 18, 1, 47, 873431, tzinfo=zoneinfo.ZoneInfo(key="GMT")
-        )
-        last_modified_on = datetime.datetime(
-            2024, 7, 3, 12, 23, 38, 785233, tzinfo=datetime.timezone.utc
-        )
-
-        # Setting up nested mocks
         ebs_status_history_mock = mock.MagicMock()
-        ebs_status_history_mock.add.return_value = OSOEBStatusHistory(
-            metadata=Metadata(
-                version=1,
-                created_by="DefaultUser",
-                created_on=created_on,
-                last_modified_by="DefaultUser",
-                last_modified_on=last_modified_on,
-            ),
-            eb_ref="eb-mvp01-20240426-5004",
-            current_status=OSOEBStatus.FULLY_OBSERVED,
-            previous_status=OSOEBStatus.CREATED,
+        ebs_status_history_mock.add.return_value = (
+            OSOEBStatusHistory.model_validate_json(valid_put_eb_history_response)
         )
 
         uow_mock.ebs_status_history = ebs_status_history_mock
@@ -274,14 +220,19 @@ class TestExecutionBlockAPI:
         mock_oda.uow.__enter__.return_value = uow_mock
 
         url = "/ska-oso-ptt-services/ptt/api/v1/status/ebs/eb-mvp01-20240426-5004"
-        params = {"version": "1"}
+        query_params = {"version": "1"}
         data = {"current_status": "fully_observed", "previous_status": "created"}
         exclude_paths = [
             "root['metadata']['created_on']",
             "root['metadata']['last_modified_on']",
         ]
 
-        result = client.put(url, query_string=params, json=data)
+        result = client.put(
+            url,
+            query_string=query_params,
+            json=data,
+            headers={"accept": "application/json"},
+        )
         assert_json_is_equal(result.text, valid_put_eb_history_response, exclude_paths)
         assert result.status_code == HTTPStatus.OK
 
@@ -292,29 +243,17 @@ class TestExecutionBlockAPI:
         error = {
             "detail": "KeyError('current_status') with args ('current_status',)",
             "title": "Internal Server Error",
-            "traceback": {
-                "full_traceback": (
-                    "Traceback (most recent call last):\n  File"
-                    ' "/home/shalu/skao/ska-oso-ptt-services/src/ska_oso_ptt_services'
-                    ' /rest/api/resources.py", line 67, in wrapper\n    return'
-                    " api_fn(*args, **kwargs)\n  File"
-                    ' "/home/shalu/skao/ska-oso-ptt-services/src/ska_oso_ptt_services'
-                    ' /rest/api/resources.py", line 187, in put_eb_history\n   '
-                    ' current_status=ebStatus(body["current_status"]),\nKeyError:'
-                    " 'current_status'\n"
-                ),
-                "key": "Internal Server Error",
-                "type": "<class 'KeyError'>",
-            },
         }
 
         result = client.put(
             f"{BASE_API_URL}/status/ebs/eb-t0001-20240702-00002",
             query_string=query_params,
             json=data,
+            headers={"accept": "application/json"},
         )
         exclude_path = ["root['traceback']"]
         assert_json_is_equal(result.text, json.dumps(error), exclude_path)
+        assert result.status_code == HTTPStatus.INTERNAL_SERVER_ERROR
 
 
 class TestSBInstanceAPI:
@@ -322,7 +261,7 @@ class TestSBInstanceAPI:
     @mock.patch("ska_oso_ptt_services.rest.api.resources._get_sbi_status")
     def test_get_sbis_with_status(self, mock_get_sbi_status, mock_oda, client):
         valid_sbis = load_string_from_file(
-            "../files/testfile_sample_multiple_sbis_with_status.json"
+            "files/testfile_sample_multiple_sbis_with_status.json"
         )
 
         sbi_instance = [SBInstance(**x) for x in json.loads(valid_sbis)]
@@ -379,9 +318,7 @@ class TestSBInstanceAPI:
     @mock.patch("ska_oso_ptt_services.rest.api.resources.oda")
     @mock.patch("ska_oso_ptt_services.rest.api.resources._get_sbi_status")
     def test_get_sbi_with_status(self, mock_get_sbi_status, mock_oda, client):
-        valid_sbi = load_string_from_file(
-            "../files/testfile_sample_sbi_with_status.json"
-        )
+        valid_sbi = load_string_from_file("files/testfile_sample_sbi_with_status.json")
 
         sbi_mock = mock.MagicMock()
         sbi_mock.model_dump.return_value = json.loads(valid_sbi)
@@ -427,7 +364,7 @@ class TestSBInstanceAPI:
     @mock.patch("ska_oso_ptt_services.rest.api.resources.oda")
     def test_get_sbi_status_history(self, mock_oda, client):
         valid_sbi_status_history = load_string_from_file(
-            "../files/testfile_sample_sbi_status_history.json"
+            "files/testfile_sample_sbi_status_history.json"
         )
 
         uow_mock = mock.MagicMock()
@@ -464,7 +401,7 @@ class TestSBInstanceAPI:
     @mock.patch("ska_oso_ptt_services.rest.api.resources._get_sbi_status")
     def test_get_sbi_status(self, mock_get_sbi_status, client):
         valid_sbi_status = load_string_from_file(
-            "../files/testfile_sample_sbi_status.json"
+            "files/testfile_sample_sbi_status.json"
         )
         mock_get_sbi_status.return_value = json.loads(valid_sbi_status)
 

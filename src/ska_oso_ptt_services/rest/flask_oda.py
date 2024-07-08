@@ -45,7 +45,6 @@ class FlaskODA(object):
         if ctx is not None:
             uow = PostgresUnitOfWork(self.connection_pool)
             ctx.uow = uow
-
             return ctx.uow
 
     @property
