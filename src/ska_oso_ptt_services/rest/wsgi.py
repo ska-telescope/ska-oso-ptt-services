@@ -26,11 +26,11 @@ class UniformLogger(glogging.Logger):
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0")
+    app.run(host="0.0.0.0", debug=True)
 else:
     # presume being run from gunicorn
     # use gunicorn logging level for app and module loggers
     gunicorn_logger = logging.getLogger("gunicorn.error")
-    app.logger.setLevel(gunicorn_logger.level)
+    app.app.logger.setLevel(gunicorn_logger.level)
     logger = logging.getLogger("ska_oso_ptt_services")
     logger.setLevel(gunicorn_logger.level)
