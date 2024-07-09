@@ -1,0 +1,142 @@
+$defs:
+  ActivityCall:
+    properties:
+      activity_ref:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Activity Ref
+      executed_at:
+        format: date-time
+        title: Executed At
+        type: string
+      runtime_args:
+        items:
+          $ref: '#/$defs/FunctionArgs'
+        title: Runtime Args
+        type: array
+    required:
+    - runtime_args
+    title: ActivityCall
+    type: object
+  FunctionArgs:
+    description: Represents a Python function & its arguments
+    properties:
+      function_name:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Function Name
+      function_args:
+        anyOf:
+        - $ref: '#/$defs/PythonArguments'
+        - type: 'null'
+        default: null
+    title: FunctionArgs
+    type: object
+  Metadata:
+    description: Represents metadata about other entities.
+    properties:
+      version:
+        default: 1
+        title: Version
+        type: integer
+      created_by:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Created By
+      created_on:
+        format: date-time
+        title: Created On
+        type: string
+      last_modified_by:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Last Modified By
+      last_modified_on:
+        format: date-time
+        title: Last Modified On
+        type: string
+    title: Metadata
+    type: object
+  PythonArguments:
+    description: Represents the arguments for a Python callable.
+    properties:
+      args:
+        items: {}
+        title: Args
+        type: array
+      kwargs:
+        title: Kwargs
+        type: object
+    title: PythonArguments
+    type: object
+  TelescopeType:
+    enum:
+    - ska_mid
+    - ska_low
+    - MeerKAT
+    title: TelescopeType
+    type: string
+properties:
+  interface:
+    anyOf:
+    - type: string
+    - type: 'null'
+    default: null
+    title: Interface
+  sbi_id:
+    anyOf:
+    - type: string
+    - type: 'null'
+    default: null
+    title: Sbi Id
+  status:
+    - type: string
+    title: Status
+  metadata:
+    anyOf:
+    - $ref: '#/$defs/Metadata'
+    - type: 'null'
+    default: null
+  telescope:
+    $ref: '#/$defs/TelescopeType'
+  sbd_ref:
+    anyOf:
+    - type: string
+    - type: 'null'
+    default: null
+    title: Sbd Ref
+  sbd_version:
+    anyOf:
+    - type: integer
+    - type: 'null'
+    default: null
+    title: Sbd Version
+  eb_ref:
+    anyOf:
+    - type: string
+    - type: 'null'
+    default: null
+    title: Eb Ref
+  subarray_id:
+    anyOf:
+    - type: integer
+    - type: 'null'
+    default: null
+    title: Subarray Id
+  activities:
+    items:
+      $ref: '#/$defs/ActivityCall'
+    title: Activities
+    type: array
+required:
+- telescope
+title: SBInstance
+type: object

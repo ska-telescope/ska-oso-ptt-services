@@ -63,6 +63,7 @@ paths:
             application/json:
               schema:
                 type: object
+                # $ref: './oso-components-openapi-v1.yaml#/components/schemas/SBDefinition'
         "404":
           $ref: '#/components/responses/NotFound'
         "500":
@@ -271,6 +272,7 @@ paths:
             application/json:
               schema:
                 type: object
+                # $ref: './oso-components-openapi-v1.yaml#/components/schemas/OSOExecutionBlock'
         "404":
           $ref: '#/components/responses/NotFound'
         "500":
@@ -407,6 +409,7 @@ paths:
             application/json:
               schema:
                 type: object
+                # $ref: './oso-components-openapi-v1.yaml#/components/schemas/SBInstance'
         "404":
           $ref: '#/components/responses/NotFound'
         "500":
