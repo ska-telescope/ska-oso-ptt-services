@@ -181,12 +181,16 @@ class TestSBDefinitionAPI:
         assert result.status_code == HTTPStatus.NOT_FOUND
 
     @mock.patch("ska_oso_ptt_services.rest.api.resources._get_sbd_status")
-    def test_get_sbd_status(self, mock_get_sbd_status, client):
+    @mock.patch("ska_oso_ptt_services.rest.api.resources.oda")
+    def test_get_sbd_status(self, mock_oda, mock_get_sbd_status, client):
         """Verifying that test_get_sbd_status API returns requested SBD status"""
 
         valid_sbd_status = load_string_from_file(
             "files/testfile_sample_sbd_status.json"
         )
+
+        uow_mock = mock.MagicMock()
+        mock_oda.uow.__enter__.return_value = uow_mock
 
         mock_get_sbd_status.return_value = json.loads(valid_sbd_status)
 
@@ -200,9 +204,13 @@ class TestSBDefinitionAPI:
         assert result.status_code == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.rest.api.resources._get_sbd_status")
-    def test_invalid_get_sbd_status(self, mock_get_sbd_status, client):
+    @mock.patch("ska_oso_ptt_services.rest.api.resources.oda")
+    def test_invalid_get_sbd_status(self, mock_oda, mock_get_sbd_status, client):
         """Verifying that get_sbd_status throws error if invalid data passed"""
         invalid_sbd_id = "sbd-t0001-20240702-00100"
+
+        uow_mock = mock.MagicMock()
+        mock_oda.uow.__enter__.return_value = uow_mock
         mock_get_sbd_status.side_effect = KeyError(
             f"Not Found. The requested identifier {invalid_sbd_id} could not be found."
         )
@@ -443,12 +451,16 @@ class TestSBInstanceAPI:
         assert result.status_code == HTTPStatus.NOT_FOUND
 
     @mock.patch("ska_oso_ptt_services.rest.api.resources._get_sbi_status")
-    def test_get_sbi_status(self, mock_get_sbi_status, client):
+    @mock.patch("ska_oso_ptt_services.rest.api.resources.oda")
+    def test_get_sbi_status(self, mock_oda, mock_get_sbi_status, client):
         """Verifying that test_get_sbi_status API returns requested SBI status"""
 
         valid_sbi_status = load_string_from_file(
             "files/testfile_sample_sbi_status.json"
         )
+        uow_mock = mock.MagicMock()
+        mock_oda.uow.__enter__.return_value = uow_mock
+
         mock_get_sbi_status.return_value = json.loads(valid_sbi_status)
 
         result = client.get(
@@ -461,9 +473,14 @@ class TestSBInstanceAPI:
         assert result.status_code == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.rest.api.resources._get_sbi_status")
-    def test_invalid_get_sbi_status(self, mock_get_sbi_status, client):
+    @mock.patch("ska_oso_ptt_services.rest.api.resources.oda")
+    def test_invalid_get_sbi_status(self, mock_oda, mock_get_sbi_status, client):
         """Verifying that get_sbi_status throws error if invalid data passed"""
         invalid_sbi_id = "sbi-t0001-20240702-00100"
+
+        uow_mock = mock.MagicMock()
+        mock_oda.uow.__enter__.return_value = uow_mock
+
         mock_get_sbi_status.side_effect = KeyError(
             f"Not Found. The requested identifier {invalid_sbi_id} could not be found."
         )
@@ -702,10 +719,15 @@ class TestExecutionBlockAPI:
         assert result.status_code == HTTPStatus.NOT_FOUND
 
     @mock.patch("ska_oso_ptt_services.rest.api.resources._get_eb_status")
-    def test_get_eb_status(self, mock_get_eb_status, client):
+    @mock.patch("ska_oso_ptt_services.rest.api.resources.oda")
+    def test_get_eb_status(self, mock_oda, mock_get_eb_status, client):
         """Verifying that test_eb_sbd_status API returns requested EB status"""
 
         valid_eb_status = load_string_from_file("files/testfile_sample_eb_status.json")
+
+        uow_mock = mock.MagicMock()
+        mock_oda.uow.__enter__.return_value = uow_mock
+
         mock_get_eb_status.return_value = json.loads(valid_eb_status)
 
         result = client.get(
@@ -718,9 +740,14 @@ class TestExecutionBlockAPI:
         assert result.status_code == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.rest.api.resources._get_eb_status")
-    def test_invalid_get_eb_status(self, mock_get_eb_status, client):
+    @mock.patch("ska_oso_ptt_services.rest.api.resources.oda")
+    def test_invalid_get_eb_status(self, mock_oda, mock_get_eb_status, client):
         """Verifying that get_eb_status throws error if invalid data passed"""
         invalid_eb_id = "eb-t0001-20240702-00100"
+
+        uow_mock = mock.MagicMock()
+        mock_oda.uow.__enter__.return_value = uow_mock
+
         mock_get_eb_status.side_effect = KeyError(
             f"Not Found. The requested identifier {invalid_eb_id} could not be found."
         )

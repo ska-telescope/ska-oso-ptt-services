@@ -131,8 +131,8 @@ def _get_sbd_status(
 
     retrieved_sbd = uow.sbds_status_history.get(
         entity_id=sbd_id, version=version, is_status_history=False
-    )
-    return retrieved_sbd.model_dump()
+    ).model_dump(mode="json")
+    return retrieved_sbd
 
 
 @error_handler
