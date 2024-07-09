@@ -1,0 +1,26 @@
+openapi: 3.1.0
+paths: {}
+info:
+  title: OSO Entities
+  description: These components are the primary definitions of the entities to be
+    used throughout the OSO services. Model code will be generated from them which
+    can be imported into projects. The components will also be referenced in other
+    OpenAPI docs for OSO services which have APIs.
+  license:
+    name: BSD 3 Clause
+    url: https://opensource.org/licenses/BSD-3-Clause
+  version: 1.0.0
+components:
+  schemas:
+    OSOExecutionBlock:
+      $ref: eb-jsonschema.yaml#
+    SBDefinition:
+      $ref: sbd-jsonschema.yaml#
+    SBInstance:
+      $ref: sbi-jsonschema.yaml#
+    SBDStatusHistory:
+      $ref: sbd-status-history-jsonschema.yaml#
+    SBIStatusHistory:
+      $ref: sbi-status-history-jsonschema.yaml#
+    OSOEBStatusHistory:
+      $ref: eb-status-history-jsonschema.yaml#

@@ -19,7 +19,215 @@ paths:
         precedence of user > created_on > modified_on. Also requests without
         parameters will return an error rather than returning all objects. This behaviour will
         change in the future..
-      operationId: ska_oso_ptt_services.rest.api.resources.get_sbds
+      operationId: ska_oso_ptt_services.rest.api.resources.get_sbds_with_status
+      parameters:
+        - $ref: '#/components/parameters/user'
+        - $ref: '#/components/parameters/MatchType'
+        - $ref: '#/components/parameters/createdBefore'
+        - $ref: '#/components/parameters/createdAfter'
+        - $ref: '#/components/parameters/modifiedBefore'
+        - $ref: '#/components/parameters/modifiedAfter'
+        - $ref: '#/components/parameters/entity_id'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "500":
+          $ref: '#/components/responses/InternalServerError'
+  /sbds/{sbd_id}:
+    parameters:
+      - name: sbd_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+    get:
+      summary: Get SBDefinition by identifier
+      description: |
+        Retrieves the SBDefinition with the given identifier from the
+        underlying data store, if available
+      operationId: ska_oso_ptt_services.rest.api.resources.get_sbd_with_status
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                # $ref: './oso-components-openapi-v1.yaml#/components/schemas/SBDefinition'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "500":
+          $ref: '#/components/responses/InternalServerError'
+
+  /status/history/sbds:
+    get:
+      summary: Get SBDefinition status history by the query parameter.
+      description: |
+        Retrieves the SBDefinitions status history which match the query parameters.
+        Currently only two single query field is permitted, eg entity_id and version, 
+        extra parameters passed to the request will be ignored.
+        If version parameter is not passed then the api retrieves the SBDefinitions status history
+        for the latest available SBDefinitions  version.Also requests without
+        parameters will return an error rather than returning all objects.
+      operationId: ska_oso_ptt_services.rest.api.resources.get_sbd_status_history
+      parameters:
+        - $ref: '#/components/parameters/entity_id'
+        - $ref: '#/components/parameters/version'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "500":
+          $ref: '#/components/responses/InternalServerError'
+  /status/sbds/{sbd_id}:
+    parameters:
+      - name: sbd_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+    put:
+      summary: Update SBDefinition status by identifier
+      description: |
+        Updates the SBDefinition status with the given identifier
+        in the underlying data store, creating a new version.
+        If the identifier does not exist in the data store, a not found error will be returned.
+      operationId: ska_oso_ptt_services.rest.api.resources.put_sbd_history
+      parameters:
+        - $ref: '#/components/parameters/version'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: './sbd-status-openapi-v1.yaml#/SBDStatusHistory'
+        required: true
+      responses:
+        "200":
+          description: OK, the SBDefinition Status was created or updated
+          content:
+            application/json:
+              schema:
+                $ref: './sbd-status-openapi-v1.yaml#/SBDStatusHistory'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "422":
+          $ref: '#/components/responses/UnprocessableEntity'
+        "500":
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      summary: Get SBDefinition by identifier
+      description: |
+        Retrieves the SBDefinition status with the given identifier from the underlying data store, if available
+      operationId: ska_oso_ptt_services.rest.api.resources.get_sbd_status
+      parameters:
+        - $ref: '#/components/parameters/version'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "500":
+          $ref: '#/components/responses/InternalServerError'
+
+  /status/sbis/{sbi_id}:
+    parameters:
+      - name: sbi_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+    put:
+      summary: Update SBInstance status by identifier
+      description: |
+        Updates the SBInstance status with the given identifier
+        in the underlying data store, mutating the existing first version.
+        If the identifier does not exist in the data store, a not found error will be returned.
+      operationId: ska_oso_ptt_services.rest.api.resources.put_sbi_history
+      parameters:
+        - $ref: '#/components/parameters/version'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: './sbi-status-openapi-v1.yaml#/SBIStatusHistory'
+        required: true
+      responses:
+        "200":
+          description: OK, the SBInstance Status was created or updated
+          content:
+            application/json:
+              schema:
+                $ref: './sbi-status-openapi-v1.yaml#/SBIStatusHistory'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "422":
+          $ref: '#/components/responses/UnprocessableEntity'
+        "500":
+          $ref: '#/components/responses/InternalServerError'
+      
+    get:
+      summary: Get SBInstance by identifier
+      description: |
+        Retrieves the SBInstance status with the given identifier from the underlying data store, if available
+      operationId: ska_oso_ptt_services.rest.api.resources.get_sbi_status
+      parameters:
+      - $ref: '#/components/parameters/version'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "500":
+          $ref: '#/components/responses/InternalServerError'
+
+  /ebs:
+    get:
+      summary: Get ExecutionBlock filter by the query parameter
+      description: |
+        Retrieves the ExecutionBlocks which match the query parameters.
+        Currently only a single query field is permitted, eg user, entity_id or created_on - 
+        extra parameters passed to the request will be ignored, with an order of 
+        precedence of user > created_on > modified_on. Also requests without
+        parameters will return an error rather than returning all IDs. This behaviour will
+        change in the future. Added pattern search support on Execution block IDs.
+      operationId: ska_oso_ptt_services.rest.api.resources.get_ebs_with_status
       parameters:
         - $ref: '#/components/parameters/user'
         - $ref: '#/components/parameters/MatchType'
@@ -42,6 +250,193 @@ paths:
         "500":
           $ref: '#/components/responses/InternalServerError'
   
+  /ebs/{eb_id}:
+    parameters:
+      - name: eb_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+    get:
+      summary: Get ExecutionBlock by identifier
+      description: |
+        Retrieves the ExecutionBlock with the given identifier from the
+        underlying data store, if available
+      operationId: ska_oso_ptt_services.rest.api.resources.get_eb_with_status
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                # $ref: './oso-components-openapi-v1.yaml#/components/schemas/OSOExecutionBlock'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "500":
+          $ref: '#/components/responses/InternalServerError'
+
+  /status/history/ebs:
+    get:
+      summary: Get ExecutionBlock status history by the query parameter
+      description: "Retrieves the ExecutionBlock status history which match the query parameters.\nCurrently only two single query field is permitted, eg entity_id and version, \nextra parameters passed to the request will be ignored.\nIf version parameter is not passed then the api retrieves the ExecutionBlock status history\nfor the latest available ExecutionBlock  version.Also requests without\nparameters will return an error rather than returning all objects.\n"
+      operationId: ska_oso_ptt_services.rest.api.resources.get_eb_status_history
+      parameters:
+      - $ref: '#/components/parameters/entity_id'
+      - $ref: '#/components/parameters/version'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "500":
+          $ref: '#/components/responses/InternalServerError'
+
+  /status/ebs/{eb_id}:
+    parameters:
+    - name: eb_id
+      in: path
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+    put:
+      summary: Update ExecutionBlock status by identifier
+      description: |
+        Updates the ExecutionBlock status with the given identifier
+        in the underlying data store, mutating the existing first version.
+        If the identifier does not exist in the data store, a not found error will be returned.
+      operationId: ska_oso_ptt_services.rest.api.resources.put_eb_history
+      parameters:
+      - $ref: '#/components/parameters/version'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: './eb-status-openapi-v1.yaml#/OSOEBStatusHistory'
+        required: true
+      responses:
+        "200":
+          description: OK, the ExecutionBlock status was created or updated
+          content:
+            application/json:
+              schema:
+                $ref: './eb-status-openapi-v1.yaml#/OSOEBStatusHistory'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "422":
+          $ref: '#/components/responses/UnprocessableEntity'
+        "500":
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      summary: Get ExecutionBlock filter by the query parameter
+      description: |
+        Retrieves the ExecutionBlock status with the given identifier from the underlying data store, if available
+      operationId: ska_oso_ptt_services.rest.api.resources.get_eb_status
+      parameters:
+      - $ref: '#/components/parameters/version'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "500":
+          $ref: '#/components/responses/InternalServerError'
+
+  /sbis:
+    get:
+      summary: Get SBInstance filter by the query parameter
+      description: "Retrieves the SBInstances which match the query parameters.\nCurrently only a single query field is permitted, eg user, entity_id or created_on - \nextra parameters passed to the request will be ignored, with an order of \nprecedence of user > created_on > modified_on. Also requests without\nparameters will return an error rather than returning all IDs. This behaviour will\nchange in the future. Added pattern search support on scheduling block instance IDs.\n"
+      operationId: ska_oso_ptt_services.rest.api.resources.get_sbis_with_status
+      parameters:
+      - $ref: '#/components/parameters/user'
+      - $ref: '#/components/parameters/MatchType'
+      - $ref: '#/components/parameters/createdBefore'
+      - $ref: '#/components/parameters/createdAfter'
+      - $ref: '#/components/parameters/modifiedBefore'
+      - $ref: '#/components/parameters/modifiedAfter'
+      - $ref: '#/components/parameters/entity_id'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "500":
+          $ref: '#/components/responses/InternalServerError'
+
+  /sbis/{sbi_id}:
+    parameters:
+      - name: sbi_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+    get:
+      summary: Get SBInstance by identifier
+      description: |
+        Retrieves the SBInstance with the given identifier from the
+        underlying data store, if available
+      operationId: ska_oso_ptt_services.rest.api.resources.get_sbi_with_status
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                # $ref: './oso-components-openapi-v1.yaml#/components/schemas/SBInstance'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "500":
+          $ref: '#/components/responses/InternalServerError'
+  
+  /status/history/sbis:
+    get:
+      summary: Get SBInstance status history by the query parameter
+      description: "Retrieves the SBInstance status history which match the query parameters.\nCurrently only two single query field is permitted, eg entity_id and version, \nextra parameters passed to the request will be ignored.\nIf version parameter is not passed then the api retrieves the SBInstance status history\nfor the latest available SBInstance  version.Also requests without\nparameters will return an error rather than returning all objects.\n"
+      operationId: ska_oso_ptt_services.rest.api.resources.get_sbi_status_history
+      parameters:
+      - $ref: '#/components/parameters/entity_id'
+      - $ref: '#/components/parameters/version'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "500":
+          $ref: '#/components/responses/InternalServerError'
+
 
 components:
   parameters:
@@ -56,7 +451,7 @@ components:
       name: match_type
       schema:
         type: string
-        enum: [ equals, starts_with, contains]
+        enum: [ equals, starts_with, contains ]
         default: equals
       required: false
     createdBefore:
@@ -93,6 +488,14 @@ components:
       schema:
         type: string
       required: false
+    version:
+      in: query
+      name: version
+      schema:
+        type: integer
+      required: false
+      example: 1
+  
   responses:
     NotFound:
       description: Not Found
