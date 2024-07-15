@@ -155,7 +155,7 @@ properties:
     title: Sbi Ref
   status:
     - type: string
-    title: Status
+  title: Status
   request_responses:
     items:
       $ref: '#/$defs/RequestResponse'

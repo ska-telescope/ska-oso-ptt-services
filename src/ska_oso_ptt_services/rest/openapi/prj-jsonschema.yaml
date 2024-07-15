@@ -1,0 +1,115 @@
+$defs:
+  Author:
+    description: The author of a Proposal
+    properties:
+      pis:
+        items:
+          type: string
+        title: Pis
+        type: array
+      cois:
+        items:
+          type: string
+        title: Cois
+        type: array
+    title: Author
+    type: object
+  Metadata:
+    description: Represents metadata about other entities.
+    properties:
+      version:
+        default: 1
+        title: Version
+        type: integer
+      created_by:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Created By
+      created_on:
+        format: date-time
+        title: Created On
+        type: string
+      last_modified_by:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Last Modified By
+      last_modified_on:
+        format: date-time
+        title: Last Modified On
+        type: string
+    title: Metadata
+    type: object
+  ObservingBlock:
+    properties:
+      obs_block_id:
+        title: Obs Block Id
+        type: string
+      name:
+        anyOf:
+        - type: string
+        - type: 'null'
+        default: null
+        title: Name
+      sbd_ids:
+        items:
+          type: string
+        title: Sbd Ids
+        type: array
+    required:
+    - obs_block_id
+    title: ObservingBlock
+    type: object
+  TelescopeType:
+    enum:
+    - ska_mid
+    - ska_low
+    - MeerKAT
+    title: TelescopeType
+    type: string
+properties:
+  interface:
+    anyOf:
+    - type: string
+    - type: 'null'
+    default: null
+    title: Interface
+  prj_id:
+    anyOf:
+    - type: string
+    - type: 'null'
+    default: null
+    title: Prj Id
+  name:
+    anyOf:
+    - type: string
+    - type: 'null'
+    default: null
+    title: Name
+  status:
+    - type: string
+    title: Status
+  metadata:
+    anyOf:
+    - $ref: '#/$defs/Metadata'
+    - type: 'null'
+    default: null
+  telescope:
+    $ref: '#/$defs/TelescopeType'
+  author:
+    anyOf:
+    - $ref: '#/$defs/Author'
+    - type: 'null'
+    default: null
+  obs_blocks:
+    items:
+      $ref: '#/$defs/ObservingBlock'
+    title: Obs Blocks
+    type: array
+required:
+- telescope
+title: Project
+type: object

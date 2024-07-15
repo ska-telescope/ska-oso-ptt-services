@@ -437,6 +437,153 @@ paths:
         "500":
           $ref: '#/components/responses/InternalServerError'
 
+  /prjs:
+    get:
+      summary: Get Project filter by the query parameter
+      description: |
+        Retrieves the Projects which match the query parameters.
+        Currently only a single query field is permitted, eg user, entity_id or created_on - 
+        extra parameters passed to the request will be ignored, with an order of 
+        precedence of user > created_on > modified_on. Also requests without
+        parameters will return an error rather than returning all objects. This behaviour will
+        change in the future..
+      operationId: ska_oso_ptt_services.rest.api.resources.get_prjs_with_status
+      parameters:
+        - $ref: '#/components/parameters/user'
+        - $ref: '#/components/parameters/MatchType'
+        - $ref: '#/components/parameters/createdBefore'
+        - $ref: '#/components/parameters/createdAfter'
+        - $ref: '#/components/parameters/modifiedBefore'
+        - $ref: '#/components/parameters/modifiedAfter'
+        - $ref: '#/components/parameters/entity_id'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "500":
+          $ref: '#/components/responses/InternalServerError'
+  /prjs/{prj_id}:
+    parameters:
+      - name: prj_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+    get:
+      summary: Get Project by identifier
+      description: |
+        Retrieves the Project with the given identifier from the
+        underlying data store, if available
+      operationId: ska_oso_ptt_services.rest.api.resources.get_prj_with_status
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                # $ref: './oso-components-openapi-v1.yaml#/components/schemas/Project'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "500":
+          $ref: '#/components/responses/InternalServerError'
+
+  /status/history/prjs:
+    get:
+      summary: Get Project status history by the query parameter.
+      description: |
+        Retrieves the Projects status history which match the query parameters.
+        Currently only two single query field is permitted, eg entity_id and version, 
+        extra parameters passed to the request will be ignored.
+        If version parameter is not passed then the api retrieves the Projects status history
+        for the latest available Projects  version.Also requests without
+        parameters will return an error rather than returning all objects.
+      operationId: ska_oso_ptt_services.rest.api.resources.get_prj_status_history
+      parameters:
+        - $ref: '#/components/parameters/entity_id'
+        - $ref: '#/components/parameters/version'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "500":
+          $ref: '#/components/responses/InternalServerError'
+  /status/prjs/{prj_id}:
+    parameters:
+      - name: prj_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+    put:
+      summary: Update Project status by identifier
+      description: |
+        Updates the Project status with the given identifier
+        in the underlying data store, creating a new version.
+        If the identifier does not exist in the data store, a not found error will be returned.
+      operationId: ska_oso_ptt_services.rest.api.resources.put_prj_history
+      parameters:
+        - $ref: '#/components/parameters/version'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: './prj-status-openapi-v1.yaml#/ProjectStatusHistory'
+        required: true
+      responses:
+        "200":
+          description: OK, the Project Status was created or updated
+          content:
+            application/json:
+              schema:
+                $ref: './prj-status-openapi-v1.yaml#/ProjectStatusHistory'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "422":
+          $ref: '#/components/responses/UnprocessableEntity'
+        "500":
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      summary: Get Project by identifier
+      description: |
+        Retrieves the Project status with the given identifier from the underlying data store, if available
+      operationId: ska_oso_ptt_services.rest.api.resources.get_prj_status
+      parameters:
+        - $ref: '#/components/parameters/version'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "500":
+          $ref: '#/components/responses/InternalServerError'
+
 
 components:
   parameters:

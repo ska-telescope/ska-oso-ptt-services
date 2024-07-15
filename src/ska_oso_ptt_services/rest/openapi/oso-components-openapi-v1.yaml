@@ -18,9 +18,13 @@ components:
       $ref: sbd-jsonschema.yaml#
     SBInstance:
       $ref: sbi-jsonschema.yaml#
+    Project:
+      $ref: prj-jsonschema.yaml#
     SBDStatusHistory:
       $ref: sbd-status-history-jsonschema.yaml#
     SBIStatusHistory:
       $ref: sbi-status-history-jsonschema.yaml#
     OSOEBStatusHistory:
       $ref: eb-status-history-jsonschema.yaml#
+    ProjectStatusHistory:
+      $ref: prj-status-history-jsonschema.yaml#
