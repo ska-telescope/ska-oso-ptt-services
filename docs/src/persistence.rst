@@ -7,7 +7,7 @@ The OSO Data Archive (ODA) contains ``Repository`` and ``UnitOfWork`` interfaces
 database access. There are different implementations of these interfaces, namely ``memory``, ``filesystem``, ``postgres`` and ``rest``.
 For more details, see the `ska-db-oda <https://developer.skao.int/projects/ska-db-oda/en/latest/index.html>`_ project.
 
-The important thing for the PTT Services is that it uses ``postgres`` for database implementation which will be be connecting directly to the PostgreSQL instance.
+The important thing for the PTT Services is that it uses ``postgres`` for implementation which will be connecting directly to the PostgreSQL instance.
 
 .. code-block:: yaml
 
@@ -24,14 +24,3 @@ indicating that the backend database type is PostgreSQL.
 
 Here, value of ``ODA_BACKEND_TYPE`` sets to the ``postgres``. 
 This attribute likely specifies the type of backend database used by the ODA REST service.
-
-Here ``FlaskODA()`` importing from ODA to create connection from ODA.
-
-.. code-block:: python
-
-  from ska_db_oda.rest.flask_oda import FlaskODA
-
-
-It creates a Connexion application, configures it with an OpenAPI specification and sets up custom JSON encoding.
-Then it loads application configuration, sets default response headers, adds the OpenAPI specification to the 
-application with custom validators, initializes ODA, and returns the configured application instance.

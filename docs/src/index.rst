@@ -26,11 +26,5 @@ and links between them and display the results on the GUI.
   persistence
   restapi
 
-.. toctree::
-  :maxdepth: 1
-  :caption: Releases
-
-  CHANGELOG.rst
-
 
 
