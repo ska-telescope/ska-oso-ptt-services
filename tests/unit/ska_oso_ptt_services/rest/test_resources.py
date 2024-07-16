@@ -861,8 +861,6 @@ class TestProjectAPI:
             headers={"accept": "application/json"},
         )
 
-        print(f"@@@@@@@@@@@@@@@@@ {result.text}")
-
         assert_json_is_equal(result.text, valid_prjs)
         assert result.status_code == HTTPStatus.OK
 
