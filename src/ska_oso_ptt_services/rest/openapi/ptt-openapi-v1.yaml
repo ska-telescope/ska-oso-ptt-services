@@ -39,6 +39,8 @@ paths:
                   type: object
         "400":
           $ref: '#/components/responses/BadRequest'
+        "404":
+          $ref: '#/components/responses/NotFound'
         "500":
           $ref: '#/components/responses/InternalServerError'
   /sbds/{sbd_id}:
@@ -63,7 +65,9 @@ paths:
             application/json:
               schema:
                 type: object
-                # $ref: './oso-components-openapi-v1.yaml#/components/schemas/SBDefinition'
+                
+        "400":
+          $ref: '#/components/responses/BadRequest'
         "404":
           $ref: '#/components/responses/NotFound'
         "500":
@@ -92,8 +96,11 @@ paths:
                 type: array
                 items:
                   type: object
+
         "400":
           $ref: '#/components/responses/BadRequest'
+        "404":
+          $ref: '#/components/responses/NotFound'
         "500":
           $ref: '#/components/responses/InternalServerError'
   /status/sbds/{sbd_id}:
@@ -127,6 +134,7 @@ paths:
             application/json:
               schema:
                 $ref: './sbd-status-openapi-v1.yaml#/SBDStatusHistory'
+
         "400":
           $ref: '#/components/responses/BadRequest'
         "404":
@@ -151,8 +159,11 @@ paths:
                 type: array
                 items:
                   type: object
+
         "400":
           $ref: '#/components/responses/BadRequest'
+        "404":
+          $ref: '#/components/responses/NotFound'
         "500":
           $ref: '#/components/responses/InternalServerError'
 
@@ -187,6 +198,7 @@ paths:
             application/json:
               schema:
                 $ref: './sbi-status-openapi-v1.yaml#/SBIStatusHistory'
+
         "400":
           $ref: '#/components/responses/BadRequest'
         "404":
@@ -212,8 +224,11 @@ paths:
                 type: array
                 items:
                   type: object
+
         "400":
           $ref: '#/components/responses/BadRequest'
+        "404":
+          $ref: '#/components/responses/NotFound'
         "500":
           $ref: '#/components/responses/InternalServerError'
 
@@ -245,8 +260,11 @@ paths:
                 type: array
                 items:
                   type: object
+
         "400":
           $ref: '#/components/responses/BadRequest'
+        "404":
+          $ref: '#/components/responses/NotFound'
         "500":
           $ref: '#/components/responses/InternalServerError'
   
@@ -272,7 +290,9 @@ paths:
             application/json:
               schema:
                 type: object
-                # $ref: './oso-components-openapi-v1.yaml#/components/schemas/OSOExecutionBlock'
+
+        "400":
+          $ref: '#/components/responses/BadRequest'
         "404":
           $ref: '#/components/responses/NotFound'
         "500":
@@ -295,8 +315,11 @@ paths:
                 type: array
                 items:
                   type: object
+
         "400":
           $ref: '#/components/responses/BadRequest'
+        "404":
+          $ref: '#/components/responses/NotFound'
         "500":
           $ref: '#/components/responses/InternalServerError'
 
@@ -331,6 +354,7 @@ paths:
             application/json:
               schema:
                 $ref: './eb-status-openapi-v1.yaml#/OSOEBStatusHistory'
+
         "400":
           $ref: '#/components/responses/BadRequest'
         "404":
@@ -355,8 +379,11 @@ paths:
                 type: array
                 items:
                   type: object
+
         "400":
           $ref: '#/components/responses/BadRequest'
+        "404":
+          $ref: '#/components/responses/NotFound'
         "500":
           $ref: '#/components/responses/InternalServerError'
 
@@ -382,8 +409,11 @@ paths:
                 type: array
                 items:
                   type: object
+
         "400":
           $ref: '#/components/responses/BadRequest'
+        "404":
+          $ref: '#/components/responses/NotFound'
         "500":
           $ref: '#/components/responses/InternalServerError'
 
@@ -409,7 +439,9 @@ paths:
             application/json:
               schema:
                 type: object
-                # $ref: './oso-components-openapi-v1.yaml#/components/schemas/SBInstance'
+                
+        "400":
+          $ref: '#/components/responses/BadRequest'
         "404":
           $ref: '#/components/responses/NotFound'
         "500":
@@ -432,8 +464,11 @@ paths:
                 type: array
                 items:
                   type: object
+
         "400":
           $ref: '#/components/responses/BadRequest'
+        "404":
+          $ref: '#/components/responses/NotFound'
         "500":
           $ref: '#/components/responses/InternalServerError'
 
@@ -465,8 +500,11 @@ paths:
                 type: array
                 items:
                   type: object
+
         "400":
           $ref: '#/components/responses/BadRequest'
+        "404":
+          $ref: '#/components/responses/NotFound'
         "500":
           $ref: '#/components/responses/InternalServerError'
   /prjs/{prj_id}:
@@ -491,7 +529,9 @@ paths:
             application/json:
               schema:
                 type: object
-                # $ref: './oso-components-openapi-v1.yaml#/components/schemas/Project'
+
+        "400":
+          $ref: '#/components/responses/BadRequest'
         "404":
           $ref: '#/components/responses/NotFound'
         "500":
@@ -520,8 +560,11 @@ paths:
                 type: array
                 items:
                   type: object
+
         "400":
           $ref: '#/components/responses/BadRequest'
+        "404":
+          $ref: '#/components/responses/NotFound'
         "500":
           $ref: '#/components/responses/InternalServerError'
   /status/prjs/{prj_id}:
@@ -555,6 +598,7 @@ paths:
             application/json:
               schema:
                 $ref: './prj-status-openapi-v1.yaml#/ProjectStatusHistory'
+
         "400":
           $ref: '#/components/responses/BadRequest'
         "404":
@@ -579,8 +623,11 @@ paths:
                 type: array
                 items:
                   type: object
+                  
         "400":
           $ref: '#/components/responses/BadRequest'
+        "404":
+          $ref: '#/components/responses/NotFound'
         "500":
           $ref: '#/components/responses/InternalServerError'
 
