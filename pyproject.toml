@@ -24,8 +24,7 @@ prance = {version = "^23.6.21.0", extras = ["osv"]}
 python-dateutil = "^2.8.2"
 # Pinning older version because of https://github.com/python-openapi/openapi-spec-validator/issues/201
 jsonschema = "4.17.3"
-ska-oso-pdm = "^14.3.0"
-ska-db-oda = "5.1.0"
+ska-db-oda = "5.2.0"
 deepdiff = "^7.0.1"
 pydantic-core = "^2.20.1"
 annotated-types = "^0.7.0"
