@@ -1076,6 +1076,59 @@ class TestProjectAPI:
         assert_json_is_equal(result.text, valid_put_prj_history_response, exclude_paths)
         assert result.status_code == HTTPStatus.OK
 
+    @mock.patch("ska_oso_ptt_services.rest.api.resources.oda")
+    def test_put_prj_history_with_two_version(self, mock_oda, client):
+        """Verifying that put_prj_history updates the prj status correctly"""
+        valid_put_prj_history_response = load_string_from_file(
+            "files/testfile_sample_prj_status.json"
+        )
+
+        uow_mock = mock.MagicMock()
+        uow_mock.prjs = ["prj-mvp01-20220923-00001"]
+
+        prjs_status_history_mock = mock.MagicMock()
+        prjs_status_history_mock.add.return_value = (
+            ProjectStatusHistory.model_validate_json(valid_put_prj_history_response)
+        )
+
+        uow_mock.prjs_status_history = prjs_status_history_mock
+        uow_mock.commit.return_value = "200"
+        mock_oda.uow.__enter__.return_value = uow_mock
+
+        url = "/ska-oso-ptt-services/ptt/api/v1/status/prjs/prj-mvp01-20220923-00001"
+        query_params = {"version": "1"}
+        data = {"current_status": "draft", "previous_status": "draft"}
+        exclude_paths = [
+            "root['metadata']['created_on']",
+            "root['metadata']['last_modified_on']",
+        ]
+
+        result = client.put(
+            url,
+            query_string=query_params,
+            json=data,
+            headers={"accept": "application/json"},
+        )
+        assert_json_is_equal(result.text, valid_put_prj_history_response, exclude_paths)
+        assert result.status_code == HTTPStatus.OK
+
+        url = "/ska-oso-ptt-services/ptt/api/v1/status/prjs/prj-mvp01-20220923-00001"
+        query_params = {"version": "2"}
+        data = {"current_status": "draft", "previous_status": "draft"}
+        exclude_paths = [
+            "root['metadata']['created_on']",
+            "root['metadata']['last_modified_on']",
+        ]
+
+        result = client.put(
+            url,
+            query_string=query_params,
+            json=data,
+            headers={"accept": "application/json"},
+        )
+        assert_json_is_equal(result.text, valid_put_prj_history_response, exclude_paths)
+        assert result.status_code == HTTPStatus.OK
+
     def test_invalid_put_prj_history(self, client):
         """Verifying that put_prj_history error if invalid data passed"""
         query_params = {"version": "1"}
