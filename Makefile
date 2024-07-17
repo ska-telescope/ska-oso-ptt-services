@@ -71,10 +71,6 @@ REST_POD_NAME=$(shell kubectl get pods -o name -n $(KUBE_NAMESPACE) -l app=ska-o
 
 MINIKUBE_NFS_SHARES_ROOT ?=
 
-rest: ## start PTT REST server
-	docker run --rm -p 5000:5000 --name=$(PROJECT_NAME) $(IMAGE_TO_TEST) gunicorn --chdir src \
-		--bind 0.0.0.0:5000 --logger-class=ska_oso_ptt_services.rest.wsgi.UniformLogger --log-level=$(LOG_LEVEL) ska_oso_ptt_services.rest.wsgi:app
-
 
 dev-up: K8S_CHART_PARAMS = \
 	--set ska-oso-ptt-services.rest.image.tag=$(VERSION) \
