@@ -352,7 +352,7 @@ paths:
           description: OK, the ExecutionBlock status was created or updated
           content:
             application/json:
-              schema:
+              schema: 
                 $ref: './eb-status-openapi-v1.yaml#/OSOEBStatusHistory'
 
         "400":
