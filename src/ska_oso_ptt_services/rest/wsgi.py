@@ -1,5 +1,5 @@
 """
-Entry point for application.
+SLT REST server entry point.
 """
 
 import logging
@@ -7,16 +7,13 @@ import logging
 from gunicorn import glogging
 from ska_ser_logging import configure_logging, get_default_formatter
 
-from ska_oso_ptt_services.rest import create_app
+from ska_oso_ptt_services.rest import init_app
 
-app = create_app()
+app = init_app()
 
 
 class UniformLogger(glogging.Logger):
-    """Custom logger class to override gunicorn logging level."""
-
     def setup(self, cfg):
-        """Setup method for UniformLogger class"""
         # override the configuration but inherit gunicorn logging level
         super().setup(cfg)
         configure_logging(level=self.loglevel)
