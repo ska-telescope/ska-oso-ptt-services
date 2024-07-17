@@ -1,0 +1,16 @@
+ProjectStatusHistory:
+  type: object
+  required:
+    - previous_status
+    - current_status
+  properties:
+    previous_status:
+      description: Previous Status of the Project Entity.
+      example: draft
+      type: string
+    current_status:
+      description: Current Status of the Project Entity.
+      example: ready
+      type: string
+   
+    

@@ -18,8 +18,8 @@ rest:
   logLevel: info
   enabled: true
   image:
-    registry: artefact.skao.int
-    image: ska-oso-ptt-services
+    registry: artefact.skao.int   
+    image: ska-oso-ptt-services    
     tag: ~ # Defaults to the chart appVersion if not set
     pullPolicy: IfNotPresent
   oda:
