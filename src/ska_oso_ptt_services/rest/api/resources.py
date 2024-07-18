@@ -257,9 +257,9 @@ def get_eb_with_status(eb_id: str) -> Response:
     with oda.uow as uow:
         eb = uow.ebs.get(eb_id)
         eb_json = eb.model_dump(mode="json")
-        # eb_json["status"] = _get_eb_status(
-        #     eb_id=eb_id, version=eb_json["metadata"]["version"]
-        # )["current_status"]
+        eb_json["status"] = _get_eb_status(
+            eb_id=eb_id, version=eb_json["metadata"]["version"]
+        )["current_status"]
 
     return eb_json, HTTPStatus.OK
 
