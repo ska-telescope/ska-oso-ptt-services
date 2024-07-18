@@ -10,7 +10,8 @@ ALL observing cycles.
 The SKA OSO PTT is a tool currently under development. The Project Tracking Tool Services is the server component of the Project Tracking Tool.
 It provides backend service for the PTT in order to manage its current functionality.
 
-Current Project Tracking Tool Services allow users to query SKA's OSO Data Archive for information on Scheduling Block Definition(SBD),Scheduling Block Instance(SBI) and Execution Block(EB) stored in the database
+Current Project Tracking Tool Services allow users to query SKA’s OSO Data Archive for information on 
+Scheduling Block Definition(SBD), Scheduling Block Instance(SBI), Execution Block(EB) and Projects stored in the database
 and links between them and display the results on the GUI.
 
 
