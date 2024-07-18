@@ -76,7 +76,6 @@ def create_app(open_api_spec=None) -> App:
         pythonic_params=True,
         validator_map=validator_map,
     )
-    print(os.getenv("ODA_BACKEND_TYPE"))
     oda.init_app(connexion.app)
 
     return connexion
