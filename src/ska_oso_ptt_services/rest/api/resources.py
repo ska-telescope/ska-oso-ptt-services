@@ -301,7 +301,7 @@ def _get_eb_status(eb_id: str, version: str = None) -> Dict[str, Any]:
     Returns retrieved EB status in Dictionary format
 
     """
-    print('############################',oda.uow)
+    print("############################", oda.uow)
     retrieved_eb = oda.uow.ebs_status_history.get(
         entity_id=eb_id, version=version, is_status_history=False
     )
