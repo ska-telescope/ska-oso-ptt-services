@@ -4,7 +4,7 @@ global:
 ska-oso-ptt-services:
   rest:
     oda:
-      backendType: postgres
+      backendType: rest
       url: ~ # Defaults to the ODA Kubernetes service address if not set
 
 ska-db-oda-umbrella:
