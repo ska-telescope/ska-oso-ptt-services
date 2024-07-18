@@ -19,6 +19,7 @@ oda = FlaskODA()
 
 ODA_BACKEND_TYPE = os.getenv("ODA_BACKEND_TYPE", "postgres")
 
+
 def resolve_openapi_spec() -> Dict[str, Any]:
     """
     Resolves the $ref in the OpenAPI spec before it is used by Connexion,
@@ -64,9 +65,9 @@ def create_app(open_api_spec=None) -> App:
     connexion.app.json_encoder = PdmJsonEncoder
 
     connexion.app.config[ODA_BACKEND_TYPE] = os.environ.get(
-            ODA_BACKEND_TYPE, default=connexion.app.config.setdefault(ODA_BACKEND_TYPE, "postgres")
-        )
-
+        ODA_BACKEND_TYPE,
+        default=connexion.app.config.setdefault(ODA_BACKEND_TYPE, "postgres"),
+    )
 
     connexion.app.after_request(set_default_headers_on_response)
 
