@@ -10,8 +10,6 @@ ska-oso-ptt-services:
 ska-db-oda-umbrella:
   ska-db-oda:
     enabled: true
-    backend:
-      type: postgres
     rest:
       enabled: true
       ingress:

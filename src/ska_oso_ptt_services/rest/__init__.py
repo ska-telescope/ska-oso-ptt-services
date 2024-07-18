@@ -43,8 +43,6 @@ class CustomRequestBodyValidator:
         return function
 
 
-
-
 def create_app(open_api_spec=None) -> App:
     """
     Create the Connexion application with required config
@@ -56,7 +54,9 @@ def create_app(open_api_spec=None) -> App:
     connexion = App(__name__, specification_dir="openapi/")
 
     connexion.app.json_encoder = PdmJsonEncoder
+    # Used for local development only
     # connexion.app.config.from_object("ska_oso_ptt_services.rest.config.Config")
+
     def set_default_headers_on_response(response):
         response.headers["Access-Control-Allow-Origin"] = "*"
         response.headers["Access-Control-Allow-Headers"] = "*"
