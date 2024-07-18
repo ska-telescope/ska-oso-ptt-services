@@ -6,6 +6,7 @@ See the operationId fields of the Open API spec for the specific mappings.
 
 import logging
 from http import HTTPStatus
+from os import getenv
 from typing import Any, Dict, Tuple, Union
 
 from ska_db_oda.domain import StatusHistoryException
@@ -30,6 +31,7 @@ from ska_oso_pdm.entity_status_history import (
 from ska_oso_ptt_services.rest import oda
 
 LOGGER = logging.getLogger(__name__)
+ODA_BACKEND_TYPE = getenv("ODA_BACKEND_TYPE", "postgres")
 
 Response = Tuple[Union[dict, list], int]
 

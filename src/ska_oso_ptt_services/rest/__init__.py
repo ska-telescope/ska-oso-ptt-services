@@ -43,11 +43,6 @@ class CustomRequestBodyValidator:
         return function
 
 
-def set_default_headers_on_response(response):
-    response.headers["Access-Control-Allow-Origin"] = "*"
-    response.headers["Access-Control-Allow-Headers"] = "*"
-    response.headers["Access-Control-Allow-Methods"] = "*"
-    return response
 
 
 def create_app(open_api_spec=None) -> App:
@@ -62,6 +57,11 @@ def create_app(open_api_spec=None) -> App:
 
     connexion.app.json_encoder = PdmJsonEncoder
     # connexion.app.config.from_object("ska_oso_ptt_services.rest.config.Config")
+    def set_default_headers_on_response(response):
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        response.headers["Access-Control-Allow-Headers"] = "*"
+        response.headers["Access-Control-Allow-Methods"] = "*"
+        return response
 
     connexion.app.after_request(set_default_headers_on_response)
 
