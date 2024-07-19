@@ -177,18 +177,25 @@ def put_sbd_history(sbd_id: str, version: int, body: dict) -> Response:
 
     if response := check_for_mismatch(sbd_id, sbd_status_history.sbd_ref):
         return response
+    try:
+        with oda.uow as uow:
+            if sbd_id not in uow.sbds:
+                raise KeyError(
+                    f"Not found. The requested sbd_id {sbd_id} could not be found."
+                )
 
-    with oda.uow as uow:
-        if sbd_id not in uow.sbds:
-            raise KeyError(
-                f"Not found. The requested sbd_id {sbd_id} could not be found."
-            )
+            persisted_sbd = uow.sbds_status_history.add(sbd_status_history)
 
-        persisted_sbd = uow.sbds_status_history.add(sbd_status_history)
+            uow.commit()
 
-        uow.commit()
+        return persisted_sbd, HTTPStatus.OK
 
-    return persisted_sbd, HTTPStatus.OK
+    except Exception as err:  # pylint: disable=W0718
+        LOGGER.exception("ValueError when adding SBD to the ODA")
+        return (
+            {"error": f"Bad Request '{err.args[0]}'"},
+            HTTPStatus.BAD_REQUEST,
+        )
 
 
 @error_handler
