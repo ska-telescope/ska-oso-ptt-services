@@ -16,6 +16,8 @@ from ska_db_oda.rest.api.resources import (
     error_handler,
     validation_response,
 )
+
+# from ska_db_oda.unit_of_work.postgresunitofwork import PostgresUnitOfWork
 from ska_oso_pdm import SBDStatusHistory
 from ska_oso_pdm.entity_status_history import (
     OSOEBStatus,
@@ -87,7 +89,7 @@ def get_sbd_with_status(sbd_id: str) -> Response:
         sbd = uow.sbds.get(sbd_id)
         sbd_json = sbd.model_dump(mode="json")
         sbd_json["status"] = _get_sbd_status(
-            sbd_id=sbd_id, version=sbd_json["metadata"]["version"]
+            uow=uow, sbd_id=sbd_id, version=sbd_json["metadata"]["version"]
         )["current_status"]
     return sbd_json, HTTPStatus.OK
 
@@ -111,7 +113,7 @@ def get_sbds_with_status(**kwargs) -> Response:
             {
                 **sbd.model_dump(mode="json"),
                 "status": _get_sbd_status(
-                    sbd_id=sbd.sbd_id, version=sbd.metadata.version
+                    uow=uow, sbd_id=sbd.sbd_id, version=sbd.metadata.version
                 )["current_status"],
             }
             for sbd in sbds
@@ -119,18 +121,19 @@ def get_sbds_with_status(**kwargs) -> Response:
     return sbd_with_status, HTTPStatus.OK
 
 
-def _get_sbd_status(sbd_id: str, version: str = None) -> Dict[str, Any]:
+def _get_sbd_status(uow, sbd_id: str, version: str = None) -> Dict[str, Any]:
     """
     Takes an SBDefinition ID and Version and returns status
+    :param: uow: ODA PostgresUnitOfWork
     :param sbd_id: Scheduling Block ID
     :param version: SBD version
 
     Returns retrieved SBD status in Dictionary format
     """
-    with oda.uow as uow:
-        retrieved_sbd = uow.sbds_status_history.get(
-            entity_id=sbd_id, version=version, is_status_history=False
-        ).model_dump(mode="json")
+
+    retrieved_sbd = uow.sbds_status_history.get(
+        entity_id=sbd_id, version=version, is_status_history=False
+    ).model_dump(mode="json")
     return retrieved_sbd
 
 
@@ -145,7 +148,8 @@ def get_sbd_status(sbd_id: str, version: str = None) -> Dict[str, Any]:
     :return: The current entity status, SBDStatusHistory wrapped in a Response, or
     appropriate error Response
     """
-    sbd_status = _get_sbd_status(sbd_id=sbd_id, version=version)
+    with oda.uow as uow:
+        sbd_status = _get_sbd_status(uow=uow, sbd_id=sbd_id, version=version)
 
     return sbd_status, HTTPStatus.OK
 
@@ -258,7 +262,7 @@ def get_eb_with_status(eb_id: str) -> Response:
         eb = uow.ebs.get(eb_id)
         eb_json = eb.model_dump(mode="json")
         eb_json["status"] = _get_eb_status(
-            eb_id=eb_id, version=eb_json["metadata"]["version"]
+            uow=uow, eb_id=eb_id, version=eb_json["metadata"]["version"]
         )["current_status"]
 
     return eb_json, HTTPStatus.OK
@@ -282,28 +286,29 @@ def get_ebs_with_status(**kwargs) -> Response:
         eb_with_status = [
             {
                 **eb.model_dump(mode="json"),
-                "status": _get_eb_status(eb_id=eb.eb_id, version=eb.metadata.version)[
-                    "current_status"
-                ],
+                "status": _get_eb_status(
+                    uow=uow, eb_id=eb.eb_id, version=eb.metadata.version
+                )["current_status"],
             }
             for eb in ebs
         ]
     return eb_with_status, HTTPStatus.OK
 
 
-def _get_eb_status(eb_id: str, version: str = None) -> Dict[str, Any]:
+def _get_eb_status(uow, eb_id: str, version: str = None) -> Dict[str, Any]:
     """
     Takes an EB ID and Version and returns status
+    :param: uow: ODA PostgresUnitOfWork
     :param sbd_id: Execution Block ID
     :param version: EB version
 
     Returns retrieved EB status in Dictionary format
 
     """
-    with oda.uow as uow:
-        retrieved_eb = uow.ebs_status_history.get(
-            entity_id=eb_id, version=version, is_status_history=False
-        )
+
+    retrieved_eb = uow.ebs_status_history.get(
+        entity_id=eb_id, version=version, is_status_history=False
+    )
 
     return retrieved_eb.model_dump()
 
@@ -319,7 +324,8 @@ def get_eb_status(eb_id: str, version: int = None) -> Response:
     :return: The current entity status,OSOEBStatusHistory wrapped in a
         Response, or appropriate error Response
     """
-    eb_status = _get_eb_status(eb_id=eb_id, version=version)
+    with oda.uow as uow:
+        eb_status = _get_eb_status(uow=uow, eb_id=eb_id, version=version)
     return eb_status, HTTPStatus.OK
 
 
@@ -396,7 +402,7 @@ def get_sbi_with_status(sbi_id: str) -> Response:
         sbi = uow.sbis.get(sbi_id)
         sbi_json = sbi.model_dump(mode="json")
         sbi_json["status"] = _get_sbi_status(
-            sbi_id=sbi_id, version=sbi_json["metadata"]["version"]
+            uow=uow, sbi_id=sbi_id, version=sbi_json["metadata"]["version"]
         )["current_status"]
     return sbi_json, HTTPStatus.OK
 
@@ -420,7 +426,7 @@ def get_sbis_with_status(**kwargs) -> Response:
             {
                 **sbi.model_dump(mode="json"),
                 "status": _get_sbi_status(
-                    sbi_id=sbi.sbi_id, version=sbi.metadata.version
+                    uow=uow, sbi_id=sbi.sbi_id, version=sbi.metadata.version
                 )["current_status"],
             }
             for sbi in sbis
@@ -428,7 +434,7 @@ def get_sbis_with_status(**kwargs) -> Response:
     return sbi_with_status, HTTPStatus.OK
 
 
-def _get_sbi_status(sbi_id: str, version: str = None) -> Dict[str, Any]:
+def _get_sbi_status(uow, sbi_id: str, version: str = None) -> Dict[str, Any]:
     """
     Takes an SBInstance ID and Version and returns status
     param sbd_id: SBInstance ID
@@ -437,10 +443,10 @@ def _get_sbi_status(sbi_id: str, version: str = None) -> Dict[str, Any]:
     Returns retrieved SBI status in Dictionary format
 
     """
-    with oda.uow as uow:
-        retrieved_sbi = uow.sbis_status_history.get(
-            entity_id=sbi_id, version=version, is_status_history=False
-        )
+
+    retrieved_sbi = uow.sbis_status_history.get(
+        entity_id=sbi_id, version=version, is_status_history=False
+    )
     return retrieved_sbi.model_dump()
 
 
@@ -455,7 +461,8 @@ def get_sbi_status(sbi_id: str, version: int = None) -> Response:
     :return: The current entity status,SBIStatusHistory wrapped in a
         Response, or appropriate error Response
     """
-    sbi_status = _get_sbi_status(sbi_id=sbi_id, version=version)
+    with oda.uow as uow:
+        sbi_status = _get_sbi_status(uow=uow, sbi_id=sbi_id, version=version)
     return sbi_status, HTTPStatus.OK
 
 
@@ -495,7 +502,7 @@ def get_prj_with_status(prj_id: str) -> Response:
         prj = uow.prjs.get(prj_id)
         prj_json = prj.model_dump(mode="json")
         prj_json["status"] = _get_prj_status(
-            prj_id=prj_id, version=prj_json["metadata"]["version"]
+            uow=uow, prj_id=prj_id, version=prj_json["metadata"]["version"]
         )["current_status"]
 
     return prj_json, HTTPStatus.OK
@@ -520,7 +527,7 @@ def get_prjs_with_status(**kwargs) -> Response:
             {
                 **prj.model_dump(mode="json"),
                 "status": _get_prj_status(
-                    prj_id=prj.prj_id, version=prj.metadata.version
+                    uow=uow, prj_id=prj.prj_id, version=prj.metadata.version
                 )["current_status"],
             }
             for prj in prjs
@@ -528,19 +535,20 @@ def get_prjs_with_status(**kwargs) -> Response:
     return prj_with_status, HTTPStatus.OK
 
 
-def _get_prj_status(prj_id: str, version: str = None) -> Dict[str, Any]:
+def _get_prj_status(uow, prj_id: str, version: str = None) -> Dict[str, Any]:
     """
     Takes an Project ID and Version and returns status
+    :param: uow: ODA PostgresUnitOfWork
     :param prj_id: project ID
     :param version: project version
 
     Returns retrieved project status in Dictionary format
 
     """
-    with oda.uow as uow:
-        retrieved_prj = uow.prjs_status_history.get(
-            entity_id=prj_id, version=version, is_status_history=False
-        )
+
+    retrieved_prj = uow.prjs_status_history.get(
+        entity_id=prj_id, version=version, is_status_history=False
+    )
 
     return retrieved_prj.model_dump()
 
@@ -556,7 +564,8 @@ def get_prj_status(prj_id: str, version: int = None) -> Response:
     :return: The current entity status,ProjectStatusHistory wrapped in a
         Response, or appropriate error Response
     """
-    prj_status = _get_prj_status(prj_id=prj_id, version=version)
+    with oda.uow as uow:
+        prj_status = _get_prj_status(uow=uow, prj_id=prj_id, version=version)
     return prj_status, HTTPStatus.OK
 
 
