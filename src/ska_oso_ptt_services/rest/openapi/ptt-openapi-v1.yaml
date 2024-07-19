@@ -72,6 +72,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         "500":
           $ref: '#/components/responses/InternalServerError'
+
   /status/history/sbds:
     get:
       summary: Get SBDefinition status history by the query parameter.
@@ -165,6 +166,8 @@ paths:
           $ref: '#/components/responses/NotFound'
         "500":
           $ref: '#/components/responses/InternalServerError'
+
+
   /ebs:
     get:
       summary: Get ExecutionBlock filter by the query parameter
@@ -199,7 +202,8 @@ paths:
         "404":
           $ref: '#/components/responses/NotFound'
         "500":
-          $ref: '#/components/responses/InternalServerError' 
+          $ref: '#/components/responses/InternalServerError'
+  
   /ebs/{eb_id}:
     parameters:
       - name: eb_id
@@ -229,6 +233,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         "500":
           $ref: '#/components/responses/InternalServerError'
+
   /status/history/ebs:
     get:
       summary: Get ExecutionBlock status history by the query parameter
@@ -253,6 +258,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         "500":
           $ref: '#/components/responses/InternalServerError'
+
   /status/ebs/{eb_id}:
     parameters:
     - name: eb_id
@@ -316,6 +322,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         "500":
           $ref: '#/components/responses/InternalServerError'
+
   /sbis:
     get:
       summary: Get SBInstance filter by the query parameter
@@ -345,6 +352,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         "500":
           $ref: '#/components/responses/InternalServerError'
+
   /sbis/{sbi_id}:
     parameters:
       - name: sbi_id
@@ -374,6 +382,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         "500":
           $ref: '#/components/responses/InternalServerError'
+  
   /status/history/sbis:
     get:
       summary: Get SBInstance status history by the query parameter
@@ -398,6 +407,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         "500":
           $ref: '#/components/responses/InternalServerError'
+
   /status/sbis/{sbi_id}:
     parameters:
       - name: sbi_id
@@ -462,6 +472,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         "500":
           $ref: '#/components/responses/InternalServerError'
+
   /prjs:
     get:
       summary: Get Project filter by the query parameter
@@ -526,6 +537,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         "500":
           $ref: '#/components/responses/InternalServerError'
+
   /status/history/prjs:
     get:
       summary: Get Project status history by the query parameter.
