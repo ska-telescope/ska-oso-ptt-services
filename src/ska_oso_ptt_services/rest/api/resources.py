@@ -294,7 +294,6 @@ def get_ebs_with_status(**kwargs) -> Response:
 def _get_eb_status(eb_id: str, version: str = None) -> Dict[str, Any]:
     """
     Takes an EB ID and Version and returns status
-    :param: uow: ODA PostgresUnitOfWork
     :param sbd_id: Execution Block ID
     :param version: EB version
 
@@ -531,7 +530,6 @@ def get_prjs_with_status(**kwargs) -> Response:
 def _get_prj_status(prj_id: str, version: str = None) -> Dict[str, Any]:
     """
     Takes an Project ID and Version and returns status
-    :param: uow: ODA PostgresUnitOfWork
     :param prj_id: project ID
     :param version: project version
 
