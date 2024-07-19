@@ -127,10 +127,10 @@ def _get_sbd_status(sbd_id: str, version: str = None) -> Dict[str, Any]:
 
     Returns retrieved SBD status in Dictionary format
     """
-
-    retrieved_sbd = oda.uow.sbds_status_history.get(
-        entity_id=sbd_id, version=version, is_status_history=False
-    ).model_dump(mode="json")
+    with oda.uow as uow:
+        retrieved_sbd = uow.sbds_status_history.get(
+            entity_id=sbd_id, version=version, is_status_history=False
+        ).model_dump(mode="json")
     return retrieved_sbd
 
 
@@ -300,9 +300,10 @@ def _get_eb_status(eb_id: str, version: str = None) -> Dict[str, Any]:
     Returns retrieved EB status in Dictionary format
 
     """
-    retrieved_eb = oda.uow.ebs_status_history.get(
-        entity_id=eb_id, version=version, is_status_history=False
-    )
+    with oda.uow as uow:
+        retrieved_eb = uow.ebs_status_history.get(
+            entity_id=eb_id, version=version, is_status_history=False
+        )
 
     return retrieved_eb.model_dump()
 
@@ -436,10 +437,10 @@ def _get_sbi_status(sbi_id: str, version: str = None) -> Dict[str, Any]:
     Returns retrieved SBI status in Dictionary format
 
     """
-
-    retrieved_sbi = oda.uow.sbis_status_history.get(
-        entity_id=sbi_id, version=version, is_status_history=False
-    )
+    with oda.uow as uow:
+        retrieved_sbi = uow.sbis_status_history.get(
+            entity_id=sbi_id, version=version, is_status_history=False
+        )
     return retrieved_sbi.model_dump()
 
 
@@ -536,10 +537,10 @@ def _get_prj_status(prj_id: str, version: str = None) -> Dict[str, Any]:
     Returns retrieved project status in Dictionary format
 
     """
-
-    retrieved_prj = oda.uow.prjs_status_history.get(
-        entity_id=prj_id, version=version, is_status_history=False
-    )
+    with oda.uow as uow:
+        retrieved_prj = uow.prjs_status_history.get(
+            entity_id=prj_id, version=version, is_status_history=False
+        )
 
     return retrieved_prj.model_dump()
 
