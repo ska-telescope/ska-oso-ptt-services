@@ -346,17 +346,23 @@ def put_eb_history(eb_id: str, version: int, body: dict) -> Response:
             eb_ref=eb_id,
             previous_status=OSOEBStatus(body["previous_status"]),
             current_status=OSOEBStatus(body["current_status"]),
-            metadata={"version": version},
+            metadata={
+                "version": version,
+            },
         )
+        print("111111111111111111111", eb_status_history)
 
     except ValueError as err:
+        print("22222222222222222", err)
         raise StatusHistoryException(err)  # pylint: disable=W0707
 
     if response := check_for_mismatch(eb_id, eb_status_history.eb_ref):
+        print("response", response)
         return response
 
     with oda.uow as uow:
         if eb_id not in uow.ebs:
+            print("response 2222222222222222", uow)
             raise KeyError(
                 f"Not found. The requested eb_id {eb_id} could not be found."
             )
