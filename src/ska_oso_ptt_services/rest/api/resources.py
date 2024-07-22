@@ -148,6 +148,10 @@ def get_sbd_status(sbd_id: str, version: str = None) -> Dict[str, Any]:
     :return: The current entity status, SBDStatusHistory wrapped in a Response, or
     appropriate error Response
     """
+    LOGGER.debug(
+        "GET CURRENT Getting entity with ID %s from postgres ODA_BACKEND_TYPE",
+        ODA_BACKEND_TYPE,
+    )
     with oda.uow as uow:
         sbd_status = _get_sbd_status(uow=uow, sbd_id=sbd_id, version=version)
 
@@ -231,12 +235,21 @@ def put_sbi_history(sbi_id: str, version: int, body: dict) -> Response:
     :param body: SBInstance to persist from the request body
     :return: The SBInstance wrapped in a Response, or appropriate error Response
     """
+    LOGGER.debug(
+        "PUT Getting entity with ID %s from postgres ODA_BACKEND_TYPE", ODA_BACKEND_TYPE
+    )
     try:
         sbi_status_history = SBIStatusHistory(
             sbi_ref=sbi_id,
             previous_status=SBIStatus(body["previous_status"]),
             current_status=SBIStatus(body["current_status"]),
-            metadata={"version": version},
+            metadata={
+                "created_by": "DefaultUser",
+                "created_on": "2024-07-22T13:12:55.951656Z",
+                "last_modified_by": "DefaultUser",
+                "last_modified_on": "2024-07-22T13:12:55.951656Z",
+                "version": version,
+            },
         )
     except ValueError as err:
         raise StatusHistoryException(err)  # pylint: disable=W0707
@@ -468,6 +481,10 @@ def get_sbi_status(sbi_id: str, version: int = None) -> Response:
     :return: The current entity status,SBIStatusHistory wrapped in a
         Response, or appropriate error Response
     """
+    LOGGER.debug(
+        "GET CURRENT Getting entity with ID %s from postgres ODA_BACKEND_TYPE",
+        ODA_BACKEND_TYPE,
+    )
     with oda.uow as uow:
         sbi_status = _get_sbi_status(uow=uow, sbi_id=sbi_id, version=version)
     return sbi_status, HTTPStatus.OK
@@ -483,6 +500,10 @@ def get_sbi_status_history(**kwargs) -> Response:
     :return: The status history, SBIStatusHistory wrapped in a Response,
         or appropriate error Response
     """
+    LOGGER.debug(
+        "GET HISTORY Getting entity with ID %s from postgres ODA_BACKEND_TYPE",
+        ODA_BACKEND_TYPE,
+    )
     if not isinstance(maybe_qry_params := get_qry_params(kwargs), QueryParams):
         return maybe_qry_params
 
