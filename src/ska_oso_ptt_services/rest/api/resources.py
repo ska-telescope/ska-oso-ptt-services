@@ -381,6 +381,7 @@ def put_eb_history(eb_id: str, version: int, body: dict) -> Response:
             )
 
         persisted_eb = uow.ebs_status_history.add(eb_status_history)
+        print('qqqqqqqqqqqqqqqqqqqqqqqqqqqq',type(uow))
         uow.commit()
 
     return persisted_eb, HTTPStatus.OK
