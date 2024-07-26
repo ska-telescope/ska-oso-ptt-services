@@ -13,7 +13,6 @@ WORKDIR /app
 
 # Copy poetry.lock* in case it doesn't exist in the repo
 COPY pyproject.toml poetry.lock* ./
-COPY ska_db_oda-5.3.0-py3-none-any.whl  /app
 # Install runtime dependencies and the app
 RUN poetry config virtualenvs.create false
 # Developers may want to add --dev to the poetry export for testing inside a container
@@ -24,6 +23,5 @@ RUN poetry export --format requirements.txt --output poetry-requirements.txt --w
 
 USER tango
 
-RUN pip install ska_db_oda-5.3.0-py3-none-any.whl --force
 
 CMD ["python3", "-m", "ska_oso_ptt_services.rest.wsgi"]
