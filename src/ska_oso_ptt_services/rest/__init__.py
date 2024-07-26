@@ -16,6 +16,7 @@ PTT_MAJOR_VERSION = version("ska-oso-ptt-services").split(".")[0]
 API_PATH = f"/{KUBE_NAMESPACE}/ptt/api/v{PTT_MAJOR_VERSION}"
 
 oda = FlaskODA()
+BACKEND_VAR = "ODA_BACKEND_TYPE"
 
 
 def resolve_openapi_spec() -> Dict[str, Any]:
@@ -61,8 +62,8 @@ def create_app(open_api_spec=None) -> App:
     connexion = App(__name__, specification_dir="openapi/")
 
     connexion.app.json_encoder = PdmJsonEncoder
-    connexion.app.config.from_object("ska_oso_ptt_services.rest.config.Config")
-
+    # connexion.app.config.from_object("ska_oso_ptt_services.rest.config.Config")
+    connexion.app.config.setdefault(BACKEND_VAR, "postgres")
     connexion.app.after_request(set_default_headers_on_response)
 
     validator_map = {
