@@ -23,5 +23,6 @@ RUN poetry export --format requirements.txt --output poetry-requirements.txt --w
 
 USER tango
 
+RUN pip install numpy==1.26.3 --force
 
 CMD ["python3", "-m", "ska_oso_ptt_services.rest.wsgi"]
