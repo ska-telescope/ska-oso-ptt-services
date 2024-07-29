@@ -4,11 +4,17 @@ Functions which the HTTP requests to individual resources are mapped to.
 See the operationId fields of the Open API spec for the specific mappings.
 """
 
+import json
 import logging
 from http import HTTPStatus
 from typing import Any, Dict, Tuple, Union
 
-from ska_db_oda.domain import StatusHistoryException
+from ska_db_oda.domain import (
+    CODEC,
+    StatusHistoryException,
+    get_identifier,
+    set_identifier,
+)
 from ska_db_oda.domain.query import QueryParams, QueryParamsFactory
 from ska_db_oda.rest.api.resources import (
     check_for_mismatch,
@@ -16,7 +22,7 @@ from ska_db_oda.rest.api.resources import (
     validation_response,
 )
 from ska_db_oda.unit_of_work.postgresunitofwork import PostgresUnitOfWork
-from ska_oso_pdm import SBDStatusHistory
+from ska_oso_pdm import OSOExecutionBlock, SBDStatusHistory
 from ska_oso_pdm.entity_status_history import (
     OSOEBStatus,
     OSOEBStatusHistory,
@@ -248,6 +254,11 @@ def put_sbi_history(sbi_id: str, version: int, body: dict) -> Response:
     return persisted_sbi, HTTPStatus.OK
 
 
+def identifier_check(entity) -> None:
+    if get_identifier(entity):
+        set_identifier(entity, None)
+
+
 @error_handler
 def get_eb_with_status(eb_id: str) -> Response:
     """
@@ -328,6 +339,26 @@ def get_eb_status(eb_id: str, version: int = None) -> Response:
     with oda.uow as uow:
         eb_status = _get_eb_status(uow=uow, eb_id=eb_id, version=version)
     return eb_status, HTTPStatus.OK
+
+
+@error_handler
+def post_ebs(body: dict) -> Response:
+    eb = CODEC.loads(OSOExecutionBlock, json.dumps(body))
+    identifier_check(eb)
+
+    with oda.uow as uow:
+        persisted_eb = uow.ebs.add(eb)
+
+        eb_status_history = OSOEBStatusHistory(
+            eb_ref=persisted_eb.eb_id,
+            current_status=OSOEBStatus.CREATED,
+            previous_status=OSOEBStatus.CREATED,
+        )
+
+        uow.ebs_status_history.add(eb_status_history)
+        uow.commit()
+
+    return persisted_eb, HTTPStatus.OK
 
 
 @error_handler

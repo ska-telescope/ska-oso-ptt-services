@@ -267,7 +267,35 @@ paths:
           $ref: '#/components/responses/NotFound'
         "500":
           $ref: '#/components/responses/InternalServerError'
-  
+    post:
+      summary: Create a new ExecutionBlock
+      description: |
+        Stores the ExecutionBlock in the underlying data store, with an identifier generated from SKUID
+      operationId: ska_db_oda.rest.api.resources.post_ebs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              #              $ref: './oso-components-openapi-v1.yaml#/components/schemas/OSOExecutionBlock'
+        required: true
+      responses:
+        "200":
+          description: OK, the ExecutionBlock was created
+          content:
+            application/json:
+              schema:
+                type: object
+                #                $ref: './oso-components-openapi-v1.yaml#/components/schemas/OSOExecutionBlock'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "422":
+          $ref: '#/components/responses/UnprocessableEntity'
+        "500":
+          $ref: '#/components/responses/InternalServerError'
+ 
   /ebs/{eb_id}:
     parameters:
       - name: eb_id
