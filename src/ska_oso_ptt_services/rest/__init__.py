@@ -63,7 +63,6 @@ def create_app(open_api_spec=None) -> App:
 
     connexion.app.json_encoder = PdmJsonEncoder
     # connexion.app.config.from_object("ska_oso_ptt_services.rest.config.Config")
-    connexion.app.config.setdefault(BACKEND_VAR, "postgres")
     connexion.app.after_request(set_default_headers_on_response)
 
     validator_map = {
