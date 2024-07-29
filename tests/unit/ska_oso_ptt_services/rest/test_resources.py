@@ -115,7 +115,7 @@ class TestSBDefinitionAPI:
 
         uow_mock = mock.MagicMock()
         uow_mock.sbds.get.side_effect = KeyError(
-            f"Not Found. The requested identifiers {invalid_sbd_id} could not be found."
+            f"Not Found. The requested identifier {invalid_sbd_id} could not be found."
         )
         mock_oda.uow.__enter__.return_value = uow_mock
 
@@ -126,7 +126,7 @@ class TestSBDefinitionAPI:
 
         error = {
             "detail": (
-                f"Not Found. The requested identifiers {invalid_sbd_id} could not be"
+                f"Not Found. The requested identifier {invalid_sbd_id} could not be"
                 " found."
             )
         }
@@ -174,7 +174,7 @@ class TestSBDefinitionAPI:
 
         error = {
             "detail": (
-                "Not Found. The requested identifiers sbd-t0001-20240702-00100 could not"
+                "Not Found. The requested identifier sbd-t0001-20240702-00100 could not"
                 " be found."
             )
         }
@@ -213,7 +213,7 @@ class TestSBDefinitionAPI:
         uow_mock = mock.MagicMock()
         mock_oda.uow.__enter__.return_value = uow_mock
         mock_get_sbd_status.side_effect = KeyError(
-            f"Not Found. The requested identifiers {invalid_sbd_id} could not be found."
+            f"Not Found. The requested identifier {invalid_sbd_id} could not be found."
         )
 
         result = client.get(
@@ -224,7 +224,7 @@ class TestSBDefinitionAPI:
 
         error = {
             "detail": (
-                "Not Found. The requested identifiers sbd-t0001-20240702-00100 could not"
+                "Not Found. The requested identifier sbd-t0001-20240702-00100 could not"
                 " be found."
             )
         }
@@ -453,7 +453,7 @@ class TestSBInstanceAPI:
 
         uow_mock = mock.MagicMock()
         uow_mock.sbis.get.side_effect = KeyError(
-            f"Not Found. The requested identifiers {invalid_sbi_id} could not be found."
+            f"Not Found. The requested identifier {invalid_sbi_id} could not be found."
         )
         mock_oda.uow.__enter__.return_value = uow_mock
 
@@ -466,7 +466,7 @@ class TestSBInstanceAPI:
         # Check if the response contains the expected error message
         expected_error_message = {
             "detail": (
-                f"Not Found. The requested identifiers {invalid_sbi_id} could not be"
+                f"Not Found. The requested identifier {invalid_sbi_id} could not be"
                 " found."
             )
         }
@@ -514,7 +514,7 @@ class TestSBInstanceAPI:
 
         error = {
             "detail": (
-                "Not Found. The requested identifiers sbi-t000-00100 could not be found."
+                "Not Found. The requested identifier sbi-t000-00100 could not be found."
             )
         }
         assert json.loads(result.text) == error
@@ -552,7 +552,7 @@ class TestSBInstanceAPI:
         mock_oda.uow.__enter__.return_value = uow_mock
 
         mock_get_sbi_status.side_effect = KeyError(
-            f"Not Found. The requested identifiers {invalid_sbi_id} could not be found."
+            f"Not Found. The requested identifier {invalid_sbi_id} could not be found."
         )
 
         result = client.get(
@@ -563,7 +563,7 @@ class TestSBInstanceAPI:
 
         error = {
             "detail": (
-                "Not Found. The requested identifiers sbi-t0001-20240702-00100 could not"
+                "Not Found. The requested identifier sbi-t0001-20240702-00100 could not"
                 " be found."
             )
         }
@@ -721,7 +721,7 @@ class TestExecutionBlockAPI:
 
         uow_mock = mock.MagicMock()
         uow_mock.ebs.get.side_effect = KeyError(
-            f"Not Found. The requested identifiers {invalid_eb_id} could not be found."
+            f"Not Found. The requested identifier {invalid_eb_id} could not be found."
         )
         mock_oda.uow.__enter__.return_value = uow_mock
 
@@ -734,7 +734,7 @@ class TestExecutionBlockAPI:
         # Check if the response contains the expected error message
         expected_error_message = {
             "detail": (
-                f"Not Found. The requested identifiers {invalid_eb_id} could not be"
+                f"Not Found. The requested identifier {invalid_eb_id} could not be"
                 " found."
             )
         }
@@ -782,7 +782,7 @@ class TestExecutionBlockAPI:
 
         error = {
             "detail": (
-                "Not Found. The requested identifiers eb-t0001-00100 could not be found."
+                "Not Found. The requested identifier eb-t0001-00100 could not be found."
             )
         }
         assert json.loads(result.text) == error
@@ -819,7 +819,7 @@ class TestExecutionBlockAPI:
         mock_oda.uow.__enter__.return_value = uow_mock
 
         mock_get_eb_status.side_effect = KeyError(
-            f"Not Found. The requested identifiers {invalid_eb_id} could not be found."
+            f"Not Found. The requested identifier {invalid_eb_id} could not be found."
         )
 
         result = client.get(
@@ -830,7 +830,7 @@ class TestExecutionBlockAPI:
 
         error = {
             "detail": (
-                "Not Found. The requested identifiers eb-t0001-20240702-00100 could not"
+                "Not Found. The requested identifier eb-t0001-20240702-00100 could not"
                 " be found."
             )
         }
@@ -990,7 +990,7 @@ class TestProjectAPI:
 
         uow_mock = mock.MagicMock()
         uow_mock.prjs.get.side_effect = KeyError(
-            f"Not Found. The requested identifiers {invalid_prj_id} could not be found."
+            f"Not Found. The requested identifier {invalid_prj_id} could not be found."
         )
         mock_oda.uow.__enter__.return_value = uow_mock
 
@@ -1003,7 +1003,7 @@ class TestProjectAPI:
         # Check if the response contains the expected error message
         expected_error_message = {
             "detail": (
-                f"Not Found. The requested identifiers {invalid_prj_id} could not be"
+                f"Not Found. The requested identifier {invalid_prj_id} could not be"
                 " found."
             )
         }
@@ -1051,7 +1051,7 @@ class TestProjectAPI:
 
         error = {
             "detail": (
-                "Not Found. The requested identifiers prj-t0001-00100 could not be"
+                "Not Found. The requested identifier prj-t0001-00100 could not be"
                 " found."
             )
         }
@@ -1091,7 +1091,7 @@ class TestProjectAPI:
         mock_oda.uow.__enter__.return_value = uow_mock
 
         mock_get_prj_status.side_effect = KeyError(
-            f"Not Found. The requested identifiers {invalid_prj_id} could not be found."
+            f"Not Found. The requested identifier {invalid_prj_id} could not be found."
         )
 
         result = client.get(
@@ -1102,7 +1102,7 @@ class TestProjectAPI:
 
         error = {
             "detail": (
-                "Not Found. The requested identifiers prj-t0001-20240702-00100 could not"
+                "Not Found. The requested identifier prj-t0001-20240702-00100 could not"
                 " be found."
             )
         }
