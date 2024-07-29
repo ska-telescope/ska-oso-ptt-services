@@ -325,7 +325,37 @@ paths:
           $ref: '#/components/responses/NotFound'
         "500":
           $ref: '#/components/responses/InternalServerError'
-
+    put:
+        summary: Updates an ExecutionBlock by identifier
+        description: |
+          Updates the ExecutionBlock with the given identifier
+          in the underlying data store, mutating the existing first version.
+          If the identifier does not exist in the data store, a not found error will be returned.
+        operationId: ska_db_oda.rest.api.resources.put_eb
+        requestBody:
+          content:
+            application/json:
+              schema:
+                type: object
+                #              $ref: './oso-components-openapi-v1.yaml#/components/schemas/OSOExecutionBlock'
+          required: true
+        responses:
+          "200":
+            description: OK, the ExecutionBlock was created or updated
+            content:
+              application/json:
+                schema:
+                  type: object
+                  #                $ref: './oso-components-openapi-v1.yaml#/components/schemas/OSOExecutionBlock'
+          "400":
+            $ref: '#/components/responses/BadRequest'
+          "404":
+            $ref: '#/components/responses/NotFound'
+          "422":
+            $ref: '#/components/responses/UnprocessableEntity'
+          "500":
+            $ref: '#/components/responses/InternalServerError'
+ 
   /status/history/ebs:
     get:
       summary: Get ExecutionBlock status history by the query parameter

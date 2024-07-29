@@ -4,18 +4,19 @@ Functions which the HTTP requests to individual resources are mapped to.
 See the operationId fields of the Open API spec for the specific mappings.
 """
 
+import json
 import logging
 from http import HTTPStatus
 from typing import Any, Dict, Tuple, Union
 
-from ska_db_oda.domain import StatusHistoryException
+from ska_db_oda.domain import CODEC, StatusHistoryException
 from ska_db_oda.domain.query import QueryParams, QueryParamsFactory
 from ska_db_oda.rest.api.resources import (
     check_for_mismatch,
     error_handler,
     validation_response,
 )
-from ska_oso_pdm import SBDStatusHistory
+from ska_oso_pdm import OSOExecutionBlock, SBDStatusHistory
 from ska_oso_pdm.entity_status_history import (
     OSOEBStatus,
     OSOEBStatusHistory,
@@ -115,6 +116,36 @@ def get_sbds_with_status(**kwargs) -> Response:
             for sbd in sbds
         ]
     return sbd_with_status, HTTPStatus.OK
+
+
+@error_handler
+def put_eb(eb_id: str, body: dict) -> Response:
+    """
+    Function that a PUT /ebs/<eb_id> request is routed to.
+
+    :param eb_id: Requested identifier from the path parameter
+    :param body: ExecutionBlock to persist from the request body
+    :return: The ExecutionBlock wrapped in a Response, or appropriate error Response
+    """
+    LOGGER.info(
+        " put_eb oda.uow  Initializing ODA filesystem backend. Working directory=%s",
+        oda.uow,
+    )
+    eb = CODEC.loads(OSOExecutionBlock, json.dumps(body))
+    if response := check_for_mismatch(eb_id, eb.eb_id):
+        return response
+
+    with oda.uow as uow:
+        # Check the identifier already exists - after refactoring for BTN-3000
+        # this check could be done within the add method
+        if eb_id not in uow.ebs:
+            raise KeyError(
+                f"Not found. The requested eb_id {eb_id} could not be found."
+            )
+        persisted_eb = uow.ebs.add(eb, is_entity_update=True)
+        uow.commit()
+
+    return persisted_eb, HTTPStatus.OK
 
 
 def _get_sbd_status(uow, sbd_id: str, version: str = None) -> Dict[str, Any]:
