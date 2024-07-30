@@ -7,6 +7,7 @@ See the operationId fields of the Open API spec for the specific mappings.
 import json
 import logging
 from http import HTTPStatus
+from os import getenv
 from typing import Any, Dict, Tuple, Union
 
 from ska_db_oda.domain import CODEC, StatusHistoryException
@@ -30,6 +31,8 @@ from ska_oso_pdm.entity_status_history import (
 from ska_oso_ptt_services.rest import oda
 
 LOGGER = logging.getLogger(__name__)
+
+ODA_BACKEND_TYPE = getenv("ODA_BACKEND_TYPE", "rest")
 
 Response = Tuple[Union[dict, list], int]
 
@@ -368,13 +371,15 @@ def put_eb_history(eb_id: str, version: int, body: dict) -> Response:
     """
 
     try:
+
         eb_status_history = OSOEBStatusHistory(
             eb_ref=eb_id,
             previous_status=OSOEBStatus(body["previous_status"]),
             current_status=OSOEBStatus(body["current_status"]),
             metadata={"version": version},
         )
-
+        LOGGER.debug("eb_status_history repo_bridge %s", eb_status_history)
+   
     except ValueError as err:
         raise StatusHistoryException(err)  # pylint: disable=W0707
 
@@ -386,11 +391,13 @@ def put_eb_history(eb_id: str, version: int, body: dict) -> Response:
             raise KeyError(
                 f"Not found. The requested eb_id {eb_id} could not be found."
             )
-
-        persisted_eb = uow.ebs_status_history.add(eb_status_history)
+        updated_eb = uow.ebs_status_history.add(eb_status_history)
         uow.commit()
+        if ODA_BACKEND_TYPE == "rest":
+            updated_eb = _get_eb_status(uow=uow, eb_id=updated_eb.eb_ref, version=version)
+            print('$$$$$$$$$$$$$',updated_eb)
+    return ( updated_eb, HTTPStatus.OK)
 
-    return persisted_eb, HTTPStatus.OK
 
 
 @error_handler
