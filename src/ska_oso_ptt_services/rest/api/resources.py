@@ -217,8 +217,11 @@ def put_sbd_history(sbd_id: str, version: int, body: dict) -> Response:
         persisted_sbd = uow.sbds_status_history.add(sbd_status_history)
 
         uow.commit()
-
-    return persisted_sbd, HTTPStatus.OK
+        if ODA_BACKEND_TYPE == "rest":
+            persisted_sbd = _get_sbd_status(
+                uow=uow, sbd_id=persisted_sbd.sbd_ref, version=version
+            )
+    return (persisted_sbd, HTTPStatus.OK)
 
 
 @error_handler
@@ -275,8 +278,11 @@ def put_sbi_history(sbi_id: str, version: int, body: dict) -> Response:
 
         persisted_sbi = uow.sbis_status_history.add(sbi_status_history)
         uow.commit()
-
-    return persisted_sbi, HTTPStatus.OK
+        if ODA_BACKEND_TYPE == "rest":
+            persisted_sbi = _get_sbi_status(
+                uow=uow, sbi_id=persisted_sbi.sbi_ref, version=version
+            )
+    return (persisted_sbi, HTTPStatus.OK)
 
 
 @error_handler
@@ -371,7 +377,6 @@ def put_eb_history(eb_id: str, version: int, body: dict) -> Response:
     """
 
     try:
-
         eb_status_history = OSOEBStatusHistory(
             eb_ref=eb_id,
             previous_status=OSOEBStatus(body["previous_status"]),
@@ -379,7 +384,7 @@ def put_eb_history(eb_id: str, version: int, body: dict) -> Response:
             metadata={"version": version},
         )
         LOGGER.debug("eb_status_history repo_bridge %s", eb_status_history)
-   
+
     except ValueError as err:
         raise StatusHistoryException(err)  # pylint: disable=W0707
 
@@ -391,13 +396,13 @@ def put_eb_history(eb_id: str, version: int, body: dict) -> Response:
             raise KeyError(
                 f"Not found. The requested eb_id {eb_id} could not be found."
             )
-        updated_eb = uow.ebs_status_history.add(eb_status_history)
+        persisted_eb = uow.ebs_status_history.add(eb_status_history)
         uow.commit()
         if ODA_BACKEND_TYPE == "rest":
-            updated_eb = _get_eb_status(uow=uow, eb_id=updated_eb.eb_ref, version=version)
-            print('$$$$$$$$$$$$$',updated_eb)
-    return ( updated_eb, HTTPStatus.OK)
-
+            persisted_eb = _get_eb_status(
+                uow=uow, eb_id=persisted_eb.eb_ref, version=version
+            )
+    return (persisted_eb, HTTPStatus.OK)
 
 
 @error_handler
@@ -636,8 +641,11 @@ def put_prj_history(prj_id: str, version: int, body: dict) -> Response:
 
         persisted_prj = uow.prjs_status_history.add(prj_status_history)
         uow.commit()
-
-    return persisted_prj, HTTPStatus.OK
+        if ODA_BACKEND_TYPE == "rest":
+            persisted_prj = _get_prj_status(
+                uow=uow, prj_id=persisted_prj.prj_ref, version=version
+            )
+    return (persisted_prj, HTTPStatus.OK)
 
 
 @error_handler
