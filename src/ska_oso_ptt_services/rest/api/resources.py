@@ -16,6 +16,7 @@ from ska_db_oda.rest.api.resources import (
     error_handler,
     validation_response,
 )
+from ska_oso_pdm import SBDStatusHistory
 from ska_oso_pdm.entity_status_history import (
     OSOEBStatus,
     OSOEBStatusHistory,
@@ -24,7 +25,6 @@ from ska_oso_pdm.entity_status_history import (
     SBDStatus,
     SBIStatus,
     SBIStatusHistory,
-    SBDStatusHistory
 )
 
 from ska_oso_ptt_services.rest import oda
