@@ -1038,7 +1038,7 @@ $defs:
 
       :param scan_definition_id: the unique ID for this scan definition
 
-      :param scan_duration: scan duration
+      :param scan_duration_ms: scan duration
 
       :target_ref: ID of target to observe
 
@@ -1059,7 +1059,7 @@ $defs:
         - type: 'null'
         default: null
         title: Scan Definition Id
-      scan_duration:
+      scan_duration_ms:
         format: duration
         title: Scan Duration
         type: string
@@ -1097,7 +1097,7 @@ $defs:
         - $ref: '#/$defs/PointingCorrection'
         default: MAINTAIN
     required:
-    - scan_duration
+    - scan_duration_ms
     title: ScanDefinition
     type: object
   ScanType:
