@@ -21,6 +21,7 @@ RUN poetry export --format requirements.txt --output poetry-requirements.txt --w
     pip install -r poetry-requirements.txt && \
     pip install . && \
     rm poetry-requirements.txt
+
 USER tango
 
 CMD ["python3", "-m", "ska_oso_ptt_services.rest.wsgi"]
