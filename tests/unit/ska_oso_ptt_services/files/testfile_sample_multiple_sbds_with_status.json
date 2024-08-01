@@ -476,7 +476,7 @@
         ]
       }
     },
-    "status": "draft",
+    "status": "Draft",
     "targets": [
       {
         "pointing_pattern": {
@@ -1036,7 +1036,7 @@
         ]
       }
     },
-    "status": "draft",
+    "status": "Draft",
     "targets": [
       {
         "pointing_pattern": {
@@ -1596,7 +1596,7 @@
         ]
       }
     },
-    "status": "draft",
+    "status": "Draft",
     "targets": [
       {
         "pointing_pattern": {

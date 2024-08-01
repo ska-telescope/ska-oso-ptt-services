@@ -6,11 +6,11 @@ OSOEBStatusHistory:
   properties:
     previous_status:
       description: Previous Status of the EB Entity.
-      example: created
+      example: Created
       type: string
     current_status:
       description: Current Status of the EB Entity.
-      example: fully_observed
+      example: Fully Observed
       type: string
    
     

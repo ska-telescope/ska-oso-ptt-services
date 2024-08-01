@@ -40,7 +40,7 @@ class TestSBDefinitionAPI:
         sbds_mock.query.return_value = sbd_definitions
         uow_mock = mock.MagicMock()
         uow_mock.sbds = sbds_mock
-        mock_get_sbd_status.return_value = {"current_status": "draft"}
+        mock_get_sbd_status.return_value = {"current_status": "Draft"}
         mock_oda.uow.__enter__.return_value = uow_mock
 
         query_params = {
@@ -97,7 +97,7 @@ class TestSBDefinitionAPI:
         sbd_mock.model_dump.return_value = json.loads(valid_sbd)
         uow_mock = mock.MagicMock()
         uow_mock.sbds.get.return_value = sbd_mock
-        mock_get_sbd_status.return_value = {"current_status": "complete"}
+        mock_get_sbd_status.return_value = {"current_status": "Complete"}
         mock_oda.uow.__enter__.return_value = uow_mock
 
         result = client.get(
@@ -251,7 +251,7 @@ class TestSBDefinitionAPI:
         mock_oda.uow.__enter__.return_value = uow_mock
 
         query_params = {"version": "1"}
-        data = {"current_status": "complete", "previous_status": "draft"}
+        data = {"current_status": "Complete", "previous_status": "Draft"}
         exclude_paths = [
             "root['metadata']['created_on']",
             "root['metadata']['last_modified_on']",
@@ -286,7 +286,7 @@ class TestSBDefinitionAPI:
         mock_oda.uow.__enter__.return_value = uow_mock
 
         query_params = {"version": "1"}
-        data = {"current_status": "complete", "previous_status": "draft"}
+        data = {"current_status": "Complete", "previous_status": "Draft"}
         exclude_paths = [
             "root['metadata']['created_on']",
             "root['metadata']['last_modified_on']",
@@ -318,7 +318,7 @@ class TestSBDefinitionAPI:
         mock_oda.uow.__enter__.return_value = uow_mock
 
         query_params = {"version": "2"}
-        data = {"current_status": "observed", "previous_status": "draft"}
+        data = {"current_status": "Observed", "previous_status": "Draft"}
         exclude_paths = [
             "root['metadata']['created_on']",
             "root['metadata']['last_modified_on']",
@@ -338,7 +338,7 @@ class TestSBDefinitionAPI:
     def test_invalid_put_sbd_history(self, client):
         """Verifying that put_sbd_history error if invalid data passed"""
         query_params = {"version": "1"}
-        data = {"current1_status": "complete", "previous_status": "draft"}
+        data = {"current1_status": "Complete", "previous_status": "Draft"}
 
         error = {
             "detail": "KeyError('current_status') with args ('current_status',)",
@@ -376,7 +376,7 @@ class TestSBInstanceAPI:
         sbis_mock.query.return_value = sbi_instance
         uow_mock = mock.MagicMock()
         uow_mock.sbis = sbis_mock
-        mock_get_sbi_status.return_value = {"current_status": "created"}
+        mock_get_sbi_status.return_value = {"current_status": "Created"}
         mock_oda.uow.__enter__.return_value = uow_mock
 
         # Perform the GET request with query parameters using the query_string parameter
@@ -435,7 +435,7 @@ class TestSBInstanceAPI:
         sbi_mock.model_dump.return_value = json.loads(valid_sbi)
         uow_mock = mock.MagicMock()
         uow_mock.sbis.get.return_value = sbi_mock
-        mock_get_sbi_status.return_value = {"current_status": "created"}
+        mock_get_sbi_status.return_value = {"current_status": "Created"}
         mock_oda.uow.__enter__.return_value = uow_mock
 
         result = client.get(
@@ -590,7 +590,7 @@ class TestSBInstanceAPI:
         mock_oda.uow.__enter__.return_value = uow_mock
 
         query_params = {"version": "1"}
-        data = {"current_status": "executing", "previous_status": "created"}
+        data = {"current_status": "Executing", "previous_status": "Created"}
         exclude_paths = [
             "root['metadata']['created_on']",
             "root['metadata']['last_modified_on']",
@@ -608,7 +608,7 @@ class TestSBInstanceAPI:
     def test_invalid_put_sbi_history(self, client):
         """Verifying that put_sbi_history error if invalid data passed"""
         query_params = {"version": "1"}
-        data = {"current1_status": "complete", "previous_status": "draft"}
+        data = {"current1_status": "Complete", "previous_status": "Draft"}
 
         error = {
             "detail": "KeyError('current_status') with args ('current_status',)",
@@ -646,7 +646,7 @@ class TestExecutionBlockAPI:
         ebs_mock.query.return_value = execution_block
         uow_mock = mock.MagicMock()
         uow_mock.ebs = ebs_mock
-        mock_get_eb_status.return_value = {"current_status": "fully_observed"}
+        mock_get_eb_status.return_value = {"current_status": "Fully Observed"}
         mock_oda.uow.__enter__.return_value = uow_mock
 
         # Perform the GET request with query parameters using the query_string parameter
@@ -704,7 +704,7 @@ class TestExecutionBlockAPI:
         eb_mock.model_dump.return_value = json.loads(valid_eb_with_status)
         uow_mock = mock.MagicMock()
         uow_mock.ebs.get.return_value = eb_mock
-        mock_get_eb_status.return_value = {"current_status": "fully_observed"}
+        mock_get_eb_status.return_value = {"current_status": "Fully Observed"}
         mock_oda.uow.__enter__.return_value = uow_mock
 
         result = client.get(
@@ -858,7 +858,7 @@ class TestExecutionBlockAPI:
 
         url = "/ska-oso-ptt-services/ptt/api/v1/status/ebs/eb-mvp01-20240426-5004"
         query_params = {"version": "1"}
-        data = {"current_status": "fully_observed", "previous_status": "created"}
+        data = {"current_status": "Fully Observed", "previous_status": "Created"}
         exclude_paths = [
             "root['metadata']['created_on']",
             "root['metadata']['last_modified_on']",
@@ -876,7 +876,7 @@ class TestExecutionBlockAPI:
     def test_invalid_put_eb_history(self, client):
         """Verifying that put_eb_history error if invalid data passed"""
         query_params = {"version": "1"}
-        data = {"current1_status": "fully_observed", "previous_status": "created"}
+        data = {"current1_status": "Fully Observed", "previous_status": "Created"}
 
         error = {
             "detail": "KeyError('current_status') with args ('current_status',)",
@@ -915,7 +915,7 @@ class TestProjectAPI:
         prjs_mock.query.return_value = project
         uow_mock = mock.MagicMock()
         uow_mock.prjs = prjs_mock
-        mock_get_prj_status.return_value = {"current_status": "draft"}
+        mock_get_prj_status.return_value = {"current_status": "Draft"}
         mock_oda.uow.__enter__.return_value = uow_mock
 
         # Perform the GET request with query parameters using the query_string parameter
@@ -973,7 +973,7 @@ class TestProjectAPI:
         prj_mock.model_dump.return_value = json.loads(valid_prj_with_status)
         uow_mock = mock.MagicMock()
         uow_mock.prjs.get.return_value = prj_mock
-        mock_get_prj_status.return_value = {"current_status": "draft"}
+        mock_get_prj_status.return_value = {"current_status": "Draft"}
         mock_oda.uow.__enter__.return_value = uow_mock
 
         result = client.get(
@@ -1130,7 +1130,7 @@ class TestProjectAPI:
 
         url = "/ska-oso-ptt-services/ptt/api/v1/status/prjs/prj-mvp01-20220923-00001"
         query_params = {"version": "1"}
-        data = {"current_status": "draft", "previous_status": "draft"}
+        data = {"current_status": "Draft", "previous_status": "Draft"}
         exclude_paths = [
             "root['metadata']['created_on']",
             "root['metadata']['last_modified_on']",
@@ -1166,7 +1166,7 @@ class TestProjectAPI:
 
         url = "/ska-oso-ptt-services/ptt/api/v1/status/prjs/prj-mvp01-20220923-00001"
         query_params = {"version": "1"}
-        data = {"current_status": "draft", "previous_status": "draft"}
+        data = {"current_status": "Draft", "previous_status": "Draft"}
         exclude_paths = [
             "root['metadata']['created_on']",
             "root['metadata']['last_modified_on']",
@@ -1201,7 +1201,7 @@ class TestProjectAPI:
 
         url = "/ska-oso-ptt-services/ptt/api/v1/status/prjs/prj-mvp01-20220923-00001"
         query_params = {"version": "2"}
-        data = {"current_status": "submitted", "previous_status": "draft"}
+        data = {"current_status": "Submitted", "previous_status": "Draft"}
         exclude_paths = [
             "root['metadata']['created_on']",
             "root['metadata']['last_modified_on']",
@@ -1222,7 +1222,7 @@ class TestProjectAPI:
     def test_invalid_put_prj_history(self, client):
         """Verifying that put_prj_history error if invalid data passed"""
         query_params = {"version": "1"}
-        data = {"current1_status": "submitted", "previous_status": "draft"}
+        data = {"current1_status": "Submitted", "previous_status": "Draft"}
 
         error = {
             "detail": "KeyError('current_status') with args ('current_status',)",

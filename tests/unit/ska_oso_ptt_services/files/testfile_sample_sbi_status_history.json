@@ -1,5 +1,5 @@
 {
-  "current_status": "executing",
+  "current_status": "Executing",
   "sbi_ref": "sbi-mvp01-20220923-00002",
   "metadata": {
     "created_by": "DefaultUser",
@@ -8,5 +8,5 @@
     "last_modified_on": "2024-04-14T11:51:16.367278+05:30",
     "version": 1
   },
-  "previous_status": "created"
+  "previous_status": "Created"
 }

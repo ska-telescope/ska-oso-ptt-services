@@ -6,11 +6,11 @@ SBDStatusHistory:
   properties:
     previous_status:
       description: Previous Status of the SBD Entity.
-      example: draft
+      example: Draft
       type: string
     current_status:
       description: Current Status of the SBD Entity.
-      example: complete
+      example: Complete
       type: string
 
 

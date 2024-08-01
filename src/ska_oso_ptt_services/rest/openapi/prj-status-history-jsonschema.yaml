@@ -30,14 +30,14 @@ $defs:
     type: object
   ProjectStatus:
     enum:
-    - draft 
-    - submitted 
-    - ready 
+    - Draft 
+    - Submitted 
+    - Ready 
     - In Progress 
-    - observed 
+    - Observed 
     - Out of Time 
-    - complete 
-    - cancelled
+    - Complete 
+    - Cancelled
     title: ProjectStatus
     type: string
 properties:
@@ -49,12 +49,12 @@ properties:
   current_status:
     allOf:
     - $ref: '#/$defs/ProjectStatus'
-    default: draft
+    default: Draft
   previous_status:
     anyOf:
     - $ref: '#/$defs/ProjectStatus'
     - type: 'null'
-    default: draft
+    default: Draft
 required:
 - prj_ref
 title: ProjectStatusHistory

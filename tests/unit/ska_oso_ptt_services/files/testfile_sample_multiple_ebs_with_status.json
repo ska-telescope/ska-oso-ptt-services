@@ -36,7 +36,7 @@
       "sbd_ref": "sbd-mvp01-20220923-00001",
       "sbd_version": 1,
       "sbi_ref": "sbi-mvp01-20220923-00001",
-      "status": "fully_observed",
+      "status": "Fully Observed",
       "telescope": "ska_mid"
     },
     {
@@ -76,7 +76,7 @@
       "sbd_ref": "sbd-mvp01-20220923-00001",
       "sbd_version": 1,
       "sbi_ref": "sbi-mvp01-20220923-00001",
-      "status": "fully_observed",
+      "status": "Fully Observed",
       "telescope": "ska_mid"
     },
     {
@@ -116,7 +116,7 @@
       "sbd_ref": "sbd-mvp01-20220923-00001",
       "sbd_version": 1,
       "sbi_ref": "sbi-mvp01-20220923-00001",
-      "status": "fully_observed",
+      "status": "Fully Observed",
       "telescope": "ska_mid"
     },
     {
@@ -156,7 +156,7 @@
       "sbd_ref": "sbd-mvp01-20220923-00001",
       "sbd_version": 1,
       "sbi_ref": "sbi-mvp01-20220923-00001",
-      "status": "fully_observed",
+      "status": "Fully Observed",
       "telescope": "ska_mid"
     },
     {
@@ -196,7 +196,7 @@
       "sbd_ref": "sbd-mvp01-20220923-00001",
       "sbd_version": 1,
       "sbi_ref": "sbi-mvp01-20220923-00001",
-      "status": "fully_observed",
+      "status": "Fully Observed",
       "telescope": "ska_mid"
     },
     {
@@ -236,7 +236,7 @@
       "sbd_ref": "sbd-mvp01-20220923-00001",
       "sbd_version": 1,
       "sbi_ref": "sbi-mvp01-20220923-00001",
-      "status": "fully_observed",
+      "status": "Fully Observed",
       "telescope": "ska_mid"
     }
   ]

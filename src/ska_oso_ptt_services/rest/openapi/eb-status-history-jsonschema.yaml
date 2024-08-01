@@ -30,9 +30,9 @@ $defs:
     type: object
   OSOEBStatus:
     enum:
-    - created
-    - fully_observed
-    - failed
+    - Created
+    - Fully Observed
+    - Failed
     title: OSOEBStatus
     type: string
 properties:
@@ -44,12 +44,12 @@ properties:
   current_status:
     allOf:
     - $ref: '#/$defs/OSOEBStatus'
-    default: created
+    default: Created
   previous_status:
     anyOf:
     - $ref: '#/$defs/OSOEBStatus'
     - type: 'null'
-    default: created
+    default: Created
 required:
 - eb_ref
 title: OSOEBStatusHistory

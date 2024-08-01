@@ -1,5 +1,5 @@
 {
-    "current_status": "created",
+    "current_status": "Created",
     "metadata": {
       "created_by": "DefaultUser",
       "created_on": "2024-07-08T01:14:55.434639+05:30",
@@ -7,6 +7,6 @@
       "last_modified_on": "2024-07-08T01:14:55.434639+05:30",
       "version": 1
     },
-    "previous_status": "created",
+    "previous_status": "Created",
     "sbi_ref": "sbi-mvp01-20240426-5016"
   }

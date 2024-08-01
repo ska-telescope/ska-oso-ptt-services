@@ -6,11 +6,11 @@ ProjectStatusHistory:
   properties:
     previous_status:
       description: Previous Status of the Project Entity.
-      example: draft
+      example: Draft
       type: string
     current_status:
       description: Current Status of the Project Entity.
-      example: ready
+      example: Ready
       type: string
    
     

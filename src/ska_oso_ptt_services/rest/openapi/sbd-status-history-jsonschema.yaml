@@ -30,14 +30,14 @@ $defs:
     type: object
   SBDStatus:
     enum:
-    - draft
-    - submitted
-    - ready
-    - in_progress
-    - observed
-    - suspended
-    - failed_processing
-    - complete
+    - Draft
+    - Submitted
+    - Ready
+    - In Progress
+    - Observed
+    - Suspended
+    - Failed Processing
+    - Complete
     title: SBDStatus
     type: string
 properties:
@@ -49,12 +49,12 @@ properties:
   current_status:
     allOf:
     - $ref: '#/$defs/SBDStatus'
-    default: draft
+    default: Draft
   previous_status:
     anyOf:
     - $ref: '#/$defs/SBDStatus'
     - type: 'null'
-    default: draft
+    default: Draft
 required:
 - sbd_ref
 title: SBDStatusHistory
