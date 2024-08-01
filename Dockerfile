@@ -14,7 +14,7 @@ WORKDIR /app
 # Copy poetry.lock* in case it doesn't exist in the repo
 COPY pyproject.toml poetry.lock* ./
 COPY ska_db_oda-5.3.0-py3-none-any.whl /app
-COPY ska_oso_pdm-15.1.0-py3-none-any.whl /app
+COPY ska_oso_pdm-15.2.0-py3-none-any.whl /app
 
 # Install runtime dependencies and the app
 RUN poetry config virtualenvs.create false
