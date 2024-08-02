@@ -1,9 +1,14 @@
 SBDStatusHistory:
   type: object
   required:
+    - version
     - previous_status
     - current_status
   properties:
+    version:
+      description: Version of the SBD Entity.
+      example: 1
+      type: integer
     previous_status:
       description: Previous Status of the SBD Entity.
       example: Draft
@@ -12,5 +17,5 @@ SBDStatusHistory:
       description: Current Status of the SBD Entity.
       example: Complete
       type: string
-
-
+    
+   

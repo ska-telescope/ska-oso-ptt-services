@@ -119,8 +119,6 @@ paths:
         in the underlying data store, creating a new version.
         If the identifier does not exist in the data store, a not found error will be returned.
       operationId: ska_oso_ptt_services.rest.api.resources.put_sbd_history
-      parameters:
-        - $ref: '#/components/parameters/version'
       requestBody:
         content:
           application/json:
@@ -275,8 +273,6 @@ paths:
         in the underlying data store, mutating the existing first version.
         If the identifier does not exist in the data store, a not found error will be returned.
       operationId: ska_oso_ptt_services.rest.api.resources.put_eb_history
-      parameters:
-      - $ref: '#/components/parameters/version'
       requestBody:
         content:
           application/json:
@@ -424,8 +420,6 @@ paths:
         in the underlying data store, mutating the existing first version.
         If the identifier does not exist in the data store, a not found error will be returned.
       operationId: ska_oso_ptt_services.rest.api.resources.put_sbi_history
-      parameters:
-        - $ref: '#/components/parameters/version'
       requestBody:
         content:
           application/json:
@@ -584,8 +578,6 @@ paths:
         in the underlying data store, creating a new version.
         If the identifier does not exist in the data store, a not found error will be returned.
       operationId: ska_oso_ptt_services.rest.api.resources.put_prj_history
-      parameters:
-        - $ref: '#/components/parameters/version'
       requestBody:
         content:
           application/json:

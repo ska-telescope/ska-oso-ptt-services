@@ -154,7 +154,7 @@ def get_sbd_status(sbd_id: str, version: str = None) -> Dict[str, Any]:
 
 
 @error_handler
-def put_sbd_history(sbd_id: str, version: int, body: dict) -> Response:
+def put_sbd_history(sbd_id: str, body: dict) -> Response:
     """
     Function that a PUT status/sbds/<sbd_id> request is routed to.
 
@@ -168,7 +168,7 @@ def put_sbd_history(sbd_id: str, version: int, body: dict) -> Response:
             sbd_ref=sbd_id,
             previous_status=SBDStatus(body["previous_status"]),
             current_status=SBDStatus(body["current_status"]),
-            metadata={"version": version},
+            metadata={"version": body["version"]},
         )
 
     except ValueError as err:
@@ -188,7 +188,7 @@ def put_sbd_history(sbd_id: str, version: int, body: dict) -> Response:
         uow.commit()
         if ODA_BACKEND_TYPE == "rest":
             persisted_sbd = _get_sbd_status(
-                uow=uow, sbd_id=persisted_sbd.sbd_ref, version=version
+                uow=uow, sbd_id=persisted_sbd.sbd_ref, version=body["version"]
             )
     return (persisted_sbd, HTTPStatus.OK)
 
@@ -217,7 +217,7 @@ def get_sbd_status_history(**kwargs) -> Response:
 
 
 @error_handler
-def put_sbi_history(sbi_id: str, version: int, body: dict) -> Response:
+def put_sbi_history(sbi_id: str, body: dict) -> Response:
     """
     Function that a PUT status/sbds/<sbd_id> request is routed to.
 
@@ -231,7 +231,7 @@ def put_sbi_history(sbi_id: str, version: int, body: dict) -> Response:
             sbi_ref=sbi_id,
             previous_status=SBIStatus(body["previous_status"]),
             current_status=SBIStatus(body["current_status"]),
-            metadata={"version": version},
+            metadata={"version": body["version"]},
         )
     except ValueError as err:
         raise StatusHistoryException(err)  # pylint: disable=W0707
@@ -249,7 +249,7 @@ def put_sbi_history(sbi_id: str, version: int, body: dict) -> Response:
         uow.commit()
         if ODA_BACKEND_TYPE == "rest":
             persisted_sbi = _get_sbi_status(
-                uow=uow, sbi_id=persisted_sbi.sbi_ref, version=version
+                uow=uow, sbi_id=persisted_sbi.sbi_ref, version=body["version"]
             )
     return (persisted_sbi, HTTPStatus.OK)
 
@@ -335,7 +335,7 @@ def get_eb_status(eb_id: str, version: int = None) -> Response:
 
 
 @error_handler
-def put_eb_history(eb_id: str, version: int, body: dict) -> Response:
+def put_eb_history(eb_id: str, body: dict) -> Response:
     """
     Function that a PUT status/ebs/<eb_id> request is routed to.
 
@@ -350,7 +350,7 @@ def put_eb_history(eb_id: str, version: int, body: dict) -> Response:
             eb_ref=eb_id,
             previous_status=OSOEBStatus(body["previous_status"]),
             current_status=OSOEBStatus(body["current_status"]),
-            metadata={"version": version},
+            metadata={"version": body["version"]},
         )
 
     except ValueError as err:
@@ -368,7 +368,7 @@ def put_eb_history(eb_id: str, version: int, body: dict) -> Response:
         uow.commit()
         if ODA_BACKEND_TYPE == "rest":
             persisted_eb = _get_eb_status(
-                uow=uow, eb_id=persisted_eb.eb_ref, version=version
+                uow=uow, eb_id=persisted_eb.eb_ref, version=body["version"]
             )
     return (persisted_eb, HTTPStatus.OK)
 
@@ -577,7 +577,7 @@ def get_prj_status(prj_id: str, version: int = None) -> Response:
 
 
 @error_handler
-def put_prj_history(prj_id: str, version: int, body: dict) -> Response:
+def put_prj_history(prj_id: str, body: dict) -> Response:
     """
     Function that a PUT status/prjs/<prj_id> request is routed to.
 
@@ -592,7 +592,7 @@ def put_prj_history(prj_id: str, version: int, body: dict) -> Response:
             prj_ref=prj_id,
             previous_status=ProjectStatus(body["previous_status"]),
             current_status=ProjectStatus(body["current_status"]),
-            metadata={"version": version},
+            metadata={"version": body["version"]},
         )
 
     except ValueError as err:
@@ -611,7 +611,7 @@ def put_prj_history(prj_id: str, version: int, body: dict) -> Response:
         uow.commit()
         if ODA_BACKEND_TYPE == "rest":
             persisted_prj = _get_prj_status(
-                uow=uow, prj_id=persisted_prj.prj_ref, version=version
+                uow=uow, prj_id=persisted_prj.prj_ref, version=body["version"]
             )
     return persisted_prj, HTTPStatus.OK
 

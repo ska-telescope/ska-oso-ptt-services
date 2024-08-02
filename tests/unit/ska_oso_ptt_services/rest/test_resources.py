@@ -250,8 +250,11 @@ class TestSBDefinitionAPI:
         uow_mock.commit.return_value = "200"
         mock_oda.uow.__enter__.return_value = uow_mock
 
-        query_params = {"version": "1"}
-        data = {"current_status": "Complete", "previous_status": "Draft"}
+        data = {
+            "current_status": "Complete",
+            "previous_status": "Draft",
+            "version": "1",
+        }
         exclude_paths = [
             "root['metadata']['created_on']",
             "root['metadata']['last_modified_on']",
@@ -259,7 +262,6 @@ class TestSBDefinitionAPI:
 
         result = client.put(
             f"{BASE_API_URL}/status/sbds/sbd-t0001-20240702-00002",
-            query_string=query_params,
             json=data,
             headers={"accept": "application/json"},
         )
@@ -285,8 +287,11 @@ class TestSBDefinitionAPI:
         uow_mock.commit.return_value = "200"
         mock_oda.uow.__enter__.return_value = uow_mock
 
-        query_params = {"version": "1"}
-        data = {"current_status": "Complete", "previous_status": "Draft"}
+        data = {
+            "current_status": "Complete",
+            "previous_status": "Draft",
+            "version": "1",
+        }
         exclude_paths = [
             "root['metadata']['created_on']",
             "root['metadata']['last_modified_on']",
@@ -294,7 +299,6 @@ class TestSBDefinitionAPI:
 
         result = client.put(
             f"{BASE_API_URL}/status/sbds/sbd-t0001-20240702-00002",
-            query_string=query_params,
             json=data,
             headers={"accept": "application/json"},
         )
@@ -317,8 +321,11 @@ class TestSBDefinitionAPI:
         uow_mock.commit.return_value = "200"
         mock_oda.uow.__enter__.return_value = uow_mock
 
-        query_params = {"version": "2"}
-        data = {"current_status": "Observed", "previous_status": "Draft"}
+        data = {
+            "current_status": "Observed",
+            "previous_status": "Draft",
+            "version": "2",
+        }
         exclude_paths = [
             "root['metadata']['created_on']",
             "root['metadata']['last_modified_on']",
@@ -326,7 +333,6 @@ class TestSBDefinitionAPI:
 
         result = client.put(
             f"{BASE_API_URL}/status/sbds/sbd-t0001-20240702-00002",
-            query_string=query_params,
             json=data,
             headers={"accept": "application/json"},
         )
@@ -589,8 +595,11 @@ class TestSBInstanceAPI:
         uow_mock.commit.return_value = "200"
         mock_oda.uow.__enter__.return_value = uow_mock
 
-        query_params = {"version": "1"}
-        data = {"current_status": "Executing", "previous_status": "Created"}
+        data = {
+            "current_status": "Executing",
+            "previous_status": "Created",
+            "version": "1",
+        }
         exclude_paths = [
             "root['metadata']['created_on']",
             "root['metadata']['last_modified_on']",
@@ -598,7 +607,6 @@ class TestSBInstanceAPI:
 
         result = client.put(
             f"{BASE_API_URL}/status/sbis/sbi-mvp01-20220923-00002",
-            query_string=query_params,
             json=data,
             headers={"accept": "application/json"},
         )
@@ -857,8 +865,11 @@ class TestExecutionBlockAPI:
         mock_oda.uow.__enter__.return_value = uow_mock
 
         url = "/ska-oso-ptt-services/ptt/api/v1/status/ebs/eb-mvp01-20240426-5004"
-        query_params = {"version": "1"}
-        data = {"current_status": "Fully Observed", "previous_status": "Created"}
+        data = {
+            "current_status": "Fully Observed",
+            "previous_status": "Created",
+            "version": "1",
+        }
         exclude_paths = [
             "root['metadata']['created_on']",
             "root['metadata']['last_modified_on']",
@@ -866,7 +877,6 @@ class TestExecutionBlockAPI:
 
         result = client.put(
             url,
-            query_string=query_params,
             json=data,
             headers={"accept": "application/json"},
         )
@@ -1129,8 +1139,7 @@ class TestProjectAPI:
         mock_oda.uow.__enter__.return_value = uow_mock
 
         url = "/ska-oso-ptt-services/ptt/api/v1/status/prjs/prj-mvp01-20220923-00001"
-        query_params = {"version": "1"}
-        data = {"current_status": "Draft", "previous_status": "Draft"}
+        data = {"current_status": "Draft", "previous_status": "Draft", "version": "1"}
         exclude_paths = [
             "root['metadata']['created_on']",
             "root['metadata']['last_modified_on']",
@@ -1138,7 +1147,6 @@ class TestProjectAPI:
 
         result = client.put(
             url,
-            query_string=query_params,
             json=data,
             headers={"accept": "application/json"},
         )
@@ -1165,8 +1173,7 @@ class TestProjectAPI:
         mock_oda.uow.__enter__.return_value = uow_mock
 
         url = "/ska-oso-ptt-services/ptt/api/v1/status/prjs/prj-mvp01-20220923-00001"
-        query_params = {"version": "1"}
-        data = {"current_status": "Draft", "previous_status": "Draft"}
+        data = {"current_status": "Draft", "previous_status": "Draft", "version": "1"}
         exclude_paths = [
             "root['metadata']['created_on']",
             "root['metadata']['last_modified_on']",
@@ -1174,7 +1181,6 @@ class TestProjectAPI:
 
         result = client.put(
             url,
-            query_string=query_params,
             json=data,
             headers={"accept": "application/json"},
         )
@@ -1200,8 +1206,11 @@ class TestProjectAPI:
         mock_oda.uow.__enter__.return_value = uow_mock
 
         url = "/ska-oso-ptt-services/ptt/api/v1/status/prjs/prj-mvp01-20220923-00001"
-        query_params = {"version": "2"}
-        data = {"current_status": "Submitted", "previous_status": "Draft"}
+        data = {
+            "current_status": "Submitted",
+            "previous_status": "Draft",
+            "version": "2",
+        }
         exclude_paths = [
             "root['metadata']['created_on']",
             "root['metadata']['last_modified_on']",
@@ -1209,11 +1218,9 @@ class TestProjectAPI:
 
         result = client.put(
             url,
-            query_string=query_params,
             json=data,
             headers={"accept": "application/json"},
         )
-        print(result.text)
         assert_json_is_equal(
             result.text, valid_put_prj_history_version_response, exclude_paths
         )
