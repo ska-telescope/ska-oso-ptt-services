@@ -2096,13 +2096,13 @@ reference = "PyPI-public"
 
 [[package]]
 name = "ska-db-oda"
-version = "5.3.0"
+version = "5.3.0+dev.c98bc08d4"
 description = "SKA Database OSO Data Archive"
 optional = false
 python-versions = ">=3.10,<4.0"
 files = [
-    {file = "ska_db_oda-5.3.0-py3-none-any.whl", hash = "sha256:c3c56908e1eaa8fbebb59e222a16e7a4a60e0b0823bdde4221d99440382966ee"},
-    {file = "ska_db_oda-5.3.0.tar.gz", hash = "sha256:0e099db193d783bc7a27ec6da19c1999b17cb3d33d02dd92f75ac2d5d95ef35b"},
+    {file = "ska_db_oda-5.3.0+dev.c98bc08d4-py3-none-any.whl", hash = "sha256:d735d0e831213e85b6c5763022b269d90da07fee3e112d223d8fb2912e497a22"},
+    {file = "ska_db_oda-5.3.0+dev.c98bc08d4.tar.gz", hash = "sha256:27b8f289600fd8052fa85ed2863c54454168c25e8ba79647209df1b13ec726f2"},
 ]
 
 [package.dependencies]
@@ -2121,8 +2121,8 @@ ska-ser-skuid = ">=3.3.3,<4.0.0"
 
 [package.source]
 type = "legacy"
-url = "https://artefact.skao.int/repository/pypi-internal/simple"
-reference = "skao"
+url = "https://gitlab.com/api/v4/projects/27507143/packages/pypi/simple"
+reference = "gitlab"
 
 [[package]]
 name = "ska-oso-pdm"
@@ -2708,4 +2708,4 @@ reference = "PyPI-public"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "b35b2a59b15f3e5d4c12ef4b8afb2ea5d09f9bc9cf2816d878eeb935f42a7a14"
+content-hash = "9824927da96cf2e3b45ea0598ee7ddbe92f69703193839ea36f80f15edf769f1"
