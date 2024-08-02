@@ -13,6 +13,8 @@ WORKDIR /app
 
 # Copy poetry.lock* in case it doesn't exist in the repo
 COPY pyproject.toml poetry.lock* ./
+COPY temp_ska_db_oda-5.3.0-py3-none-any.whl /app
+COPY temp_ska_oso_pdm-15.2.0-py3-none-any.whl /app
 
 # Install runtime dependencies and the app
 RUN poetry config virtualenvs.create false
@@ -21,6 +23,8 @@ RUN poetry export --format requirements.txt --output poetry-requirements.txt --w
     pip install -r poetry-requirements.txt && \
     pip install . && \
     rm poetry-requirements.txt
+RUN pip install temp_ska_oso_pdm-15.2.0-py3-none-any.whl --force
+RUN pip install temp_ska_db_oda-5.3.0-py3-none-any.whl --force
 
 USER tango
 
