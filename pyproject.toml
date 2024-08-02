@@ -14,10 +14,6 @@ url = 'https://artefact.skao.int/repository/pypi-internal/simple'
 name = "PyPI-public"
 url = 'https://pypi.org/simple'
 
-[[tool.poetry.source]]
- name = "gitlab"
- url = 'https://gitlab.com/api/v4/projects/27507143/packages/pypi/simple'
-
 [tool.poetry.dependencies]
 python = "^3.10"
 connexion = {extras = ["swagger-ui"], version = "^2.14.0"}
@@ -28,7 +24,7 @@ prance = {version = "^23.6.21.0", extras = ["osv"]}
 python-dateutil = "^2.8.2"
 # Pinning older version because of https://github.com/python-openapi/openapi-spec-validator/issues/201
 jsonschema = "4.17.3"
-ska-db-oda = "5.3.0+dev.cb1afbb91"
+ska-db-oda = "5.3.0"
 deepdiff = "^7.0.1"
 pydantic-core = "^2.20.1"
 annotated-types = "^0.7.0"
