@@ -18,9 +18,9 @@ rest:
   logLevel: info
   enabled: true
   image:
-    registry: registry.gitlab.com   
-    image: ska-telescope/oso/ska-oso-ptt-services/ska-oso-ptt-services     
-    tag: 1.0.0-dev.c9271603f  # Defaults to the chart appVersion if not set
+    registry: artefact.skao.int   
+    image: ska-oso-ptt-services    
+    tag: ~ # Defaults to the chart appVersion if not set
     pullPolicy: IfNotPresent
   oda:
     backendType: postgres
