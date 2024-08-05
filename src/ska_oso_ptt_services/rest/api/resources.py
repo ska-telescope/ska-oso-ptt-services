@@ -4,7 +4,6 @@ Functions which the HTTP requests to individual resources are mapped to.
 See the operationId fields of the Open API spec for the specific mappings.
 """
 
-import json
 import logging
 from http import HTTPStatus
 from os import getenv
@@ -357,15 +356,21 @@ def put_eb_history(eb_id: str, body: dict) -> Response:
     except ValueError as err:
         raise StatusHistoryException(err)  # pylint: disable=W0707
 
+    if response := check_for_mismatch(eb_id, eb_status_history.eb_ref):
+        return response
+
     with oda.uow as uow:
-        persisted_eb = uow.eb_status_history.add(eb_status_history)
+        if eb_id not in uow.ebs:
+            raise KeyError(
+                f"Not found. The requested eb_id {eb_id} could not be found."
+            )
+        persisted_eb = uow.ebs_status_history.add(eb_status_history)
         uow.commit()
-        persisted_eb = uow.eb_status_history.get(eb_id)
-    return (
-        # TODO: revisit Url is not JSON serializable error using model_dump()
-        json.loads(persisted_eb.model_dump_json()),
-        HTTPStatus.OK,
-    )
+        if ODA_BACKEND_TYPE == "rest":
+            persisted_eb = _get_eb_status(
+                uow=uow, eb_id=persisted_eb.eb_ref, version=body["version"]
+            )
+    return (persisted_eb, HTTPStatus.OK)
 
 
 @error_handler
