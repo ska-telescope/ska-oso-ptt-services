@@ -4,6 +4,7 @@ Functions which the HTTP requests to individual resources are mapped to.
 See the operationId fields of the Open API spec for the specific mappings.
 """
 
+import json
 import logging
 from http import HTTPStatus
 from os import getenv
@@ -357,18 +358,14 @@ def put_eb_history(eb_id: str, body: dict) -> Response:
         raise StatusHistoryException(err)  # pylint: disable=W0707
 
     with oda.uow as uow:
-        persisted_eb = uow.ebs_status_history.add(eb_status_history)
+        persisted_eb = uow.eb_status_history.add(eb_status_history)
         uow.commit()
-        LOGGER.debug("4444444444444 Sending request to %s", uow)
-        if ODA_BACKEND_TYPE == "rest":
-            print("1111111111111111111111", persisted_eb)
-            LOGGER.debug("1111111111111111111111 Sending request to %s", persisted_eb)
-            persisted_eb = _get_eb_status(
-                uow=uow, eb_id=persisted_eb.eb_ref, version=body["version"]
-            )
-            print("222222222222222222222222", persisted_eb)
-            LOGGER.debug("222222222222222222222222 Sending request to %s", persisted_eb)
-    return (persisted_eb, HTTPStatus.OK)
+        persisted_eb = uow.eb_status_history.get(eb_id)
+    return (
+        # TODO: revisit Url is not JSON serializable error using model_dump()
+        json.loads(persisted_eb.model_dump_json()),
+        HTTPStatus.OK,
+    )
 
 
 @error_handler
