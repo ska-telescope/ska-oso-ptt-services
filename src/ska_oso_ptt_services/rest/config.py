@@ -8,4 +8,4 @@ class Config:
     Config holds the Flask configuration for the ODA REST service.
     """
 
-    ODA_BACKEND_TYPE = "rest"
+    ODA_BACKEND_TYPE = "postgres"
