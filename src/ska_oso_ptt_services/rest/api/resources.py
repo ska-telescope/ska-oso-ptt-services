@@ -31,7 +31,7 @@ from ska_oso_ptt_services.rest import oda
 
 LOGGER = logging.getLogger(__name__)
 
-ODA_BACKEND_TYPE = getenv("ODA_BACKEND_TYPE", "postgres")
+ODA_BACKEND_TYPE = getenv("ODA_BACKEND_TYPE", "rest")
 
 Response = Tuple[Union[dict, list], int]
 
@@ -356,20 +356,15 @@ def put_eb_history(eb_id: str, body: dict) -> Response:
     except ValueError as err:
         raise StatusHistoryException(err)  # pylint: disable=W0707
 
-    if response := check_for_mismatch(eb_id, eb_status_history.eb_ref):
-        return response
-
     with oda.uow as uow:
-        if eb_id not in uow.ebs:
-            raise KeyError(
-                f"Not found. The requested eb_id {eb_id} could not be found."
-            )
         persisted_eb = uow.ebs_status_history.add(eb_status_history)
         uow.commit()
         if ODA_BACKEND_TYPE == "rest":
+            print('1111111111111111111111',persisted_eb)
             persisted_eb = _get_eb_status(
                 uow=uow, eb_id=persisted_eb.eb_ref, version=body["version"]
             )
+            print('222222222222222222222222',persisted_eb)
     return (persisted_eb, HTTPStatus.OK)
 
 
