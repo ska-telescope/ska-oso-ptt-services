@@ -31,7 +31,7 @@ from ska_oso_ptt_services.rest import oda
 
 LOGGER = logging.getLogger(__name__)
 
-ODA_BACKEND_TYPE = getenv("ODA_BACKEND_TYPE", "rest")
+ODA_BACKEND_TYPE = getenv("ODA_BACKEND_TYPE", "postgres")
 
 Response = Tuple[Union[dict, list], int]
 
