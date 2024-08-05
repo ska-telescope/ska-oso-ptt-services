@@ -31,7 +31,7 @@ from ska_oso_ptt_services.rest import oda
 
 LOGGER = logging.getLogger(__name__)
 
-ODA_BACKEND_TYPE = getenv("ODA_BACKEND_TYPE", "postgres")
+ODA_BACKEND_TYPE = getenv("ODA_BACKEND_TYPE", "rest")
 
 Response = Tuple[Union[dict, list], int]
 
@@ -359,12 +359,15 @@ def put_eb_history(eb_id: str, body: dict) -> Response:
     with oda.uow as uow:
         persisted_eb = uow.ebs_status_history.add(eb_status_history)
         uow.commit()
+        LOGGER.debug("4444444444444 Sending request to %s", uow)
         if ODA_BACKEND_TYPE == "rest":
-            print('1111111111111111111111',persisted_eb)
+            print("1111111111111111111111", persisted_eb)
+            LOGGER.debug("1111111111111111111111 Sending request to %s", persisted_eb)
             persisted_eb = _get_eb_status(
                 uow=uow, eb_id=persisted_eb.eb_ref, version=body["version"]
             )
-            print('222222222222222222222222',persisted_eb)
+            print("222222222222222222222222", persisted_eb)
+            LOGGER.debug("222222222222222222222222 Sending request to %s", persisted_eb)
     return (persisted_eb, HTTPStatus.OK)
 
 
