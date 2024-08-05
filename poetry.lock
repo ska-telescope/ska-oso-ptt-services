@@ -109,13 +109,13 @@ reference = "PyPI-public"
 
 [[package]]
 name = "astropy-iers-data"
-version = "0.2024.7.29.0.32.7"
+version = "0.2024.8.5.0.32.23"
 description = "IERS Earth Rotation and Leap Second tables for the astropy core package"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "astropy_iers_data-0.2024.7.29.0.32.7-py3-none-any.whl", hash = "sha256:7c8fb523731f6c2c039c112be089c998202020234d2a6155a1f3620b4cfbf24d"},
-    {file = "astropy_iers_data-0.2024.7.29.0.32.7.tar.gz", hash = "sha256:32967816e4758603b571303ea3c8a836570aacb10f9bb258154f10d2913faf6d"},
+    {file = "astropy_iers_data-0.2024.8.5.0.32.23-py3-none-any.whl", hash = "sha256:62658ec29e2df10b34ad4c080d5fdae1def63e9f1ecbb659c97fdb7301609fa3"},
+    {file = "astropy_iers_data-0.2024.8.5.0.32.23.tar.gz", hash = "sha256:ed07ceccccf15d1d1185a544f5eed3da965657241a46da2f3b012e707a3a0123"},
 ]
 
 [package.extras]
@@ -129,22 +129,14 @@ reference = "PyPI-public"
 
 [[package]]
 name = "attrs"
-version = "23.2.0"
-description = "Classes Without Boilerplate"
+version = "24.1.0"
+description = ""
 optional = false
-python-versions = ">=3.7"
+python-versions = "*"
 files = [
-    {file = "attrs-23.2.0-py3-none-any.whl", hash = "sha256:99b87a485a5820b23b879f04c2305b44b951b502fd64be915879d77a7e8fc6f1"},
-    {file = "attrs-23.2.0.tar.gz", hash = "sha256:935dc3b529c262f6cf76e50877d35a4bd3c1de194fd41f47a2b7ae8f19971f30"},
+    {file = "attrs-24.1.0-py3-none-any.whl", hash = "sha256:377b47448cb61fea38533f671fba0d0f8a96fd58facd4dc518e3dac9dbea0905"},
+    {file = "attrs-24.1.0.tar.gz", hash = "sha256:adbdec84af72d38be7628e353a09b6a6790d15cd71819f6e9d7b0faa8a125745"},
 ]
-
-[package.extras]
-cov = ["attrs[tests]", "coverage[toml] (>=5.3)"]
-dev = ["attrs[tests]", "pre-commit"]
-docs = ["furo", "myst-parser", "sphinx", "sphinx-notfound-page", "sphinxcontrib-towncrier", "towncrier", "zope-interface"]
-tests = ["attrs[tests-no-zope]", "zope-interface"]
-tests-mypy = ["mypy (>=1.6)", "pytest-mypy-plugins"]
-tests-no-zope = ["attrs[tests-mypy]", "cloudpickle", "hypothesis", "pympler", "pytest (>=4.3.0)", "pytest-xdist[psutil]"]
 
 [package.source]
 type = "legacy"
@@ -2096,13 +2088,13 @@ reference = "PyPI-public"
 
 [[package]]
 name = "ska-db-oda"
-version = "5.3.0"
+version = "5.3.1"
 description = "SKA Database OSO Data Archive"
 optional = false
 python-versions = ">=3.10,<4.0"
 files = [
-    {file = "ska_db_oda-5.3.0-py3-none-any.whl", hash = "sha256:c3c56908e1eaa8fbebb59e222a16e7a4a60e0b0823bdde4221d99440382966ee"},
-    {file = "ska_db_oda-5.3.0.tar.gz", hash = "sha256:0e099db193d783bc7a27ec6da19c1999b17cb3d33d02dd92f75ac2d5d95ef35b"},
+    {file = "ska_db_oda-5.3.1-py3-none-any.whl", hash = "sha256:a9bbac6945049214a8b4df3c6ec596d505e186f0773f7941fa6804f6d89ad4ee"},
+    {file = "ska_db_oda-5.3.1.tar.gz", hash = "sha256:45e89e19ea9f5574c90b016e012630f0a0f8be636ede75902b35ecd0745fae01"},
 ]
 
 [package.dependencies]
@@ -2708,4 +2700,4 @@ reference = "PyPI-public"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "b35b2a59b15f3e5d4c12ef4b8afb2ea5d09f9bc9cf2816d878eeb935f42a7a14"
+content-hash = "a1c378777d883aaf3d1c83f2b03886d852e79571979cb99a1cfb8fdd4f106b3a"
