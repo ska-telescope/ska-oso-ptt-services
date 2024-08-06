@@ -188,7 +188,7 @@ def put_sbd_history(sbd_id: str, body: dict) -> Response:
         uow.commit()
         if ODA_BACKEND_TYPE == "rest":
             persisted_sbd = _get_sbd_status(
-                uow=uow, sbd_id=persisted_sbd.sbd_ref, version=body["version"]
+                uow=uow, sbd_id=persisted_sbd.sbd_ref, version=body["metadata"]["version"]
             )
     return (persisted_sbd, HTTPStatus.OK)
 
@@ -249,7 +249,7 @@ def put_sbi_history(sbi_id: str, body: dict) -> Response:
         uow.commit()
         if ODA_BACKEND_TYPE == "rest":
             persisted_sbi = _get_sbi_status(
-                uow=uow, sbi_id=persisted_sbi.sbi_ref, version=body["version"]
+                uow=uow, sbi_id=persisted_sbi.sbi_ref, version=body["metadata"]["version"]
             )
     return (persisted_sbi, HTTPStatus.OK)
 
@@ -368,7 +368,7 @@ def put_eb_history(eb_id: str, body: dict) -> Response:
         uow.commit()
         if ODA_BACKEND_TYPE == "rest":
             persisted_eb = _get_eb_status(
-                uow=uow, eb_id=persisted_eb.eb_ref, version=body["version"]
+                uow=uow, eb_id=persisted_eb.eb_ref, version=body["metadata"]["version"]
             )
     return (persisted_eb, HTTPStatus.OK)
 
@@ -611,7 +611,7 @@ def put_prj_history(prj_id: str, body: dict) -> Response:
         uow.commit()
         if ODA_BACKEND_TYPE == "rest":
             persisted_prj = _get_prj_status(
-                uow=uow, prj_id=persisted_prj.prj_ref, version=body["version"]
+                uow=uow, prj_id=persisted_prj.prj_ref, version=body["metadata"]["version"]
             )
     return persisted_prj, HTTPStatus.OK
 
