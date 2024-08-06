@@ -168,7 +168,7 @@ def put_sbd_history(sbd_id: str, body: dict) -> Response:
             sbd_ref=sbd_id,
             previous_status=SBDStatus(body["previous_status"]),
             current_status=SBDStatus(body["current_status"]),
-            metadata={"version": body["version"]},
+            metadata={"version": body["metadata"]["version"]},
         )
 
     except ValueError as err:
@@ -231,7 +231,7 @@ def put_sbi_history(sbi_id: str, body: dict) -> Response:
             sbi_ref=sbi_id,
             previous_status=SBIStatus(body["previous_status"]),
             current_status=SBIStatus(body["current_status"]),
-            metadata={"version": body["version"]},
+            metadata={"version": body["metadata"]["version"]},
         )
     except ValueError as err:
         raise StatusHistoryException(err)  # pylint: disable=W0707
@@ -350,7 +350,7 @@ def put_eb_history(eb_id: str, body: dict) -> Response:
             eb_ref=eb_id,
             previous_status=OSOEBStatus(body["previous_status"]),
             current_status=OSOEBStatus(body["current_status"]),
-            metadata={"version": body["version"]},
+            metadata={"version": body["metadata"]["version"]},
         )
 
     except ValueError as err:
@@ -592,7 +592,7 @@ def put_prj_history(prj_id: str, body: dict) -> Response:
             prj_ref=prj_id,
             previous_status=ProjectStatus(body["previous_status"]),
             current_status=ProjectStatus(body["current_status"]),
-            metadata={"version": body["version"]},
+            metadata={"version": body["metadata"]["version"]},
         )
 
     except ValueError as err:
