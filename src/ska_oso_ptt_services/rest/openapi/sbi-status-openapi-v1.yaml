@@ -1,16 +1,21 @@
 SBIStatusHistory:
   type: object
   required:
+    - version
     - previous_status
     - current_status
   properties:
+    version:
+      description: Version of the SBI Entity.
+      example: 1
+      type: integer
     previous_status:
       description: Previous Status of the SBI Entity.
-      example: created
+      example: Created
       type: string
     current_status:
       description: Current Status of the SBI Entity.
-      example: executing
+      example: Executing
       type: string
-
-
+    
+    

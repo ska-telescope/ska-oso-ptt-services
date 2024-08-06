@@ -1,16 +1,22 @@
 OSOEBStatusHistory:
   type: object
   required:
+    - version
     - previous_status
     - current_status
+    
   properties:
+    version:
+      description: Version of the EB Entity.
+      example: 1
+      type: integer
     previous_status:
       description: Previous Status of the EB Entity.
-      example: created
+      example: Created
       type: string
     current_status:
       description: Current Status of the EB Entity.
-      example: fully_observed
+      example: Fully Observed
       type: string
    
     

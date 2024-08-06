@@ -1,5 +1,5 @@
 {
-    "current_status": "submitted",
+    "current_status": "Submitted",
     "prj_ref": "prj-mvp01-20220923-00001",
     "metadata": {
       "created_by": "DefaultUser",
@@ -8,5 +8,5 @@
       "last_modified_on": "2024-04-14T11:51:16.367278+05:30",
       "version": 2
     },
-    "previous_status": "draft"
+    "previous_status": "Draft"
   }

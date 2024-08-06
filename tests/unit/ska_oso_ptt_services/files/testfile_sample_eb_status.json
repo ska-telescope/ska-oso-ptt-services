@@ -1,5 +1,5 @@
 {
-    "current_status": "fully_observed",
+    "current_status": "Fully Observed",
     "eb_ref": "eb-mvp01-20240426-5004",
     "metadata": {
       "created_by": "DefaultUser",
@@ -8,5 +8,5 @@
       "last_modified_on": "2024-07-04T15:07:39.012028+05:30",
       "version": 1
     },
-    "previous_status": "created"
+    "previous_status": "Created"
   }

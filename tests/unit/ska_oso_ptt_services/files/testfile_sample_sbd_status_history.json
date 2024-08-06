@@ -1,6 +1,6 @@
 [
   {
-    "current_status": "draft",
+    "current_status": "Draft",
     "metadata": {
       "created_by": "DefaultUser",
       "created_on": "2024-07-02T18:01:47.873431Z",
@@ -8,11 +8,11 @@
       "last_modified_on": "2024-07-02T18:01:47.873431Z",
       "version": 1
     },
-    "previous_status": "draft",
+    "previous_status": "Draft",
     "sbd_ref": "sbd-t0001-20240702-00002"
   },
   {
-    "current_status": "complete",
+    "current_status": "Complete",
     "metadata": {
       "created_by": "DefaultUser",
       "created_on": "2024-07-02T18:01:47.873431Z",
@@ -20,7 +20,7 @@
       "last_modified_on": "2024-07-02T18:05:42.230594Z",
       "version": 1
     },
-    "previous_status": "draft",
+    "previous_status": "Draft",
     "sbd_ref": "sbd-t0001-20240702-00002"
   }
 ]

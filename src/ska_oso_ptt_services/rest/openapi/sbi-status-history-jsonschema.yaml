@@ -30,10 +30,10 @@ $defs:
     type: object
   SBIStatus:
     enum:
-    - created
-    - executing
-    - observed
-    - failed
+    - Created
+    - Executing
+    - Observed
+    - Failed
     title: SBIStatus
     type: string
 properties:
@@ -45,12 +45,12 @@ properties:
   current_status:
     allOf:
     - $ref: '#/$defs/SBIStatus'
-    default: created
+    default: Created
   previous_status:
     anyOf:
     - $ref: '#/$defs/SBIStatus'
     - type: 'null'
-    default: created
+    default: Created
 required:
 - sbi_ref
 title: SBIStatusHistory

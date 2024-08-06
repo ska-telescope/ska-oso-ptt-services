@@ -1,5 +1,5 @@
 {
-  "current_status": "complete",
+  "current_status": "Complete",
   "metadata": {
     "created_by": "DefaultUser",
     "created_on": "2024-07-02T18:01:47.873431+00:00",
@@ -7,6 +7,6 @@
     "last_modified_on": "2024-07-02T18:05:42.230594+00:00",
     "version": 1
   },
-  "previous_status": "draft",
+  "previous_status": "Draft",
   "sbd_ref": "sbd-t0001-20240702-00002"
 }
