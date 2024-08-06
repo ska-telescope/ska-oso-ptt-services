@@ -864,7 +864,7 @@ class TestExecutionBlockAPI:
         uow_mock.commit.return_value = "200"
         mock_oda.uow.__enter__.return_value = uow_mock
 
-        url = "/ska-oso-ptt-services/ptt/api/v1/status/ebs/eb-mvp01-20240426-5004"
+        url = "/ska-oso-ptt-services/ptt/api/v0/status/ebs/eb-mvp01-20240426-5004"
         data = {
             "current_status": "Fully Observed",
             "previous_status": "Created",
@@ -1138,7 +1138,7 @@ class TestProjectAPI:
         uow_mock.commit.return_value = "200"
         mock_oda.uow.__enter__.return_value = uow_mock
 
-        url = "/ska-oso-ptt-services/ptt/api/v1/status/prjs/prj-mvp01-20220923-00001"
+        url = "/ska-oso-ptt-services/ptt/api/v0/status/prjs/prj-mvp01-20220923-00001"
         data = {"current_status": "Draft", "previous_status": "Draft", "version": "1"}
         exclude_paths = [
             "root['metadata']['created_on']",
@@ -1172,7 +1172,7 @@ class TestProjectAPI:
         uow_mock.commit.return_value = "200"
         mock_oda.uow.__enter__.return_value = uow_mock
 
-        url = "/ska-oso-ptt-services/ptt/api/v1/status/prjs/prj-mvp01-20220923-00001"
+        url = "/ska-oso-ptt-services/ptt/api/v0/status/prjs/prj-mvp01-20220923-00001"
         data = {"current_status": "Draft", "previous_status": "Draft", "version": "1"}
         exclude_paths = [
             "root['metadata']['created_on']",
@@ -1205,7 +1205,7 @@ class TestProjectAPI:
         uow_mock.commit.return_value = "200"
         mock_oda.uow.__enter__.return_value = uow_mock
 
-        url = "/ska-oso-ptt-services/ptt/api/v1/status/prjs/prj-mvp01-20220923-00001"
+        url = "/ska-oso-ptt-services/ptt/api/v0/status/prjs/prj-mvp01-20220923-00001"
         data = {
             "current_status": "Submitted",
             "previous_status": "Draft",

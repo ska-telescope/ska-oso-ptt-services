@@ -7,7 +7,7 @@ info:
     url: https://opensource.org/licenses/BSD-3-Clause
   version: 1.0.0
 servers:
-- url: /ska-oso-ptt-services/ptt/api/v1
+- url: /ska-oso-ptt-services/ptt/api/v0
 paths:
   /sbds:
     get:
