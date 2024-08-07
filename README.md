@@ -78,7 +78,7 @@ There are 3 different environments which are defined through the standard pipeli
 3. `staging` - a permanent deployment of the latest published artefact from CAR
 
 To find the URL for the environment, see the 'info' job of the CICD pipeline stage, which should output the URL alongside the status of the Kubernetes pods.
-Generally the API URL should be available at  `https://k8s.stfc.skao.int/$KUBE_NAMESPACE/ptt/api/v1`
+Generally the API URL should be available at  `https://k8s.stfc.skao.int/$KUBE_NAMESPACE/ptt/api/v0`
 
 
 ## Flask

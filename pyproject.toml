@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ska-oso-ptt-services"
-version = "1.0.0"
+version = "0.0.0"
 description = "Project Tracking Tool"
 authors = ["Team Nakshatra"]
 license= "BSD-3-Clause"
