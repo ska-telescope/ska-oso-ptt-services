@@ -14,9 +14,11 @@ Current Project Tracking Tool Services allow users to query SKA's OSO Data Archi
 and links between them and display the results on the GUI.
 
 
-.. HOME SECTION ==================================================
+.. toctree::
+   :maxdepth: 1
+   :caption: Releases
 
-.. Hidden toctree to manage the sidebar navigation.
+   CHANGELOG.rst
 
 .. toctree::
   :maxdepth: 1
