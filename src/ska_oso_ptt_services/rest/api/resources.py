@@ -9,8 +9,8 @@ from http import HTTPStatus
 from os import getenv
 from typing import Any, Dict, Tuple, Union
 
-from ska_db_oda.domain import StatusHistoryException
-from ska_db_oda.domain.query import QueryParams, QueryParamsFactory
+from ska_db_oda.persistence.domain import StatusHistoryException
+from ska_db_oda.persistence.domain.query import QueryParams, QueryParamsFactory
 from ska_db_oda.rest.api.resources import (
     check_for_mismatch,
     error_handler,
