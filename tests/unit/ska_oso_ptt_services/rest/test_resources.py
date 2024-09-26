@@ -258,7 +258,7 @@ class TestSBDefinitionAPI:
         exclude_paths = [
             "root['metadata']['created_on']",
             "root['metadata']['last_modified_on']",
-            "root['metadata']['version']"
+            "root['metadata']['version']",
         ]
 
         result = client.put(
@@ -296,7 +296,7 @@ class TestSBDefinitionAPI:
         exclude_paths = [
             "root['metadata']['created_on']",
             "root['metadata']['last_modified_on']",
-            "root['metadata']['version']"
+            "root['metadata']['version']",
         ]
 
         result = client.put(
@@ -331,7 +331,7 @@ class TestSBDefinitionAPI:
         exclude_paths = [
             "root['metadata']['created_on']",
             "root['metadata']['last_modified_on']",
-            "root['metadata']['version']"
+            "root['metadata']['version']",
         ]
 
         result = client.put(
@@ -606,7 +606,7 @@ class TestSBInstanceAPI:
         exclude_paths = [
             "root['metadata']['created_on']",
             "root['metadata']['last_modified_on']",
-            "root['metadata']['version']"
+            "root['metadata']['version']",
         ]
 
         result = client.put(
@@ -877,7 +877,7 @@ class TestExecutionBlockAPI:
         exclude_paths = [
             "root['metadata']['created_on']",
             "root['metadata']['last_modified_on']",
-            "root['metadata']['version']"
+            "root['metadata']['version']",
         ]
 
         result = client.put(
@@ -1148,7 +1148,7 @@ class TestProjectAPI:
         exclude_paths = [
             "root['metadata']['created_on']",
             "root['metadata']['last_modified_on']",
-            "root['metadata']['version']"
+            "root['metadata']['version']",
         ]
 
         result = client.put(
@@ -1183,7 +1183,7 @@ class TestProjectAPI:
         exclude_paths = [
             "root['metadata']['created_on']",
             "root['metadata']['last_modified_on']",
-            "root['metadata']['version']"
+            "root['metadata']['version']",
         ]
 
         result = client.put(
@@ -1221,7 +1221,7 @@ class TestProjectAPI:
         exclude_paths = [
             "root['metadata']['created_on']",
             "root['metadata']['last_modified_on']",
-            "root['metadata']['version']"
+            "root['metadata']['version']",
         ]
 
         result = client.put(
