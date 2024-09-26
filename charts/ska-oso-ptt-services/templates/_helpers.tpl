@@ -1,97 +1,45 @@
-{{ if .Values.rest.enabled }}
-{{ if .Values.rest.ingress.enabled }}
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: {{ template "ska-oso-ptt-services.name" . }}-{{ .Values.rest.component }}-{{ .Release.Name }}
-  namespace: {{ .Release.Namespace }}
-  labels:
-    {{- include "ska-oso-ptt-services.labels" . | indent 4 }}
-    component: {{ .Values.rest.component }}
-    function: {{ .Values.rest.function }}
-    domain: {{ .Values.rest.domain }}
-    intent: production
-  annotations:
-spec:
-  rules:
-    - http:
-        paths:
-          - path: /{{ .Release.Namespace }}/oso/api
-            pathType: Prefix
-            backend:
-              service:
-                name: {{ template "ska-oso-ptt-services.name" . }}-{{ .Values.rest.component }}-{{ .Release.Name }}
-                port:
-                  number: 5000
-{{ end }}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ template "ska-oso-ptt-services.name" . }}-{{ .Values.rest.component }}-{{ .Release.Name }}
-  namespace: {{ .Release.Namespace }}
-  labels:
-    {{- include "ska-oso-ptt-services.labels" . | indent 4 }}
-    component: {{ .Values.rest.component }}
-    function: {{ .Values.rest.function }}
-    domain: {{ .Values.rest.domain }}
-    intent: production
-spec:
-  ports:
-  - port: 5000
-  selector:
-    app: {{ template "ska-oso-ptt-services.name" . }}
-    component: {{ .Values.rest.component }}
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: {{ template "ska-oso-ptt-services.name" . }}-{{ .Values.rest.component }}-{{ .Release.Name }}
-  namespace: {{ .Release.Namespace }}
-  labels:
-    {{- include "ska-oso-ptt-services.labels" . | indent 4 }}
-    component: {{ .Values.rest.component }}
-    function: {{ .Values.rest.function }}
-    domain: {{ .Values.rest.domain }}
-    intent: production
-spec:
-  selector:
-    matchLabels:
-      app: {{ template "ska-oso-ptt-services.name" . }}
-      component: {{ .Values.rest.component }}
-  replicas: 1
-  template:
-    metadata:
-      labels:
-        {{- include "ska-oso-ptt-services.labels" . | indent 8 }}
-        component: {{ .Values.rest.component }}
-        function: {{ .Values.rest.function }}
-        domain: {{ .Values.rest.domain }}
-        intent: production
-    spec:
-      containers:
-      - name: oso-services
-        image: "{{ .Values.rest.image.registry }}/{{ .Values.rest.image.image }}:{{$.Values.rest.image.tag | default $.Chart.AppVersion}}"
-        imagePullPolicy: {{ .Values.rest.image.pullPolicy }}
-        # Command set in the Docker image
-        envFrom:
-          - configMapRef:
-              name: {{ template "ska-oso-ptt-services.name" . }}-{{ .Values.rest.component }}-{{ .Release.Name }}-environment
-        ports:
-          - containerPort: 5000
-        resources:
-{{ toYaml .Values.rest.resources | indent 10 }}
-  {{- with .Values.nodeSelector }}
-nodeSelector:
-  {{ toYaml . | indent 8 }}
-  {{- end }}
-  {{- with .Values.affinity }}
-affinity:
-  {{ toYaml . | indent 8 }}
-  {{- end }}
-  {{- with .Values.tolerations }}
-tolerations:
-  {{ toYaml . | indent 8 }}
-  {{- end }}
-  {{ end }}
+{{/* vim: set filetype=mustache: */}}
+{{/*
+Expand the name of the chart.
+*/}}
+{{- define "ska-oso-ptt-services.name" -}}
+{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Create a default fully qualified app name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+If release name contains chart name it will be used as a full name.
+*/}}
+{{- define "ska-oso-ptt-services.fullname" -}}
+{{- if .Values.fullnameOverride -}}
+{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- $name := default .Chart.Name .Values.nameOverride -}}
+{{- if contains $name .Release.Name -}}
+{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Common labels
+*/}}
+{{- define "ska-oso-ptt-services.labels" }}
+app: {{ template "ska-oso-ptt-services.name" . }}
+chart: {{ template "ska-oso-ptt-services.chart" . }}
+release: {{ .Release.Name }}
+heritage: {{ .Release.Service }}
+system: {{ .Values.system }}
+subsystem: {{ .Values.subsystem }}
+telescope: {{ .Values.telescope }}
+{{- end }}
+
+{{/*
+Create chart name and version as used by the chart label.
+*/}}
+{{- define "ska-oso-ptt-services.chart" -}}
+{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
