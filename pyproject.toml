@@ -26,9 +26,8 @@ python-dateutil = "^2.8.2"
 jsonschema = "4.17.3"
 ska-db-oda = "6.0.0"
 deepdiff = "^7.0.1"
-pydantic-core = "2.20.1"
 annotated-types = "^0.7.0"
-pydantic = {extras = ["email"], version = "^2.8.2"}
+pydantic = "^2.7"
 email-validator = "^2.2.0"
 
 [tool.poetry.group.dev.dependencies]
