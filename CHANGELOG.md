@@ -7,6 +7,7 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 -----------
 
+- Updated ODA depedency to version 6.0.0
 - Added CHANGELOG file to the repository and RTD.
 
 
