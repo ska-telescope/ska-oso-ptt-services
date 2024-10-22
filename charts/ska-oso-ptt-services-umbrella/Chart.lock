@@ -1,0 +1,9 @@
+dependencies:
+- name: ska-oso-ptt-services
+  repository: file://../ska-oso-ptt-services
+  version: 0.1.0
+- name: ska-db-oda-umbrella
+  repository: https://artefact.skao.int/repository/helm-internal
+  version: 5.3.3
+digest: sha256:3d5e9a6ab62f437ff80060b042cc0c324ccd5f20c15a743258678e7547e80b96
+generated: "2024-08-27T17:23:22.231432385+05:30"
