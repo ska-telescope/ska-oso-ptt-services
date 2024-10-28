@@ -35,6 +35,19 @@ ODA_BACKEND_TYPE = getenv("ODA_BACKEND_TYPE", "postgres")
 
 Response = Tuple[Union[dict, list], int]
 
+#####################################################
+# from kafka import KafkaConsumer
+# from ska_oso_ptt_services.entity_status.status_entity import StatusStateMachine 
+
+# topic = "status_topic"
+
+# ptt_consumer = KafkaConsumer(bootstrap_servers=['localhost:9092'],
+#                             auto_offset_reset='latest',
+#                             enable_auto_commit=True,
+#                             group_id='my-status-group')
+
+# ptt_consumer.subscribe(topic)
+
 
 class PTTQueryParamsFactory(QueryParamsFactory):
     """
@@ -637,3 +650,31 @@ def get_prj_status_history(**kwargs) -> Response:
             raise KeyError("not found")
 
     return prjs_status_history, HTTPStatus.OK
+
+
+# def test_func():
+        
+#     # for msg in ptt_consumer:
+
+#     #     print(f"f{msg.value}")
+
+#     #     if msg.value == b'create_sbd':
+
+#     sbd_data = json.load(open("/home/sagar/Projects/ska-db-oda/tests/files/testfile_sample_mid_sb.json"))
+
+#     # print(sbd_data)
+#     with oda.uow as uow:
+
+#         persisted_prj = uow.prjs_status_history.add(sbd_data)
+#         uow.commit()
+
+        # sbd_status = uow.sbds.add(sbd_data)
+
+        # print(f"Created SBD ID {sbd_status}")
+
+        # # sbd = StatusStateMachine(sbd_status.sbd_id)
+
+        # uow.commit()
+
+            # break
+

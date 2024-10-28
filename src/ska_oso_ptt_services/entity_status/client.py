@@ -1,22 +1,41 @@
+import time
+from random import choice
 from kafka import KafkaProducer
 
-producer = KafkaProducer(bootstrap_servers='minikube:9092')
 
-kafka_topic = 'status-topic'
+producer = KafkaProducer(bootstrap_servers=['localhost:9092'])
 
-# >>> import json
-# >>> producer = KafkaProducer(value_serializer=lambda v: json.dumps(v).encode('utf-8'))
-# >>> producer.send('fizzbuzz', {'foo': 'bar'})
+topic = 'status_topic'
 
+choice_list = ['Submitted', 'Ready', 'Failed']
 
 def create_sbd():
-    producer.send(kafka_topic, key=b'create_sbd', value=b'create_sbd')
+    producer.send(topic, value=b'create_sbd')
+    producer.flush()
 
 
-def update_sbd_status():
+def update_sbd_status(message):
 
-    producer.send(kafka_topic, key=b'sbd-123', value=b'Ready')
+    producer.send(topic, key=b'sbd-123', value=message.encode())
+    producer.flush()
 
 
-# create_sbd()
-# update_sbd_status()
+while True:
+
+    create_sbd()
+
+    # chc = choice(choice_list)
+
+    update_sbd_status(choice_list[0])
+
+    time.sleep(5)
+
+    update_sbd_status(choice_list[1])
+
+    time.sleep(5)
+
+    update_sbd_status(choice_list[2])
+
+    time.sleep(15)
+
+
