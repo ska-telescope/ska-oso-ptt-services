@@ -11,6 +11,10 @@ global:
   minikube: true
   cluster_domain: techops.internal.skao.int
 
+# kafka:
+#   enabled: true
+  # cluster_domain: kafka.techops.internal.skao.int
+
 rest:
   component: rest
   function: oso-services

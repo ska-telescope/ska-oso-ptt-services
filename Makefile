@@ -70,6 +70,14 @@ REST_POD_NAME=$(shell kubectl get pods -o name -n $(KUBE_NAMESPACE) -l app=ska-o
 
 MINIKUBE_NFS_SHARES_ROOT ?=
 
+# Add a new target for Kafka installation
+kafka-install:
+	@echo "Adding Strimzi Helm repository and installing Kafka operator..."
+	helm repo add strimzi https://strimzi.io/charts/
+	helm repo update
+	helm upgrade --install strimzi-kafka strimzi/strimzi-kafka-operator --namespace $(KUBE_NAMESPACE)
+	kubectl apply -f charts/ska-oso-ptt-services/templates/kafka.yaml
+
 
 dev-up: K8S_CHART_PARAMS = \
 	--set ska-oso-ptt-services.rest.image.tag=$(VERSION) \
