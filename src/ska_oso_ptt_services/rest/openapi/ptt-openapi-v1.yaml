@@ -626,8 +626,12 @@ paths:
 
   /get_entity:
     get:
-      summary: Get SBInstance filter by the query parameter
-      description: "Retrieves the SBInstances which match the query parameters.\nCurrently only a single query field is permitted, eg user, entity_id or created_on - \nextra parameters passed to the request will be ignored, with an order of \nprecedence of user > created_on > modified_on. Also requests without\nparameters will return an error rather than returning all IDs. This behaviour will\nchange in the future. Added pattern search support on scheduling block instance IDs.\n"
+      summary: Get status dictionary by the entity parameter
+      description: |
+        Retrieves the status dictionary which match the query parameters.
+        Currently only a single query field is permitted, eg entity_name 
+        extra parameters passed to the request will be ignored.
+        Also requests with any invalid parameters will return an error.
       operationId: ska_oso_ptt_services.rest.api.resources.get_entity_status
       parameters:
       - $ref: '#/components/parameters/entity_name'
