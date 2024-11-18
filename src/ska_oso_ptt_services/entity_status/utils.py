@@ -1,6 +1,8 @@
 import json
+import time
 import requests
 from kafka import KafkaConsumer
+from transitions import MachineError
 from ska_oso_ptt_services.entity_status.status_entity import StatusStateMachine 
 
 topic = "status_topic"
@@ -35,7 +37,10 @@ def read_file(path):
 def print_response(response):
 
     if response.status_code == 200:
-        print(f"Response {response.json()}")
+        response_data = response.json()
+        print("@" * 50)
+        print(f"Entity SBD ID {response_data['sbd_ref']} \nPrevious Status {response_data['previous_status']} \nCurrent Status {response_data['current_status']}")
+        print("@" * 50)
     else:
         print("Request failed with status code:", response.status_code)
         print("Response:", response.text)
@@ -45,7 +50,6 @@ def update_status_data(sbd_id, sbd_status_data, sbd_state_machine):
     sbd_status_data["current_status"] = sbd_state_machine.state.value
     sbd_status_data["sbd_ref"] = sbd_id
     sbd_status_data["previous_status"] = sbd_state_machine.previous_state.value
-
 
 
 ptt_consumer = KafkaConsumer(bootstrap_servers=['localhost:9092'],
@@ -72,12 +76,14 @@ for msg in ptt_consumer:
 
             sbd = StatusStateMachine(sbd_id)
 
-            print(f"Initial Status of SBD {sbd.state} {sbd_id}")
+            print(f"Initial Status of SBD {sbd_id} {sbd.state}")
 
         else:
 
             print("Request failed with status code:", response.status_code)
             print("Response:", response.text)
+
+        time.sleep(2)
 
     if msg.key is not None:
 
@@ -89,6 +95,8 @@ for msg in ptt_consumer:
 
             print_response(response)
 
+            time.sleep(2)
+
         elif msg.value == b'Ready':
 
             sbd.ready_for_observed()
@@ -97,14 +105,34 @@ for msg in ptt_consumer:
 
             print_response(response)
 
+            time.sleep(2)
+
         elif msg.value == b'Failed':
 
+            try:
+            
+                # sbd.failed()
+                sbd.sdp_success()
+                update_status_data(sbd_id, sbd_status_data, sbd)
+                response = requests.put(f"{sbd_status_url}/{sbd_id}", json=sbd_status_data, headers=headers)
+
+                print_response(response)
+
+                time.sleep(2)
+            
+            except MachineError as e:
+
+                print(f"Machine Error", e)
+            
+        elif msg.value == b'Success':
+
             sbd.sdp_success()
-            # sbd.failed()
+
             update_status_data(sbd_id, sbd_status_data, sbd)
             response = requests.put(f"{sbd_status_url}/{sbd_id}", json=sbd_status_data, headers=headers)
 
             print_response(response)
 
+            time.sleep(2)
 
-    
+    time.sleep(2)
