@@ -1,3 +1,4 @@
+# pylint: disable=no-member
 import json
 from http import HTTPStatus
 from importlib.metadata import version
