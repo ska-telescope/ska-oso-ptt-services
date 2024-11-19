@@ -624,6 +624,34 @@ paths:
         "500":
           $ref: '#/components/responses/InternalServerError'
 
+  /get_entity:
+    get:
+      summary: Get status dictionary by the entity parameter
+      description: |
+        Retrieves the status dictionary which match the query parameters.
+        Currently only a single query field is permitted, eg entity_name 
+        extra parameters passed to the request will be ignored.
+        Also requests with any invalid parameters will return an error.
+      operationId: ska_oso_ptt_services.rest.api.resources.get_entity_status
+      parameters:
+      - $ref: '#/components/parameters/entity_name'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "500":
+          $ref: '#/components/responses/InternalServerError'
+
 
 components:
   parameters:
@@ -633,6 +661,12 @@ components:
       schema:
         type: string
       required: false
+    entity_name:
+      in: query
+      name: entity_name
+      schema:
+        type: string
+      required: true
     MatchType:
       in: query
       name: match_type

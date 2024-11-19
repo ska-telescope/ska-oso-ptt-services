@@ -1,3 +1,4 @@
+# pylint: disable=no-member
 import json
 from http import HTTPStatus
 from importlib.metadata import version
@@ -1254,3 +1255,97 @@ class TestProjectAPI:
         exclude_path = ["root['traceback']"]
         assert_json_is_equal(result.text, json.dumps(error), exclude_path)
         assert result.status_code == HTTPStatus.INTERNAL_SERVER_ERROR
+
+    def test_get_sbi_entity_status(self, client):
+        """Verifying that get_entity_status API returns correct status
+        values for SBI entity
+        """
+
+        result_sbi = client.get(
+            f"{BASE_API_URL}/get_entity?entity_name=sbi",
+        )
+
+        expected_sbi_response = {
+            "CREATED": "Created",
+            "EXECUTING": "Executing",
+            "FAILED": "Failed",
+            "OBSERVED": "Observed",
+        }
+
+        assert_json_is_equal(result_sbi.text, json.dumps(expected_sbi_response))
+
+    def test_get_eb_entity_status(self, client):
+        """Verifying that get_entity_status API returns correct status
+        values for EB entity
+        """
+
+        result_eb = client.get(
+            f"{BASE_API_URL}/get_entity?entity_name=eb",
+        )
+
+        expected_eb_response = {
+            "CREATED": "Created",
+            "FULLY_OBSERVED": "Fully Observed",
+            "FAILED": "Failed",
+        }
+
+        assert_json_is_equal(result_eb.text, json.dumps(expected_eb_response))
+
+    def test_get_sbd_entity_status(self, client):
+        """Verifying that get_entity_status API returns correct status values
+        for SBD entity
+        """
+
+        result_sbd = client.get(
+            f"{BASE_API_URL}/get_entity?entity_name=sbd",
+        )
+
+        expected_sbd_response = {
+            "DRAFT": "Draft",
+            "SUBMITTED": "Submitted",
+            "READY": "Ready",
+            "IN_PROGRESS": "In Progress",
+            "OBSERVED": "Observed",
+            "SUSPENDED": "Suspended",
+            "FAILED_PROCESSING": "Failed Processing",
+            "COMPLETE": "Complete",
+        }
+
+        assert_json_is_equal(result_sbd.text, json.dumps(expected_sbd_response))
+
+    def test_get_prj_entity_status(self, client):
+        """Verifying that get_entity_status API returns correct status
+        values for Project entity
+        """
+
+        result_prj = client.get(
+            f"{BASE_API_URL}/get_entity?entity_name=prj",
+        )
+
+        expected_prj_response = {
+            "DRAFT": "Draft",
+            "SUBMITTED": "Submitted",
+            "READY": "Ready",
+            "IN_PROGRESS": "In Progress",
+            "OBSERVED": "Observed",
+            "COMPLETE": "Complete",
+            "CANCELLED": "Cancelled",
+            "OUT_OF_TIME": "Out of Time",
+        }
+
+        assert_json_is_equal(result_prj.text, json.dumps(expected_prj_response))
+
+    def test_get_invalid_entity_status(self, client):
+        """Verifying that get_entity_status API returns error for invalid entity"""
+
+        # Test SBI status
+        result_invalid_entity = client.get(
+            f"{BASE_API_URL}/get_entity?entity_name=ebi",
+        )
+        result_json = json.loads(result_invalid_entity.text)["detail"]
+        expected_eb_response = (
+            "ValueError('Invalid entity name: ebi') with args ('Invalid entity name:"
+            " ebi',)"
+        )
+
+        assert result_json == expected_eb_response

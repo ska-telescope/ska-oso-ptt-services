@@ -5,6 +5,7 @@ See the operationId fields of the Open API spec for the specific mappings.
 """
 
 import logging
+from enum import EnumMeta
 from http import HTTPStatus
 from os import getenv
 from typing import Any, Dict, Tuple, Union
@@ -637,3 +638,31 @@ def get_prj_status_history(**kwargs) -> Response:
             raise KeyError("not found")
 
     return prjs_status_history, HTTPStatus.OK
+
+
+@error_handler
+def get_entity_status(entity_name: str) -> Tuple[Dict[str, str], HTTPStatus]:
+    """
+    Function that returns the status dictionary for a given entity type.
+
+    Args:
+        entity_name: The name of the entity type (sbi, eb, prj, or sbd)
+
+    Returns:
+        Tuple containing dictionary of status names and values, and HTTP status code
+
+    Raises:
+        ValueError: If an invalid entity name is provided
+    """
+    entity_map: Dict[str, EnumMeta] = {
+        "sbi": SBIStatus,
+        "eb": OSOEBStatus,
+        "prj": ProjectStatus,
+        "sbd": SBDStatus,
+    }
+
+    entity_class = entity_map.get(entity_name.lower())
+    if not entity_class:
+        raise ValueError(f"Invalid entity name: {entity_name}")
+
+    return {status.name: status.value for status in entity_class}, HTTPStatus.OK

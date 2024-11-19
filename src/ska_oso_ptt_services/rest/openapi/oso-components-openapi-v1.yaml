@@ -13,18 +13,18 @@ info:
 components:
   schemas:
     OSOExecutionBlock:
-      $ref: eb-jsonschema.yaml#
+      $ref: ska_oso_pdm/openapi/eb-jsonschema.yaml#
     SBDefinition:
-      $ref: sbd-jsonschema.yaml#
+      $ref: ska_oso_pdm/openapi/sbd-jsonschema.yaml#
     SBInstance:
-      $ref: sbi-jsonschema.yaml#
+      $ref: ska_oso_pdm/openapi/sbi-jsonschema.yaml#
     Project:
-      $ref: prj-jsonschema.yaml#
+      $ref: ska_oso_pdm/openapi/prj-jsonschema.yaml#
     SBDStatusHistory:
-      $ref: sbd-status-history-jsonschema.yaml#
+      $ref: ska_oso_pdm/openapi/sbd-status-history-jsonschema.yaml#
     SBIStatusHistory:
-      $ref: sbi-status-history-jsonschema.yaml#
+      $ref: ska_oso_pdm/openapi/sbi-status-history-jsonschema.yaml#
     OSOEBStatusHistory:
-      $ref: eb-status-history-jsonschema.yaml#
+      $ref: ska_oso_pdm/openapi/eb-status-history-jsonschema.yaml#
     ProjectStatusHistory:
-      $ref: prj-status-history-jsonschema.yaml#
+      $ref: ska_oso_pdm/openapi/prj-status-history-jsonschema.yaml#
