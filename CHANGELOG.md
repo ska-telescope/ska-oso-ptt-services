@@ -4,7 +4,7 @@ Changelog
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
-Unreleased
+0.2.0
 -----------
 
 - Updated ODA depedency to version 6.0.0
