@@ -10,12 +10,11 @@ from http import HTTPStatus
 from os import getenv
 from typing import Any, Dict, Tuple, Union
 
-from ska_db_oda.persistence.domain import StatusHistoryException
+from ska_db_oda.persistence.domain.errors import StatusHistoryException
 from ska_db_oda.persistence.domain.query import QueryParams, QueryParamsFactory
-from ska_db_oda.rest.api.resources import (
-    check_for_mismatch,
-    error_handler,
-    validation_response,
+from ska_db_oda.rest.api import check_for_mismatch
+from ska_db_oda.rest.error_handling import (  # oda_status_error_handler,
+    oda_validation_error_handler,
 )
 from ska_oso_pdm import SBDStatusHistory
 from ska_oso_pdm.entity_status_history import (
@@ -69,14 +68,13 @@ def get_qry_params(kwargs: dict) -> Union[QueryParams, Response]:
     try:
         return PTTQueryParamsFactory.from_dict(kwargs)
     except ValueError as err:
-        return validation_response(
+        return oda_validation_error_handler(
             "Not Supported",
             err.args[0],
             HTTPStatus.BAD_REQUEST,
         )
 
 
-@error_handler
 def get_sbd_with_status(sbd_id: str) -> Response:
     """
     Function that a GET /sbds/<sbd_id> request is routed to.
@@ -94,7 +92,6 @@ def get_sbd_with_status(sbd_id: str) -> Response:
     return sbd_json, HTTPStatus.OK
 
 
-@error_handler
 def get_sbds_with_status(**kwargs) -> Response:
     """
     Function that a GET /sbds request is routed to.
@@ -137,7 +134,6 @@ def _get_sbd_status(uow, sbd_id: str, version: str = None) -> Dict[str, Any]:
     return retrieved_sbd
 
 
-@error_handler
 def get_sbd_status(sbd_id: str, version: str = None) -> Dict[str, Any]:
     """
     Function that a GET status/sbds/<sbd_id> request is routed to.
@@ -154,7 +150,6 @@ def get_sbd_status(sbd_id: str, version: str = None) -> Dict[str, Any]:
     return sbd_status, HTTPStatus.OK
 
 
-@error_handler
 def put_sbd_history(sbd_id: str, body: dict) -> Response:
     """
     Function that a PUT status/sbds/<sbd_id> request is routed to.
@@ -194,7 +189,6 @@ def put_sbd_history(sbd_id: str, body: dict) -> Response:
     return (persisted_sbd, HTTPStatus.OK)
 
 
-@error_handler
 def get_sbd_status_history(**kwargs) -> Response:
     """
     Function that a GET /status/sbds request is routed to.
@@ -217,7 +211,6 @@ def get_sbd_status_history(**kwargs) -> Response:
     return sbds_status_history, HTTPStatus.OK
 
 
-@error_handler
 def put_sbi_history(sbi_id: str, body: dict) -> Response:
     """
     Function that a PUT status/sbds/<sbd_id> request is routed to.
@@ -255,7 +248,6 @@ def put_sbi_history(sbi_id: str, body: dict) -> Response:
     return (persisted_sbi, HTTPStatus.OK)
 
 
-@error_handler
 def get_eb_with_status(eb_id: str) -> Response:
     """
     Function that a GET /ebs/<eb_id> request is routed to.
@@ -274,7 +266,6 @@ def get_eb_with_status(eb_id: str) -> Response:
     return eb_json, HTTPStatus.OK
 
 
-@error_handler
 def get_ebs_with_status(**kwargs) -> Response:
     """
     Function that a GET /ebs request is routed to.
@@ -319,7 +310,6 @@ def _get_eb_status(uow, eb_id: str, version: str = None) -> Dict[str, Any]:
     return retrieved_eb.model_dump()
 
 
-@error_handler
 def get_eb_status(eb_id: str, version: int = None) -> Response:
     """
     Function that a GET status/ebs/<eb_id> request is routed to.
@@ -335,7 +325,6 @@ def get_eb_status(eb_id: str, version: int = None) -> Response:
     return eb_status, HTTPStatus.OK
 
 
-@error_handler
 def put_eb_history(eb_id: str, body: dict) -> Response:
     """
     Function that a PUT status/ebs/<eb_id> request is routed to.
@@ -374,7 +363,6 @@ def put_eb_history(eb_id: str, body: dict) -> Response:
     return (persisted_eb, HTTPStatus.OK)
 
 
-@error_handler
 def get_eb_status_history(**kwargs) -> Response:
     """
     Function that a GET /status/ebs request is routed to.
@@ -397,7 +385,6 @@ def get_eb_status_history(**kwargs) -> Response:
     return ebs_status_history, HTTPStatus.OK
 
 
-@error_handler
 def get_sbi_with_status(sbi_id: str) -> Response:
     """
     Function that a GET /sbis/<sbi_id> request is routed to.
@@ -415,7 +402,6 @@ def get_sbi_with_status(sbi_id: str) -> Response:
     return sbi_json, HTTPStatus.OK
 
 
-@error_handler
 def get_sbis_with_status(**kwargs) -> Response:
     """
     Function that a GET /sbis request is routed to.
@@ -458,7 +444,6 @@ def _get_sbi_status(uow, sbi_id: str, version: str = None) -> Dict[str, Any]:
     return retrieved_sbi.model_dump()
 
 
-@error_handler
 def get_sbi_status(sbi_id: str, version: int = None) -> Response:
     """
     Function that a GET status/sbi/<sbi_id> request is routed to.
@@ -474,7 +459,6 @@ def get_sbi_status(sbi_id: str, version: int = None) -> Response:
     return sbi_status, HTTPStatus.OK
 
 
-@error_handler
 def get_sbi_status_history(**kwargs) -> Response:
     """
     Function that a GET /status/history/sbis request is routed to.
@@ -497,7 +481,6 @@ def get_sbi_status_history(**kwargs) -> Response:
     return sbis_status_history, HTTPStatus.OK
 
 
-@error_handler
 def get_prj_with_status(prj_id: str) -> Response:
     """
     Function that a GET /prjs/<prj_id> request is routed to.
@@ -516,7 +499,6 @@ def get_prj_with_status(prj_id: str) -> Response:
     return prj_json, HTTPStatus.OK
 
 
-@error_handler
 def get_prjs_with_status(**kwargs) -> Response:
     """
     Function that a GET /prjs request is routed to.
@@ -561,7 +543,6 @@ def _get_prj_status(uow, prj_id: str, version: str = None) -> Dict[str, Any]:
     return retrieved_prj.model_dump()
 
 
-@error_handler
 def get_prj_status(prj_id: str, version: int = None) -> Response:
     """
     Function that a GET status/prjs/<prj_id> request is routed to.
@@ -577,7 +558,6 @@ def get_prj_status(prj_id: str, version: int = None) -> Response:
     return prj_status, HTTPStatus.OK
 
 
-@error_handler
 def put_prj_history(prj_id: str, body: dict) -> Response:
     """
     Function that a PUT status/prjs/<prj_id> request is routed to.
@@ -617,7 +597,6 @@ def put_prj_history(prj_id: str, body: dict) -> Response:
     return persisted_prj, HTTPStatus.OK
 
 
-@error_handler
 def get_prj_status_history(**kwargs) -> Response:
     """
     Function that a GET /status/prjs request is routed to.
@@ -640,7 +619,6 @@ def get_prj_status_history(**kwargs) -> Response:
     return prjs_status_history, HTTPStatus.OK
 
 
-@error_handler
 def get_entity_status(entity_name: str) -> Tuple[Dict[str, str], HTTPStatus]:
     """
     Function that returns the status dictionary for a given entity type.
