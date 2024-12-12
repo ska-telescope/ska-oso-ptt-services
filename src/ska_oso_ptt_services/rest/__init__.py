@@ -7,7 +7,7 @@ from typing import Any, Dict
 import prance
 from connexion import App
 
-from ska_oso_ptt_services.rest.flaskoda import FlaskODA
+from ska_oso_ptt_services.rest.flaskoda import FlaskODA, PdmJsonEncoder
 
 KUBE_NAMESPACE = os.getenv("KUBE_NAMESPACE", "ska-oso-ptt-services")
 PTT_MAJOR_VERSION = version("ska-oso-ptt-services").split(".")[0]
@@ -52,6 +52,7 @@ def create_app(open_api_spec=None) -> App:
         open_api_spec = resolve_openapi_spec()
 
     connexion = App(__name__, specification_dir="openapi/")
+    connexion.app.json_encoder = PdmJsonEncoder
 
     # Used for local deployment
     connexion.app.config.from_object("ska_oso_ptt_services.rest.config.Config")

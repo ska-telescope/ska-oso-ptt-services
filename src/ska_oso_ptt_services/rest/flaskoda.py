@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 
@@ -7,10 +8,32 @@ from ska_db_oda.persistence.unitofwork.postgresunitofwork import (
     PostgresUnitOfWork,
     create_connection_pool,
 )
+from connexion.apps.flask_app import FlaskJSONEncoder
+from ska_oso_pdm import PdmObject
+
 
 LOGGER = logging.getLogger(__name__)
 
 BACKEND_VAR = "ODA_BACKEND_TYPE"
+
+class PdmJsonEncoder(FlaskJSONEncoder):
+    """
+    JsonEncoder can handle the encoding of the responses
+    which are instances of the generated models.
+    This extension can also encode the hand written SBDefinition model.
+
+    It does this by converting the SBDefinition to the generated version,
+    which can be handled by the JsonEncoder.
+
+    Once we have settled on a single SBDefinition, this class should be removed.
+    """
+
+    def default(self, o):
+        if isinstance(o, PdmObject):
+            # model_dump_json serialises the model as a string, then we turn this into a dict so it is properly returned as json by the API
+            return json.loads(o.model_dump_json())
+
+        return FlaskJSONEncoder.default(self, o)
 
 
 class FlaskODA(object):
