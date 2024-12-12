@@ -13,8 +13,8 @@ from typing import Any, Dict, Tuple, Union
 from ska_db_oda.persistence.domain.errors import StatusHistoryException
 from ska_db_oda.persistence.domain.query import QueryParams, QueryParamsFactory
 from ska_db_oda.rest.api import check_for_mismatch
-from ska_db_oda.rest.error_handling import (  # oda_status_error_handler,
-    oda_validation_error_handler,
+from ska_db_oda.rest.error_handling import (  # oda_validation_error_handler,
+    oda_status_error_handler,
 )
 from ska_oso_pdm import SBDStatusHistory
 from ska_oso_pdm.entity_status_history import (
@@ -68,8 +68,7 @@ def get_qry_params(kwargs: dict) -> Union[QueryParams, Response]:
     try:
         return PTTQueryParamsFactory.from_dict(kwargs)
     except ValueError as err:
-        return oda_validation_error_handler(
-            "Not Supported",
+        return oda_status_error_handler(
             err.args[0],
             HTTPStatus.BAD_REQUEST,
         )
@@ -83,7 +82,7 @@ def get_sbd_with_status(sbd_id: str) -> Response:
     :return: The SBDefinition with status wrapped in a Response, or appropriate error
      Response
     """
-    with oda.uow as uow:
+    with oda.uow() as uow:
         sbd = uow.sbds.get(sbd_id)
         sbd_json = sbd.model_dump(mode="json")
         sbd_json["status"] = _get_sbd_status(
@@ -104,7 +103,7 @@ def get_sbds_with_status(**kwargs) -> Response:
     if not isinstance(maybe_qry_params, QueryParams):
         return maybe_qry_params
 
-    with oda.uow as uow:
+    with oda.uow() as uow:
         sbds = uow.sbds.query(maybe_qry_params)
         sbd_with_status = [
             {
@@ -144,7 +143,7 @@ def get_sbd_status(sbd_id: str, version: str = None) -> Dict[str, Any]:
     :return: The current entity status, SBDStatusHistory wrapped in a Response, or
     appropriate error Response
     """
-    with oda.uow as uow:
+    with oda.uow() as uow:
         sbd_status = _get_sbd_status(uow=uow, sbd_id=sbd_id, version=version)
 
     return sbd_status, HTTPStatus.OK
@@ -155,16 +154,16 @@ def put_sbd_history(sbd_id: str, body: dict) -> Response:
     Function that a PUT status/sbds/<sbd_id> request is routed to.
 
     :param sbd_id: Requested identifier from the path parameter
-    :param version: Requested identifier from the path parameter
+    :param sbd_version: Requested identifier from the path parameter
     :param body: SBDefinition to persist from the request body
     :return: The SBDefinition wrapped in a Response, or appropriate error Response
     """
     try:
         sbd_status_history = SBDStatusHistory(
             sbd_ref=sbd_id,
+            sbd_version=body["sbd_version"],
             previous_status=SBDStatus(body["previous_status"]),
             current_status=SBDStatus(body["current_status"]),
-            metadata={"version": body["version"]},
         )
 
     except ValueError as err:
@@ -173,7 +172,7 @@ def put_sbd_history(sbd_id: str, body: dict) -> Response:
     if response := check_for_mismatch(sbd_id, sbd_status_history.sbd_ref):
         return response
 
-    with oda.uow as uow:
+    with oda.uow() as uow:
         if sbd_id not in uow.sbds:
             raise KeyError(
                 f"Not found. The requested sbd_id {sbd_id} could not be found."
@@ -182,10 +181,6 @@ def put_sbd_history(sbd_id: str, body: dict) -> Response:
         persisted_sbd = uow.sbds_status_history.add(sbd_status_history)
 
         uow.commit()
-        if ODA_BACKEND_TYPE == "rest":
-            persisted_sbd = _get_sbd_status(
-                uow=uow, sbd_id=persisted_sbd.sbd_ref, version=body["version"]
-            )
     return (persisted_sbd, HTTPStatus.OK)
 
 
@@ -201,7 +196,7 @@ def get_sbd_status_history(**kwargs) -> Response:
     if not isinstance(maybe_qry_params := get_qry_params(kwargs), QueryParams):
         return maybe_qry_params
 
-    with oda.uow as uow:
+    with oda.uow() as uow:
         sbds_status_history = uow.sbds_status_history.query(
             maybe_qry_params, is_status_history=True
         )
@@ -223,9 +218,9 @@ def put_sbi_history(sbi_id: str, body: dict) -> Response:
     try:
         sbi_status_history = SBIStatusHistory(
             sbi_ref=sbi_id,
+            sbi_version=body["sbi_version"],
             previous_status=SBIStatus(body["previous_status"]),
             current_status=SBIStatus(body["current_status"]),
-            metadata={"version": body["version"]},
         )
     except ValueError as err:
         raise StatusHistoryException(err)  # pylint: disable=W0707
@@ -233,7 +228,7 @@ def put_sbi_history(sbi_id: str, body: dict) -> Response:
     if response := check_for_mismatch(sbi_id, sbi_status_history.sbi_ref):
         return response
 
-    with oda.uow as uow:
+    with oda.uow() as uow:
         if sbi_id not in uow.sbis:
             raise KeyError(
                 f"Not found. The requested sbi_id {sbi_id} could not be found."
@@ -241,10 +236,6 @@ def put_sbi_history(sbi_id: str, body: dict) -> Response:
 
         persisted_sbi = uow.sbis_status_history.add(sbi_status_history)
         uow.commit()
-        if ODA_BACKEND_TYPE == "rest":
-            persisted_sbi = _get_sbi_status(
-                uow=uow, sbi_id=persisted_sbi.sbi_ref, version=body["version"]
-            )
     return (persisted_sbi, HTTPStatus.OK)
 
 
@@ -256,7 +247,7 @@ def get_eb_with_status(eb_id: str) -> Response:
     :return: The ExecutionBlock with status wrapped in a Response,
         or appropriate error Response
     """
-    with oda.uow as uow:
+    with oda.uow() as uow:
         eb = uow.ebs.get(eb_id)
         eb_json = eb.model_dump(mode="json")
         eb_json["status"] = _get_eb_status(
@@ -278,7 +269,7 @@ def get_ebs_with_status(**kwargs) -> Response:
     if not isinstance(maybe_qry_params, QueryParams):
         return maybe_qry_params
 
-    with oda.uow as uow:
+    with oda.uow() as uow:
         ebs = uow.ebs.query(maybe_qry_params)
         eb_with_status = [
             {
@@ -320,7 +311,7 @@ def get_eb_status(eb_id: str, version: int = None) -> Response:
     :return: The current entity status,OSOEBStatusHistory wrapped in a
         Response, or appropriate error Response
     """
-    with oda.uow as uow:
+    with oda.uow() as uow:
         eb_status = _get_eb_status(uow=uow, eb_id=eb_id, version=version)
     return eb_status, HTTPStatus.OK
 
@@ -338,9 +329,9 @@ def put_eb_history(eb_id: str, body: dict) -> Response:
     try:
         eb_status_history = OSOEBStatusHistory(
             eb_ref=eb_id,
+            eb_version=body["eb_version"],
             previous_status=OSOEBStatus(body["previous_status"]),
             current_status=OSOEBStatus(body["current_status"]),
-            metadata={"version": body["version"]},
         )
 
     except ValueError as err:
@@ -349,17 +340,13 @@ def put_eb_history(eb_id: str, body: dict) -> Response:
     if response := check_for_mismatch(eb_id, eb_status_history.eb_ref):
         return response
 
-    with oda.uow as uow:
+    with oda.uow() as uow:
         if eb_id not in uow.ebs:
             raise KeyError(
                 f"Not found. The requested eb_id {eb_id} could not be found."
             )
         persisted_eb = uow.ebs_status_history.add(eb_status_history)
         uow.commit()
-        if ODA_BACKEND_TYPE == "rest":
-            persisted_eb = _get_eb_status(
-                uow=uow, eb_id=persisted_eb.eb_ref, version=body["version"]
-            )
     return (persisted_eb, HTTPStatus.OK)
 
 
@@ -375,7 +362,7 @@ def get_eb_status_history(**kwargs) -> Response:
     if not isinstance(maybe_qry_params := get_qry_params(kwargs), QueryParams):
         return maybe_qry_params
 
-    with oda.uow as uow:
+    with oda.uow() as uow:
         ebs_status_history = uow.ebs_status_history.query(
             maybe_qry_params, is_status_history=True
         )
@@ -393,7 +380,7 @@ def get_sbi_with_status(sbi_id: str) -> Response:
     :return: The SBInstance with status wrapped in a Response,
          or appropriate error Response
     """
-    with oda.uow as uow:
+    with oda.uow() as uow:
         sbi = uow.sbis.get(sbi_id)
         sbi_json = sbi.model_dump(mode="json")
         sbi_json["status"] = _get_sbi_status(
@@ -414,7 +401,7 @@ def get_sbis_with_status(**kwargs) -> Response:
     if not isinstance(maybe_qry_params, QueryParams):
         return maybe_qry_params
 
-    with oda.uow as uow:
+    with oda.uow() as uow:
         sbis = uow.sbis.query(maybe_qry_params)
         sbi_with_status = [
             {
@@ -454,7 +441,7 @@ def get_sbi_status(sbi_id: str, version: int = None) -> Response:
     :return: The current entity status,SBIStatusHistory wrapped in a
         Response, or appropriate error Response
     """
-    with oda.uow as uow:
+    with oda.uow() as uow:
         sbi_status = _get_sbi_status(uow=uow, sbi_id=sbi_id, version=version)
     return sbi_status, HTTPStatus.OK
 
@@ -471,7 +458,7 @@ def get_sbi_status_history(**kwargs) -> Response:
     if not isinstance(maybe_qry_params := get_qry_params(kwargs), QueryParams):
         return maybe_qry_params
 
-    with oda.uow as uow:
+    with oda.uow() as uow:
         sbis_status_history = uow.sbis_status_history.query(
             maybe_qry_params, is_status_history=True
         )
@@ -489,7 +476,7 @@ def get_prj_with_status(prj_id: str) -> Response:
     :return: The Project with status wrapped in a Response,
         or appropriate error Response
     """
-    with oda.uow as uow:
+    with oda.uow() as uow:
         prj = uow.prjs.get(prj_id)
         prj_json = prj.model_dump(mode="json")
         prj_json["status"] = _get_prj_status(
@@ -511,7 +498,7 @@ def get_prjs_with_status(**kwargs) -> Response:
     if not isinstance(maybe_qry_params, QueryParams):
         return maybe_qry_params
 
-    with oda.uow as uow:
+    with oda.uow() as uow:
         prjs = uow.prjs.query(maybe_qry_params)
         prj_with_status = [
             {
@@ -553,7 +540,7 @@ def get_prj_status(prj_id: str, version: int = None) -> Response:
     :return: The current entity status,ProjectStatusHistory wrapped in a
         Response, or appropriate error Response
     """
-    with oda.uow as uow:
+    with oda.uow() as uow:
         prj_status = _get_prj_status(uow=uow, prj_id=prj_id, version=version)
     return prj_status, HTTPStatus.OK
 
@@ -571,9 +558,9 @@ def put_prj_history(prj_id: str, body: dict) -> Response:
     try:
         prj_status_history = ProjectStatusHistory(
             prj_ref=prj_id,
+            prj_version=body["prj_version"],
             previous_status=ProjectStatus(body["previous_status"]),
             current_status=ProjectStatus(body["current_status"]),
-            metadata={"version": body["version"]},
         )
 
     except ValueError as err:
@@ -582,7 +569,7 @@ def put_prj_history(prj_id: str, body: dict) -> Response:
     if response := check_for_mismatch(prj_id, prj_status_history.prj_ref):
         return response
 
-    with oda.uow as uow:
+    with oda.uow() as uow:
         if prj_id not in uow.prjs:
             raise KeyError(
                 f"Not found. The requested prj_id {prj_id} could not be found."
@@ -590,10 +577,6 @@ def put_prj_history(prj_id: str, body: dict) -> Response:
 
         persisted_prj = uow.prjs_status_history.add(prj_status_history)
         uow.commit()
-        if ODA_BACKEND_TYPE == "rest":
-            persisted_prj = _get_prj_status(
-                uow=uow, prj_id=persisted_prj.prj_ref, version=body["version"]
-            )
     return persisted_prj, HTTPStatus.OK
 
 
@@ -609,7 +592,7 @@ def get_prj_status_history(**kwargs) -> Response:
     if not isinstance(maybe_qry_params := get_qry_params(kwargs), QueryParams):
         return maybe_qry_params
 
-    with oda.uow as uow:
+    with oda.uow() as uow:
         prjs_status_history = uow.prjs_status_history.query(
             maybe_qry_params, is_status_history=True
         )

@@ -35,7 +35,7 @@ class FlaskODA(object):
         Initialise ODA Flask extension.
         """
         app.config[BACKEND_VAR] = os.environ.get(
-            BACKEND_VAR, default=app.config.setdefault(BACKEND_VAR, "memory")
+            BACKEND_VAR, default=app.config.setdefault(BACKEND_VAR, "postgres")
         )
 
         app.extensions["oda"] = self
@@ -51,6 +51,7 @@ class FlaskODA(object):
                     uow = PostgresUnitOfWork(self.connection_pool)
                 else:
                     uow = FilesystemUnitOfWork()
+                uow = PostgresUnitOfWork(self.connection_pool)
                 ctx.uow = uow
 
             return ctx.uow
@@ -61,6 +62,3 @@ class FlaskODA(object):
         if not hasattr(current_app, "connection_pool"):
             current_app.connection_pool = create_connection_pool()
         return current_app.connection_pool
-
-
-oda = FlaskODA()

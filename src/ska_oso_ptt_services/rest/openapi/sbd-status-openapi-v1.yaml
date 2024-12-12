@@ -1,13 +1,13 @@
 SBDStatusHistory:
   type: object
   required:
-    - version
+    - sbd_version
     - previous_status
     - current_status
   properties:
-    version:
-      description: Version of the SBD Entity.
-      example: 1
+    sbd_version:
+      default: 1
+      title: SBD Version
       type: integer
     previous_status:
       description: Previous Status of the SBD Entity.
