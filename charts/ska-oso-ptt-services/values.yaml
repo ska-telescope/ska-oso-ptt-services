@@ -49,15 +49,3 @@ nodeSelector: {}
 affinity: {}
 
 tolerations: []
-
-secretProvider:
-  enabled: false
-  name: vault
-  provider:
-      name: "vault"
-      vaultAddress: "https://vault.skao.int"
-      roleName: "kube-role"
-      ## TODO as of PI24, System Team are refactoring the Vault layout and usage and have advised to stick with this under a personal ID for now
-      secretsPath: "kv/data/users/thaddeuskenny/credentials"
-      secrets:
-      - secretKey: "ADMIN_POSTGRES_PASSWORD"
