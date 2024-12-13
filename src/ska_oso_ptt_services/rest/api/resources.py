@@ -5,17 +5,17 @@ See the operationId fields of the Open API spec for the specific mappings.
 """
 
 import logging
+import traceback
 from enum import EnumMeta
+from functools import wraps
 from http import HTTPStatus
 from os import getenv
-from typing import Any, Dict, Tuple, Union
+from typing import Any, Callable, Dict, Tuple, Union
 
+from pydantic import ValidationError
 from ska_db_oda.persistence.domain.errors import StatusHistoryException
 from ska_db_oda.persistence.domain.query import QueryParams, QueryParamsFactory
 from ska_db_oda.rest.api import check_for_mismatch
-from ska_db_oda.rest.error_handling import (  # oda_validation_error_handler,
-    oda_status_error_handler,
-)
 from ska_oso_pdm import SBDStatusHistory
 from ska_oso_pdm.entity_status_history import (
     OSOEBStatus,
@@ -53,6 +53,88 @@ class PTTQueryParamsFactory(QueryParamsFactory):
         return QueryParamsFactory.from_dict(kwargs=kwargs)
 
 
+def error_handler(api_fn: Callable[[str], Response]) -> Callable[[str], Response]:
+    """
+    A decorator function to catch general errors and wrap in the correct HTTP response
+
+    :param api_fn: A function which accepts an entity
+
+     identifier and returns an HTTP response
+    """
+
+    @wraps(api_fn)
+    def wrapper(*args, **kwargs):
+        try:
+            LOGGER.debug(
+                "Request to %s with args: %s and kwargs: %s", api_fn, args, kwargs
+            )
+            return api_fn(*args, **kwargs)
+        except KeyError as err:
+            # TODO there is a risk that the KeyError is not from the
+            #  ODA not being able to find the entity. After BTN-1502 the
+            #  ODA should raise its own exceptions which we can catch here
+            is_not_found_in_oda = any(
+                "not found" in str(arg).lower() for arg in err.args
+            )
+            if is_not_found_in_oda:
+                return {
+                    "detail": (
+                        "Not Found. The requested identifier"
+                        f" {next(iter(kwargs.values()))} could not be found."
+                    ),
+                }, HTTPStatus.NOT_FOUND
+            else:
+                LOGGER.exception(
+                    "KeyError raised by api function call, but not due to the "
+                    "sbd_id not being found in the ODA."
+                )
+                return error_response(err)
+        except (ValueError, ValidationError) as e:
+            LOGGER.exception(
+                "ValueError occurred when adding entity, likely some semantic"
+                " validation failed"
+            )
+
+            return error_response(e, HTTPStatus.UNPROCESSABLE_ENTITY)
+
+        except StatusHistoryException as e:
+            return {"detail": str(e.args[0])}, HTTPStatus.UNPROCESSABLE_ENTITY
+
+    return wrapper
+
+
+def error_response(
+    err: Exception, http_status: HTTPStatus = HTTPStatus.INTERNAL_SERVER_ERROR
+) -> Response:
+    """
+    Creates a general server error response from an exception
+
+    :return: HTTP response server error
+    """
+    response_body = {
+        "title": http_status.phrase,
+        "detail": f"{repr(err)} with args {err.args}",
+        "traceback": {
+            "key": "Internal Server Error",
+            "type": str(type(err)),
+            "full_traceback": traceback.format_exc(),
+        },
+    }
+
+    return response_body, http_status
+
+
+def validation_response(
+    title: str, detail: str, http_status: HTTPStatus = HTTPStatus.UNPROCESSABLE_ENTITY
+):
+    """
+    Creates an error response in the case that our validation has failed.
+    """
+    response_body = {"title": title, "detail": detail}
+
+    return response_body, http_status
+
+
 def get_qry_params(kwargs: dict) -> Union[QueryParams, Response]:
     """
     Convert the parameters from the request into QueryParams.
@@ -68,12 +150,14 @@ def get_qry_params(kwargs: dict) -> Union[QueryParams, Response]:
     try:
         return PTTQueryParamsFactory.from_dict(kwargs)
     except ValueError as err:
-        return oda_status_error_handler(
+        return validation_response(
+            "Not Supported",
             err.args[0],
             HTTPStatus.BAD_REQUEST,
         )
 
 
+@error_handler
 def get_sbd_with_status(sbd_id: str) -> Response:
     """
     Function that a GET /sbds/<sbd_id> request is routed to.
@@ -82,7 +166,7 @@ def get_sbd_with_status(sbd_id: str) -> Response:
     :return: The SBDefinition with status wrapped in a Response, or appropriate error
      Response
     """
-    with oda.uow() as uow:
+    with oda.uow as uow:
         sbd = uow.sbds.get(sbd_id)
         sbd_json = sbd.model_dump(mode="json")
         sbd_json["status"] = _get_sbd_status(
@@ -91,6 +175,7 @@ def get_sbd_with_status(sbd_id: str) -> Response:
     return sbd_json, HTTPStatus.OK
 
 
+@error_handler
 def get_sbds_with_status(**kwargs) -> Response:
     """
     Function that a GET /sbds request is routed to.
@@ -103,7 +188,7 @@ def get_sbds_with_status(**kwargs) -> Response:
     if not isinstance(maybe_qry_params, QueryParams):
         return maybe_qry_params
 
-    with oda.uow() as uow:
+    with oda.uow as uow:
         sbds = uow.sbds.query(maybe_qry_params)
         sbd_with_status = [
             {
@@ -117,6 +202,7 @@ def get_sbds_with_status(**kwargs) -> Response:
     return sbd_with_status, HTTPStatus.OK
 
 
+@error_handler
 def _get_sbd_status(uow, sbd_id: str, version: str = None) -> Dict[str, Any]:
     """
     Takes an SBDefinition ID and Version and returns status
@@ -133,6 +219,7 @@ def _get_sbd_status(uow, sbd_id: str, version: str = None) -> Dict[str, Any]:
     return retrieved_sbd
 
 
+@error_handler
 def get_sbd_status(sbd_id: str, version: str = None) -> Dict[str, Any]:
     """
     Function that a GET status/sbds/<sbd_id> request is routed to.
@@ -143,12 +230,13 @@ def get_sbd_status(sbd_id: str, version: str = None) -> Dict[str, Any]:
     :return: The current entity status, SBDStatusHistory wrapped in a Response, or
     appropriate error Response
     """
-    with oda.uow() as uow:
+    with oda.uow as uow:
         sbd_status = _get_sbd_status(uow=uow, sbd_id=sbd_id, version=version)
 
     return sbd_status, HTTPStatus.OK
 
 
+@error_handler
 def put_sbd_history(sbd_id: str, body: dict) -> Response:
     """
     Function that a PUT status/sbds/<sbd_id> request is routed to.
@@ -172,7 +260,7 @@ def put_sbd_history(sbd_id: str, body: dict) -> Response:
     if response := check_for_mismatch(sbd_id, sbd_status_history.sbd_ref):
         return response
 
-    with oda.uow() as uow:
+    with oda.uow as uow:
         if sbd_id not in uow.sbds:
             raise KeyError(
                 f"Not found. The requested sbd_id {sbd_id} could not be found."
@@ -184,6 +272,7 @@ def put_sbd_history(sbd_id: str, body: dict) -> Response:
     return (persisted_sbd, HTTPStatus.OK)
 
 
+@error_handler
 def get_sbd_status_history(**kwargs) -> Response:
     """
     Function that a GET /status/sbds request is routed to.
@@ -196,7 +285,7 @@ def get_sbd_status_history(**kwargs) -> Response:
     if not isinstance(maybe_qry_params := get_qry_params(kwargs), QueryParams):
         return maybe_qry_params
 
-    with oda.uow() as uow:
+    with oda.uow as uow:
         sbds_status_history = uow.sbds_status_history.query(
             maybe_qry_params, is_status_history=True
         )
@@ -206,6 +295,7 @@ def get_sbd_status_history(**kwargs) -> Response:
     return sbds_status_history, HTTPStatus.OK
 
 
+@error_handler
 def put_sbi_history(sbi_id: str, body: dict) -> Response:
     """
     Function that a PUT status/sbds/<sbd_id> request is routed to.
@@ -228,7 +318,7 @@ def put_sbi_history(sbi_id: str, body: dict) -> Response:
     if response := check_for_mismatch(sbi_id, sbi_status_history.sbi_ref):
         return response
 
-    with oda.uow() as uow:
+    with oda.uow as uow:
         if sbi_id not in uow.sbis:
             raise KeyError(
                 f"Not found. The requested sbi_id {sbi_id} could not be found."
@@ -239,6 +329,7 @@ def put_sbi_history(sbi_id: str, body: dict) -> Response:
     return (persisted_sbi, HTTPStatus.OK)
 
 
+@error_handler
 def get_eb_with_status(eb_id: str) -> Response:
     """
     Function that a GET /ebs/<eb_id> request is routed to.
@@ -247,7 +338,7 @@ def get_eb_with_status(eb_id: str) -> Response:
     :return: The ExecutionBlock with status wrapped in a Response,
         or appropriate error Response
     """
-    with oda.uow() as uow:
+    with oda.uow as uow:
         eb = uow.ebs.get(eb_id)
         eb_json = eb.model_dump(mode="json")
         eb_json["status"] = _get_eb_status(
@@ -257,6 +348,7 @@ def get_eb_with_status(eb_id: str) -> Response:
     return eb_json, HTTPStatus.OK
 
 
+@error_handler
 def get_ebs_with_status(**kwargs) -> Response:
     """
     Function that a GET /ebs request is routed to.
@@ -269,7 +361,7 @@ def get_ebs_with_status(**kwargs) -> Response:
     if not isinstance(maybe_qry_params, QueryParams):
         return maybe_qry_params
 
-    with oda.uow() as uow:
+    with oda.uow as uow:
         ebs = uow.ebs.query(maybe_qry_params)
         eb_with_status = [
             {
@@ -283,6 +375,7 @@ def get_ebs_with_status(**kwargs) -> Response:
     return eb_with_status, HTTPStatus.OK
 
 
+@error_handler
 def _get_eb_status(uow, eb_id: str, version: str = None) -> Dict[str, Any]:
     """
     Takes an EB ID and Version and returns status
@@ -301,6 +394,7 @@ def _get_eb_status(uow, eb_id: str, version: str = None) -> Dict[str, Any]:
     return retrieved_eb.model_dump()
 
 
+@error_handler
 def get_eb_status(eb_id: str, version: int = None) -> Response:
     """
     Function that a GET status/ebs/<eb_id> request is routed to.
@@ -311,11 +405,12 @@ def get_eb_status(eb_id: str, version: int = None) -> Response:
     :return: The current entity status,OSOEBStatusHistory wrapped in a
         Response, or appropriate error Response
     """
-    with oda.uow() as uow:
+    with oda.uow as uow:
         eb_status = _get_eb_status(uow=uow, eb_id=eb_id, version=version)
     return eb_status, HTTPStatus.OK
 
 
+@error_handler
 def put_eb_history(eb_id: str, body: dict) -> Response:
     """
     Function that a PUT status/ebs/<eb_id> request is routed to.
@@ -340,7 +435,7 @@ def put_eb_history(eb_id: str, body: dict) -> Response:
     if response := check_for_mismatch(eb_id, eb_status_history.eb_ref):
         return response
 
-    with oda.uow() as uow:
+    with oda.uow as uow:
         if eb_id not in uow.ebs:
             raise KeyError(
                 f"Not found. The requested eb_id {eb_id} could not be found."
@@ -350,6 +445,7 @@ def put_eb_history(eb_id: str, body: dict) -> Response:
     return (persisted_eb, HTTPStatus.OK)
 
 
+@error_handler
 def get_eb_status_history(**kwargs) -> Response:
     """
     Function that a GET /status/ebs request is routed to.
@@ -362,7 +458,7 @@ def get_eb_status_history(**kwargs) -> Response:
     if not isinstance(maybe_qry_params := get_qry_params(kwargs), QueryParams):
         return maybe_qry_params
 
-    with oda.uow() as uow:
+    with oda.uow as uow:
         ebs_status_history = uow.ebs_status_history.query(
             maybe_qry_params, is_status_history=True
         )
@@ -372,6 +468,7 @@ def get_eb_status_history(**kwargs) -> Response:
     return ebs_status_history, HTTPStatus.OK
 
 
+@error_handler
 def get_sbi_with_status(sbi_id: str) -> Response:
     """
     Function that a GET /sbis/<sbi_id> request is routed to.
@@ -380,7 +477,7 @@ def get_sbi_with_status(sbi_id: str) -> Response:
     :return: The SBInstance with status wrapped in a Response,
          or appropriate error Response
     """
-    with oda.uow() as uow:
+    with oda.uow as uow:
         sbi = uow.sbis.get(sbi_id)
         sbi_json = sbi.model_dump(mode="json")
         sbi_json["status"] = _get_sbi_status(
@@ -389,6 +486,7 @@ def get_sbi_with_status(sbi_id: str) -> Response:
     return sbi_json, HTTPStatus.OK
 
 
+@error_handler
 def get_sbis_with_status(**kwargs) -> Response:
     """
     Function that a GET /sbis request is routed to.
@@ -401,7 +499,7 @@ def get_sbis_with_status(**kwargs) -> Response:
     if not isinstance(maybe_qry_params, QueryParams):
         return maybe_qry_params
 
-    with oda.uow() as uow:
+    with oda.uow as uow:
         sbis = uow.sbis.query(maybe_qry_params)
         sbi_with_status = [
             {
@@ -415,6 +513,7 @@ def get_sbis_with_status(**kwargs) -> Response:
     return sbi_with_status, HTTPStatus.OK
 
 
+@error_handler
 def _get_sbi_status(uow, sbi_id: str, version: str = None) -> Dict[str, Any]:
     """
     Takes an SBInstance ID and Version and returns status
@@ -431,6 +530,7 @@ def _get_sbi_status(uow, sbi_id: str, version: str = None) -> Dict[str, Any]:
     return retrieved_sbi.model_dump()
 
 
+@error_handler
 def get_sbi_status(sbi_id: str, version: int = None) -> Response:
     """
     Function that a GET status/sbi/<sbi_id> request is routed to.
@@ -441,11 +541,12 @@ def get_sbi_status(sbi_id: str, version: int = None) -> Response:
     :return: The current entity status,SBIStatusHistory wrapped in a
         Response, or appropriate error Response
     """
-    with oda.uow() as uow:
+    with oda.uow as uow:
         sbi_status = _get_sbi_status(uow=uow, sbi_id=sbi_id, version=version)
     return sbi_status, HTTPStatus.OK
 
 
+@error_handler
 def get_sbi_status_history(**kwargs) -> Response:
     """
     Function that a GET /status/history/sbis request is routed to.
@@ -458,7 +559,7 @@ def get_sbi_status_history(**kwargs) -> Response:
     if not isinstance(maybe_qry_params := get_qry_params(kwargs), QueryParams):
         return maybe_qry_params
 
-    with oda.uow() as uow:
+    with oda.uow as uow:
         sbis_status_history = uow.sbis_status_history.query(
             maybe_qry_params, is_status_history=True
         )
@@ -468,6 +569,7 @@ def get_sbi_status_history(**kwargs) -> Response:
     return sbis_status_history, HTTPStatus.OK
 
 
+@error_handler
 def get_prj_with_status(prj_id: str) -> Response:
     """
     Function that a GET /prjs/<prj_id> request is routed to.
@@ -476,7 +578,7 @@ def get_prj_with_status(prj_id: str) -> Response:
     :return: The Project with status wrapped in a Response,
         or appropriate error Response
     """
-    with oda.uow() as uow:
+    with oda.uow as uow:
         prj = uow.prjs.get(prj_id)
         prj_json = prj.model_dump(mode="json")
         prj_json["status"] = _get_prj_status(
@@ -486,6 +588,7 @@ def get_prj_with_status(prj_id: str) -> Response:
     return prj_json, HTTPStatus.OK
 
 
+@error_handler
 def get_prjs_with_status(**kwargs) -> Response:
     """
     Function that a GET /prjs request is routed to.
@@ -498,7 +601,7 @@ def get_prjs_with_status(**kwargs) -> Response:
     if not isinstance(maybe_qry_params, QueryParams):
         return maybe_qry_params
 
-    with oda.uow() as uow:
+    with oda.uow as uow:
         prjs = uow.prjs.query(maybe_qry_params)
         prj_with_status = [
             {
@@ -512,6 +615,7 @@ def get_prjs_with_status(**kwargs) -> Response:
     return prj_with_status, HTTPStatus.OK
 
 
+@error_handler
 def _get_prj_status(uow, prj_id: str, version: str = None) -> Dict[str, Any]:
     """
     Takes an Project ID and Version and returns status
@@ -530,6 +634,7 @@ def _get_prj_status(uow, prj_id: str, version: str = None) -> Dict[str, Any]:
     return retrieved_prj.model_dump()
 
 
+@error_handler
 def get_prj_status(prj_id: str, version: int = None) -> Response:
     """
     Function that a GET status/prjs/<prj_id> request is routed to.
@@ -540,11 +645,12 @@ def get_prj_status(prj_id: str, version: int = None) -> Response:
     :return: The current entity status,ProjectStatusHistory wrapped in a
         Response, or appropriate error Response
     """
-    with oda.uow() as uow:
+    with oda.uow as uow:
         prj_status = _get_prj_status(uow=uow, prj_id=prj_id, version=version)
     return prj_status, HTTPStatus.OK
 
 
+@error_handler
 def put_prj_history(prj_id: str, body: dict) -> Response:
     """
     Function that a PUT status/prjs/<prj_id> request is routed to.
@@ -569,7 +675,7 @@ def put_prj_history(prj_id: str, body: dict) -> Response:
     if response := check_for_mismatch(prj_id, prj_status_history.prj_ref):
         return response
 
-    with oda.uow() as uow:
+    with oda.uow as uow:
         if prj_id not in uow.prjs:
             raise KeyError(
                 f"Not found. The requested prj_id {prj_id} could not be found."
@@ -580,6 +686,7 @@ def put_prj_history(prj_id: str, body: dict) -> Response:
     return persisted_prj, HTTPStatus.OK
 
 
+@error_handler
 def get_prj_status_history(**kwargs) -> Response:
     """
     Function that a GET /status/prjs request is routed to.
@@ -592,7 +699,7 @@ def get_prj_status_history(**kwargs) -> Response:
     if not isinstance(maybe_qry_params := get_qry_params(kwargs), QueryParams):
         return maybe_qry_params
 
-    with oda.uow() as uow:
+    with oda.uow as uow:
         prjs_status_history = uow.prjs_status_history.query(
             maybe_qry_params, is_status_history=True
         )
@@ -602,6 +709,7 @@ def get_prj_status_history(**kwargs) -> Response:
     return prjs_status_history, HTTPStatus.OK
 
 
+@error_handler
 def get_entity_status(entity_name: str) -> Tuple[Dict[str, str], HTTPStatus]:
     """
     Function that returns the status dictionary for a given entity type.

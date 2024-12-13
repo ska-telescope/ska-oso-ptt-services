@@ -2,19 +2,19 @@ import json
 import logging
 import os
 
+from connexion.apps.flask_app import FlaskJSONEncoder
 from flask import _app_ctx_stack, current_app  # pylint: disable=no-name-in-module
 from ska_db_oda.persistence.unitofwork.filesystemunitofwork import FilesystemUnitOfWork
 from ska_db_oda.persistence.unitofwork.postgresunitofwork import (
     PostgresUnitOfWork,
     create_connection_pool,
 )
-from connexion.apps.flask_app import FlaskJSONEncoder
 from ska_oso_pdm import PdmObject
-
 
 LOGGER = logging.getLogger(__name__)
 
 BACKEND_VAR = "ODA_BACKEND_TYPE"
+
 
 class PdmJsonEncoder(FlaskJSONEncoder):
     """
@@ -30,7 +30,9 @@ class PdmJsonEncoder(FlaskJSONEncoder):
 
     def default(self, o):
         if isinstance(o, PdmObject):
-            # model_dump_json serialises the model as a string, then we turn this into a dict so it is properly returned as json by the API
+            # model_dump_json serialises the model as a string,
+            # then we turn this into a dict
+            #  so it is properly returned as json by the API
             return json.loads(o.model_dump_json())
 
         return FlaskJSONEncoder.default(self, o)
@@ -63,6 +65,7 @@ class FlaskODA(object):
 
         app.extensions["oda"] = self
 
+    @property
     def uow(self):
         # Lazy creation of one UnitOfWork instance per HTTP request
         # UoW instances are not shared as concurrent modification of a single
@@ -74,7 +77,6 @@ class FlaskODA(object):
                     uow = PostgresUnitOfWork(self.connection_pool)
                 else:
                     uow = FilesystemUnitOfWork()
-                uow = PostgresUnitOfWork(self.connection_pool)
                 ctx.uow = uow
 
             return ctx.uow
