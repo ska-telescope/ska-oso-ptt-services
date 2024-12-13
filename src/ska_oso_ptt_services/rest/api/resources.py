@@ -513,7 +513,6 @@ def get_sbis_with_status(**kwargs) -> Response:
     return sbi_with_status, HTTPStatus.OK
 
 
-@error_handler
 def _get_sbi_status(uow, sbi_id: str, version: str = None) -> Dict[str, Any]:
     """
     Takes an SBInstance ID and Version and returns status
@@ -615,7 +614,6 @@ def get_prjs_with_status(**kwargs) -> Response:
     return prj_with_status, HTTPStatus.OK
 
 
-@error_handler
 def _get_prj_status(uow, prj_id: str, version: str = None) -> Dict[str, Any]:
     """
     Takes an Project ID and Version and returns status
