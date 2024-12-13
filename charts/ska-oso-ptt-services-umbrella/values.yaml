@@ -8,6 +8,8 @@ ska-oso-ptt-services:
 
 ska-db-oda-umbrella:
   ska-db-oda:
+    secretProvider:
+        enabled: true
     rest:
       enabled: true # Disabled by default as ska-oso-ptt-services does not use the ska-db-oda REST server. Would be useful to enable for demos and testing.
   postgresql:
