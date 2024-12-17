@@ -29,7 +29,7 @@ rest:
       host: ~
       port: ~
       user: ~
-      password: secretpassword # TODO BTN-2449 will extract this
+      password: secretpassword 
       db:
         name: ~
   use_skuid: true
