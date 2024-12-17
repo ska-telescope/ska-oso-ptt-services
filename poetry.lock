@@ -143,13 +143,13 @@ reference = "PyPI-public"
 
 [[package]]
 name = "astropy-iers-data"
-version = "0.2024.12.9.0.36.21"
+version = "0.2024.12.16.0.35.48"
 description = "IERS Earth Rotation and Leap Second tables for the astropy core package"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "astropy_iers_data-0.2024.12.9.0.36.21-py3-none-any.whl", hash = "sha256:f22cc517b5bc164e4d105c14677d918ab732ef10342fe76fc9068fa46755c91f"},
-    {file = "astropy_iers_data-0.2024.12.9.0.36.21.tar.gz", hash = "sha256:b8c235b5420702a8e28bb43d94e634aa4bead38d9e72dea03fd0a22b1057817d"},
+    {file = "astropy_iers_data-0.2024.12.16.0.35.48-py3-none-any.whl", hash = "sha256:c277670bf5324d9e17a28b011d4d7493acc06ce9dc75e7cfab848bd8c4847ce3"},
+    {file = "astropy_iers_data-0.2024.12.16.0.35.48.tar.gz", hash = "sha256:dbb95668d66bb160342f058df49953c9d47bac628279169ffd476ca51fe90fac"},
 ]
 
 [package.extras]
@@ -163,13 +163,13 @@ reference = "PyPI-public"
 
 [[package]]
 name = "attrs"
-version = "24.2.0"
+version = "24.3.0"
 description = ""
 optional = false
 python-versions = "*"
 files = [
-    {file = "attrs-24.2.0-py3-none-any.whl", hash = "sha256:81921eb96de3191c8258c199618104dd27ac608d9366f5e35d011eae1867ede2"},
-    {file = "attrs-24.2.0.tar.gz", hash = "sha256:5cfb1b9148b5b086569baec03f20d7b6bf3bcacc9a42bebf87ffaaca362f6346"},
+    {file = "attrs-24.3.0-py3-none-any.whl", hash = "sha256:ac96cd038792094f438ad1f6ff80837353805ac950cd2aa0e0625ef19850c308"},
+    {file = "attrs-24.3.0.tar.gz", hash = "sha256:8f5c07333d543103541ba7be0e2ce16eeee8130cb0b3f9238ab904ce1e85baff"},
 ]
 
 [package.source]
@@ -237,13 +237,13 @@ reference = "PyPI-public"
 
 [[package]]
 name = "certifi"
-version = "2024.8.30"
+version = "2024.12.14"
 description = "Python package for providing Mozilla's CA Bundle."
 optional = false
 python-versions = ">=3.6"
 files = [
-    {file = "certifi-2024.8.30-py3-none-any.whl", hash = "sha256:922820b53db7a7257ffbda3f597266d435245903d80737e34f8a45ff3e3230d8"},
-    {file = "certifi-2024.8.30.tar.gz", hash = "sha256:bec941d2aa8195e248a60b31ff9f0558284cf01a52591ceda73ea9afffd69fd9"},
+    {file = "certifi-2024.12.14-py3-none-any.whl", hash = "sha256:1275f7a45be9464efc1173084eaa30f866fe2e47d389406136d332ed4967ec56"},
+    {file = "certifi-2024.12.14.tar.gz", hash = "sha256:b650d30f370c2b724812bee08008be0c4163b163ddaec3f2546c1caf65f191db"},
 ]
 
 [package.source]
@@ -689,13 +689,13 @@ reference = "PyPI-public"
 
 [[package]]
 name = "fastapi-cli"
-version = "0.0.6"
+version = "0.0.7"
 description = "Run and manage FastAPI apps from the command line with FastAPI CLI. 🚀"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "fastapi_cli-0.0.6-py3-none-any.whl", hash = "sha256:43288efee46338fae8902f9bf4559aed3aed639f9516f5d394a7ff19edcc8faf"},
-    {file = "fastapi_cli-0.0.6.tar.gz", hash = "sha256:2835a8f0c44b68e464d5cafe5ec205265f02dc1ad1d640db33a994ba3338003b"},
+    {file = "fastapi_cli-0.0.7-py3-none-any.whl", hash = "sha256:d549368ff584b2804336c61f192d86ddea080c11255f375959627911944804f4"},
+    {file = "fastapi_cli-0.0.7.tar.gz", hash = "sha256:02b3b65956f526412515907a0793c9094abd4bfb5457b389f645b0ea6ba3605e"},
 ]
 
 [package.dependencies]
@@ -2045,13 +2045,13 @@ reference = "PyPI-public"
 
 [[package]]
 name = "python-multipart"
-version = "0.0.19"
+version = "0.0.20"
 description = ""
 optional = false
 python-versions = "*"
 files = [
-    {file = "python_multipart-0.0.19-py3-none-any.whl", hash = "sha256:f8d5b0b9c618575bf9df01c684ded1d94a338839bdd8223838afacfb4bb2082d"},
-    {file = "python_multipart-0.0.19.tar.gz", hash = "sha256:905502ef39050557b7a6af411f454bc19526529ca46ae6831508438890ce12cc"},
+    {file = "python_multipart-0.0.20-py3-none-any.whl", hash = "sha256:8a62d3a8335e06589fe01f2a3e178cdcc632f3fbe0d492ad9ee0ec35aab1f104"},
+    {file = "python_multipart-0.0.20.tar.gz", hash = "sha256:8dd0cab45b8e23064ae09147625994d090fa46f5b0d1e13af944c331a7fa9d13"},
 ]
 
 [package.source]
@@ -2348,13 +2348,13 @@ reference = "PyPI-public"
 
 [[package]]
 name = "ska-db-oda"
-version = "6.3.1"
+version = "7.0.0"
 description = "SKA Database OSO Data Archive"
 optional = false
 python-versions = ">=3.10,<4.0"
 files = [
-    {file = "ska_db_oda-6.3.1-py3-none-any.whl", hash = "sha256:5fba0822c38e1c68108fe62e89a3f15021464a8cd72a00ac565c8bb5a6a83ff9"},
-    {file = "ska_db_oda-6.3.1.tar.gz", hash = "sha256:00a6c6a95f6675104e269690a8a3addeb6f069a1ce28aa71fbf9a961b509f6e6"},
+    {file = "ska_db_oda-7.0.0-py3-none-any.whl", hash = "sha256:75ae8bbc314f0b77123051d262ab5ed0452fc3cacc6bfdeb1ce369d6e5a6c728"},
+    {file = "ska_db_oda-7.0.0.tar.gz", hash = "sha256:edece0bc689574f5cb8960339e880137ebba200dc67192bcdca3be72ba4e6d7a"},
 ]
 
 [package.dependencies]
@@ -2362,10 +2362,10 @@ fastapi = ">=0.111.0,<0.112.0"
 fire = ">=0.5.0,<0.6.0"
 psycopg = {version = ">=3.0.15,<4.0.0", extras = ["binary"]}
 psycopg-pool = ">=3.1.1,<4.0.0"
-pydantic = ">=2.7,<3.0"
+pydantic = ">=2.9,<3.0"
 python-dateutil = ">=2.8.2,<3.0.0"
 requests = ">=2.27.1,<3.0.0"
-ska-oso-pdm = ">=16.1.0,<17.0.0"
+ska-oso-pdm = ">=17.0.0,<18.0.0"
 ska-ser-logging = ">=0.4.1,<0.5.0"
 ska-ser-skuid = ">=3.3.3,<4.0.0"
 
@@ -2376,19 +2376,19 @@ reference = "skao"
 
 [[package]]
 name = "ska-oso-pdm"
-version = "16.2.1"
+version = "17.0.0"
 description = "SKA Project Data Model serialisation library"
 optional = false
 python-versions = ">=3.10,<4.0"
 files = [
-    {file = "ska_oso_pdm-16.2.1-py3-none-any.whl", hash = "sha256:cf1f27b4e826f3c7f4f3adf95f60ebdb929f34ddb05b6b3e2f8a712e510ad6d5"},
-    {file = "ska_oso_pdm-16.2.1.tar.gz", hash = "sha256:4fdbaadde79d7923253cdfa64dca12f3f976897e6ba3deb3db2d2d5878163f44"},
+    {file = "ska_oso_pdm-17.0.0-py3-none-any.whl", hash = "sha256:1eaae552fcd87f5f3e79ae282ed9cdcc575864dd692bc70e9808261c1e540a25"},
+    {file = "ska_oso_pdm-17.0.0.tar.gz", hash = "sha256:c967e136fa64b0d1cf6ac3839e1aa16dc01951a9b590417cc2d030f66777684b"},
 ]
 
 [package.dependencies]
-astropy = ">=5.0.3,<7"
+astropy = ">=6.1,<7.0"
 packaging = ">=24.1,<25.0"
-pydantic = {version = ">=2.7.1,<3.0.0", extras = ["email"]}
+pydantic = {version = ">=2.9,<3.0", extras = ["email"]}
 
 [package.source]
 type = "legacy"
@@ -2939,13 +2939,13 @@ reference = "PyPI-public"
 
 [[package]]
 name = "uvicorn"
-version = "0.32.1"
+version = "0.34.0"
 description = ""
 optional = false
 python-versions = "*"
 files = [
-    {file = "uvicorn-0.32.1-py3-none-any.whl", hash = "sha256:82ad92fd58da0d12af7482ecdb5f2470a04c9c9a53ced65b9bbb4a205377602e"},
-    {file = "uvicorn-0.32.1.tar.gz", hash = "sha256:ee9519c246a72b1c084cea8d3b44ed6026e78a4a309cbedae9c37e4cb9fbb175"},
+    {file = "uvicorn-0.34.0-py3-none-any.whl", hash = "sha256:023dc038422502fa28a09c7a30bf2b6991512da7dcdb8fd35fe57cfc154126f4"},
+    {file = "uvicorn-0.34.0.tar.gz", hash = "sha256:404051050cd7e905de2c9a7e61790943440b3416f49cb409f965d9dcd0fa73e9"},
 ]
 
 [package.source]
@@ -3057,4 +3057,4 @@ reference = "PyPI-public"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "eea0014f2979596be9cbca64e27d6b06b9ce6059c2aab4df736c08e4d426be30"
+content-hash = "b971a25a79510c5a2d8963f657ab0d316980f60582c516aaa91edb4d26f7bdf2"
