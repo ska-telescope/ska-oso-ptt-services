@@ -102,7 +102,7 @@ class TestSBDefinitionAPI:
         sbd_mock.model_dump.return_value = json.loads(valid_sbd)
         uow_mock = mock.MagicMock()
         uow_mock.sbds.get.return_value = sbd_mock
-        mock_get_sbd_status.return_value = {"current_status": "Complete"}
+        mock_get_sbd_status.return_value = {"current_status": "Draft"}
         mock_oda.uow.__enter__.return_value = uow_mock
 
         result = client.get(

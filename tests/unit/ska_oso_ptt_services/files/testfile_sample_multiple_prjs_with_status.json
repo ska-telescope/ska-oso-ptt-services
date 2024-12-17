@@ -2,7 +2,6 @@
   {
     "interface": "https://schema.skao.int/ska-oso-pdm-prj/0.1",
     "prj_id": "prj-mvp01-20220923-00001",
-    "telescope": "ska_mid",
     "status": "Draft",
     "metadata": {
       "version": 1,
@@ -20,7 +19,6 @@
   {
     "interface": "https://schema.skao.int/ska-oso-pdm-prj/0.1",
     "prj_id": "prj-mvp01-20220923-00001",
-    "telescope": "ska_mid",
     "status": "Draft",
     "metadata": {
       "version": 1,
@@ -38,7 +36,6 @@
   {
     "interface": "https://schema.skao.int/ska-oso-pdm-prj/0.1",
     "prj_id": "prj-mvp01-20220923-00001",
-    "telescope": "ska_mid",
     "status": "Draft",
     "metadata": {
       "version": 1,
@@ -56,7 +53,6 @@
   {
     "interface": "https://schema.skao.int/ska-oso-pdm-prj/0.1",
     "prj_id": "prj-mvp01-20220923-00001",
-    "telescope": "ska_mid",
     "status": "Draft",
     "metadata": {
       "version": 1,
@@ -74,7 +70,6 @@
   {
     "interface": "https://schema.skao.int/ska-oso-pdm-prj/0.1",
     "prj_id": "prj-mvp01-20220923-00001",
-    "telescope": "ska_mid",
     "status": "Draft",
     "metadata": {
       "version": 1,
@@ -92,7 +87,6 @@
   {
     "interface": "https://schema.skao.int/ska-oso-pdm-prj/0.1",
     "prj_id": "prj-mvp01-20220923-00001",
-    "telescope": "ska_mid",
     "status": "Draft",
     "metadata": {
       "version": 1,
