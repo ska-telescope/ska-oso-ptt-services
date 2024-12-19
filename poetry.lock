@@ -1641,13 +1641,13 @@ reference = "PyPI-public"
 
 [[package]]
 name = "pydantic"
-version = "2.10.3"
+version = "2.10.4"
 description = ""
 optional = false
 python-versions = "*"
 files = [
-    {file = "pydantic-2.10.3-py3-none-any.whl", hash = "sha256:be04d85bbc7b65651c5f8e6b9976ed9c6f41782a55524cef079a34a0bb82144d"},
-    {file = "pydantic-2.10.3.tar.gz", hash = "sha256:cb5ac360ce894ceacd69c403187900a02c4b20b693a9dd1d643e1effab9eadf9"},
+    {file = "pydantic-2.10.4-py3-none-any.whl", hash = "sha256:597e135ea68be3a37552fb524bc7d0d66dcf93d395acd93a00682f1efcb8ee3d"},
+    {file = "pydantic-2.10.4.tar.gz", hash = "sha256:82f12e9723da6de4fe2ba888b5971157b3be7ad914267dea8f05f82b28254f06"},
 ]
 
 [package.source]
@@ -2348,13 +2348,13 @@ reference = "PyPI-public"
 
 [[package]]
 name = "ska-db-oda"
-version = "7.0.0"
+version = "7.1.0"
 description = "SKA Database OSO Data Archive"
 optional = false
 python-versions = ">=3.10,<4.0"
 files = [
-    {file = "ska_db_oda-7.0.0-py3-none-any.whl", hash = "sha256:75ae8bbc314f0b77123051d262ab5ed0452fc3cacc6bfdeb1ce369d6e5a6c728"},
-    {file = "ska_db_oda-7.0.0.tar.gz", hash = "sha256:edece0bc689574f5cb8960339e880137ebba200dc67192bcdca3be72ba4e6d7a"},
+    {file = "ska_db_oda-7.1.0-py3-none-any.whl", hash = "sha256:102901337c869c660e72aa8a7beffb97379938208e83ef28c591def2a68c8c1d"},
+    {file = "ska_db_oda-7.1.0.tar.gz", hash = "sha256:185be2e8b5cf1ffeebb9d370044cf5019224b54b61ec79d61b70d4fba899af92"},
 ]
 
 [package.dependencies]
@@ -3057,4 +3057,4 @@ reference = "PyPI-public"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "b971a25a79510c5a2d8963f657ab0d316980f60582c516aaa91edb4d26f7bdf2"
+content-hash = "d5c26ae2a8e094cc48fdac0e1e9523a8b5ae434f1f671668d214fc7d043b50e0"
