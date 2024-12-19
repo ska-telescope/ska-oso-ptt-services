@@ -14,6 +14,7 @@
     {
       "current_status": "Fully Observed",
       "eb_ref": "eb-mvp01-20240426-5004",
+      "eb_version": 1,
       "metadata": {
         "created_by": "DefaultUser",
         "created_on": "2024-07-01T15:31:29.087203+05:30",

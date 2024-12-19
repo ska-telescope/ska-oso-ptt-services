@@ -1,13 +1,13 @@
 ProjectStatusHistory:
   type: object
   required:
-    - version
+    - prj_version
     - previous_status
     - current_status
   properties:
-    version:
-      description: Version of the Project Entity.
-      example: 1
+    prj_version:
+      default: 1
+      title: Project Version
       type: integer
     previous_status:
       description: Previous Status of the Project Entity.

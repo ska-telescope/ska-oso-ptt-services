@@ -2,7 +2,6 @@
   {
     "interface": "https://schema.skao.int/ska-oso-pdm-prj/0.1",
     "prj_id": "prj-mvp01-20220923-00001",
-    "telescope": "ska_mid",
     "status": "Draft",
     "metadata": {
       "version": 1,
@@ -10,6 +9,7 @@
       "created_on": "2024-07-01T10:00:49.094768Z",
       "last_modified_on": "2024-07-01T10:00:49.094768Z",
       "last_modified_by": "DefaultUser"
+      
     },
     "author": {
        "pis": ["John Lennon"],
@@ -19,7 +19,6 @@
   {
     "interface": "https://schema.skao.int/ska-oso-pdm-prj/0.1",
     "prj_id": "prj-mvp01-20220923-00001",
-    "telescope": "ska_mid",
     "status": "Draft",
     "metadata": {
       "version": 1,
@@ -27,6 +26,7 @@
       "created_on": "2024-07-01T10:00:49.094768Z",
       "last_modified_on": "2024-07-01T10:00:49.094768Z",
       "last_modified_by": "DefaultUser"
+      
     },
     "author": {
        "pis": ["John Lennon"],
@@ -36,7 +36,6 @@
   {
     "interface": "https://schema.skao.int/ska-oso-pdm-prj/0.1",
     "prj_id": "prj-mvp01-20220923-00001",
-    "telescope": "ska_mid",
     "status": "Draft",
     "metadata": {
       "version": 1,
@@ -44,6 +43,7 @@
       "created_on": "2024-07-01T10:00:49.094768Z",
       "last_modified_on": "2024-07-01T10:00:49.094768Z",
       "last_modified_by": "DefaultUser"
+      
     },
     "author": {
        "pis": ["John Lennon"],
@@ -53,7 +53,6 @@
   {
     "interface": "https://schema.skao.int/ska-oso-pdm-prj/0.1",
     "prj_id": "prj-mvp01-20220923-00001",
-    "telescope": "ska_mid",
     "status": "Draft",
     "metadata": {
       "version": 1,
@@ -61,6 +60,7 @@
       "created_on": "2024-07-01T10:00:49.094768Z",
       "last_modified_on": "2024-07-01T10:00:49.094768Z",
       "last_modified_by": "DefaultUser"
+      
     },
     "author": {
        "pis": ["John Lennon"],
@@ -70,7 +70,6 @@
   {
     "interface": "https://schema.skao.int/ska-oso-pdm-prj/0.1",
     "prj_id": "prj-mvp01-20220923-00001",
-    "telescope": "ska_mid",
     "status": "Draft",
     "metadata": {
       "version": 1,
@@ -78,6 +77,7 @@
       "created_on": "2024-07-01T10:00:49.094768Z",
       "last_modified_on": "2024-07-01T10:00:49.094768Z",
       "last_modified_by": "DefaultUser"
+      
     },
     "author": {
        "pis": ["John Lennon"],
@@ -87,7 +87,6 @@
   {
     "interface": "https://schema.skao.int/ska-oso-pdm-prj/0.1",
     "prj_id": "prj-mvp01-20220923-00001",
-    "telescope": "ska_mid",
     "status": "Draft",
     "metadata": {
       "version": 1,
@@ -95,6 +94,7 @@
       "created_on": "2024-07-01T10:00:49.094768Z",
       "last_modified_on": "2024-07-01T10:00:49.094768Z",
       "last_modified_by": "DefaultUser"
+      
     },
     "author": {
        "pis": ["John Lennon"],

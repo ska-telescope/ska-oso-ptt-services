@@ -1,14 +1,14 @@
 OSOEBStatusHistory:
   type: object
   required:
-    - version
+    - eb_version
     - previous_status
     - current_status
     
   properties:
-    version:
-      description: Version of the EB Entity.
-      example: 1
+    eb_version:
+      default: 1
+      title: EB Version
       type: integer
     previous_status:
       description: Previous Status of the EB Entity.

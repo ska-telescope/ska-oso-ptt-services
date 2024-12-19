@@ -55,7 +55,11 @@ class TestSBDefinitionAPI:
             headers={"accept": "application/json"},
         )
 
-        assert_json_is_equal(result.text, valid_sbds)
+        resultDict = json.loads(result.text)
+        for res in resultDict:
+            del res["metadata"]["pdm_version"]
+
+        assert_json_is_equal(json.dumps(resultDict), valid_sbds)
         assert result.status_code == HTTPStatus.OK
 
     def test_invalid_get_sbds_with_status(self, client):
@@ -98,7 +102,7 @@ class TestSBDefinitionAPI:
         sbd_mock.model_dump.return_value = json.loads(valid_sbd)
         uow_mock = mock.MagicMock()
         uow_mock.sbds.get.return_value = sbd_mock
-        mock_get_sbd_status.return_value = {"current_status": "Complete"}
+        mock_get_sbd_status.return_value = {"current_status": "Draft"}
         mock_oda.uow.__enter__.return_value = uow_mock
 
         result = client.get(
@@ -152,7 +156,7 @@ class TestSBDefinitionAPI:
 
         result = client.get(
             f"{BASE_API_URL}/status/history/sbds",
-            query_string={"entity_id": "sbd-t0001-20240702-00002", "version": "1"},
+            query_string={"entity_id": "sbd-t0001-20240702-00002", "sbd_version": "1"},
             headers={"accept": "application/json"},
         )
 
@@ -169,7 +173,7 @@ class TestSBDefinitionAPI:
         mock_oda.uow.__enter__.return_value = uow_mock
         result = client.get(
             f"{BASE_API_URL}/status/history/sbds",
-            query_string={"entity_id": "sbd-t0001-20240702-00100", "version": "1"},
+            query_string={"entity_id": "sbd-t0001-20240702-00100", "sbd_version": "1"},
             headers={"accept": "application/json"},
         )
 
@@ -198,7 +202,7 @@ class TestSBDefinitionAPI:
 
         result = client.get(
             f"{BASE_API_URL}/status/sbds/sbd-t0001-20240702-00002",
-            query_string={"version": "1"},
+            query_string={"sbd_version": "1"},
             headers={"accept": "application/json"},
         )
 
@@ -219,7 +223,7 @@ class TestSBDefinitionAPI:
 
         result = client.get(
             f"{BASE_API_URL}/status/sbds/{invalid_sbd_id}",
-            query_string={"version": "1"},
+            query_string={"sbd_version": "1"},
             headers={"accept": "application/json"},
         )
 
@@ -254,12 +258,13 @@ class TestSBDefinitionAPI:
         data = {
             "current_status": "Complete",
             "previous_status": "Draft",
-            "version": "1",
+            "sbd_version": "1",
         }
         exclude_paths = [
             "root['metadata']['created_on']",
             "root['metadata']['last_modified_on']",
             "root['metadata']['version']",
+            "root['metadata']['pdm_version']",
         ]
 
         result = client.put(
@@ -292,12 +297,13 @@ class TestSBDefinitionAPI:
         data = {
             "current_status": "Complete",
             "previous_status": "Draft",
-            "version": "1",
+            "sbd_version": "1",
         }
         exclude_paths = [
             "root['metadata']['created_on']",
             "root['metadata']['last_modified_on']",
             "root['metadata']['version']",
+            "root['metadata']['pdm_version']",
         ]
 
         result = client.put(
@@ -327,12 +333,13 @@ class TestSBDefinitionAPI:
         data = {
             "current_status": "Observed",
             "previous_status": "Draft",
-            "version": "2",
+            "sbd_version": "2",
         }
         exclude_paths = [
             "root['metadata']['created_on']",
             "root['metadata']['last_modified_on']",
             "root['metadata']['version']",
+            "root['metadata']['pdm_version']",
         ]
 
         result = client.put(
@@ -347,8 +354,12 @@ class TestSBDefinitionAPI:
 
     def test_invalid_put_sbd_history(self, client):
         """Verifying that put_sbd_history error if invalid data passed"""
-        query_params = {"version": "1"}
-        data = {"current1_status": "Complete", "previous_status": "Draft"}
+        query_params = {"sbd_version": "1"}
+        data = {
+            "current1_status": "Complete",
+            "previous_status": "Draft",
+            "sbd_version": "1",
+        }
 
         error = {
             "detail": "KeyError('current_status') with args ('current_status',)",
@@ -400,8 +411,12 @@ class TestSBInstanceAPI:
             query_string=query_params,
             headers={"accept": "application/json"},
         )
+        resultDict = json.loads(result.text)
+        for res in resultDict:
+            del res["metadata"]["pdm_version"]
 
-        assert_json_is_equal(result.text, valid_sbis)
+        assert_json_is_equal(json.dumps(resultDict), valid_sbis)
+
         assert result.status_code == HTTPStatus.OK
 
     def test_invalid_get_sbis_with_status(self, client):
@@ -501,7 +516,7 @@ class TestSBInstanceAPI:
         mock_oda.uow.__enter__.return_value = uow_mock
         result = client.get(
             f"{BASE_API_URL}/status/history/sbis",
-            query_string={"entity_id": "sbi-mvp01-20220923-00002", "version": "1"},
+            query_string={"entity_id": "sbi-mvp01-20220923-00002", "sbi_version": "1"},
             headers={"accept": "application/json"},
         )
 
@@ -518,7 +533,7 @@ class TestSBInstanceAPI:
         mock_oda.uow.__enter__.return_value = uow_mock
         result = client.get(
             f"{BASE_API_URL}/status/history/sbis",
-            query_string={"entity_id": "sbi-t000-00100", "version": "1"},
+            query_string={"entity_id": "sbi-t000-00100", "sbi_version": "1"},
             headers={"accept": "application/json"},
         )
 
@@ -545,7 +560,7 @@ class TestSBInstanceAPI:
 
         result = client.get(
             f"{BASE_API_URL}/status/sbis/sbi-mvp01-20240426-5016",
-            query_string={"version": "1"},
+            query_string={"sbi_version": "1"},
             headers={"accept": "application/json"},
         )
 
@@ -567,7 +582,7 @@ class TestSBInstanceAPI:
 
         result = client.get(
             f"{BASE_API_URL}/status/sbis/{invalid_sbi_id}",
-            query_string={"version": "1"},
+            query_string={"sbi_version": "1"},
             headers={"accept": "application/json"},
         )
 
@@ -602,12 +617,13 @@ class TestSBInstanceAPI:
         data = {
             "current_status": "Executing",
             "previous_status": "Created",
-            "version": "1",
+            "sbi_version": "1",
         }
         exclude_paths = [
             "root['metadata']['created_on']",
             "root['metadata']['last_modified_on']",
             "root['metadata']['version']",
+            "root['metadata']['pdm_version']",
         ]
 
         result = client.put(
@@ -618,10 +634,14 @@ class TestSBInstanceAPI:
         assert_json_is_equal(result.text, valid_put_sbi_history_response, exclude_paths)
         assert result.status_code == HTTPStatus.OK
 
-    def test_invalid_put_sbi_history(self, client):
-        """Verifying that put_sbi_history error if invalid data passed"""
-        query_params = {"version": "1"}
-        data = {"current1_status": "Complete", "previous_status": "Draft"}
+    def test_invalid_put_sbd_history(self, client):
+        """Verifying that put_sbd_history error if invalid data passed"""
+        query_params = {"sbd_version": "1"}
+        data = {
+            "current1_status": "Complete",
+            "previous_status": "Draft",
+            "sbd_version": "1",
+        }
 
         error = {
             "detail": "KeyError('current_status') with args ('current_status',)",
@@ -673,8 +693,13 @@ class TestExecutionBlockAPI:
             query_string=query_params,
             headers={"accept": "application/json"},
         )
+        resultDict = json.loads(result.text)
 
-        assert_json_is_equal(result.text, valid_ebs)
+        for res in resultDict:
+            del res["metadata"]["pdm_version"]
+
+        assert_json_is_equal(json.dumps(resultDict), valid_ebs)
+
         assert result.status_code == HTTPStatus.OK
 
     def test_invalid_get_ebs_with_status(self, client):
@@ -772,7 +797,7 @@ class TestExecutionBlockAPI:
 
         result = client.get(
             f"{BASE_API_URL}/status/history/ebs",
-            query_string={"entity_id": "eb-mvp01-20240426-5004", "version": "1"},
+            query_string={"entity_id": "eb-mvp01-20240426-5004", "eb_version": "1"},
             headers={"accept": "application/json"},
         )
         assert_json_is_equal(result.text, valid_eb_status_history)
@@ -789,7 +814,7 @@ class TestExecutionBlockAPI:
         mock_oda.uow.__enter__.return_value = uow_mock
         result = client.get(
             f"{BASE_API_URL}/status/history/ebs",
-            query_string={"entity_id": "eb-t0001-00100", "version": "1"},
+            query_string={"entity_id": "eb-t0001-00100", "eb_version": "1"},
             headers={"accept": "application/json"},
         )
 
@@ -815,7 +840,7 @@ class TestExecutionBlockAPI:
 
         result = client.get(
             f"{BASE_API_URL}/status/ebs/eb-mvp01-20240426-5004",
-            query_string={"version": "1"},
+            query_string={"eb_version": "1"},
             headers={"accept": "application/json"},
         )
 
@@ -837,7 +862,7 @@ class TestExecutionBlockAPI:
 
         result = client.get(
             f"{BASE_API_URL}/status/ebs/{invalid_eb_id}",
-            query_string={"version": "1"},
+            query_string={"eb_version": "1"},
             headers={"accept": "application/json"},
         )
 
@@ -873,12 +898,13 @@ class TestExecutionBlockAPI:
         data = {
             "current_status": "Fully Observed",
             "previous_status": "Created",
-            "version": "1",
+            "eb_version": "1",
         }
         exclude_paths = [
             "root['metadata']['created_on']",
             "root['metadata']['last_modified_on']",
             "root['metadata']['version']",
+            "root['metadata']['pdm_version']",
         ]
 
         result = client.put(
@@ -891,8 +917,12 @@ class TestExecutionBlockAPI:
 
     def test_invalid_put_eb_history(self, client):
         """Verifying that put_eb_history error if invalid data passed"""
-        query_params = {"version": "1"}
-        data = {"current1_status": "Fully Observed", "previous_status": "Created"}
+        query_params = {"eb_version": "1"}
+        data = {
+            "current1_status": "Fully Observed",
+            "previous_status": "Created",
+            "eb_version": "1",
+        }
 
         error = {
             "detail": "KeyError('current_status') with args ('current_status',)",
@@ -945,8 +975,12 @@ class TestProjectAPI:
             query_string=query_params,
             headers={"accept": "application/json"},
         )
+        resultDict = json.loads(result.text)
 
-        assert_json_is_equal(result.text, valid_prjs)
+        for res in resultDict:
+            del res["metadata"]["pdm_version"]
+
+        assert_json_is_equal(json.dumps(resultDict), valid_prjs)
         assert result.status_code == HTTPStatus.OK
 
     def test_invalid_get_prjs_with_status(self, client):
@@ -1044,7 +1078,7 @@ class TestProjectAPI:
 
         result = client.get(
             f"{BASE_API_URL}/status/history/prjs",
-            query_string={"entity_id": "prj-mvp01-20220923-00001", "version": "1"},
+            query_string={"entity_id": "prj-mvp01-20220923-00001", "prj_version": "1"},
             headers={"accept": "application/json"},
         )
         assert_json_is_equal(result.text, valid_prj_status_history)
@@ -1061,7 +1095,7 @@ class TestProjectAPI:
         mock_oda.uow.__enter__.return_value = uow_mock
         result = client.get(
             f"{BASE_API_URL}/status/history/prjs",
-            query_string={"entity_id": "prj-t0001-00100", "version": "1"},
+            query_string={"entity_id": "prj-t0001-00100", "prj_version": "1"},
             headers={"accept": "application/json"},
         )
 
@@ -1090,7 +1124,7 @@ class TestProjectAPI:
 
         result = client.get(
             f"{BASE_API_URL}/status/prjs/prj-mvp01-20240426-5004",
-            query_string={"version": "1"},
+            query_string={"prj_version": "1"},
             headers={"accept": "application/json"},
         )
 
@@ -1112,7 +1146,7 @@ class TestProjectAPI:
 
         result = client.get(
             f"{BASE_API_URL}/status/prjs/{invalid_prj_id}",
-            query_string={"version": "1"},
+            query_string={"prj_version": "1"},
             headers={"accept": "application/json"},
         )
 
@@ -1145,11 +1179,16 @@ class TestProjectAPI:
         mock_oda.uow.__enter__.return_value = uow_mock
 
         url = f"{BASE_API_URL}/status/prjs/prj-mvp01-20220923-00001"
-        data = {"current_status": "Draft", "previous_status": "Draft", "version": "1"}
+        data = {
+            "current_status": "Draft",
+            "previous_status": "Draft",
+            "prj_version": "1",
+        }
         exclude_paths = [
             "root['metadata']['created_on']",
             "root['metadata']['last_modified_on']",
             "root['metadata']['version']",
+            "root['metadata']['pdm_version']",
         ]
 
         result = client.put(
@@ -1157,6 +1196,7 @@ class TestProjectAPI:
             json=data,
             headers={"accept": "application/json"},
         )
+        print("qqqqqqqqqqqqqqqqqqqqqqqq", result.text)
         assert_json_is_equal(result.text, valid_put_prj_history_response, exclude_paths)
         assert result.status_code == HTTPStatus.OK
 
@@ -1180,11 +1220,16 @@ class TestProjectAPI:
         mock_oda.uow.__enter__.return_value = uow_mock
 
         url = f"{BASE_API_URL}/status/prjs/prj-mvp01-20220923-00001"
-        data = {"current_status": "Draft", "previous_status": "Draft", "version": "1"}
+        data = {
+            "current_status": "Draft",
+            "previous_status": "Draft",
+            "prj_version": "1",
+        }
         exclude_paths = [
             "root['metadata']['created_on']",
             "root['metadata']['last_modified_on']",
             "root['metadata']['version']",
+            "root['metadata']['pdm_version']",
         ]
 
         result = client.put(
@@ -1217,12 +1262,13 @@ class TestProjectAPI:
         data = {
             "current_status": "Submitted",
             "previous_status": "Draft",
-            "version": "2",
+            "prj_version": "2",
         }
         exclude_paths = [
             "root['metadata']['created_on']",
             "root['metadata']['last_modified_on']",
             "root['metadata']['version']",
+            "root['metadata']['pdm_version']",
         ]
 
         result = client.put(
@@ -1237,8 +1283,12 @@ class TestProjectAPI:
 
     def test_invalid_put_prj_history(self, client):
         """Verifying that put_prj_history error if invalid data passed"""
-        query_params = {"version": "1"}
-        data = {"current1_status": "Submitted", "previous_status": "Draft"}
+        query_params = {"prj_version": "1"}
+        data = {
+            "current1_status": "Submitted",
+            "previous_status": "Draft",
+            "prj_version": "1",
+        }
 
         error = {
             "detail": "KeyError('current_status') with args ('current_status',)",

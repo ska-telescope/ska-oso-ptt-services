@@ -5,18 +5,17 @@ See the operationId fields of the Open API spec for the specific mappings.
 """
 
 import logging
+import traceback
 from enum import EnumMeta
+from functools import wraps
 from http import HTTPStatus
 from os import getenv
-from typing import Any, Dict, Tuple, Union
+from typing import Any, Callable, Dict, Tuple, Union
 
-from ska_db_oda.persistence.domain import StatusHistoryException
+from pydantic import ValidationError
+from ska_db_oda.persistence.domain.errors import StatusHistoryException
 from ska_db_oda.persistence.domain.query import QueryParams, QueryParamsFactory
-from ska_db_oda.rest.api.resources import (
-    check_for_mismatch,
-    error_handler,
-    validation_response,
-)
+from ska_db_oda.rest.api import check_for_mismatch
 from ska_oso_pdm import SBDStatusHistory
 from ska_oso_pdm.entity_status_history import (
     OSOEBStatus,
@@ -52,6 +51,94 @@ class PTTQueryParamsFactory(QueryParamsFactory):
         """
 
         return QueryParamsFactory.from_dict(kwargs=kwargs)
+
+
+def error_handler(api_fn: Callable[[str], Response]) -> Callable[[str], Response]:
+    """
+    A decorator function to catch general errors and wrap in the correct HTTP response
+
+    :param api_fn: A function which accepts an entity
+    :param Response: This is HTTP Response
+
+    Returns: Returns an HTTP response
+
+    """
+
+    @wraps(api_fn)
+    def wrapper(*args, **kwargs):
+        try:
+            LOGGER.debug(
+                "Request to %s with args: %s and kwargs: %s", api_fn, args, kwargs
+            )
+            return api_fn(*args, **kwargs)
+        except KeyError as err:
+            is_not_found_in_ptt = any(
+                "not found" in str(arg).lower() for arg in err.args
+            )
+            if is_not_found_in_ptt:
+                return {
+                    "detail": (
+                        "Not Found. The requested identifier"
+                        f" {next(iter(kwargs.values()))} could not be found."
+                    ),
+                }, HTTPStatus.NOT_FOUND
+            else:
+                LOGGER.exception(
+                    "KeyError raised by api function call, but not due to the "
+                    "sbd_id not being found in the ODA."
+                )
+                return error_response(err)
+        except (ValueError, ValidationError) as e:
+            LOGGER.exception(
+                "ValueError occurred when adding entity, likely some semantic"
+                " validation failed"
+            )
+
+            return error_response(e, HTTPStatus.UNPROCESSABLE_ENTITY)
+
+        except StatusHistoryException as e:
+            return {"detail": str(e.args[0])}, HTTPStatus.UNPROCESSABLE_ENTITY
+
+    return wrapper
+
+
+def error_response(
+    err: Exception, http_status: HTTPStatus = HTTPStatus.INTERNAL_SERVER_ERROR
+) -> Response:
+    """
+    Creates a general server error response from an exception
+
+    :param err: This is Error Exception
+    :param http_status: This is HTTP status
+
+    :return: HTTP response server error
+    """
+    response_body = {
+        "title": http_status.phrase,
+        "detail": f"{repr(err)} with args {err.args}",
+        "traceback": {
+            "key": "Internal Server Error",
+            "type": str(type(err)),
+            "full_traceback": traceback.format_exc(),
+        },
+    }
+
+    return response_body, http_status
+
+
+def validation_response(
+    title: str, detail: str, http_status: HTTPStatus = HTTPStatus.UNPROCESSABLE_ENTITY
+):
+    """
+    Creates an error response in the case that our validation has failed.
+
+    :param title: This is title of response
+    :param detail: This is detail of response
+    :param http_status: This is http status
+    """
+    response_body = {"title": title, "detail": detail}
+
+    return response_body, http_status
 
 
 def get_qry_params(kwargs: dict) -> Union[QueryParams, Response]:
@@ -121,6 +208,7 @@ def get_sbds_with_status(**kwargs) -> Response:
     return sbd_with_status, HTTPStatus.OK
 
 
+@error_handler
 def _get_sbd_status(uow, sbd_id: str, version: str = None) -> Dict[str, Any]:
     """
     Takes an SBDefinition ID and Version and returns status
@@ -160,16 +248,16 @@ def put_sbd_history(sbd_id: str, body: dict) -> Response:
     Function that a PUT status/sbds/<sbd_id> request is routed to.
 
     :param sbd_id: Requested identifier from the path parameter
-    :param version: Requested identifier from the path parameter
+    :param sbd_version: Requested identifier from the path parameter
     :param body: SBDefinition to persist from the request body
     :return: The SBDefinition wrapped in a Response, or appropriate error Response
     """
     try:
         sbd_status_history = SBDStatusHistory(
             sbd_ref=sbd_id,
+            sbd_version=body["sbd_version"],
             previous_status=SBDStatus(body["previous_status"]),
             current_status=SBDStatus(body["current_status"]),
-            metadata={"version": body["version"]},
         )
 
     except ValueError as err:
@@ -187,10 +275,6 @@ def put_sbd_history(sbd_id: str, body: dict) -> Response:
         persisted_sbd = uow.sbds_status_history.add(sbd_status_history)
 
         uow.commit()
-        if ODA_BACKEND_TYPE == "rest":
-            persisted_sbd = _get_sbd_status(
-                uow=uow, sbd_id=persisted_sbd.sbd_ref, version=body["version"]
-            )
     return (persisted_sbd, HTTPStatus.OK)
 
 
@@ -230,9 +314,9 @@ def put_sbi_history(sbi_id: str, body: dict) -> Response:
     try:
         sbi_status_history = SBIStatusHistory(
             sbi_ref=sbi_id,
+            sbi_version=body["sbi_version"],
             previous_status=SBIStatus(body["previous_status"]),
             current_status=SBIStatus(body["current_status"]),
-            metadata={"version": body["version"]},
         )
     except ValueError as err:
         raise StatusHistoryException(err)  # pylint: disable=W0707
@@ -248,10 +332,6 @@ def put_sbi_history(sbi_id: str, body: dict) -> Response:
 
         persisted_sbi = uow.sbis_status_history.add(sbi_status_history)
         uow.commit()
-        if ODA_BACKEND_TYPE == "rest":
-            persisted_sbi = _get_sbi_status(
-                uow=uow, sbi_id=persisted_sbi.sbi_ref, version=body["version"]
-            )
     return (persisted_sbi, HTTPStatus.OK)
 
 
@@ -301,6 +381,7 @@ def get_ebs_with_status(**kwargs) -> Response:
     return eb_with_status, HTTPStatus.OK
 
 
+@error_handler
 def _get_eb_status(uow, eb_id: str, version: str = None) -> Dict[str, Any]:
     """
     Takes an EB ID and Version and returns status
@@ -349,9 +430,9 @@ def put_eb_history(eb_id: str, body: dict) -> Response:
     try:
         eb_status_history = OSOEBStatusHistory(
             eb_ref=eb_id,
+            eb_version=body["eb_version"],
             previous_status=OSOEBStatus(body["previous_status"]),
             current_status=OSOEBStatus(body["current_status"]),
-            metadata={"version": body["version"]},
         )
 
     except ValueError as err:
@@ -367,10 +448,6 @@ def put_eb_history(eb_id: str, body: dict) -> Response:
             )
         persisted_eb = uow.ebs_status_history.add(eb_status_history)
         uow.commit()
-        if ODA_BACKEND_TYPE == "rest":
-            persisted_eb = _get_eb_status(
-                uow=uow, eb_id=persisted_eb.eb_ref, version=body["version"]
-            )
     return (persisted_eb, HTTPStatus.OK)
 
 
@@ -591,9 +668,9 @@ def put_prj_history(prj_id: str, body: dict) -> Response:
     try:
         prj_status_history = ProjectStatusHistory(
             prj_ref=prj_id,
+            prj_version=body["prj_version"],
             previous_status=ProjectStatus(body["previous_status"]),
             current_status=ProjectStatus(body["current_status"]),
-            metadata={"version": body["version"]},
         )
 
     except ValueError as err:
@@ -610,10 +687,6 @@ def put_prj_history(prj_id: str, body: dict) -> Response:
 
         persisted_prj = uow.prjs_status_history.add(prj_status_history)
         uow.commit()
-        if ODA_BACKEND_TYPE == "rest":
-            persisted_prj = _get_prj_status(
-                uow=uow, prj_id=persisted_prj.prj_ref, version=body["version"]
-            )
     return persisted_prj, HTTPStatus.OK
 
 

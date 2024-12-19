@@ -101,48 +101,38 @@
         "subarray_id": 1
       },
       "config_id": "csp config 123",
+      "name": "",
       "subarray": {
         "subarray_name": "science period 23"
       }
     }
   ],
   "dish_allocations": {
-    "receptor_ids": [
-      "0001",
-      "0002"
-    ]
+    
   },
-  "dish_configurations": [
-    {
-      "dish_configuration_id": "dish config 123",
-      "receiver_band": "5a"
-    }
-  ],
   "interface": "https://schema.skao.int/ska-oso-pdm-sbd/0.1",
   "metadata": {
     "created_by": "DefaultUser",
-    "created_on": "2024-07-02T18:01:47.869759Z",
+    "created_on": "2024-07-06T18:31:38.850886Z",
     "last_modified_by": "DefaultUser",
-    "last_modified_on": "2024-07-02T18:01:47.869759Z",
+    "last_modified_on": "2024-07-06T18:31:38.850886Z",
     "version": 1
   },
-  "sbd_id": "sbd-t0001-20240702-00002",
+  "sbd_id": "sbd-t0001-20240706-00005",
   "scan_definitions": [
     {
       "csp_configuration_ref": "csp config 123",
-      "dish_configuration_ref": "dish config 123",
       "pointing_correction": "MAINTAIN",
       "scan_definition_id": "calibrator scan",
-      "scan_duration_ms": 60000,
+      "scan_duration_ms": 60000.0,
       "scan_type_ref": "calibration_B",
       "target_ref": "Polaris Australis"
     },
     {
       "csp_configuration_ref": "csp config 123",
-      "dish_configuration_ref": "dish config 123",
       "pointing_correction": "UPDATE",
       "scan_definition_id": "science scan",
-      "scan_duration_ms": 60000,
+      "scan_duration_ms": 60000.0,
       "scan_type_ref": "science_A",
       "target_ref": "M83"
     }
@@ -192,8 +182,8 @@
           "spectral_windows": [
             {
               "count": 744,
-              "freq_max": 368000000,
-              "freq_min": 350000000,
+              "freq_max": 368000000.0,
+              "freq_min": 350000000.0,
               "link_map": [
                 [
                   0,
@@ -218,8 +208,8 @@
             },
             {
               "count": 744,
-              "freq_max": 368000000,
-              "freq_min": 360000000,
+              "freq_max": 368000000.0,
+              "freq_min": 360000000.0,
               "link_map": [
                 [
                   2000,
@@ -236,8 +226,8 @@
             },
             {
               "count": 744,
-              "freq_max": 361000000,
-              "freq_min": 360000000,
+              "freq_max": 361000000.0,
+              "freq_min": 360000000.0,
               "link_map": [
                 [
                   4000,
@@ -259,8 +249,8 @@
           "spectral_windows": [
             {
               "count": 744,
-              "freq_max": 368000000,
-              "freq_min": 350000000,
+              "freq_max": 368000000.0,
+              "freq_min": 350000000.0,
               "spectral_window_id": "pulsar_fsp_channels",
               "start": 0
             }
@@ -272,7 +262,7 @@
         "foo": "bar"
       },
       "eb_id": "eb-mvp01-20200325-00001",
-      "max_length": 100,
+      "max_length": 100.0,
       "polarisations": [
         {
           "corr_type": [
@@ -475,15 +465,16 @@
       ]
     }
   },
-  "status": "Complete",
+  "status": "Draft",
   "targets": [
     {
+      "name": "",
       "pointing_pattern": {
         "active": "FivePointParameters",
         "parameters": [
           {
             "kind": "FivePointParameters",
-            "offset_arcsec": 5
+            "offset_arcsec": 5.0
           },
           {
             "kind": "RasterParameters",
@@ -524,13 +515,14 @@
       "target_id": "Polaris Australis"
     },
     {
+      "name": "",
       "pointing_pattern": {
         "active": "SinglePointParameters",
         "parameters": [
           {
             "kind": "SinglePointParameters",
-            "offset_x_arcsec": 0,
-            "offset_y_arcsec": 0
+            "offset_x_arcsec": 0.0,
+            "offset_y_arcsec": 0.0
           }
         ]
       },
@@ -538,9 +530,9 @@
         "definition": "RADIO",
         "quantity": {
           "unit": "km / s",
-          "value": 0
+          "value": 0.0
         },
-        "redshift": 0,
+        "redshift": 0.0,
         "reference_frame": "LSRK"
       },
       "reference_coordinate": {
