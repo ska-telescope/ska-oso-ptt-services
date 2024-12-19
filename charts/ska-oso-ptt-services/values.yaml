@@ -29,7 +29,7 @@ rest:
       host: ~
       port: ~
       user: ~
-      password: secretpassword 
+      password: secretpassword
       db:
         name: ~
   use_skuid: true

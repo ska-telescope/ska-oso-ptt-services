@@ -58,8 +58,10 @@ def error_handler(api_fn: Callable[[str], Response]) -> Callable[[str], Response
     A decorator function to catch general errors and wrap in the correct HTTP response
 
     :param api_fn: A function which accepts an entity
+    :param Response: This is HTTP Response
 
-     identifier and returns an HTTP response
+    Returns: Returns an HTTP response
+
     """
 
     @wraps(api_fn)
@@ -70,13 +72,10 @@ def error_handler(api_fn: Callable[[str], Response]) -> Callable[[str], Response
             )
             return api_fn(*args, **kwargs)
         except KeyError as err:
-            # TODO there is a risk that the KeyError is not from the
-            #  ODA not being able to find the entity. After BTN-1502 the
-            #  ODA should raise its own exceptions which we can catch here
-            is_not_found_in_oda = any(
+            is_not_found_in_ptt = any(
                 "not found" in str(arg).lower() for arg in err.args
             )
-            if is_not_found_in_oda:
+            if is_not_found_in_ptt:
                 return {
                     "detail": (
                         "Not Found. The requested identifier"
@@ -109,6 +108,9 @@ def error_response(
     """
     Creates a general server error response from an exception
 
+    :param err: This is Error Exception
+    :param http_status: This is HTTP status
+
     :return: HTTP response server error
     """
     response_body = {
@@ -129,6 +131,10 @@ def validation_response(
 ):
     """
     Creates an error response in the case that our validation has failed.
+
+    :param title: This is title of response
+    :param detail: This is detail of response
+    :param http_status: This is http status
     """
     response_body = {"title": title, "detail": detail}
 

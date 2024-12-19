@@ -1124,7 +1124,7 @@ class TestProjectAPI:
 
         result = client.get(
             f"{BASE_API_URL}/status/prjs/prj-mvp01-20240426-5004",
-            query_string={"prj_vversionersion": "1"},
+            query_string={"prj_version": "1"},
             headers={"accept": "application/json"},
         )
 
@@ -1237,8 +1237,6 @@ class TestProjectAPI:
             json=data,
             headers={"accept": "application/json"},
         )
-        print("qqqqqqqqqqqqqqqqqqq", result.text)
-        print("wwwwwwwwwwwwwwwwwwww", valid_put_prj_history_response)
         assert_json_is_equal(result.text, valid_put_prj_history_response, exclude_paths)
         assert result.status_code == HTTPStatus.OK
 
