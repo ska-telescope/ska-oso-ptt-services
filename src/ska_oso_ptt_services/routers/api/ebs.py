@@ -114,8 +114,7 @@ def get_ebs_with_status(**kwargs):
                     "example": [
                         json.loads(
                             (
-                                current_dir
-                                / "response_files/eb_status_response.json"
+                                current_dir / "response_files/eb_status_response.json"
                             ).read_text()
                         )
                     ]
@@ -247,8 +246,7 @@ def get_eb_status(eb_id: str, version: int = None):
                     "example": [
                         json.loads(
                             (
-                                current_dir
-                                / "response_files/eb_status_response.json"
+                                current_dir / "response_files/eb_status_response.json"
                             ).read_text()
                         )
                     ]

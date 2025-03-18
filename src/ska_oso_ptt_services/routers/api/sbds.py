@@ -32,7 +32,7 @@ sbd_router = APIRouter()
                     "example": [
                         json.loads(
                             (
-                                current_dir / "response_files/sbd_status_response.json"
+                                current_dir / "response_files/multiple_sbds_with_status_response.json"
                             ).read_text()
                         )
                     ]
@@ -322,7 +322,8 @@ def put_sbd_history(sbd_id: str, body: dict) -> Response:
                     "example": [
                         json.loads(
                             (
-                                current_dir / "response_files/sbd_status_response.json"
+                                current_dir
+                                / "response_files/sbd_status_history_response.json"
                             ).read_text()
                         )
                     ]

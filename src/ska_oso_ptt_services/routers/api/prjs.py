@@ -32,7 +32,8 @@ prj_router = APIRouter()
                     "example": [
                         json.loads(
                             (
-                                current_dir / "response_files/prj_status_response.json"
+                                current_dir
+                                / "response_files/prj_with_status_response.json"
                             ).read_text()
                         )
                     ]
@@ -174,7 +175,8 @@ def get_prj_with_status(prj_id: str) -> Response:
                     "example": [
                         json.loads(
                             (
-                                current_dir / "response_files/prj_status_response.json"
+                                current_dir
+                                / "response_files/prj_status_version_response.json"
                             ).read_text()
                         )
                     ]
@@ -322,7 +324,8 @@ def put_prj_history(prj_id: str, body: dict) -> Response:
                     "example": [
                         json.loads(
                             (
-                                current_dir / "response_files/prj_status_response.json"
+                                current_dir
+                                / "response_files/prj_status_history_response.json"
                             ).read_text()
                         )
                     ]
