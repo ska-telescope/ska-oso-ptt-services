@@ -5,11 +5,13 @@ from http import HTTPStatus
 from pathlib import Path
 from typing import Any, Dict, Tuple
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from ska_db_oda.persistence import oda
 from ska_db_oda.persistence.domain.errors import StatusHistoryException
 from ska_db_oda.persistence.domain.query import QueryParams
 from ska_db_oda.rest.api import check_for_mismatch, get_qry_params
+from ska_db_oda.rest.model import ApiQueryParameters
+from ska_oso_pdm import OSOExecutionBlock
 from ska_oso_pdm.entity_status_history import (
     OSOEBStatus,
     OSOEBStatusHistory,
@@ -76,7 +78,9 @@ eb_router = APIRouter()
         },
     },
 )
-def get_ebs_with_status(**kwargs):
+def get_ebs_with_status(
+    query_params: ApiQueryParameters = Depends(),
+) -> list[OSOExecutionBlock]:
     """
     Function that a GET /ebs request is routed to.
 
@@ -84,7 +88,7 @@ def get_ebs_with_status(**kwargs):
     :return: All ExecutionBlocks present with status wrapped in a Response,
          or appropriate error Response
     """
-    maybe_qry_params = get_qry_params(kwargs)
+    maybe_qry_params = get_qry_params(query_params)
     if not isinstance(maybe_qry_params, QueryParams):
         return maybe_qry_params
 

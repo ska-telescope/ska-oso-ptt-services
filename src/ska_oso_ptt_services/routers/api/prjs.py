@@ -4,11 +4,13 @@ from http import HTTPStatus
 from pathlib import Path
 from typing import Any, Dict
 
-from fastapi import APIRouter, Response
+from fastapi import APIRouter, Depends
 from ska_db_oda.persistence import oda
 from ska_db_oda.persistence.domain.errors import StatusHistoryException
 from ska_db_oda.persistence.domain.query import QueryParams
 from ska_db_oda.rest.api import check_for_mismatch, get_qry_params
+from ska_db_oda.rest.model import ApiQueryParameters
+from ska_oso_pdm import Project
 from ska_oso_pdm.entity_status_history import ProjectStatus, ProjectStatusHistory
 
 # Get the directory of the current script
@@ -70,7 +72,7 @@ prj_router = APIRouter()
         },
     },
 )
-def get_prjs_with_status(**kwargs) -> Response:
+def get_prjs_with_status(query_params: ApiQueryParameters = Depends()) -> list[Project]:
     """
     Function that a GET /prjs request is routed to.
 
@@ -78,7 +80,7 @@ def get_prjs_with_status(**kwargs) -> Response:
     :return: All Project present with status wrapped in a Response,
          or appropriate error Response
     """
-    maybe_qry_params = get_qry_params(kwargs)
+    maybe_qry_params = get_qry_params(query_params)
     if not isinstance(maybe_qry_params, QueryParams):
         return maybe_qry_params
 
@@ -145,7 +147,7 @@ def get_prjs_with_status(**kwargs) -> Response:
         },
     },
 )
-def get_prj_with_status(prj_id: str) -> Response:
+def get_prj_with_status(prj_id: str):
     """
     Function that a GET /prjs/<prj_id> request is routed to.
 
@@ -213,7 +215,7 @@ def get_prj_with_status(prj_id: str) -> Response:
         },
     },
 )
-def get_prj_status(prj_id: str, version: int = None) -> Response:
+def get_prj_status(prj_id: str, version: int = None):
     """
     Function that a GET status/prjs/<prj_id> request is routed to.
     This method is used to GET the current status for the given prj_id
@@ -277,7 +279,7 @@ def get_prj_status(prj_id: str, version: int = None) -> Response:
         },
     },
 )
-def put_prj_history(prj_id: str, body: dict) -> Response:
+def put_prj_history(prj_id: str, body: dict):
     """
     Function that a PUT status/prjs/<prj_id> request is routed to.
 
@@ -362,7 +364,7 @@ def put_prj_history(prj_id: str, body: dict) -> Response:
         },
     },
 )
-def get_prj_status_history(**kwargs) -> Response:
+def get_prj_status_history(**kwargs):
     """
     Function that a GET /status/prjs request is routed to.
     This method is used to GET status history for the given entity

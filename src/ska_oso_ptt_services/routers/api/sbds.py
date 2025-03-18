@@ -4,11 +4,13 @@ from http import HTTPStatus
 from pathlib import Path
 from typing import Any, Dict
 
-from fastapi import APIRouter, Response
+from fastapi import APIRouter, Depends
 from ska_db_oda.persistence import oda
 from ska_db_oda.persistence.domain.errors import StatusHistoryException
 from ska_db_oda.persistence.domain.query import QueryParams
 from ska_db_oda.rest.api import check_for_mismatch, get_qry_params
+from ska_db_oda.rest.model import ApiQueryParameters
+from ska_oso_pdm import SBDefinition
 from ska_oso_pdm.entity_status_history import SBDStatus, SBDStatusHistory
 
 # Get the directory of the current script
@@ -20,6 +22,9 @@ LOGGER = logging.getLogger(__name__)
 sbd_router = APIRouter()
 
 
+file_name = "response_files/multiple_sbds_with_status_response.json"
+
+
 @sbd_router.get(
     "/sbds",
     tags=["SBD"],
@@ -29,13 +34,7 @@ sbd_router = APIRouter()
             "description": "Successful Response",
             "content": {
                 "application/json": {
-                    "example": [
-                        json.loads(
-                            (
-                                current_dir / "response_files/multiple_sbds_with_status_response.json"
-                            ).read_text()
-                        )
-                    ]
+                    "example": [json.loads((current_dir / file_name).read_text())]
                 }
             },
         },
@@ -69,7 +68,9 @@ sbd_router = APIRouter()
         },
     },
 )
-def get_sbds_with_status(**kwargs) -> Response:
+def get_sbds_with_status(
+    query_params: ApiQueryParameters = Depends(),
+) -> list[SBDefinition]:
     """
     Function that a GET /sbds request is routed to.
 
@@ -77,7 +78,7 @@ def get_sbds_with_status(**kwargs) -> Response:
     :return: All SBDefinitions present with status wrapped in a Response, or appropriate
      error Response
     """
-    maybe_qry_params = get_qry_params(kwargs)
+    maybe_qry_params = get_qry_params(query_params)
     if not isinstance(maybe_qry_params, QueryParams):
         return maybe_qry_params
 
@@ -144,7 +145,7 @@ def get_sbds_with_status(**kwargs) -> Response:
         },
     },
 )
-def get_sbd_with_status(sbd_id: str) -> Response:
+def get_sbd_with_status(sbd_id: str):
     """
     Function that a GET /sbds/<sbd_id> request is routed to.
 
@@ -275,7 +276,7 @@ def get_sbd_status(sbd_id: str, version: str = None) -> Dict[str, Any]:
         },
     },
 )
-def put_sbd_history(sbd_id: str, body: dict) -> Response:
+def put_sbd_history(sbd_id: str, body: dict):
     """
     Function that a PUT status/sbds/<sbd_id> request is routed to.
 
@@ -360,7 +361,7 @@ def put_sbd_history(sbd_id: str, body: dict) -> Response:
         },
     },
 )
-def get_sbd_status_history(**kwargs) -> Response:
+def get_sbd_status_history(**kwargs):
     """
     Function that a GET /status/sbds request is routed to.
     This method is used to GET status history for the given entity
