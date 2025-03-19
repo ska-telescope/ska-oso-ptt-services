@@ -23,7 +23,7 @@ from ska_oso_pdm.sb_definition.sb_definition import SBDefinitionID
 from ska_oso_pdm.sb_instance import SBInstance
 
 PROJECT_ROOT = Path(__file__).parents[1].resolve()
-
+TEST_ROOT = Path(__file__).parents[0].resolve()
 
 KUBE_HOST = os.getenv("KUBE_HOST")
 KUBE_NAMESPACE = os.getenv("KUBE_NAMESPACE", "ska-db-oda")
@@ -34,7 +34,8 @@ DEFAULT_API_PATH = f"ska-db-oda/oda/api/v{ODA_MAJOR_VERSION}"
 ODA_URL = os.getenv(
     "ODA_URL", f"http://{KUBE_HOST}/{KUBE_NAMESPACE}/oda/api/v{ODA_MAJOR_VERSION}"
 )
-TESTFILES_PATH = "unit/ska_oso_ptt_services/test_data_files"
+TESTFILES_PATH = "unit/ska_oso_ptt_services/routers/test_data_files"
+TEST_PATH = f"{TEST_ROOT}/{TESTFILES_PATH}"
 
 TEST_ENTITY_DATETIME = datetime.fromisoformat("2022-03-28T15:43:53.971548+00:00")
 
@@ -130,7 +131,7 @@ class TestDataFactory:
         sbi_id: str = "sbi-mvp01-20220923-00001",
         version: int = 1,
     ) -> SBInstance:
-        with open(f"{TESTFILES_PATH}/testfile_sample_sbi.json", encoding="utf-8") as fh:
+        with open(f"{TEST_PATH}/testfile_sample_sbi.json", encoding="utf-8") as fh:
             sbi = SBInstance.model_validate_json(fh.read())
 
         set_identifier(sbi, sbi_id)
@@ -143,7 +144,7 @@ class TestDataFactory:
         eb_id: str = "eb-mvp01-20220923-00001", version: int = 1
     ) -> OSOExecutionBlock:
         with open(
-            f"{TESTFILES_PATH}/testfile_sample_execution_block.json", encoding="utf-8"
+            f"{TEST_PATH}/testfile_sample_execution_block.json", encoding="utf-8"
         ) as fh:
             eb = OSOExecutionBlock.model_validate_json(fh.read())
 
@@ -157,10 +158,10 @@ class TestDataFactory:
         eb_id: str = "eb-mvp01-20220923-00001", version: int = 1
     ) -> Tuple[OSOExecutionBlock, SBInstance]:
         with open(
-            f"{TESTFILES_PATH}/testfile_sample_execution_block.json", encoding="utf-8"
+            f"{TEST_PATH}/testfile_sample_execution_block.json", encoding="utf-8"
         ) as fh:
             eb = OSOExecutionBlock.model_validate_json(fh.read())
-        with open(f"{TESTFILES_PATH}/testfile_sample_sbi.json", encoding="utf-8") as fh:
+        with open(f"{TEST_PATH}/testfile_sample_sbi.json", encoding="utf-8") as fh:
             sbi = SBInstance.model_validate_json(fh.read())
 
         set_identifier(eb, eb_id)
@@ -174,9 +175,7 @@ class TestDataFactory:
         prj_id: str = "prj-mvp01-20220923-00001",
         version: int = 1,
     ) -> Project:
-        with open(
-            f"{TESTFILES_PATH}/testfile_sample_project.json", encoding="utf-8"
-        ) as fh:
+        with open(f"{TEST_PATH}/testfile_sample_project.json", encoding="utf-8") as fh:
             prj = Project.model_validate_json(fh.read())
 
         set_identifier(prj, prj_id)
@@ -189,9 +188,7 @@ class TestDataFactory:
         prsl_id: str = "prsl-mvp01-20220923-00001",
         version: int = 1,
     ) -> Proposal:
-        with open(
-            f"{TESTFILES_PATH}/testfile_sample_proposal.json", encoding="utf-8"
-        ) as fh:
+        with open(f"{TEST_PATH}/testfile_sample_proposal.json", encoding="utf-8") as fh:
             prsl = Proposal.model_validate_json(fh.read())
         set_identifier(prsl, prsl_id)
 

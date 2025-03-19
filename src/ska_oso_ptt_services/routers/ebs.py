@@ -396,7 +396,7 @@ def get_eb_status_history(
                         json.loads(
                             (
                                 current_dir
-                                / "response_files/eb_status_history_response.json"
+                                / "response_files/status_entity_response.json"
                             ).read_text()
                         )
                     ]
