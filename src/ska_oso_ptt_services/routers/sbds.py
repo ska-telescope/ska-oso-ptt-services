@@ -1,50 +1,38 @@
 import json
 import logging
-from enum import EnumMeta
 from http import HTTPStatus
 from pathlib import Path
-from typing import Any, Dict, Tuple
+from typing import Any, Dict
 
 from fastapi import APIRouter, Depends
 from ska_db_oda.persistence import oda
-from ska_db_oda.persistence.domain.errors import StatusHistoryException
 from ska_db_oda.persistence.domain.query import QueryParams
 from ska_db_oda.rest.api import check_for_mismatch, get_qry_params
-from ska_db_oda.rest.model import ApiQueryParameters
-from ska_oso_pdm import OSOExecutionBlock
-from ska_oso_pdm.entity_status_history import (
-    OSOEBStatus,
-    OSOEBStatusHistory,
-    ProjectStatus,
-    SBDStatus,
-    SBIStatus,
-)
+from ska_db_oda.rest.model import ApiQueryParameters, ApiStatusQueryParameters
+from ska_oso_pdm.entity_status_history import SBDStatusHistory
 
 # Get the directory of the current script
 current_dir = Path(__file__).parent
 
 LOGGER = logging.getLogger(__name__)
 
-eb_router = APIRouter()
+# Ideally would prefix this with ebs but the status entities do not follow the pattern
+sbd_router = APIRouter()
 
 
-@eb_router.get(
-    "/ebs",
-    tags=["EB"],
-    summary="Get Execution Block filter by the query parameter",
+file_name = "response_files/multiple_sbds_with_status_response.json"
+
+
+@sbd_router.get(
+    "/sbds",
+    tags=["SBD"],
+    summary="Get SB Definition filter by the query parameter",
     responses={
         200: {
             "description": "Successful Response",
             "content": {
                 "application/json": {
-                    "example": [
-                        json.loads(
-                            (
-                                current_dir
-                                / "response_files/eb_with_status_response.json"
-                            ).read_text()
-                        )
-                    ]
+                    "example": [json.loads((current_dir / file_name).read_text())]
                 }
             },
         },
@@ -78,105 +66,38 @@ eb_router = APIRouter()
         },
     },
 )
-def get_ebs_with_status(
+def get_sbds_with_status(
     query_params: ApiQueryParameters = Depends(),
-) -> list[OSOExecutionBlock]:
+):
     """
-    Function that a GET /ebs request is routed to.
+    Function that a GET /sbds request is routed to.
 
     :param kwargs: Parameters to query the ODA by.
-    :return: All ExecutionBlocks present with status wrapped in a Response,
-         or appropriate error Response
+    :return: All SBDefinitions present with status wrapped in a Response, or appropriate
+     error Response
     """
     maybe_qry_params = get_qry_params(query_params)
     if not isinstance(maybe_qry_params, QueryParams):
         return maybe_qry_params
 
     with oda.uow() as uow:
-        ebs = uow.ebs.query(maybe_qry_params)
-        eb_with_status = [
+        sbds = uow.sbds.query(maybe_qry_params)
+        sbd_with_status = [
             {
-                **eb.model_dump(mode="json"),
-                "status": _get_eb_status(
-                    uow=uow, eb_id=eb.eb_id, version=eb.metadata.version
+                **sbd.model_dump(mode="json"),
+                "status": _get_sbd_status(
+                    uow=uow, sbd_id=sbd.sbd_id, version=sbd.metadata.version
                 )["current_status"],
             }
-            for eb in ebs
+            for sbd in sbds
         ]
-    return eb_with_status, HTTPStatus.OK
+    return sbd_with_status, HTTPStatus.OK
 
 
-@eb_router.get(
-    "/ebs/{eb_id}",
-    tags=["EB"],
-    summary="Get Execution Block by identifier",
-    responses={
-        200: {
-            "description": "Successful Response",
-            "content": {
-                "application/json": {
-                    "example": [
-                        json.loads(
-                            (
-                                current_dir / "response_files/eb_status_response.json"
-                            ).read_text()
-                        )
-                    ]
-                }
-            },
-        },
-        400: {
-            "description": "Bad Request",
-            "content": {
-                "application/json": {
-                    "example": {"message": "Invalid request parameters"}
-                }
-            },
-        },
-        404: {
-            "description": "Not Found",
-            "content": {
-                "application/json": {"example": {"message": "Entity Not Found"}}
-            },
-        },
-        422: {
-            "description": "Unprocessable Content",
-            "content": {
-                "application/json": {"example": {"message": "Invalid Entity Id"}}
-            },
-        },
-        500: {
-            "description": "Internal Server Error",
-            "content": {
-                "application/json": {
-                    "example": {"message": "Internal server error occurred"}
-                }
-            },
-        },
-    },
-)
-def get_eb_with_status(eb_id: str):
-    """
-    Function that a GET /ebs/<eb_id> request is routed to.
-
-    :param eb_id: Requested identifier from the path parameter
-    :return: The ExecutionBlock with status wrapped in a Response,
-        or appropriate error Response
-    """
-    with oda.uow() as uow:
-        eb = uow.ebs.get(eb_id)
-        eb_json = eb.model_dump(mode="json")
-        eb_json["status"] = _get_eb_status(
-            uow=uow, eb_id=eb_id, version=eb_json["metadata"]["version"]
-        )["current_status"]
-
-    return eb_json, HTTPStatus.OK
-
-
-@eb_router.get(
-    "/status/history/eb",
-    tags=["EB"],
-    summary="Get Execution Block status history by the query parameter",
+@sbd_router.get(
+    "/sbds/{sbd_id}",
+    tags=["SBD"],
+    summary="Get SB Definition by identifier",
     responses={
         200: {
             "description": "Successful Response",
@@ -186,7 +107,7 @@ def get_eb_with_status(eb_id: str):
                         json.loads(
                             (
                                 current_dir
-                                / "response_files/eb_status_history_response.json"
+                                / "response_files/sbds_with_status_response.json"
                             ).read_text()
                         )
                     ]
@@ -223,25 +144,27 @@ def get_eb_with_status(eb_id: str):
         },
     },
 )
-def get_eb_status(eb_id: str, version: int = None):
+def get_sbd_with_status(sbd_id: str):
     """
-    Function that a GET status/ebs/<eb_id> request is routed to.
-    This method is used to GET the current status for the given eb_id
+    Function that a GET /sbds/<sbd_id> request is routed to.
 
-    :param eb_id: Requested identifier from the path parameter
-    :param version: Requested identifier from the path parameter
-    :return: The current entity status,OSOEBStatusHistory wrapped in a
-        Response, or appropriate error Response
+    :param sbd_id: Requested identifier from the path parameter
+    :return: The SBDefinition with status wrapped in a Response, or appropriate error
+     Response
     """
     with oda.uow() as uow:
-        eb_status = _get_eb_status(uow=uow, eb_id=eb_id, version=version)
-    return eb_status, HTTPStatus.OK
+        sbd = uow.sbds.get(sbd_id)
+        sbd_json = sbd.model_dump(mode="json")
+        sbd_json["status"] = _get_sbd_status(
+            uow=uow, sbd_id=sbd_id, version=sbd_json["metadata"]["version"]
+        )["current_status"]
+    return sbd_json, HTTPStatus.OK
 
 
-@eb_router.put(
-    "/status/ebs/{eb_id}",
-    tags=["EB"],
-    summary="Get Execution Block by identifier",
+@sbd_router.get(
+    "/status/sbds/{sbd_id}",
+    tags=["SBD"],
+    summary="Get SBDefinition by identifier",
     responses={
         200: {
             "description": "Successful Response",
@@ -250,7 +173,7 @@ def get_eb_status(eb_id: str, version: int = None):
                     "example": [
                         json.loads(
                             (
-                                current_dir / "response_files/eb_status_response.json"
+                                current_dir / "response_files/sbd_status_response.json"
                             ).read_text()
                         )
                     ]
@@ -287,44 +210,100 @@ def get_eb_status(eb_id: str, version: int = None):
         },
     },
 )
-def put_eb_history(eb_id: str, body: dict):
+def get_sbd_status(sbd_id: str, version: str = None):
     """
-    Function that a PUT status/ebs/<eb_id> request is routed to.
+    Function that a GET status/sbds/<sbd_id> request is routed to.
+    This method is used to GET the current status for the given sbd_id
 
-    :param eb_id: Requested identifier from the path parameter
+    :param sbd_id: Requested identifier from the path parameter
     :param version: Requested identifier from the path parameter
-    :param body: ExecutionBlock to persist from the request body
-    :return: The ExecutionBlock wrapped in a Response, or appropriate error Response
+    :return: The current entity status, SBDStatusHistory wrapped in a Response, or
+    appropriate error Response
+    """
+    with oda.uow() as uow:
+        sbd_status = _get_sbd_status(uow=uow, sbd_id=sbd_id, version=version)
+
+    return sbd_status, HTTPStatus.OK
+
+
+@sbd_router.put(
+    "/status/sbds/{sbd_id}",
+    tags=["SBD"],
+    summary="Update SB Definition status by identifier",
+    responses={
+        200: {
+            "description": "Successful Response",
+            "content": {
+                "application/json": {
+                    "example": [
+                        json.loads(
+                            (
+                                current_dir / "response_files/sbd_status_response.json"
+                            ).read_text()
+                        )
+                    ]
+                }
+            },
+        },
+        400: {
+            "description": "Bad Request",
+            "content": {
+                "application/json": {
+                    "example": {"message": "Invalid request parameters"}
+                }
+            },
+        },
+        404: {
+            "description": "Not Found",
+            "content": {
+                "application/json": {"example": {"message": "Entity Not Found"}}
+            },
+        },
+        422: {
+            "description": "Unprocessable Content",
+            "content": {
+                "application/json": {"example": {"message": "Invalid Entity Id"}}
+            },
+        },
+        500: {
+            "description": "Internal Server Error",
+            "content": {
+                "application/json": {
+                    "example": {"message": "Internal server error occurred"}
+                }
+            },
+        },
+    },
+)
+def put_sbd_history(sbd_id: str, sbd_status_history: SBDStatusHistory):
+    """
+    Function that a PUT status/sbds/<sbd_id> request is routed to.
+
+    :param sbd_id: Requested identifier from the path parameter
+    :param sbd_version: Requested identifier from the path parameter
+    :param body: SBDefinition to persist from the request body
+    :return: The SBDefinition wrapped in a Response, or appropriate error Response
     """
 
-    try:
-        eb_status_history = OSOEBStatusHistory(
-            eb_ref=eb_id,
-            eb_version=body["eb_version"],
-            previous_status=OSOEBStatus(body["previous_status"]),
-            current_status=OSOEBStatus(body["current_status"]),
-        )
-
-    except ValueError as err:
-        raise StatusHistoryException(err)  # pylint: disable=W0707
-
-    if response := check_for_mismatch(eb_id, eb_status_history.eb_ref):
+    if response := check_for_mismatch(sbd_id, sbd_status_history.sbd_ref):
         return response
 
     with oda.uow() as uow:
-        if eb_id not in uow.ebs:
+        if sbd_id not in uow.sbds:
             raise KeyError(
-                f"Not found. The requested eb_id {eb_id} could not be found."
+                f"Not found. The requested sbd_id {sbd_id} could not be found."
             )
-        persisted_eb = uow.ebs_status_history.add(eb_status_history)
+
+        persisted_sbd = uow.sbds_status_history.add(sbd_status_history)
+
         uow.commit()
-    return (persisted_eb, HTTPStatus.OK)
+    return (persisted_sbd, HTTPStatus.OK)
 
 
-@eb_router.get(
-    "/status/ebs",
-    tags=["EB"],
-    summary="Get Execution Block by identifier",
+@sbd_router.get(
+    "/status/history/sbds",
+    tags=["SBD"],
+    summary="Get SB Definition status history by the query parameter",
     responses={
         200: {
             "description": "Successful Response",
@@ -334,7 +313,7 @@ def put_eb_history(eb_id: str, body: dict):
                         json.loads(
                             (
                                 current_dir
-                                / "response_files/eb_status_history_response.json"
+                                / "response_files/sbd_status_history_response.json"
                             ).read_text()
                         )
                     ]
@@ -371,118 +350,41 @@ def put_eb_history(eb_id: str, body: dict):
         },
     },
 )
-def get_eb_status_history(**kwargs):
+def get_sbd_status_history(
+    query_params: ApiStatusQueryParameters = Depends(),
+):
     """
-    Function that a GET /status/ebs request is routed to.
+    Function that a GET /status/sbds request is routed to.
     This method is used to GET status history for the given entity
 
     :param kwargs: Parameters to query the ODA by.
-    :return: The status history, OSOEBStatusHistory wrapped in a Response,
-        or appropriate error Response
+    :return: The status history, SBDStatusHistory wrapped in a Response, or appropriate
+     error Response
     """
-    if not isinstance(maybe_qry_params := get_qry_params(kwargs), QueryParams):
+    if not isinstance(maybe_qry_params := get_qry_params(query_params), QueryParams):
         return maybe_qry_params
 
     with oda.uow() as uow:
-        ebs_status_history = uow.ebs_status_history.query(
+        sbds_status_history = uow.sbds_status_history.query(
             maybe_qry_params, is_status_history=True
         )
-        if not ebs_status_history:
+
+        if not sbds_status_history:
             raise KeyError("not found")
+    return sbds_status_history, HTTPStatus.OK
 
-    return ebs_status_history, HTTPStatus.OK
 
-
-@eb_router.get(
-    "/get_entity",
-    tags=["Status"],
-    summary="Get status dictionary by the entity parameter",
-    responses={
-        200: {
-            "description": "Successful Response",
-            "content": {
-                "application/json": {
-                    "example": [
-                        json.loads(
-                            (
-                                current_dir
-                                / "response_files/eb_with_status_response.json"
-                            ).read_text()
-                        )
-                    ]
-                }
-            },
-        },
-        400: {
-            "description": "Bad Request",
-            "content": {
-                "application/json": {
-                    "example": {"message": "Invalid request parameters"}
-                }
-            },
-        },
-        404: {
-            "description": "Not Found",
-            "content": {
-                "application/json": {"example": {"message": "Entity Not Found"}}
-            },
-        },
-        422: {
-            "description": "Unprocessable Content",
-            "content": {
-                "application/json": {"example": {"message": "Invalid Entity Id"}}
-            },
-        },
-        500: {
-            "description": "Internal Server Error",
-            "content": {
-                "application/json": {
-                    "example": {"message": "Internal server error occurred"}
-                }
-            },
-        },
-    },
-)
-def get_entity_status(entity_name: str) -> Tuple[Dict[str, str], HTTPStatus]:
+def _get_sbd_status(uow, sbd_id: str, version: str = None) -> Dict[str, Any]:
     """
-    Function that returns the status dictionary for a given entity type.
-
-    Args:
-        entity_name: The name of the entity type (sbi, eb, prj, or sbd)
-
-    Returns:
-        Tuple containing dictionary of status names and values, and HTTP status code
-
-    Raises:
-        ValueError: If an invalid entity name is provided
-    """
-    entity_map: Dict[str, EnumMeta] = {
-        "sbi": SBIStatus,
-        "eb": OSOEBStatus,
-        "prj": ProjectStatus,
-        "sbd": SBDStatus,
-    }
-
-    entity_class = entity_map.get(entity_name.lower())
-    if not entity_class:
-        raise ValueError(f"Invalid entity name: {entity_name}")
-
-    return {status.name: status.value for status in entity_class}, HTTPStatus.OK
-
-
-def _get_eb_status(uow, eb_id: str, version: str = None) -> Dict[str, Any]:
-    """
-    Takes an EB ID and Version and returns status
+    Takes an SBDefinition ID and Version and returns status
     :param: uow: ODA PostgresUnitOfWork
-    :param sbd_id: Execution Block ID
-    :param version: EB version
+    :param sbd_id: Scheduling Block ID
+    :param version: SBD version
 
-    Returns retrieved EB status in Dictionary format
-
+    Returns retrieved SBD status in Dictionary format
     """
 
-    retrieved_eb = uow.ebs_status_history.get(
-        entity_id=eb_id, version=version, is_status_history=False
-    )
-
-    return retrieved_eb.model_dump()
+    retrieved_sbd = uow.sbds_status_history.get(
+        entity_id=sbd_id, version=version, is_status_history=False
+    ).model_dump(mode="json")
+    return retrieved_sbd

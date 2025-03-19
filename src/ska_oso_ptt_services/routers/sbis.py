@@ -6,12 +6,10 @@ from typing import Any, Dict
 
 from fastapi import APIRouter, Depends
 from ska_db_oda.persistence import oda
-from ska_db_oda.persistence.domain.errors import StatusHistoryException
 from ska_db_oda.persistence.domain.query import QueryParams
 from ska_db_oda.rest.api import check_for_mismatch, get_qry_params
-from ska_db_oda.rest.model import ApiQueryParameters
-from ska_oso_pdm import SBInstance
-from ska_oso_pdm.entity_status_history import SBIStatus, SBIStatusHistory
+from ska_db_oda.rest.model import ApiQueryParameters, ApiStatusQueryParameters
+from ska_oso_pdm.entity_status_history import SBIStatusHistory
 
 # Get the directory of the current script
 current_dir = Path(__file__).parent
@@ -74,7 +72,7 @@ sbi_router = APIRouter()
 )
 def get_sbis_with_status(
     query_params: ApiQueryParameters = Depends(),
-) -> list[SBInstance]:
+):
     """
     Function that a GET /sbis request is routed to.
 
@@ -279,7 +277,7 @@ def get_sbi_status(sbi_id: str, version: int = None):
         },
     },
 )
-def put_sbi_history(sbi_id: str, body: dict):
+def put_sbi_history(sbi_id: str, sbi_status_history: SBIStatusHistory):
     """
     Function that a PUT  /status/sbis/<sbi_id> request is routed to.
 
@@ -288,15 +286,6 @@ def put_sbi_history(sbi_id: str, body: dict):
     :param body: SBInstance to persist from the request body
     :return: The SBInstance wrapped in a Response, or appropriate error Response
     """
-    try:
-        sbi_status_history = SBIStatusHistory(
-            sbi_ref=sbi_id,
-            sbi_version=body["sbi_version"],
-            previous_status=SBIStatus(body["previous_status"]),
-            current_status=SBIStatus(body["current_status"]),
-        )
-    except ValueError as err:
-        raise StatusHistoryException(err)  # pylint: disable=W0707
 
     if response := check_for_mismatch(sbi_id, sbi_status_history.sbi_ref):
         return response
@@ -362,7 +351,9 @@ def put_sbi_history(sbi_id: str, body: dict):
         },
     },
 )
-def get_sbi_status_history(**kwargs):
+def get_sbi_status_history(
+    query_params: ApiStatusQueryParameters = Depends(),
+):
     """
     Function that a GET /status/history/sbis request is routed to.
     This method is used to GET status history for the given entity
@@ -371,7 +362,7 @@ def get_sbi_status_history(**kwargs):
     :return: The status history, SBIStatusHistory wrapped in a Response,
         or appropriate error Response
     """
-    if not isinstance(maybe_qry_params := get_qry_params(kwargs), QueryParams):
+    if not isinstance(maybe_qry_params := get_qry_params(query_params), QueryParams):
         return maybe_qry_params
 
     with oda.uow() as uow:

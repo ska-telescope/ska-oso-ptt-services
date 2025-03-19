@@ -10,10 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from ska_db_oda.persistence import oda
 from ska_db_oda.persistence.domain.errors import StatusHistoryException
 
-from ska_oso_ptt_services.routers.api.ebs import eb_router
-from ska_oso_ptt_services.routers.api.prjs import prj_router
-from ska_oso_ptt_services.routers.api.sbds import sbd_router
-from ska_oso_ptt_services.routers.api.sbis import sbi_router
+from ska_oso_ptt_services.routers.ebs import eb_router
 from ska_oso_ptt_services.routers.error_handling import (
     dangerous_internal_server_handler,
     oda_not_found_handler,
@@ -21,6 +18,9 @@ from ska_oso_ptt_services.routers.error_handling import (
     oda_validation_error_handler,
 )
 from ska_oso_ptt_services.routers.errors import ODANotFound, QueryParameterError
+from ska_oso_ptt_services.routers.prjs import prj_router
+from ska_oso_ptt_services.routers.sbds import sbd_router
+from ska_oso_ptt_services.routers.sbis import sbi_router
 
 KUBE_NAMESPACE = os.getenv("KUBE_NAMESPACE", "ska-oso-ptt-services")
 # FIXME: Find a good way to avoid hardcoding this...

@@ -1,4 +1,4 @@
-{
+[{
     "eb_id": "eb-mvp01-20240426-5004",
     "interface": "https://schema.skao.int/ska-oso-pdm-eb/0.1",
     "metadata": {
@@ -37,4 +37,4 @@
     "sbi_ref": "sbi-mvp01-20220923-00001",
     "status": "Fully Observed",
     "telescope": "ska_mid"
-  }
+  }]
