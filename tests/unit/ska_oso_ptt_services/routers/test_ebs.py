@@ -11,7 +11,7 @@ from ska_oso_ptt_services.routers.app import (
     create_app,  # Import your create_app function
 )
 from ska_oso_ptt_services.routers.app import API_PREFIX
-from tests.unit.ska_oso_ptt_services.util import (
+from tests.unit.ska_oso_ptt_services.utils import (
     assert_json_is_equal,
     load_string_from_file,
 )
@@ -29,8 +29,8 @@ class TestExecutionBlockAPI:
     Execution Block.
     """
 
-    @mock.patch("ska_oso_ptt_services.routers.api.ebs.oda")
-    @mock.patch("ska_oso_ptt_services.routers.api.ebs._get_eb_status")
+    @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
+    @mock.patch("ska_oso_ptt_services.routers.ebs._get_eb_status")
     def test_get_ebs_with_status(self, mock_get_eb_status, mock_oda):
         """Verifying that get_ebs_with_status API returns All EBs with status"""
         valid_ebs = load_string_from_file(
@@ -94,8 +94,8 @@ class TestExecutionBlockAPI:
 
         assert json.loads(result.text) == error
 
-    @mock.patch("ska_oso_ptt_services.routers.api.ebs.oda")
-    @mock.patch("ska_oso_ptt_services.routers.api.ebs._get_eb_status")
+    @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
+    @mock.patch("ska_oso_ptt_services.routers.ebs._get_eb_status")
     def test_get_eb_with_status(self, mock_get_eb_status, mock_oda):
         """Verifying that get_eb_with_status API returns requested EB with status"""
         valid_eb_with_status = load_string_from_file(
@@ -116,7 +116,7 @@ class TestExecutionBlockAPI:
         assert_json_is_equal(result.text, valid_eb_with_status)
         assert result.status_code == HTTPStatus.OK
 
-    @mock.patch("ska_oso_ptt_services.routers.api.ebs")
+    @mock.patch("ska_oso_ptt_services.routers.ebs")
     def test_get_eb_with_invalid_status(self, mock_oda):
         """Verifying that get_eb_with_status throws error if invalid data passed"""
         invalid_eb_id = "invalid-eb-id-12345"
@@ -144,7 +144,7 @@ class TestExecutionBlockAPI:
         assert result.status_code == HTTPStatus.NOT_FOUND
         assert result.get_json() == expected_error_message
 
-    @mock.patch("ska_oso_ptt_services.routers.api.ebs.oda")
+    @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
     def test_get_eb_status_history(self, mock_oda):
         """Verifying that get_eb_status_history API returns requested
         EB status history
@@ -168,7 +168,7 @@ class TestExecutionBlockAPI:
 
         assert result.status_code == HTTPStatus.OK
 
-    @mock.patch("ska_oso_ptt_services.routers.api.ebs.oda")
+    @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
     def test_invalid_get_eb_status_history(self, mock_oda):
         """Verifying that test_invalid_get_eb_status_history throws error
         if invalid data passed
@@ -190,8 +190,8 @@ class TestExecutionBlockAPI:
         assert json.loads(result.text) == error
         assert result.status_code == HTTPStatus.NOT_FOUND
 
-    @mock.patch("ska_oso_ptt_services.routers.api.ebs._get_eb_status")
-    @mock.patch("ska_oso_ptt_services.routers.api.ebs.oda")
+    @mock.patch("ska_oso_ptt_services.routers.ebs._get_eb_status")
+    @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
     def test_get_eb_status(self, mock_oda, mock_get_eb_status):
         """Verifying that test_eb_sbd_status API returns requested EB status"""
 
@@ -211,8 +211,8 @@ class TestExecutionBlockAPI:
         assert_json_is_equal(result.text, valid_eb_status)
         assert result.status_code == HTTPStatus.OK
 
-    @mock.patch("ska_oso_ptt_services.routers.api.ebs._get_eb_status")
-    @mock.patch("ska_oso_ptt_services.routers.api.ebs.oda")
+    @mock.patch("ska_oso_ptt_services.routers.ebs._get_eb_status")
+    @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
     def test_invalid_get_eb_status(self, mock_oda, mock_get_eb_status):
         """Verifying that get_eb_status throws error if invalid data passed"""
         invalid_eb_id = "eb-t0001-20240702-00100"
@@ -239,7 +239,7 @@ class TestExecutionBlockAPI:
         assert json.loads(result.text) == error
         assert result.status_code == HTTPStatus.NOT_FOUND
 
-    @mock.patch("ska_oso_ptt_services.routers.api.ebs.oda")
+    @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
     def test_put_eb_history(self, mock_oda):
         """Verifying that put_eb_history updates the eb status correctly"""
         valid_put_eb_history_response = load_string_from_file(

@@ -11,7 +11,7 @@ from ska_oso_ptt_services.routers.app import (
     create_app,  # Import your create_app function
 )
 from ska_oso_ptt_services.routers.app import API_PREFIX
-from tests.unit.ska_oso_ptt_services.util import (
+from tests.unit.ska_oso_ptt_services.utils import (
     assert_json_is_equal,
     load_string_from_file,
 )
@@ -29,8 +29,8 @@ class TestSBInstanceAPI:
     Scheduling Block Insatnces.
     """
 
-    @mock.patch("ska_oso_ptt_services.routers.api.sbis.oda")
-    @mock.patch("ska_oso_ptt_services.routers.api.sbis._get_sbi_status")
+    @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
+    @mock.patch("ska_oso_ptt_services.routers.sbis._get_sbi_status")
     def test_get_sbis_with_status(self, mock_get_sbi_status, mock_oda):
         """Verifying that get_sbis_with_status API returns All SBIs with status"""
         valid_sbis = load_string_from_file(
@@ -95,8 +95,8 @@ class TestSBInstanceAPI:
 
         assert json.loads(result.text) == error
 
-    @mock.patch("ska_oso_ptt_services.routers.api.sbis.oda")
-    @mock.patch("ska_oso_ptt_services.routers.api.sbis._get_sbi_status")
+    @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
+    @mock.patch("ska_oso_ptt_services.routers.sbis._get_sbi_status")
     def test_get_sbi_with_status(self, mock_get_sbi_status, mock_oda):
         """Verifying that get_sbi_with_status API returns requested SBI with status"""
 
@@ -116,7 +116,7 @@ class TestSBInstanceAPI:
         assert_json_is_equal(result.text, valid_sbi)
         assert result.status_code == HTTPStatus.OK
 
-    @mock.patch("ska_oso_ptt_services.routers.api.sbis.oda")
+    @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
     def test_get_sbi_with_invalid_status(self, mock_oda):
         """Verifying that get_sbi_with_status throws error if invalid data passed"""
 
@@ -145,7 +145,7 @@ class TestSBInstanceAPI:
         assert result.status_code == HTTPStatus.NOT_FOUND
         assert result.get_json() == expected_error_message
 
-    @mock.patch("ska_oso_ptt_services.routers.api.sbis.oda")
+    @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
     def test_get_sbi_status_history(self, mock_oda):
         """Verifying that get_sbi_status_history API returns requested
         SBI status history
@@ -169,7 +169,7 @@ class TestSBInstanceAPI:
         assert_json_is_equal(result.text, valid_sbi_status_history)
         assert result.status_code == HTTPStatus.OK
 
-    @mock.patch("ska_oso_ptt_services.routers.api.sbis.oda")
+    @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
     def test_invalid_get_sbi_status_history(self, mock_oda):
         """Verifying that test_invalid_get_sbi_status_history throws error
         if invalid data passed
@@ -191,8 +191,8 @@ class TestSBInstanceAPI:
         assert json.loads(result.text) == error
         assert result.status_code == HTTPStatus.NOT_FOUND
 
-    @mock.patch("ska_oso_ptt_services.routers.api.sbis._get_sbi_status")
-    @mock.patch("ska_oso_ptt_services.routers.api.sbis.oda")
+    @mock.patch("ska_oso_ptt_services.routers.sbis._get_sbi_status")
+    @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
     def test_get_sbi_status(self, mock_oda, mock_get_sbi_status):
         """Verifying that test_get_sbi_status API returns requested SBI status"""
 
@@ -213,8 +213,8 @@ class TestSBInstanceAPI:
         assert_json_is_equal(result.text, valid_sbi_status)
         assert result.status_code == HTTPStatus.OK
 
-    @mock.patch("ska_oso_ptt_services.routers.api.sbis._get_sbi_status")
-    @mock.patch("ska_oso_ptt_services.routers.api.sbis.oda")
+    @mock.patch("ska_oso_ptt_services.routers.sbis._get_sbi_status")
+    @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
     def test_invalid_get_sbi_status(self, mock_oda, mock_get_sbi_status):
         """Verifying that get_sbi_status throws error if invalid data passed"""
         invalid_sbi_id = "sbi-t0001-20240702-00100"
@@ -241,7 +241,7 @@ class TestSBInstanceAPI:
         assert json.loads(result.text) == error
         assert result.status_code == HTTPStatus.NOT_FOUND
 
-    @mock.patch("ska_oso_ptt_services.routers.api.sbis.oda")
+    @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
     def test_put_sbi_history(self, mock_oda):
         """Verifying that put_sbi_history updates the sbi status correctly"""
         valid_put_sbi_history_response = load_string_from_file(

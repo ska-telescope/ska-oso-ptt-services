@@ -11,7 +11,7 @@ from ska_oso_ptt_services.routers.app import (
     create_app,  # Import your create_app function
 )
 from ska_oso_ptt_services.routers.app import API_PREFIX
-from tests.unit.ska_oso_ptt_services.util import (
+from tests.unit.ska_oso_ptt_services.utils import (
     assert_json_is_equal,
     load_string_from_file,
 )
@@ -29,8 +29,8 @@ class TestProjectAPI:
     Project.
     """
 
-    @mock.patch("ska_oso_ptt_services.routers.api.prjs.oda")
-    @mock.patch("ska_oso_ptt_services.routers.api.prjs._get_prj_status")
+    @mock.patch("ska_oso_ptt_services.routers.prjs.oda")
+    @mock.patch("ska_oso_ptt_services.routers.prjs._get_prj_status")
     def test_get_prjs_with_status(self, mock_get_prj_status, mock_oda):
         """Verifying that get_prjs_with_status API returns All prjs with status"""
         valid_prjs = load_string_from_file(
@@ -93,8 +93,8 @@ class TestProjectAPI:
 
         assert json.loads(result.text) == error
 
-    @mock.patch("ska_oso_ptt_services.routers.api.prjs.oda")
-    @mock.patch("ska_oso_ptt_services.routers.api.prjs._get_prj_status")
+    @mock.patch("ska_oso_ptt_services.routers.prjs.oda")
+    @mock.patch("ska_oso_ptt_services.routers.prjs._get_prj_status")
     def test_get_prj_with_status(self, mock_get_prj_status, mock_oda):
         """Verifying that get_prj_with_status API returns requested prj with status"""
         valid_prj_with_status = load_string_from_file(
@@ -115,7 +115,7 @@ class TestProjectAPI:
         assert_json_is_equal(result.text, valid_prj_with_status)
         assert result.status_code == HTTPStatus.OK
 
-    @mock.patch("ska_oso_ptt_services.routers.api.prjs.oda")
+    @mock.patch("ska_oso_ptt_services.routers.prjs.oda")
     def test_get_prj_with_invalid_status(self, mock_oda):
         """Verifying that get_prj_with_status throws error if invalid data passed"""
         invalid_prj_id = "invalid-prj-id-12345"
@@ -143,7 +143,7 @@ class TestProjectAPI:
         assert result.status_code == HTTPStatus.NOT_FOUND
         assert result.get_json() == expected_error_message
 
-    @mock.patch("ska_oso_ptt_services.routers.api.prjs.oda")
+    @mock.patch("ska_oso_ptt_services.routers.prjs.oda")
     def test_get_prj_status_history(self, mock_oda):
         """Verifying that get_prj_status_history API returns requested
         prj status history
@@ -167,7 +167,7 @@ class TestProjectAPI:
 
         assert result.status_code == HTTPStatus.OK
 
-    @mock.patch("ska_oso_ptt_services.routers.api.prjs.oda")
+    @mock.patch("ska_oso_ptt_services.routers.prjs.oda")
     def test_invalid_get_prj_status_history(self, mock_oda):
         """Verifying that test_invalid_get_prj_status_history throws error
         if invalid data passed
@@ -190,8 +190,8 @@ class TestProjectAPI:
         assert json.loads(result.text) == error
         assert result.status_code == HTTPStatus.NOT_FOUND
 
-    @mock.patch("ska_oso_ptt_services.routers.api.prjs._get_prj_status")
-    @mock.patch("ska_oso_ptt_services.routers.api.prjs.oda")
+    @mock.patch("ska_oso_ptt_services.routers.prjs._get_prj_status")
+    @mock.patch("ska_oso_ptt_services.routers.prjs.oda")
     def test_get_prj_status(self, mock_oda, mock_get_prj_status):
         """Verifying that test_prj_sbd_status API returns requested prj status"""
 
@@ -213,8 +213,8 @@ class TestProjectAPI:
         assert_json_is_equal(result.text, valid_prj_status)
         assert result.status_code == HTTPStatus.OK
 
-    @mock.patch("ska_oso_ptt_services.routers.api.prjs._get_prj_status")
-    @mock.patch("ska_oso_ptt_services.routers.api.prjs.oda")
+    @mock.patch("ska_oso_ptt_services.routers.prjs._get_prj_status")
+    @mock.patch("ska_oso_ptt_services.routers.prjs.oda")
     def test_invalid_get_prj_status(self, mock_oda, mock_get_prj_status):
         """Verifying that get_prj_status throws error if invalid data passed"""
         invalid_prj_id = "prj-t0001-20240702-00100"
@@ -241,7 +241,7 @@ class TestProjectAPI:
         assert json.loads(result.text) == error
         assert result.status_code == HTTPStatus.NOT_FOUND
 
-    @mock.patch("ska_oso_ptt_services.routers.api.prjs.oda")
+    @mock.patch("ska_oso_ptt_services.routers.prjs.oda")
     def test_put_prj_history(self, mock_oda):
         """Verifying that put_prj_history updates the prj status correctly"""
         valid_put_prj_history_response = load_string_from_file(
@@ -282,7 +282,7 @@ class TestProjectAPI:
         assert_json_is_equal(result.text, valid_put_prj_history_response, exclude_paths)
         assert result.status_code == HTTPStatus.OK
 
-    @mock.patch("ska_oso_ptt_services.routers.api.prjs.oda")
+    @mock.patch("ska_oso_ptt_services.routers.prjs.oda")
     def test_put_prj_history_with_two_version(self, mock_oda):
         """Verifying that put_prj_history updates the prj status correctly"""
         valid_put_prj_history_response = load_string_from_file(
