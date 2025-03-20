@@ -7,18 +7,20 @@ ska-oso-ptt-services:
       backendType: postgres
 
 ska-db-oda-umbrella:
-  enabled: true
   ska-db-oda:
     enabled: true
     secretProvider:
       enabled: true
     rest:
-      enabled: true # ska-oso-services doesn't need the rest server, however the way the secret provider is set up means it needs to be deployed.
+      enabled: true # ska-oso-services d
+      ingress:
+        enabled: true
+      backend:
+        type: postgres
+        postgres:
+          host:
   postgresql:
     enabled: true
   pgadmin4:
     enabled: true
-  ska-ser-skuid:
-    skuid:
-      enabled: true
 

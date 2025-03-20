@@ -23,4 +23,3 @@ data:
   {{ if .Values.rest.oda.postgres.user }}
   ADMIN_POSTGRES_USER: {{ .Values.rest.oda.postgres.user }}
   {{ end }}
-  {{ if .Values.rest.skuid.url }}
