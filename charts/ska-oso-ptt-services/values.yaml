@@ -17,6 +17,7 @@ rest:
   domain: operations
   logLevel: INFO
   enabled: true
+  production: false
   image:
     registry: artefact.skao.int  
     image: ska-oso-ptt-services  
