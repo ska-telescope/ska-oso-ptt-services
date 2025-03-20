@@ -17,7 +17,6 @@ rest:
   domain: operations
   logLevel: INFO
   enabled: true
-  production: false
   image:
     registry: artefact.skao.int  
     image: ska-oso-ptt-services  
@@ -32,16 +31,6 @@ rest:
       password: secretpassword
       db:
         name: ~
-  use_skuid: true
-  skuid:
-    url:
-  resources:
-    requests:
-      cpu:  100m
-      memory: 1024Mi
-    limits:
-      cpu:  1000m
-      memory: 1024Mi
   ingress:
     enabled: true
 
