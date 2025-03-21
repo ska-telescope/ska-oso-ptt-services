@@ -10,6 +10,8 @@ metadata:
     function: ska-oso-ptt-services-environment
     intent: production
 data:
+  PRODUCTION: {{ .Values.rest.production | quote }}
+  LOG_LEVEL: {{ .Values.rest.logLevel }}
   KUBE_NAMESPACE: {{ .Release.Namespace }}
   ODA_BACKEND_TYPE: {{ .Values.rest.oda.backendType }}
   POSTGRES_HOST: {{ if .Values.rest.oda.postgres.host }} {{ .Values.rest.oda.postgres.host }} {{ else }} {{ .Release.Name }}-postgresql {{ end }}
@@ -22,4 +24,12 @@ data:
   {{ end }}
   {{ if .Values.rest.oda.postgres.user }}
   ADMIN_POSTGRES_USER: {{ .Values.rest.oda.postgres.user }}
+  {{ end }}
+  {{ if .Values.rest.skuid.url }}
+  SKUID_URL: {{ .Values.rest.skuid.url }}
+  {{ else }}
+  SKUID_URL: ska-ser-skuid-{{ .Release.Name }}-svc.{{ .Release.Namespace }}.svc.{{ .Values.global.cluster_domain }}:9870
+  {{ end }}
+  {{- if not .Values.rest.use_skuid }}
+  FAKE_SKUID: "true"
   {{ end }}

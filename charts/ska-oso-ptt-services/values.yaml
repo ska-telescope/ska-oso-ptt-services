@@ -32,6 +32,16 @@ rest:
       password: secretpassword
       db:
         name: ~
+  use_skuid: true
+  skuid:
+    url:
+  resources:
+    requests:
+      cpu:  100m
+      memory: 1024Mi
+    limits:
+      cpu:  1000m
+      memory: 1024Mi
   ingress:
     enabled: true
 
