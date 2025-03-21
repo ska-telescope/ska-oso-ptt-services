@@ -22,6 +22,8 @@ app = create_app()
 # Create the TestClient with the app instance
 client = TestClient(app)
 
+TEST_FILES_PATH = "routers/test_data_files"
+
 
 class TestExecutionBlockAPI:
     """This class contains unit tests for the ExecutionBlockAPI resource,
@@ -29,22 +31,23 @@ class TestExecutionBlockAPI:
     Execution Block.
     """
 
-    @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
+    @mock.patch.object("ska_oso_ptt_services.routers.ebs.oda")
     @mock.patch("ska_oso_ptt_services.routers.ebs._get_eb_status")
     def test_get_ebs_with_status(self, mock_get_eb_status, mock_oda):
         """Verifying that get_ebs_with_status API returns All EBs with status"""
         valid_ebs = load_string_from_file(
-            "files/testfile_sample_multiple_ebs_with_status.json"
+            f"{TEST_FILES_PATH}/testfile_sample_multiple_ebs_with_status.json"
         )
 
         execution_block = [OSOExecutionBlock(**x) for x in json.loads(valid_ebs)]
 
         ebs_mock = mock.MagicMock()
+        # mock_oda.uow().__enter__.query.return_value = execution_block
         ebs_mock.query.return_value = execution_block
         uow_mock = mock.MagicMock()
         uow_mock.ebs = ebs_mock
         mock_get_eb_status.return_value = {"current_status": "Fully Observed"}
-        mock_oda.uow.__enter__.return_value = uow_mock
+        mock_oda.uow().__enter__.return_value = uow_mock
 
         # Perform the GET request with query parameters using the query_string parameter
         query_params = {
@@ -54,9 +57,10 @@ class TestExecutionBlockAPI:
 
         result = client.get(
             f"{API_PREFIX}/ebs",
-            query_string=query_params,
+            params=query_params,
             headers={"accept": "application/json"},
         )
+        print(f"*******************result: {result.text}")
         resultDict = json.loads(result.text)
 
         for res in resultDict:
@@ -80,16 +84,13 @@ class TestExecutionBlockAPI:
         # Perform the GET request with query parameters using the query_string parameter
         result = client.get(
             f"{API_PREFIX}/ebs",
-            query_string=query_params,
+            params=query_params,
             headers={"accept": "application/json"},
         )
 
         error = {
-            "detail": (
-                "Different query types are not currently supported - for example,"
-                " cannot combine date created query or entity query with a user query"
-            ),
-            "title": "Not Supported",
+            "detail": "Different query types are not currently supported - for example,"
+            "cannot combine date created query or entity query with a user query"
         }
 
         assert json.loads(result.text) == error
@@ -99,7 +100,7 @@ class TestExecutionBlockAPI:
     def test_get_eb_with_status(self, mock_get_eb_status, mock_oda):
         """Verifying that get_eb_with_status API returns requested EB with status"""
         valid_eb_with_status = load_string_from_file(
-            "files/testfile_sample_eb_with_status.json"
+            f"{TEST_FILES_PATH}/testfile_sample_eb_with_status.json"
         )
 
         eb_mock = mock.MagicMock()
@@ -150,7 +151,7 @@ class TestExecutionBlockAPI:
         EB status history
         """
         valid_eb_status_history = load_string_from_file(
-            "files/testfile_sample_eb_status_history.json"
+            f"{TEST_FILES_PATH}/testfile_sample_eb_status_history.json"
         )
 
         uow_mock = mock.MagicMock()
@@ -161,7 +162,7 @@ class TestExecutionBlockAPI:
 
         result = client.get(
             f"{API_PREFIX}/status/history/ebs",
-            query_string={"entity_id": "eb-mvp01-20240426-5004", "eb_version": "1"},
+            params={"entity_id": "eb-mvp01-20240426-5004", "eb_version": "1"},
             headers={"accept": "application/json"},
         )
         assert_json_is_equal(result.text, valid_eb_status_history)
@@ -178,7 +179,7 @@ class TestExecutionBlockAPI:
         mock_oda.uow.__enter__.return_value = uow_mock
         result = client.get(
             f"{API_PREFIX}/status/history/ebs",
-            query_string={"entity_id": "eb-t0001-00100", "eb_version": "1"},
+            params={"entity_id": "eb-t0001-00100", "eb_version": "1"},
             headers={"accept": "application/json"},
         )
 
@@ -195,7 +196,9 @@ class TestExecutionBlockAPI:
     def test_get_eb_status(self, mock_oda, mock_get_eb_status):
         """Verifying that test_eb_sbd_status API returns requested EB status"""
 
-        valid_eb_status = load_string_from_file("files/testfile_sample_eb_status.json")
+        valid_eb_status = load_string_from_file(
+            f"{TEST_FILES_PATH}/testfile_sample_eb_status.json"
+        )
 
         uow_mock = mock.MagicMock()
         mock_oda.uow.__enter__.return_value = uow_mock
@@ -204,7 +207,7 @@ class TestExecutionBlockAPI:
 
         result = client.get(
             f"{API_PREFIX}/status/ebs/eb-mvp01-20240426-5004",
-            query_string={"eb_version": "1"},
+            params={"eb_version": "1"},
             headers={"accept": "application/json"},
         )
 
@@ -226,7 +229,7 @@ class TestExecutionBlockAPI:
 
         result = client.get(
             f"{API_PREFIX}/status/ebs/{invalid_eb_id}",
-            query_string={"eb_version": "1"},
+            params={"eb_version": "1"},
             headers={"accept": "application/json"},
         )
 
@@ -243,7 +246,7 @@ class TestExecutionBlockAPI:
     def test_put_eb_history(self, mock_oda):
         """Verifying that put_eb_history updates the eb status correctly"""
         valid_put_eb_history_response = load_string_from_file(
-            "files/testfile_sample_eb_status.json"
+            f"{TEST_FILES_PATH}/testfile_sample_eb_status.json"
         )
 
         uow_mock = mock.MagicMock()
@@ -295,7 +298,7 @@ class TestExecutionBlockAPI:
 
         result = client.put(
             f"{API_PREFIX}/status/ebs/eb-t0001-20240702-00002",
-            query_string=query_params,
+            params=query_params,
             json=data,
             headers={"accept": "application/json"},
         )

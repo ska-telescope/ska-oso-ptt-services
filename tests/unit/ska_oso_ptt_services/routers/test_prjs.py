@@ -34,7 +34,7 @@ class TestProjectAPI:
     def test_get_prjs_with_status(self, mock_get_prj_status, mock_oda):
         """Verifying that get_prjs_with_status API returns All prjs with status"""
         valid_prjs = load_string_from_file(
-            "files/testfile_sample_multiple_prjs_with_status.json"
+            "routers/test_data_files/testfile_sample_multiple_prjs_with_status.json"
         )
 
         project = [Project(**x) for x in json.loads(valid_prjs)]
@@ -54,7 +54,7 @@ class TestProjectAPI:
 
         result = client.get(
             f"{API_PREFIX}/prjs",
-            query_string=query_params,
+            params=query_params,
             headers={"accept": "application/json"},
         )
         resultDict = json.loads(result.text)
@@ -79,7 +79,7 @@ class TestProjectAPI:
         # Perform the GET request with query parameters using the query_string parameter
         result = client.get(
             f"{API_PREFIX}/prjs",
-            query_string=query_params,
+            params=query_params,
             headers={"accept": "application/json"},
         )
 
@@ -98,7 +98,7 @@ class TestProjectAPI:
     def test_get_prj_with_status(self, mock_get_prj_status, mock_oda):
         """Verifying that get_prj_with_status API returns requested prj with status"""
         valid_prj_with_status = load_string_from_file(
-            "files/testfile_sample_prj_with_status.json"
+            "routers/test_data_files/testfile_sample_prj_with_status.json"
         )
 
         prj_mock = mock.MagicMock()
@@ -149,7 +149,7 @@ class TestProjectAPI:
         prj status history
         """
         valid_prj_status_history = load_string_from_file(
-            "files/testfile_sample_prj_status_history.json"
+            "routers/test_data_files/testfile_sample_prj_status_history.json"
         )
 
         uow_mock = mock.MagicMock()
@@ -160,7 +160,7 @@ class TestProjectAPI:
 
         result = client.get(
             f"{API_PREFIX}/status/history/prjs",
-            query_string={"entity_id": "prj-mvp01-20220923-00001", "prj_version": "1"},
+            params={"entity_id": "prj-mvp01-20220923-00001", "prj_version": "1"},
             headers={"accept": "application/json"},
         )
         assert_json_is_equal(result.text, valid_prj_status_history)
@@ -177,7 +177,7 @@ class TestProjectAPI:
         mock_oda.uow.__enter__.return_value = uow_mock
         result = client.get(
             f"{API_PREFIX}/status/history/prjs",
-            query_string={"entity_id": "prj-t0001-00100", "prj_version": "1"},
+            params={"entity_id": "prj-t0001-00100", "prj_version": "1"},
             headers={"accept": "application/json"},
         )
 
@@ -196,7 +196,7 @@ class TestProjectAPI:
         """Verifying that test_prj_sbd_status API returns requested prj status"""
 
         valid_prj_status = load_string_from_file(
-            "files/testfile_sample_prj_status.json"
+            "routers/test_data_files/testfile_sample_prj_status.json"
         )
 
         uow_mock = mock.MagicMock()
@@ -206,7 +206,7 @@ class TestProjectAPI:
 
         result = client.get(
             f"{API_PREFIX}/status/prjs/prj-mvp01-20240426-5004",
-            query_string={"prj_version": "1"},
+            params={"prj_version": "1"},
             headers={"accept": "application/json"},
         )
 
@@ -228,7 +228,7 @@ class TestProjectAPI:
 
         result = client.get(
             f"{API_PREFIX}/status/prjs/{invalid_prj_id}",
-            query_string={"prj_version": "1"},
+            params={"prj_version": "1"},
             headers={"accept": "application/json"},
         )
 
@@ -245,7 +245,7 @@ class TestProjectAPI:
     def test_put_prj_history(self, mock_oda):
         """Verifying that put_prj_history updates the prj status correctly"""
         valid_put_prj_history_response = load_string_from_file(
-            "files/testfile_sample_prj_status.json"
+            "routers/test_data_files/testfile_sample_prj_status.json"
         )
 
         uow_mock = mock.MagicMock()
@@ -286,7 +286,7 @@ class TestProjectAPI:
     def test_put_prj_history_with_two_version(self, mock_oda):
         """Verifying that put_prj_history updates the prj status correctly"""
         valid_put_prj_history_response = load_string_from_file(
-            "files/testfile_sample_prj_status.json"
+            "routers/test_data_files/testfile_sample_prj_status.json"
         )
 
         uow_mock = mock.MagicMock()
@@ -323,7 +323,7 @@ class TestProjectAPI:
         assert result.status_code == HTTPStatus.OK
 
         valid_put_prj_history_version_response = load_string_from_file(
-            "files/testfile_sample_prj_status_version.json"
+            "routers/test_data_files/testfile_sample_prj_status_version.json"
         )
 
         uow_mock = mock.MagicMock()
@@ -379,7 +379,7 @@ class TestProjectAPI:
 
         result = client.put(
             f"{API_PREFIX}/status/prjs/prj-t0001-20240702-00002",
-            query_string=query_params,
+            params=query_params,
             json=data,
             headers={"accept": "application/json"},
         )

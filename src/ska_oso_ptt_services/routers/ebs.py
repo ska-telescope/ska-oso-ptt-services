@@ -470,7 +470,6 @@ def _get_eb_status(uow, eb_id: str, version: str = None) -> Dict[str, Any]:
     Returns retrieved EB status in Dictionary format
 
     """
-
     retrieved_eb = uow.ebs_status_history.get(
         entity_id=eb_id, version=version, is_status_history=False
     )
