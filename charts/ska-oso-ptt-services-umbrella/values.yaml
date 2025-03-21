@@ -9,14 +9,10 @@ ska-oso-ptt-services:
 ska-db-oda-umbrella:
   enabled: true
   ska-db-oda:
-    enabled: true 
+    rest:
+      enabled: true 
   postgresql:
     enabled: true
-  pgadmin4:
-    enabled: true
-  ska-ser-skuid:
-    skuid:
-      enabled: true
 
 
 

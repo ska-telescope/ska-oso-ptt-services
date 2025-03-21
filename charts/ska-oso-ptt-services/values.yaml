@@ -36,10 +36,6 @@ rest:
         # If left as null the default secret deployed by the ODA umbrella will be used.
         secret: ~
         key: ~
-
-  use_skuid: true
-  skuid:
-    url:
   ingress:
     enabled: true
 
