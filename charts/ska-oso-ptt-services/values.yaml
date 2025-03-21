@@ -29,9 +29,14 @@ rest:
       host: ~
       port: ~
       user: ~
-      password: secretpassword
       db:
         name: ~
+      password:
+        # This is the resource name of a k8s secret and the key the password is stored under.
+        # If left as null the default secret deployed by the ODA umbrella will be used.
+        secret: ~
+        key: ~
+
   use_skuid: true
   skuid:
     url:
