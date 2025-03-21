@@ -22,17 +22,17 @@ rest:
     image: ska-oso-ptt-services
     tag: ~ # Defaults to the chart appVersion if not set
     pullPolicy: IfNotPresent
-  oda:
-    backendType: postgres
-    postgres: # The below values are used to set environment variables that are used in the ODA Repository. If they are not set then the defaults defined by the ODA will be used.
-      host: ~
-      port: ~
-      user: ~
-      password: secretpassword # TODO BTN-2449 will extract this
-      db:
-        name: ~
+  # oda:
+  #   backendType: postgres
+  #   postgres: # The below values are used to set environment variables that are used in the ODA Repository. If they are not set then the defaults defined by the ODA will be used.
+  #     host: ~
+  #     port: ~
+  #     user: ~
+  #     password: secretpassword # TODO BTN-2449 will extract this
+  #     db:
+  #       name: ~
   ingress:
-    enabled: true
+    enabled: false
         
 nodeSelector: {}
 
