@@ -17,6 +17,10 @@ DOCS_SPHINXOPTS ?= -W --keep-going
 IMAGE_TO_TEST = $(CAR_OCI_REGISTRY_HOST)/$(strip $(OCI_IMAGE)):$(VERSION)
 K8S_CHART = ska-oso-ptt-services-umbrella
 
+POSTGRES_HOST ?= $(RELEASE_NAME)-postgresql
+K8S_CHART_PARAMS += \
+  --set ska-db-oda-umbrella.pgadmin4.serverDefinitions.servers.firstServer.Host=$(POSTGRES_HOST)
+
  # Set cluster_domain to minikube default (cluster.local) in local development
 # (CI_ENVIRONMENT_SLUG should only be defined when running on the CI/CD pipeline)
 ifeq ($(CI_ENVIRONMENT_SLUG),)

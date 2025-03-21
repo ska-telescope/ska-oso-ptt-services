@@ -1,19 +1,27 @@
 global:
   cluster_domain: techops.internal.skao.int
 
-ska-oso-ptt-services:
+ska-oso-services:
   rest:
     oda:
-      backendType: postgres
+      backendType: rest
+      url: ~ # Defaults to the ODA Kubernetes service address if not set
 
 ska-db-oda-umbrella:
-  enabled: true
   ska-db-oda:
+    enabled: true
+    secretProvider:
+      enabled: true # mark false for local dev
     rest:
-      enabled: true 
+      enabled: true
+      ingress:
+        enabled: true
+      backend:
+        type: postgres
+        postgres:
+          host:
   postgresql:
     enabled: true
-
-
-
+  pgadmin4:
+    enabled: true
 

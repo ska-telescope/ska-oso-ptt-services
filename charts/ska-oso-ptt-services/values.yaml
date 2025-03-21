@@ -15,12 +15,11 @@ rest:
   component: rest
   function: oso-services
   domain: operations
-  logLevel: INFO
+  logLevel: info
   enabled: true
-  production: false
   image:
-    registry: artefact.skao.int  
-    image: ska-oso-ptt-services  
+    registry: artefact.skao.int
+    image: ska-oso-ptt-services
     tag: ~ # Defaults to the chart appVersion if not set
     pullPolicy: IfNotPresent
   oda:
@@ -29,16 +28,12 @@ rest:
       host: ~
       port: ~
       user: ~
+      password: secretpassword # TODO BTN-2449 will extract this
       db:
         name: ~
-      password:
-        # This is the resource name of a k8s secret and the key the password is stored under.
-        # If left as null the default secret deployed by the ODA umbrella will be used.
-        secret: ~
-        key: ~
   ingress:
     enabled: true
-
+        
 nodeSelector: {}
 
 affinity: {}
