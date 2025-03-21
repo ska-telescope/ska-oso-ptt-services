@@ -26,7 +26,6 @@ and links between them and display the results on the GUI.
   :hidden:
 
   persistence
-  restapi
 
 
 
