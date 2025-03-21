@@ -1,6 +1,6 @@
 apiVersion: v2
 name: ska-oso-ptt-services
-description: A Helm chart for deploying the OSO Services on Kubernetes
+description: A Helm chart for deploying the OSO PTT Services on Kubernetes
 type: application
 version: 0.3.0
 appVersion: 0.3.0

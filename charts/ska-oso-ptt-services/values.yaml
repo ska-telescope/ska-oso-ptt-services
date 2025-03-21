@@ -15,11 +15,12 @@ rest:
   component: rest
   function: oso-services
   domain: operations
-  logLevel: info
+  logLevel: INFO
   enabled: true
+  production: false
   image:
-    registry: artefact.skao.int
-    image: ska-oso-ptt-services
+    registry: artefact.skao.int  
+    image: ska-oso-ptt-services  
     tag: ~ # Defaults to the chart appVersion if not set
     pullPolicy: IfNotPresent
   oda:
@@ -28,12 +29,22 @@ rest:
       host: ~
       port: ~
       user: ~
-      password: secretpassword # TODO BTN-2449 will extract this
+      password: secretpassword
       db:
         name: ~
+  use_skuid: true
+  skuid:
+    url:
+  resources:
+    requests:
+      cpu:  100m
+      memory: 1024Mi
+    limits:
+      cpu:  1000m
+      memory: 1024Mi
   ingress:
-    enabled: false
-        
+    enabled: true
+
 nodeSelector: {}
 
 affinity: {}
