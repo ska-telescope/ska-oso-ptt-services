@@ -20,8 +20,8 @@ ska-db-oda-umbrella:
         type: postgres
         postgres:
           host:
-  postgresql:
-    enabled: true
-  pgadmin4:
-    enabled: true
+  # postgresql:
+  #   enabled: true
+  # pgadmin4:
+  #   enabled: true
 
