@@ -26,7 +26,7 @@ USER tango
 
 CMD ["fastapi", \
     "run", \
-    "src/ska_oso_slt_services/app.py", \
+    "src/ska_oso_ptt_services/routers/app.py", \
     # Trust TLS headers set by nginx ingress:
     "--proxy-headers", \
     "--port", "5000" \
