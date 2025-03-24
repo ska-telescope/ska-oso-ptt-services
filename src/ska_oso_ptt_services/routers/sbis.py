@@ -76,7 +76,7 @@ def get_sbis_with_status(
     """
     Function that a GET /sbis request is routed to.
 
-    :param kwargs: Parameters to query the ODA by.
+    :param query_params: Parameters to query the ODA by.
     :return: All SBInstance present with status wrapped in a Response,
          or appropriate error Response
     """
@@ -282,8 +282,7 @@ def put_sbi_history(sbi_id: str, sbi_status_history: SBIStatusHistory):
     Function that a PUT  /status/sbis/<sbi_id> request is routed to.
 
     :param sbi_id: Requested identifier from the path parameter
-    :param version: Requested identifier from the path parameter
-    :param body: SBInstance to persist from the request body
+    :param sbi_status_history: Object of SBIStatusHistory
     :return: The SBInstance wrapped in a Response, or appropriate error Response
     """
 
@@ -298,7 +297,7 @@ def put_sbi_history(sbi_id: str, sbi_status_history: SBIStatusHistory):
 
         persisted_sbi = uow.sbis_status_history.add(sbi_status_history)
         uow.commit()
-    return (persisted_sbi, HTTPStatus.OK)
+    return persisted_sbi, HTTPStatus.OK
 
 
 @sbi_router.get(
@@ -358,7 +357,7 @@ def get_sbi_status_history(
     Function that a GET /status/history/sbis request is routed to.
     This method is used to GET status history for the given entity
 
-    :param kwargs: Parameters to query the ODA by.
+    :param query_params: Parameters to query the ODA by.
     :return: The status history, SBIStatusHistory wrapped in a Response,
         or appropriate error Response
     """

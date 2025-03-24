@@ -74,7 +74,7 @@ def get_prjs_with_status(query_params: ApiQueryParameters = Depends()):
     """
     Function that a GET /prjs request is routed to.
 
-    :param kwargs: Parameters to query the ODA by.
+    :param query_params: Parameters to query the ODA by.
     :return: All Project present with status wrapped in a Response,
          or appropriate error Response
     """
@@ -283,8 +283,7 @@ def put_prj_history(prj_id: str, prj_status_history: ProjectStatusHistory):
     Function that a PUT status/prjs/<prj_id> request is routed to.
 
     :param prj_id: Requested identifier from the path parameter
-    :param version: Requested identifier from the path parameter
-    :param body: Project to persist from the request body
+    :param prj_status_history: Object of ProjectStatusHistory
     :return: The Project wrapped in a Response, or appropriate error Response
     """
 
@@ -359,7 +358,7 @@ def get_prj_status_history(
     Function that a GET /status/prjs request is routed to.
     This method is used to GET status history for the given entity
 
-    :param kwargs: Parameters to query the ODA by.
+    :param query_params: Parameters to query the ODA by.
     :return: The status history, ProjectStatusHistory wrapped in a Response,
         or appropriate error Response
     """

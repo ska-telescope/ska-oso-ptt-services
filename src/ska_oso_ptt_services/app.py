@@ -1,5 +1,5 @@
 """
-ska_oso_services app.py
+ska_oso_ptt_services app.py
 """
 
 import logging

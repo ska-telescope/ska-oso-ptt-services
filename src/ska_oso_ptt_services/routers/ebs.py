@@ -82,7 +82,7 @@ def get_ebs_with_status(
     """
     Function that a GET /ebs request is routed to.
 
-    :param kwargs: Parameters to query the ODA by.
+    :param query_params: Parameters to query the ODA by.
     :return: All ExecutionBlocks present with status wrapped in a Response,
          or appropriate error Response
     """
@@ -291,8 +291,7 @@ def put_eb_history(eb_id: str, eb_status_history: OSOEBStatusHistory):
     Function that a PUT status/ebs/<eb_id> request is routed to.
 
     :param eb_id: Requested identifier from the path parameter
-    :param version: Requested identifier from the path parameter
-    :param body: ExecutionBlock to persist from the request body
+    :param eb_status_history: Object of OSOEBStatusHistory
     :return: The ExecutionBlock wrapped in a Response, or appropriate error Response
     """
 
@@ -306,7 +305,7 @@ def put_eb_history(eb_id: str, eb_status_history: OSOEBStatusHistory):
             )
         persisted_eb = uow.ebs_status_history.add(eb_status_history)
         uow.commit()
-    return (persisted_eb, HTTPStatus.OK)
+    return persisted_eb, HTTPStatus.OK
 
 
 @eb_router.get(
@@ -366,7 +365,7 @@ def get_eb_status_history(
     Function that a GET /status/ebs request is routed to.
     This method is used to GET status history for the given entity
 
-    :param kwargs: Parameters to query the ODA by.
+    :param query_params: Parameters to query the ODA by.
     :return: The status history, OSOEBStatusHistory wrapped in a Response,
         or appropriate error Response
     """

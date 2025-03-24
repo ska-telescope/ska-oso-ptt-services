@@ -72,7 +72,7 @@ def get_sbds_with_status(
     """
     Function that a GET /sbds request is routed to.
 
-    :param kwargs: Parameters to query the ODA by.
+    :param query_params: Parameters to query the ODA by.
     :return: All SBDefinitions present with status wrapped in a Response, or appropriate
      error Response
     """
@@ -280,8 +280,7 @@ def put_sbd_history(sbd_id: str, sbd_status_history: SBDStatusHistory):
     Function that a PUT status/sbds/<sbd_id> request is routed to.
 
     :param sbd_id: Requested identifier from the path parameter
-    :param sbd_version: Requested identifier from the path parameter
-    :param body: SBDefinition to persist from the request body
+    :param sbd_status_history: Object of SBDStatusHistory
     :return: The SBDefinition wrapped in a Response, or appropriate error Response
     """
 
@@ -297,7 +296,7 @@ def put_sbd_history(sbd_id: str, sbd_status_history: SBDStatusHistory):
         persisted_sbd = uow.sbds_status_history.add(sbd_status_history)
 
         uow.commit()
-    return (persisted_sbd, HTTPStatus.OK)
+    return persisted_sbd, HTTPStatus.OK
 
 
 @sbd_router.get(
@@ -357,7 +356,7 @@ def get_sbd_status_history(
     Function that a GET /status/sbds request is routed to.
     This method is used to GET status history for the given entity
 
-    :param kwargs: Parameters to query the ODA by.
+    :param query_params: Parameters to query the ODA by.
     :return: The status history, SBDStatusHistory wrapped in a Response, or appropriate
      error Response
     """
