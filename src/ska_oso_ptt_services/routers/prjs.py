@@ -2,9 +2,9 @@ import json
 import logging
 from http import HTTPStatus
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any, Dict, List
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
 from ska_db_oda.persistence import oda
 from ska_db_oda.persistence.domain.query import QueryParams
 from ska_db_oda.rest.api import check_for_mismatch, get_qry_params
@@ -168,53 +168,15 @@ def get_prj_with_status(prj_id: str):
     "/{prj_id}/status",
     tags=["PRJ"],
     summary="Get Project by identifier",
+    response_model=ProjectStatusHistory,
     responses={
-        200: {
+        status.HTTP_200_OK: {
             "description": "Successful Response",
-            "content": {
-                "application/json": {
-                    "example": [
-                        json.loads(
-                            (
-                                current_dir
-                                / "response_files/prj_status_version_response.json"
-                            ).read_text()
-                        )
-                    ]
-                }
-            },
-        },
-        400: {
-            "description": "Bad Request",
-            "content": {
-                "application/json": {
-                    "example": {"message": "Invalid request parameters"}
-                }
-            },
-        },
-        404: {
-            "description": "Not Found",
-            "content": {
-                "application/json": {"example": {"message": "Entity Not Found"}}
-            },
-        },
-        422: {
-            "description": "Unprocessable Content",
-            "content": {
-                "application/json": {"example": {"message": "Invalid Entity Id"}}
-            },
-        },
-        500: {
-            "description": "Internal Server Error",
-            "content": {
-                "application/json": {
-                    "example": {"message": "Internal server error occurred"}
-                }
-            },
-        },
+            "model": ProjectStatusHistory,
+        }
     },
 )
-def get_prj_status(prj_id: str, version: int = None):
+def get_prj_status(prj_id: str, version: int = None) -> ProjectStatusHistory:
     """
     Function that a GET status/prjs/<prj_id> request is routed to.
     This method is used to GET the current status for the given prj_id
@@ -226,59 +188,24 @@ def get_prj_status(prj_id: str, version: int = None):
     """
     with oda.uow() as uow:
         prj_status = _get_prj_status(uow=uow, prj_id=prj_id, version=version)
-    return prj_status, HTTPStatus.OK
+    return prj_status
 
 
 @prj_router.put(
     "/prjs/{prj_id}/status",
     tags=["PRJ"],
     summary="Update Project status by identifier",
+    response_model=ProjectStatusHistory,
     responses={
-        200: {
+        status.HTTP_200_OK: {
             "description": "Successful Response",
-            "content": {
-                "application/json": {
-                    "example": [
-                        json.loads(
-                            (
-                                current_dir / "response_files/prj_status_response.json"
-                            ).read_text()
-                        )
-                    ]
-                }
-            },
-        },
-        400: {
-            "description": "Bad Request",
-            "content": {
-                "application/json": {
-                    "example": {"message": "Invalid request parameters"}
-                }
-            },
-        },
-        404: {
-            "description": "Not Found",
-            "content": {
-                "application/json": {"example": {"message": "Entity Not Found"}}
-            },
-        },
-        422: {
-            "description": "Unprocessable Content",
-            "content": {
-                "application/json": {"example": {"message": "Invalid Entity Id"}}
-            },
-        },
-        500: {
-            "description": "Internal Server Error",
-            "content": {
-                "application/json": {
-                    "example": {"message": "Internal server error occurred"}
-                }
-            },
-        },
+            "model": ProjectStatusHistory,
+        }
     },
 )
-def put_prj_history(prj_id: str, prj_status_history: ProjectStatusHistory):
+def put_prj_history(
+    prj_id: str, prj_status_history: ProjectStatusHistory
+) -> ProjectStatusHistory:
     """
     Function that a PUT status/prjs/<prj_id> request is routed to.
 
@@ -298,62 +225,24 @@ def put_prj_history(prj_id: str, prj_status_history: ProjectStatusHistory):
 
         persisted_prj = uow.prjs_status_history.add(prj_status_history)
         uow.commit()
-    return persisted_prj, HTTPStatus.OK
+    return persisted_prj
 
 
 @prj_router.get(
     "/status/history",
     tags=["PRJ"],
     summary="Get Project status history by the query parameter",
+    response_model=List[ProjectStatusHistory],
     responses={
-        200: {
+        status.HTTP_200_OK: {
             "description": "Successful Response",
-            "content": {
-                "application/json": {
-                    "example": [
-                        json.loads(
-                            (
-                                current_dir
-                                / "response_files/prj_status_history_response.json"
-                            ).read_text()
-                        )
-                    ]
-                }
-            },
-        },
-        400: {
-            "description": "Bad Request",
-            "content": {
-                "application/json": {
-                    "example": {"message": "Invalid request parameters"}
-                }
-            },
-        },
-        404: {
-            "description": "Not Found",
-            "content": {
-                "application/json": {"example": {"message": "Entity Not Found"}}
-            },
-        },
-        422: {
-            "description": "Unprocessable Content",
-            "content": {
-                "application/json": {"example": {"message": "Invalid Entity Id"}}
-            },
-        },
-        500: {
-            "description": "Internal Server Error",
-            "content": {
-                "application/json": {
-                    "example": {"message": "Internal server error occurred"}
-                }
-            },
-        },
+            "model": List[ProjectStatusHistory],
+        }
     },
 )
 def get_prj_status_history(
     query_params: ApiStatusQueryParameters = Depends(),
-):
+) -> List[ProjectStatusHistory]:
     """
     Function that a GET /status/prjs request is routed to.
     This method is used to GET status history for the given entity
@@ -372,7 +261,7 @@ def get_prj_status_history(
         if not prjs_status_history:
             raise KeyError("not found")
 
-    return prjs_status_history, HTTPStatus.OK
+    return prjs_status_history
 
 
 def _get_prj_status(uow, prj_id: str, version: str = None) -> Dict[str, Any]:
@@ -390,4 +279,4 @@ def _get_prj_status(uow, prj_id: str, version: str = None) -> Dict[str, Any]:
         entity_id=prj_id, version=version, is_status_history=False
     )
 
-    return retrieved_prj.model_dump()
+    return retrieved_prj
