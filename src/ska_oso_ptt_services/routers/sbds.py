@@ -1,6 +1,4 @@
-import json
 import logging
-from http import HTTPStatus
 from pathlib import Path
 from typing import Any, Dict, List
 
@@ -10,6 +8,8 @@ from ska_db_oda.persistence.domain.query import QueryParams
 from ska_db_oda.rest.api import check_for_mismatch, get_qry_params
 from ska_db_oda.rest.model import ApiQueryParameters, ApiStatusQueryParameters
 from ska_oso_pdm.entity_status_history import SBDStatusHistory
+
+from ska_oso_ptt_services.models.models import SBDefinitionStatusModel
 
 # Get the directory of the current script
 current_dir = Path(__file__).parent
@@ -27,48 +27,17 @@ file_name = "response_files/multiple_sbds_with_status_response.json"
     "/",
     tags=["SBD"],
     summary="Get SB Definition filter by the query parameter",
+    response_model=List[SBDefinitionStatusModel],
     responses={
-        200: {
+        status.HTTP_200_OK: {
             "description": "Successful Response",
-            "content": {
-                "application/json": {
-                    "example": [json.loads((current_dir / file_name).read_text())]
-                }
-            },
-        },
-        400: {
-            "description": "Bad Request",
-            "content": {
-                "application/json": {
-                    "example": {"message": "Invalid request parameters"}
-                }
-            },
-        },
-        404: {
-            "description": "Not Found",
-            "content": {
-                "application/json": {"example": {"message": "Entity Not Found"}}
-            },
-        },
-        422: {
-            "description": "Unprocessable Content",
-            "content": {
-                "application/json": {"example": {"message": "Invalid Entity Id"}}
-            },
-        },
-        500: {
-            "description": "Internal Server Error",
-            "content": {
-                "application/json": {
-                    "example": {"message": "Internal server error occurred"}
-                }
-            },
-        },
+            "model": List[SBDefinitionStatusModel],
+        }
     },
 )
 def get_sbds_with_status(
     query_params: ApiQueryParameters = Depends(),
-):
+) -> List[SBDefinitionStatusModel]:
     """
     Function that a GET /sbds request is routed to.
 
@@ -87,64 +56,26 @@ def get_sbds_with_status(
                 **sbd.model_dump(mode="json"),
                 "status": _get_sbd_status(
                     uow=uow, sbd_id=sbd.sbd_id, version=sbd.metadata.version
-                )["current_status"],
+                ).current_status,
             }
             for sbd in sbds
         ]
-    return sbd_with_status, HTTPStatus.OK
+    return sbd_with_status
 
 
 @sbd_router.get(
     "/{sbd_id}",
     tags=["SBD"],
     summary="Get SB Definition by identifier",
+    response_model=SBDefinitionStatusModel,
     responses={
-        200: {
+        status.HTTP_200_OK: {
             "description": "Successful Response",
-            "content": {
-                "application/json": {
-                    "example": [
-                        json.loads(
-                            (
-                                current_dir
-                                / "response_files/sbds_with_status_response.json"
-                            ).read_text()
-                        )
-                    ]
-                }
-            },
-        },
-        400: {
-            "description": "Bad Request",
-            "content": {
-                "application/json": {
-                    "example": {"message": "Invalid request parameters"}
-                }
-            },
-        },
-        404: {
-            "description": "Not Found",
-            "content": {
-                "application/json": {"example": {"message": "Entity Not Found"}}
-            },
-        },
-        422: {
-            "description": "Unprocessable Content",
-            "content": {
-                "application/json": {"example": {"message": "Invalid Entity Id"}}
-            },
-        },
-        500: {
-            "description": "Internal Server Error",
-            "content": {
-                "application/json": {
-                    "example": {"message": "Internal server error occurred"}
-                }
-            },
-        },
+            "model": SBDefinitionStatusModel,
+        }
     },
 )
-def get_sbd_with_status(sbd_id: str):
+def get_sbd_with_status(sbd_id: str) -> SBDefinitionStatusModel:
     """
     Function that a GET /sbds/<sbd_id> request is routed to.
 
@@ -157,8 +88,8 @@ def get_sbd_with_status(sbd_id: str):
         sbd_json = sbd.model_dump(mode="json")
         sbd_json["status"] = _get_sbd_status(
             uow=uow, sbd_id=sbd_id, version=sbd_json["metadata"]["version"]
-        )["current_status"]
-    return sbd_json, HTTPStatus.OK
+        ).current_status
+    return sbd_json
 
 
 @sbd_router.get(

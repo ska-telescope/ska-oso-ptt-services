@@ -18,6 +18,8 @@ from ska_oso_pdm.entity_status_history import (
     SBIStatus,
 )
 
+from ska_oso_ptt_services.models.models import EBStatusModel
+
 # Get the directory of the current script
 current_dir = Path(__file__).parent
 
@@ -30,55 +32,17 @@ eb_router = APIRouter(prefix="/ebs")
     "/",
     tags=["EB"],
     summary="Get Execution Block filter by the query parameter",
+    response_model=List[EBStatusModel],
     responses={
-        200: {
+        status.HTTP_200_OK: {
             "description": "Successful Response",
-            "content": {
-                "application/json": {
-                    "example": [
-                        json.loads(
-                            (
-                                current_dir
-                                / "response_files/eb_with_status_response.json"
-                            ).read_text()
-                        )
-                    ]
-                }
-            },
-        },
-        400: {
-            "description": "Bad Request",
-            "content": {
-                "application/json": {
-                    "example": {"message": "Invalid request parameters"}
-                }
-            },
-        },
-        404: {
-            "description": "Not Found",
-            "content": {
-                "application/json": {"example": {"message": "Entity Not Found"}}
-            },
-        },
-        422: {
-            "description": "Unprocessable Content",
-            "content": {
-                "application/json": {"example": {"message": "Invalid Entity Id"}}
-            },
-        },
-        500: {
-            "description": "Internal Server Error",
-            "content": {
-                "application/json": {
-                    "example": {"message": "Internal server error occurred"}
-                }
-            },
-        },
+            "model": List[EBStatusModel],
+        }
     },
 )
 def get_ebs_with_status(
     query_params: ApiQueryParameters = Depends(),
-):
+) -> List[EBStatusModel]:
     """
     Function that a GET /ebs request is routed to.
 
@@ -97,64 +61,26 @@ def get_ebs_with_status(
                 **eb.model_dump(mode="json"),
                 "status": _get_eb_status(
                     uow=uow, eb_id=eb.eb_id, version=eb.metadata.version
-                )["current_status"],
+                ).current_status,
             }
             for eb in ebs
         ]
-    return eb_with_status, HTTPStatus.OK
+    return eb_with_status
 
 
 @eb_router.get(
     "/{eb_id}",
     tags=["EB"],
     summary="Get Execution Block by identifier",
+    response_model=EBStatusModel,
     responses={
-        200: {
+        status.HTTP_200_OK: {
             "description": "Successful Response",
-            "content": {
-                "application/json": {
-                    "example": [
-                        json.loads(
-                            (
-                                current_dir
-                                / "response_files/eb_with_status_response.json"
-                            ).read_text()
-                        )
-                    ]
-                }
-            },
-        },
-        400: {
-            "description": "Bad Request",
-            "content": {
-                "application/json": {
-                    "example": {"message": "Invalid request parameters"}
-                }
-            },
-        },
-        404: {
-            "description": "Not Found",
-            "content": {
-                "application/json": {"example": {"message": "Entity Not Found"}}
-            },
-        },
-        422: {
-            "description": "Unprocessable Content",
-            "content": {
-                "application/json": {"example": {"message": "Invalid Entity Id"}}
-            },
-        },
-        500: {
-            "description": "Internal Server Error",
-            "content": {
-                "application/json": {
-                    "example": {"message": "Internal server error occurred"}
-                }
-            },
-        },
+            "model": EBStatusModel,
+        }
     },
 )
-def get_eb_with_status(eb_id: str):
+def get_eb_with_status(eb_id: str) -> EBStatusModel:
     """
     Function that a GET /ebs/<eb_id> request is routed to.
 
@@ -167,9 +93,9 @@ def get_eb_with_status(eb_id: str):
         eb_json = eb.model_dump(mode="json")
         eb_json["status"] = _get_eb_status(
             uow=uow, eb_id=eb_id, version=eb_json["metadata"]["version"]
-        )["current_status"]
+        ).current_status
 
-    return eb_json, HTTPStatus.OK
+    return eb_json
 
 
 @eb_router.get(

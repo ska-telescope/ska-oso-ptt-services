@@ -41,7 +41,7 @@ class TestExecutionBlockAPI:
         ebs_mock.query.return_value = execution_block
         uow_mock = mock.MagicMock()
         uow_mock.ebs = ebs_mock
-        mock_get_eb_status.return_value = {"current_status": "Fully Observed"}
+        mock_get_eb_status.current_status = "Fully Observed"
         mock_oda.uow().__enter__.return_value = uow_mock
 
         # Perform the GET request with query parameters using the query_string parameter
@@ -55,6 +55,7 @@ class TestExecutionBlockAPI:
             params=query_params,
             headers={"accept": "application/json"},
         )
+
         resultDict = result.json()[0]
 
         for res in resultDict:
@@ -104,7 +105,6 @@ class TestExecutionBlockAPI:
         uow_mock.ebs.get.return_value = eb_mock
         mock_get_eb_status.return_value = {"current_status": "Fully Observed"}
         mock_oda.uow().__enter__.return_value = uow_mock
-
         result = client.get(
             f"{API_PREFIX}/ebs/eb-mvp01-20240426-5004",
             headers={"accept": "application/json"},
