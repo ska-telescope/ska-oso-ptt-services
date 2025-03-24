@@ -85,7 +85,7 @@ Generally the API URL should be available at  `https://k8s.stfc.skao.int/$KUBE_N
 To start the Fast API server run the following command in a terminal bash prompt
 
 ```
-fastapi dev src/ska_oso_slt_services/app.py
+fastapi dev src/ska_oso_ptt_services/app.py
 ```
 
 # Documentation
