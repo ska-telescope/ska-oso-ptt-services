@@ -218,7 +218,7 @@ def get_sbi_status(sbi_id: str, version: int = None):
     Function that a GET status/sbi/<sbi_id> request is routed to.
     This method is used to GET the current status for the given sbi_id
 
-    :param sb_id: Requested identifier from the path parameter
+    :param sbi_id: Requested identifier from the path parameter
     :param version: Requested identifier from the path parameter
     :return: The current entity status,SBIStatusHistory wrapped in a
         Response, or appropriate error Response
@@ -377,7 +377,8 @@ def get_sbi_status_history(
 def _get_sbi_status(uow, sbi_id: str, version: str = None) -> Dict[str, Any]:
     """
     Takes an SBInstance ID and Version and returns status
-    param sbd_id: SBInstance ID
+    :param: uow: ODA PostgresUnitOfWork
+    :param sbi_id: SBInstance ID
     :param version: SBI version
 
     Returns retrieved SBI status in Dictionary format

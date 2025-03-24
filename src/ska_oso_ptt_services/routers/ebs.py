@@ -463,7 +463,7 @@ def _get_eb_status(uow, eb_id: str, version: str = None) -> Dict[str, Any]:
     """
     Takes an EB ID and Version and returns status
     :param: uow: ODA PostgresUnitOfWork
-    :param sbd_id: Execution Block ID
+    :param eb_id: Execution Block ID
     :param version: EB version
 
     Returns retrieved EB status in Dictionary format
