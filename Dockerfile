@@ -31,4 +31,3 @@ CMD ["fastapi", \
     "--proxy-headers", \
     "--port", "5000" \
 ]
-
