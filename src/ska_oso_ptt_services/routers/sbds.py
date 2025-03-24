@@ -17,14 +17,14 @@ current_dir = Path(__file__).parent
 LOGGER = logging.getLogger(__name__)
 
 # Ideally would prefix this with ebs but the status entities do not follow the pattern
-sbd_router = APIRouter()
+sbd_router = APIRouter(prefix="/sbds")
 
 
 file_name = "response_files/multiple_sbds_with_status_response.json"
 
 
 @sbd_router.get(
-    "/sbds",
+    "/",
     tags=["SBD"],
     summary="Get SB Definition filter by the query parameter",
     responses={
@@ -95,7 +95,7 @@ def get_sbds_with_status(
 
 
 @sbd_router.get(
-    "/sbds/{sbd_id}",
+    "/{sbd_id}",
     tags=["SBD"],
     summary="Get SB Definition by identifier",
     responses={
@@ -162,7 +162,7 @@ def get_sbd_with_status(sbd_id: str):
 
 
 @sbd_router.get(
-    "/status/sbds/{sbd_id}",
+    "/{sbd_id}/status",
     tags=["SBD"],
     summary="Get SBDefinition by identifier",
     responses={
@@ -227,7 +227,7 @@ def get_sbd_status(sbd_id: str, version: str = None):
 
 
 @sbd_router.put(
-    "/status/sbds/{sbd_id}",
+    "/{sbd_id}/status",
     tags=["SBD"],
     summary="Update SB Definition status by identifier",
     responses={
@@ -301,7 +301,7 @@ def put_sbd_history(sbd_id: str, sbd_status_history: SBDStatusHistory):
 
 
 @sbd_router.get(
-    "/status/history/sbds",
+    "/status/history",
     tags=["SBD"],
     summary="Get SB Definition status history by the query parameter",
     responses={

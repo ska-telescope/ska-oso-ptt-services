@@ -17,11 +17,11 @@ current_dir = Path(__file__).parent
 LOGGER = logging.getLogger(__name__)
 
 # Ideally would prefix this with ebs but the status entities do not follow the pattern
-sbi_router = APIRouter()
+sbi_router = APIRouter(prefix="/sbis")
 
 
 @sbi_router.get(
-    "/sbis",
+    "/",
     tags=["SBI"],
     summary="Get SB Instance filter by the query parameter",
     responses={
@@ -99,7 +99,7 @@ def get_sbis_with_status(
 
 
 @sbi_router.get(
-    "/sbis/{sbi_id}",
+    "/{sbi_id}",
     tags=["SBI"],
     summary="Get SB Instance by identifier",
     responses={
@@ -165,7 +165,7 @@ def get_sbi_with_status(sbi_id: str):
 
 
 @sbi_router.get(
-    "/status/sbis/{sbi_id}",
+    "/{sbi_id}/status",
     tags=["SBI"],
     summary="Get SB Instance status history by the query parameter",
     responses={
@@ -229,7 +229,7 @@ def get_sbi_status(sbi_id: str, version: int = None):
 
 
 @sbi_router.put(
-    "/status/sbis/{sbi_id}",
+    "/{sbi_id}/status",
     tags=["SBI"],
     summary="Update SB Instance status by identifier",
     responses={
@@ -302,7 +302,7 @@ def put_sbi_history(sbi_id: str, sbi_status_history: SBIStatusHistory):
 
 
 @sbi_router.get(
-    "/status/history/sbis",
+    "/status/history",
     tags=["SBI"],
     summary="Get SB Instance status history by the query parameter",
     responses={

@@ -23,11 +23,11 @@ current_dir = Path(__file__).parent
 
 LOGGER = logging.getLogger(__name__)
 
-eb_router = APIRouter()
+eb_router = APIRouter(prefix="/ebs")
 
 
 @eb_router.get(
-    "/ebs",
+    "/",
     tags=["EB"],
     summary="Get Execution Block filter by the query parameter",
     responses={
@@ -105,7 +105,7 @@ def get_ebs_with_status(
 
 
 @eb_router.get(
-    "/ebs/{eb_id}",
+    "/{eb_id}",
     tags=["EB"],
     summary="Get Execution Block by identifier",
     responses={
@@ -173,7 +173,7 @@ def get_eb_with_status(eb_id: str):
 
 
 @eb_router.get(
-    "/status/history/eb",
+    "/{eb_id}/status",
     tags=["EB"],
     summary="Get Execution Block status history by the query parameter",
     responses={
@@ -238,7 +238,7 @@ def get_eb_status(eb_id: str, version: int = None):
 
 
 @eb_router.put(
-    "/status/ebs/{eb_id}",
+    "/{eb_id}/status",
     tags=["EB"],
     summary="Get Execution Block by identifier",
     responses={
@@ -310,7 +310,7 @@ def put_eb_history(eb_id: str, eb_status_history: OSOEBStatusHistory):
 
 
 @eb_router.get(
-    "/status/ebs",
+    "/status/history",
     tags=["EB"],
     summary="Get Execution Block by identifier",
     responses={

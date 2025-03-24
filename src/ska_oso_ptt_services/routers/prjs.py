@@ -17,11 +17,11 @@ current_dir = Path(__file__).parent
 LOGGER = logging.getLogger(__name__)
 
 # Ideally would prefix this with ebs but the status entities do not follow the pattern
-prj_router = APIRouter()
+prj_router = APIRouter(prefix="/prjs")
 
 
 @prj_router.get(
-    "/prjs",
+    "/",
     tags=["PRJ"],
     summary="Get Project filter by the query parameter",
     responses={
@@ -97,7 +97,7 @@ def get_prjs_with_status(query_params: ApiQueryParameters = Depends()):
 
 
 @prj_router.get(
-    "/prjs/{prj_id}",
+    "/{prj_id}",
     tags=["PRJ"],
     summary="Get Project by identifier",
     responses={
@@ -165,7 +165,7 @@ def get_prj_with_status(prj_id: str):
 
 
 @prj_router.get(
-    "/status/prjs/{prj_id}",
+    "/{prj_id}/status",
     tags=["PRJ"],
     summary="Get Project by identifier",
     responses={
@@ -230,7 +230,7 @@ def get_prj_status(prj_id: str, version: int = None):
 
 
 @prj_router.put(
-    "/status/prjs/{prj_id}",
+    "/prjs/{prj_id}/status",
     tags=["PRJ"],
     summary="Update Project status by identifier",
     responses={
@@ -303,7 +303,7 @@ def put_prj_history(prj_id: str, prj_status_history: ProjectStatusHistory):
 
 
 @prj_router.get(
-    "/status/history/prjs",
+    "/status/history",
     tags=["PRJ"],
     summary="Get Project status history by the query parameter",
     responses={

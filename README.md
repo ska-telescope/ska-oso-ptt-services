@@ -81,17 +81,11 @@ To find the URL for the environment, see the 'info' job of the CICD pipeline sta
 Generally the API URL should be available at  `https://k8s.stfc.skao.int/$KUBE_NAMESPACE/ptt/api/v0`
 
 
-## Flask
-To start the Flask server run the following command in a terminal bash prompt
+## Fast API
+To start the Fast API server run the following command in a terminal bash prompt
 
 ```
-python src/ska_oso_ptt_services/rest/wsgi.py
-```
-
-Alternatively use the following command
-
-```
-make rest
+fastapi dev src/ska_oso_slt_services/app.py
 ```
 
 # Documentation
