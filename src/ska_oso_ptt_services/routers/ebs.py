@@ -1,88 +1,44 @@
-import json
 import logging
-from enum import EnumMeta
-from http import HTTPStatus
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any, Dict, List
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
 from ska_db_oda.persistence import oda
 from ska_db_oda.persistence.domain.query import QueryParams
 from ska_db_oda.rest.api import check_for_mismatch, get_qry_params
 from ska_db_oda.rest.model import ApiQueryParameters, ApiStatusQueryParameters
-from ska_oso_pdm.entity_status_history import (
-    OSOEBStatus,
-    OSOEBStatusHistory,
-    ProjectStatus,
-    SBDStatus,
-    SBIStatus,
-)
+from ska_oso_pdm.entity_status_history import OSOEBStatusHistory
+
+from ska_oso_ptt_services.models.models import EBStatusModel
 
 # Get the directory of the current script
 current_dir = Path(__file__).parent
 
 LOGGER = logging.getLogger(__name__)
 
-eb_router = APIRouter()
+eb_router = APIRouter(prefix="/ebs")
 
 
 @eb_router.get(
-    "/ebs",
+    "/",
     tags=["EB"],
-    summary="Get Execution Block filter by the query parameter",
+    summary="Get All Execution Block with status appended, filter by the query "
+    "parameter like created_before, created_after and user name",
+    response_model=List[EBStatusModel],
     responses={
-        200: {
+        status.HTTP_200_OK: {
             "description": "Successful Response",
-            "content": {
-                "application/json": {
-                    "example": [
-                        json.loads(
-                            (
-                                current_dir
-                                / "response_files/eb_with_status_response.json"
-                            ).read_text()
-                        )
-                    ]
-                }
-            },
-        },
-        400: {
-            "description": "Bad Request",
-            "content": {
-                "application/json": {
-                    "example": {"message": "Invalid request parameters"}
-                }
-            },
-        },
-        404: {
-            "description": "Not Found",
-            "content": {
-                "application/json": {"example": {"message": "Entity Not Found"}}
-            },
-        },
-        422: {
-            "description": "Unprocessable Content",
-            "content": {
-                "application/json": {"example": {"message": "Invalid Entity Id"}}
-            },
-        },
-        500: {
-            "description": "Internal Server Error",
-            "content": {
-                "application/json": {
-                    "example": {"message": "Internal server error occurred"}
-                }
-            },
-        },
+            "model": List[EBStatusModel],
+        }
     },
 )
 def get_ebs_with_status(
     query_params: ApiQueryParameters = Depends(),
-):
+) -> List[EBStatusModel]:
     """
     Function that a GET /ebs request is routed to.
 
-    :param kwargs: Parameters to query the ODA by.
+    :param query_params: Parameters to query the ODA by.
     :return: All ExecutionBlocks present with status wrapped in a Response,
          or appropriate error Response
     """
@@ -97,64 +53,26 @@ def get_ebs_with_status(
                 **eb.model_dump(mode="json"),
                 "status": _get_eb_status(
                     uow=uow, eb_id=eb.eb_id, version=eb.metadata.version
-                )["current_status"],
+                ).current_status,
             }
             for eb in ebs
         ]
-    return eb_with_status, HTTPStatus.OK
+    return eb_with_status
 
 
 @eb_router.get(
-    "/ebs/{eb_id}",
+    "/{eb_id}",
     tags=["EB"],
-    summary="Get Execution Block by identifier",
+    summary="Get specific Execution Block by identifier with status appended",
+    response_model=EBStatusModel,
     responses={
-        200: {
+        status.HTTP_200_OK: {
             "description": "Successful Response",
-            "content": {
-                "application/json": {
-                    "example": [
-                        json.loads(
-                            (
-                                current_dir
-                                / "response_files/eb_with_status_response.json"
-                            ).read_text()
-                        )
-                    ]
-                }
-            },
-        },
-        400: {
-            "description": "Bad Request",
-            "content": {
-                "application/json": {
-                    "example": {"message": "Invalid request parameters"}
-                }
-            },
-        },
-        404: {
-            "description": "Not Found",
-            "content": {
-                "application/json": {"example": {"message": "Entity Not Found"}}
-            },
-        },
-        422: {
-            "description": "Unprocessable Content",
-            "content": {
-                "application/json": {"example": {"message": "Invalid Entity Id"}}
-            },
-        },
-        500: {
-            "description": "Internal Server Error",
-            "content": {
-                "application/json": {
-                    "example": {"message": "Internal server error occurred"}
-                }
-            },
-        },
+            "model": EBStatusModel,
+        }
     },
 )
-def get_eb_with_status(eb_id: str):
+def get_eb_with_status(eb_id: str) -> EBStatusModel:
     """
     Function that a GET /ebs/<eb_id> request is routed to.
 
@@ -167,64 +85,26 @@ def get_eb_with_status(eb_id: str):
         eb_json = eb.model_dump(mode="json")
         eb_json["status"] = _get_eb_status(
             uow=uow, eb_id=eb_id, version=eb_json["metadata"]["version"]
-        )["current_status"]
+        ).current_status
 
-    return eb_json, HTTPStatus.OK
+    return eb_json
 
 
 @eb_router.get(
-    "/status/history/eb",
+    "/{eb_id}/status",
     tags=["EB"],
-    summary="Get Execution Block status history by the query parameter",
+    summary="Get specific Execution Block status by the identifier",
+    response_model=OSOEBStatusHistory,
     responses={
-        200: {
+        status.HTTP_200_OK: {
             "description": "Successful Response",
-            "content": {
-                "application/json": {
-                    "example": [
-                        json.loads(
-                            (
-                                current_dir
-                                / "response_files/eb_status_history_response.json"
-                            ).read_text()
-                        )
-                    ]
-                }
-            },
-        },
-        400: {
-            "description": "Bad Request",
-            "content": {
-                "application/json": {
-                    "example": {"message": "Invalid request parameters"}
-                }
-            },
-        },
-        404: {
-            "description": "Not Found",
-            "content": {
-                "application/json": {"example": {"message": "Entity Not Found"}}
-            },
-        },
-        422: {
-            "description": "Unprocessable Content",
-            "content": {
-                "application/json": {"example": {"message": "Invalid Entity Id"}}
-            },
-        },
-        500: {
-            "description": "Internal Server Error",
-            "content": {
-                "application/json": {
-                    "example": {"message": "Internal server error occurred"}
-                }
-            },
-        },
+            "model": OSOEBStatusHistory,
+        }
     },
 )
-def get_eb_status(eb_id: str, version: int = None):
+def get_eb_status(eb_id: str, version: int = None) -> OSOEBStatusHistory:
     """
-    Function that a GET status/ebs/<eb_id> request is routed to.
+    Function that a GET /ebs/<eb_id>/status request is routed to.
     This method is used to GET the current status for the given eb_id
 
     :param eb_id: Requested identifier from the path parameter
@@ -234,65 +114,29 @@ def get_eb_status(eb_id: str, version: int = None):
     """
     with oda.uow() as uow:
         eb_status = _get_eb_status(uow=uow, eb_id=eb_id, version=version)
-    return eb_status, HTTPStatus.OK
+    return eb_status
 
 
 @eb_router.put(
-    "/status/ebs/{eb_id}",
+    "/{eb_id}/status",
     tags=["EB"],
-    summary="Get Execution Block by identifier",
+    summary="Update specific Execution Block status by identifier",
+    response_model=OSOEBStatusHistory,
     responses={
-        200: {
+        status.HTTP_200_OK: {
             "description": "Successful Response",
-            "content": {
-                "application/json": {
-                    "example": [
-                        json.loads(
-                            (
-                                current_dir / "response_files/eb_status_response.json"
-                            ).read_text()
-                        )
-                    ]
-                }
-            },
-        },
-        400: {
-            "description": "Bad Request",
-            "content": {
-                "application/json": {
-                    "example": {"message": "Invalid request parameters"}
-                }
-            },
-        },
-        404: {
-            "description": "Not Found",
-            "content": {
-                "application/json": {"example": {"message": "Entity Not Found"}}
-            },
-        },
-        422: {
-            "description": "Unprocessable Content",
-            "content": {
-                "application/json": {"example": {"message": "Invalid Entity Id"}}
-            },
-        },
-        500: {
-            "description": "Internal Server Error",
-            "content": {
-                "application/json": {
-                    "example": {"message": "Internal server error occurred"}
-                }
-            },
-        },
+            "model": OSOEBStatusHistory,
+        }
     },
 )
-def put_eb_history(eb_id: str, eb_status_history: OSOEBStatusHistory):
+def put_eb_history(
+    eb_id: str, eb_status_history: OSOEBStatusHistory
+) -> OSOEBStatusHistory:
     """
-    Function that a PUT status/ebs/<eb_id> request is routed to.
+    Function that a PUT /ebs/<eb_id>/status request is routed to.
 
     :param eb_id: Requested identifier from the path parameter
-    :param version: Requested identifier from the path parameter
-    :param body: ExecutionBlock to persist from the request body
+    :param eb_status_history: Object of OSOEBStatusHistory
     :return: The ExecutionBlock wrapped in a Response, or appropriate error Response
     """
 
@@ -306,67 +150,29 @@ def put_eb_history(eb_id: str, eb_status_history: OSOEBStatusHistory):
             )
         persisted_eb = uow.ebs_status_history.add(eb_status_history)
         uow.commit()
-    return (persisted_eb, HTTPStatus.OK)
+    return persisted_eb
 
 
 @eb_router.get(
-    "/status/ebs",
+    "/status/history",
     tags=["EB"],
-    summary="Get Execution Block by identifier",
+    summary="Get specific Execution Block status history by identifier and version",
+    response_model=List[OSOEBStatusHistory],
     responses={
-        200: {
+        status.HTTP_200_OK: {
             "description": "Successful Response",
-            "content": {
-                "application/json": {
-                    "example": [
-                        json.loads(
-                            (
-                                current_dir
-                                / "response_files/eb_status_history_response.json"
-                            ).read_text()
-                        )
-                    ]
-                }
-            },
-        },
-        400: {
-            "description": "Bad Request",
-            "content": {
-                "application/json": {
-                    "example": {"message": "Invalid request parameters"}
-                }
-            },
-        },
-        404: {
-            "description": "Not Found",
-            "content": {
-                "application/json": {"example": {"message": "Entity Not Found"}}
-            },
-        },
-        422: {
-            "description": "Unprocessable Content",
-            "content": {
-                "application/json": {"example": {"message": "Invalid Entity Id"}}
-            },
-        },
-        500: {
-            "description": "Internal Server Error",
-            "content": {
-                "application/json": {
-                    "example": {"message": "Internal server error occurred"}
-                }
-            },
-        },
+            "model": List[OSOEBStatusHistory],
+        }
     },
 )
 def get_eb_status_history(
     query_params: ApiStatusQueryParameters = Depends(),
-):
+) -> List[OSOEBStatusHistory]:
     """
-    Function that a GET /status/ebs request is routed to.
+    Function that a GET /status/history request is routed to.
     This method is used to GET status history for the given entity
 
-    :param kwargs: Parameters to query the ODA by.
+    :param query_params: Parameters to query the ODA by.
     :return: The status history, OSOEBStatusHistory wrapped in a Response,
         or appropriate error Response
     """
@@ -380,91 +186,14 @@ def get_eb_status_history(
         if not ebs_status_history:
             raise KeyError("not found")
 
-    return ebs_status_history, HTTPStatus.OK
-
-
-@eb_router.get(
-    "/get_entity",
-    tags=["Status"],
-    summary="Get status dictionary by the entity parameter",
-    responses={
-        200: {
-            "description": "Successful Response",
-            "content": {
-                "application/json": {
-                    "example": [
-                        json.loads(
-                            (
-                                current_dir
-                                / "response_files/status_entity_response.json"
-                            ).read_text()
-                        )
-                    ]
-                }
-            },
-        },
-        400: {
-            "description": "Bad Request",
-            "content": {
-                "application/json": {
-                    "example": {"message": "Invalid request parameters"}
-                }
-            },
-        },
-        404: {
-            "description": "Not Found",
-            "content": {
-                "application/json": {"example": {"message": "Entity Not Found"}}
-            },
-        },
-        422: {
-            "description": "Unprocessable Content",
-            "content": {
-                "application/json": {"example": {"message": "Invalid Entity Id"}}
-            },
-        },
-        500: {
-            "description": "Internal Server Error",
-            "content": {
-                "application/json": {
-                    "example": {"message": "Internal server error occurred"}
-                }
-            },
-        },
-    },
-)
-def get_entity_status(entity_name: str):
-    """
-    Function that returns the status dictionary for a given entity type.
-
-    Args:
-        entity_name: The name of the entity type (sbi, eb, prj, or sbd)
-
-    Returns:
-        Tuple containing dictionary of status names and values, and HTTP status code
-
-    Raises:
-        ValueError: If an invalid entity name is provided
-    """
-    entity_map: Dict[str, EnumMeta] = {
-        "sbi": SBIStatus,
-        "eb": OSOEBStatus,
-        "prj": ProjectStatus,
-        "sbd": SBDStatus,
-    }
-
-    entity_class = entity_map.get(entity_name.lower())
-    if not entity_class:
-        raise ValueError(f"Invalid entity name: {entity_name}")
-
-    return {status.name: status.value for status in entity_class}, HTTPStatus.OK
+    return ebs_status_history
 
 
 def _get_eb_status(uow, eb_id: str, version: str = None) -> Dict[str, Any]:
     """
     Takes an EB ID and Version and returns status
     :param: uow: ODA PostgresUnitOfWork
-    :param sbd_id: Execution Block ID
+    :param eb_id: Execution Block ID
     :param version: EB version
 
     Returns retrieved EB status in Dictionary format
@@ -475,4 +204,4 @@ def _get_eb_status(uow, eb_id: str, version: str = None) -> Dict[str, Any]:
         entity_id=eb_id, version=version, is_status_history=False
     )
 
-    return retrieved_eb.model_dump()
+    return retrieved_eb

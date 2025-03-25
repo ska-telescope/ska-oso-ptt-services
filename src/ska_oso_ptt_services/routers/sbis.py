@@ -1,15 +1,15 @@
-import json
 import logging
-from http import HTTPStatus
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any, Dict, List
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
 from ska_db_oda.persistence import oda
 from ska_db_oda.persistence.domain.query import QueryParams
 from ska_db_oda.rest.api import check_for_mismatch, get_qry_params
 from ska_db_oda.rest.model import ApiQueryParameters, ApiStatusQueryParameters
 from ska_oso_pdm.entity_status_history import SBIStatusHistory
+
+from ska_oso_ptt_services.models.models import SBInstanceStatusModel
 
 # Get the directory of the current script
 current_dir = Path(__file__).parent
@@ -17,66 +17,29 @@ current_dir = Path(__file__).parent
 LOGGER = logging.getLogger(__name__)
 
 # Ideally would prefix this with ebs but the status entities do not follow the pattern
-sbi_router = APIRouter()
+sbi_router = APIRouter(prefix="/sbis")
 
 
 @sbi_router.get(
-    "/sbis",
+    "/",
     tags=["SBI"],
-    summary="Get SB Instance filter by the query parameter",
+    summary="Get All SB Instance with status appended, filter by the query parameter"
+    " like created_before, created_after and user name",
+    response_model=List[SBInstanceStatusModel],
     responses={
-        200: {
+        status.HTTP_200_OK: {
             "description": "Successful Response",
-            "content": {
-                "application/json": {
-                    "example": [
-                        json.loads(
-                            (
-                                current_dir
-                                / "response_files/sbd_status_history_response.json"
-                            ).read_text()
-                        )
-                    ]
-                }
-            },
-        },
-        400: {
-            "description": "Bad Request",
-            "content": {
-                "application/json": {
-                    "example": {"message": "Invalid request parameters"}
-                }
-            },
-        },
-        404: {
-            "description": "Not Found",
-            "content": {
-                "application/json": {"example": {"message": "Entity Not Found"}}
-            },
-        },
-        422: {
-            "description": "Unprocessable Content",
-            "content": {
-                "application/json": {"example": {"message": "Invalid Entity Id"}}
-            },
-        },
-        500: {
-            "description": "Internal Server Error",
-            "content": {
-                "application/json": {
-                    "example": {"message": "Internal server error occurred"}
-                }
-            },
-        },
+            "model": List[SBInstanceStatusModel],
+        }
     },
 )
 def get_sbis_with_status(
     query_params: ApiQueryParameters = Depends(),
-):
+) -> List[SBInstanceStatusModel]:
     """
     Function that a GET /sbis request is routed to.
 
-    :param kwargs: Parameters to query the ODA by.
+    :param query_params: Parameters to query the ODA by.
     :return: All SBInstance present with status wrapped in a Response,
          or appropriate error Response
     """
@@ -91,63 +54,26 @@ def get_sbis_with_status(
                 **sbi.model_dump(mode="json"),
                 "status": _get_sbi_status(
                     uow=uow, sbi_id=sbi.sbi_id, version=sbi.metadata.version
-                )["current_status"],
+                ).current_status,
             }
             for sbi in sbis
         ]
-    return sbi_with_status, HTTPStatus.OK
+    return sbi_with_status
 
 
 @sbi_router.get(
-    "/sbis/{sbi_id}",
+    "/{sbi_id}",
     tags=["SBI"],
-    summary="Get SB Instance by identifier",
+    summary="Get specific SB Instance by identifier with status appended",
+    response_model=SBInstanceStatusModel,
     responses={
-        200: {
+        status.HTTP_200_OK: {
             "description": "Successful Response",
-            "content": {
-                "application/json": {
-                    "example": [
-                        json.loads(
-                            (
-                                current_dir / "response_files/sbi_status_response.json"
-                            ).read_text()
-                        )
-                    ]
-                }
-            },
-        },
-        400: {
-            "description": "Bad Request",
-            "content": {
-                "application/json": {
-                    "example": {"message": "Invalid request parameters"}
-                }
-            },
-        },
-        404: {
-            "description": "Not Found",
-            "content": {
-                "application/json": {"example": {"message": "Entity Not Found"}}
-            },
-        },
-        422: {
-            "description": "Unprocessable Content",
-            "content": {
-                "application/json": {"example": {"message": "Invalid Entity Id"}}
-            },
-        },
-        500: {
-            "description": "Internal Server Error",
-            "content": {
-                "application/json": {
-                    "example": {"message": "Internal server error occurred"}
-                }
-            },
-        },
+            "model": SBInstanceStatusModel,
+        }
     },
 )
-def get_sbi_with_status(sbi_id: str):
+def get_sbi_with_status(sbi_id: str) -> SBInstanceStatusModel:
     """
     Function that a GET /sbis/<sbi_id> request is routed to.
 
@@ -160,130 +86,57 @@ def get_sbi_with_status(sbi_id: str):
         sbi_json = sbi.model_dump(mode="json")
         sbi_json["status"] = _get_sbi_status(
             uow=uow, sbi_id=sbi_id, version=sbi_json["metadata"]["version"]
-        )["current_status"]
-    return sbi_json, HTTPStatus.OK
+        ).current_status
+    return sbi_json
 
 
 @sbi_router.get(
-    "/status/sbis/{sbi_id}",
+    "/{sbi_id}/status",
     tags=["SBI"],
-    summary="Get SB Instance status history by the query parameter",
+    summary="Get SB Instance status by the identifier",
+    response_model=SBIStatusHistory,
     responses={
-        200: {
+        status.HTTP_200_OK: {
             "description": "Successful Response",
-            "content": {
-                "application/json": {
-                    "example": [
-                        json.loads(
-                            (
-                                current_dir / "response_files/sbi_status_response.json"
-                            ).read_text()
-                        )
-                    ]
-                }
-            },
-        },
-        400: {
-            "description": "Bad Request",
-            "content": {
-                "application/json": {
-                    "example": {"message": "Invalid request parameters"}
-                }
-            },
-        },
-        404: {
-            "description": "Not Found",
-            "content": {
-                "application/json": {"example": {"message": "Entity Not Found"}}
-            },
-        },
-        422: {
-            "description": "Unprocessable Content",
-            "content": {
-                "application/json": {"example": {"message": "Invalid Entity Id"}}
-            },
-        },
-        500: {
-            "description": "Internal Server Error",
-            "content": {
-                "application/json": {
-                    "example": {"message": "Internal server error occurred"}
-                }
-            },
-        },
+            "model": SBIStatusHistory,
+        }
     },
 )
 def get_sbi_status(sbi_id: str, version: int = None):
     """
-    Function that a GET status/sbi/<sbi_id> request is routed to.
+    Function that a GET /sbi/<sbi_id>/status request is routed to.
     This method is used to GET the current status for the given sbi_id
 
-    :param sb_id: Requested identifier from the path parameter
+    :param sbi_id: Requested identifier from the path parameter
     :param version: Requested identifier from the path parameter
     :return: The current entity status,SBIStatusHistory wrapped in a
         Response, or appropriate error Response
     """
     with oda.uow() as uow:
         sbi_status = _get_sbi_status(uow=uow, sbi_id=sbi_id, version=version)
-    return sbi_status, HTTPStatus.OK
+    return sbi_status
 
 
 @sbi_router.put(
-    "/status/sbis/{sbi_id}",
+    "/{sbi_id}/status",
     tags=["SBI"],
-    summary="Update SB Instance status by identifier",
+    summary="Update specific SB Instance status by identifier",
+    response_model=SBIStatusHistory,
     responses={
-        200: {
+        status.HTTP_200_OK: {
             "description": "Successful Response",
-            "content": {
-                "application/json": {
-                    "example": [
-                        json.loads(
-                            (
-                                current_dir / "response_files/sbi_status_response.json"
-                            ).read_text()
-                        )
-                    ]
-                }
-            },
-        },
-        400: {
-            "description": "Bad Request",
-            "content": {
-                "application/json": {
-                    "example": {"message": "Invalid request parameters"}
-                }
-            },
-        },
-        404: {
-            "description": "Not Found",
-            "content": {
-                "application/json": {"example": {"message": "Entity Not Found"}}
-            },
-        },
-        422: {
-            "description": "Unprocessable Content",
-            "content": {
-                "application/json": {"example": {"message": "Invalid Entity Id"}}
-            },
-        },
-        500: {
-            "description": "Internal Server Error",
-            "content": {
-                "application/json": {
-                    "example": {"message": "Internal server error occurred"}
-                }
-            },
-        },
+            "model": SBIStatusHistory,
+        }
     },
 )
-def put_sbi_history(sbi_id: str, sbi_status_history: SBIStatusHistory):
+def put_sbi_history(
+    sbi_id: str, sbi_status_history: SBIStatusHistory
+) -> SBIStatusHistory:
     """
-    Function that a PUT  /status/sbis/<sbi_id> request is routed to.
+    Function that a PUT /sbis/<sbi_id>/status request is routed to.
 
     :param sbi_id: Requested identifier from the path parameter
-    :param version: Requested identifier from the path parameter
-    :param body: SBInstance to persist from the request body
+    :param sbi_status_history: Object of SBIStatusHistory
     :return: The SBInstance wrapped in a Response, or appropriate error Response
     """
 
@@ -298,67 +151,29 @@ def put_sbi_history(sbi_id: str, sbi_status_history: SBIStatusHistory):
 
         persisted_sbi = uow.sbis_status_history.add(sbi_status_history)
         uow.commit()
-    return (persisted_sbi, HTTPStatus.OK)
+    return persisted_sbi
 
 
 @sbi_router.get(
-    "/status/history/sbis",
+    "/status/history",
     tags=["SBI"],
-    summary="Get SB Instance status history by the query parameter",
+    summary="Get specific SB Instance status history by identifier and version",
+    response_model=List[SBIStatusHistory],
     responses={
-        200: {
+        status.HTTP_200_OK: {
             "description": "Successful Response",
-            "content": {
-                "application/json": {
-                    "example": [
-                        json.loads(
-                            (
-                                current_dir
-                                / "response_files/sbi_status_history_response.json"
-                            ).read_text()
-                        )
-                    ]
-                }
-            },
-        },
-        400: {
-            "description": "Bad Request",
-            "content": {
-                "application/json": {
-                    "example": {"message": "Invalid request parameters"}
-                }
-            },
-        },
-        404: {
-            "description": "Not Found",
-            "content": {
-                "application/json": {"example": {"message": "Entity Not Found"}}
-            },
-        },
-        422: {
-            "description": "Unprocessable Content",
-            "content": {
-                "application/json": {"example": {"message": "Invalid Entity Id"}}
-            },
-        },
-        500: {
-            "description": "Internal Server Error",
-            "content": {
-                "application/json": {
-                    "example": {"message": "Internal server error occurred"}
-                }
-            },
-        },
+            "model": List[SBIStatusHistory],
+        }
     },
 )
 def get_sbi_status_history(
     query_params: ApiStatusQueryParameters = Depends(),
-):
+) -> SBIStatusHistory:
     """
-    Function that a GET /status/history/sbis request is routed to.
+    Function that a GET /status/history request is routed to.
     This method is used to GET status history for the given entity
 
-    :param kwargs: Parameters to query the ODA by.
+    :param query_params: Parameters to query the ODA by.
     :return: The status history, SBIStatusHistory wrapped in a Response,
         or appropriate error Response
     """
@@ -372,13 +187,14 @@ def get_sbi_status_history(
         if not sbis_status_history:
             raise KeyError("not found")
 
-    return sbis_status_history, HTTPStatus.OK
+    return sbis_status_history
 
 
 def _get_sbi_status(uow, sbi_id: str, version: str = None) -> Dict[str, Any]:
     """
-    Takes an SBInstance ID and Version and returns status
-    param sbd_id: SBInstance ID
+    Takes an SB Instance ID and Version and returns status
+    :param: uow: ODA PostgresUnitOfWork
+    :param sbi_id: SB Instance ID
     :param version: SBI version
 
     Returns retrieved SBI status in Dictionary format
@@ -388,4 +204,4 @@ def _get_sbi_status(uow, sbi_id: str, version: str = None) -> Dict[str, Any]:
     retrieved_sbi = uow.sbis_status_history.get(
         entity_id=sbi_id, version=version, is_status_history=False
     )
-    return retrieved_sbi.model_dump()
+    return retrieved_sbi

@@ -1,5 +1,5 @@
 """
-ska_oso_services app.py
+ska_oso_ptt_services app.py
 """
 
 import logging
@@ -9,18 +9,21 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from ska_db_oda.persistence import oda
 from ska_db_oda.persistence.domain.errors import StatusHistoryException
+from ska_ser_logging import configure_logging
 
-from ska_oso_ptt_services.routers.ebs import eb_router
-from ska_oso_ptt_services.routers.error_handling import (
+from ska_oso_ptt_services.common.error_handling import (
+    ODANotFound,
+    QueryParameterError,
     dangerous_internal_server_handler,
     oda_not_found_handler,
     oda_status_error_handler,
     oda_validation_error_handler,
 )
-from ska_oso_ptt_services.routers.errors import ODANotFound, QueryParameterError
+from ska_oso_ptt_services.routers.ebs import eb_router
 from ska_oso_ptt_services.routers.prjs import prj_router
 from ska_oso_ptt_services.routers.sbds import sbd_router
 from ska_oso_ptt_services.routers.sbis import sbi_router
+from ska_oso_ptt_services.routers.status import status_router
 
 KUBE_NAMESPACE = os.getenv("KUBE_NAMESPACE", "ska-oso-ptt-services")
 # FIXME: Find a good way to avoid hardcoding this...
@@ -33,6 +36,10 @@ PRODUCTION = os.getenv("PRODUCTION", "false").lower() == "true"
 ODA_BACKEND_TYPE = os.getenv("ODA_BACKEND_TYPE", "postgres")
 
 LOGGER = logging.getLogger(__name__)
+
+LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
+
+configure_logging(level=LOG_LEVEL)
 
 
 def create_app(production=PRODUCTION) -> FastAPI:
@@ -56,6 +63,7 @@ def create_app(production=PRODUCTION) -> FastAPI:
     app.include_router(sbi_router, prefix=API_PREFIX)
     app.include_router(eb_router, prefix=API_PREFIX)
     app.include_router(prj_router, prefix=API_PREFIX)
+    app.include_router(status_router, prefix=API_PREFIX)
 
     # Add handles for different types of error
     app.exception_handler(ODANotFound)(oda_not_found_handler)

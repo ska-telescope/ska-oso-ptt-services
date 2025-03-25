@@ -38,12 +38,9 @@ python = "^3.10"
 ska-ser-logging = "^0.4.1"
 requests = "^2.27.1"
 python-dateutil = "^2.8.2"
-# Pinning older version because of https://github.com/python-openapi/openapi-spec-validator/issues/201
-jsonschema = "4.17.3"
 ska-db-oda = "7.1.0"
 deepdiff = "^7.0.1"
 fastapi = "^0.111.0"
-annotated-types = "^0.7.0"
 pydantic = "^2.7"
 
 [tool.poetry.group.dev.dependencies]
@@ -56,8 +53,6 @@ pycodestyle = "^2.8.0"
 isort = "^5.10.1"
 pylint-junit = "^0.3.2"
 flake8 = "^7.0.0"
-deepdiff = "^7.0.0"
-platformdirs = "^2.5.1"
 
 [tool.poetry.group.docs.dependencies]
 sphinxcontrib-openapi= "^0.8.1"
@@ -107,7 +102,6 @@ extend-exclude = '''
     | buck-out
     | build
     | dist
-    | src/ska_oso_slt_services/rest/openapi/__submodules__
   )/
   | foo.py           # also separately exclude a file named foo.py in
                      # the root of the project
@@ -117,7 +111,6 @@ extend-exclude = '''
 [tool.isort]
 profile = "black"
 line_length = 88
-skip = "src/ska_oso_slt_services/rest/openapi/__submodules__"
 
 [tool.pylint]
 disable = "C,R,W3101,W0511"
