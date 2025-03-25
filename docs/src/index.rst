@@ -25,7 +25,18 @@ and links between them and display the results on the GUI.
   :caption: Table of Contents
   :hidden:
 
+.. toctree::
+   :maxdepth: 2
+   :caption: API Usage
+
+   api/rest_api.rst
+
   persistence
 
 
+Indices and tables
+==================
 
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
