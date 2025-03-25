@@ -1,10 +1,8 @@
-import json
 import logging
 from enum import EnumMeta
-from pathlib import Path
 from typing import Dict
 
-from fastapi import APIRouter
+from fastapi import APIRouter, status
 from ska_oso_pdm.entity_status_history import (
     OSOEBStatus,
     ProjectStatus,
@@ -12,8 +10,7 @@ from ska_oso_pdm.entity_status_history import (
     SBIStatus,
 )
 
-# Get the directory of the current script
-current_dir = Path(__file__).parent
+from ska_oso_ptt_services.models.models import EntityStatusResponse
 
 LOGGER = logging.getLogger(__name__)
 
@@ -24,53 +21,15 @@ status_router = APIRouter(prefix="/status")
     "/get_entity",
     tags=["Status"],
     summary="Get status dictionary by the entity parameter",
+    response_model=EntityStatusResponse,
     responses={
-        200: {
+        status.HTTP_200_OK: {
             "description": "Successful Response",
-            "content": {
-                "application/json": {
-                    "example": [
-                        json.loads(
-                            (
-                                current_dir
-                                / "response_files/status_entity_response.json"
-                            ).read_text()
-                        )
-                    ]
-                }
-            },
-        },
-        400: {
-            "description": "Bad Request",
-            "content": {
-                "application/json": {
-                    "example": {"message": "Invalid request parameters"}
-                }
-            },
-        },
-        404: {
-            "description": "Not Found",
-            "content": {
-                "application/json": {"example": {"message": "Entity Not Found"}}
-            },
-        },
-        422: {
-            "description": "Unprocessable Content",
-            "content": {
-                "application/json": {"example": {"message": "Invalid Entity Id"}}
-            },
-        },
-        500: {
-            "description": "Internal Server Error",
-            "content": {
-                "application/json": {
-                    "example": {"message": "Internal server error occurred"}
-                }
-            },
-        },
+            "model": EntityStatusResponse,
+        }
     },
 )
-def get_entity_status(entity_name: str):
+def get_entity_status(entity_name: str) -> EntityStatusResponse:
     """
     Function that returns the status dictionary for a given entity type.
 

@@ -1,5 +1,4 @@
 import logging
-from pathlib import Path
 from typing import Any, Dict, List
 
 from fastapi import APIRouter, Depends, status
@@ -10,9 +9,6 @@ from ska_db_oda.rest.model import ApiQueryParameters, ApiStatusQueryParameters
 from ska_oso_pdm.entity_status_history import ProjectStatusHistory
 
 from ska_oso_ptt_services.models.models import ProjectStatusModel
-
-# Get the directory of the current script
-current_dir = Path(__file__).parent
 
 LOGGER = logging.getLogger(__name__)
 
