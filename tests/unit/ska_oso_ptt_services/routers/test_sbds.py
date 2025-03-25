@@ -53,7 +53,7 @@ class TestSBDefinitionAPI:
 
         for res in resultDict:
             del res["metadata"]["pdm_version"]
-            del res["targets"]["reference_coordinate"]["epoch"]
+            # del res["targets"]["reference_coordinate"]["epoch"]
 
         assert_json_is_equal(json.dumps(resultDict), json.dumps(json.loads(valid_sbds)))
         assert result.status_code == HTTPStatus.OK
@@ -76,9 +76,9 @@ class TestSBDefinitionAPI:
         )
 
         error = {
-            "detail": "Different query types are not currently supported"
-            " - for example, "
-            "cannot combine date created query or entity query with a user query"
+            "detail": "Different query types are not currently supported - "
+            "for example, cannot combine date created query or entity query "
+            "with a user query"
         }
 
         assert json.loads(result.json()) == error
@@ -130,7 +130,7 @@ class TestSBDefinitionAPI:
             )
         }
 
-        assert result.get_json() == error
+        assert result.json() == error
         assert result.status_code == HTTPStatus.NOT_FOUND
 
     @mock.patch("ska_oso_ptt_services.routers.sbds.oda")
@@ -266,7 +266,9 @@ class TestSBDefinitionAPI:
             json=data,
             headers={"accept": "application/json"},
         )
-        assert_json_is_equal(result.json(), valid_put_sbd_history_response, exclude_paths)
+        assert_json_is_equal(
+            result.json(), valid_put_sbd_history_response, exclude_paths
+        )
         assert result.status_code == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.sbds.oda")
@@ -305,7 +307,9 @@ class TestSBDefinitionAPI:
             json=data,
             headers={"accept": "application/json"},
         )
-        assert_json_is_equal(result.json(), valid_put_sbd_history_response, exclude_paths)
+        assert_json_is_equal(
+            result.json(), valid_put_sbd_history_response, exclude_paths
+        )
         assert result.status_code == HTTPStatus.OK
 
         valid_put_sbd_history_version_response = load_string_from_file(

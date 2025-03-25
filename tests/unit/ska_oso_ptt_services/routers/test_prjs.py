@@ -268,7 +268,9 @@ class TestProjectAPI:
             json=data,
             headers={"accept": "application/json"},
         )
-        assert_json_is_equal(result.json(), valid_put_prj_history_response, exclude_paths)
+        assert_json_is_equal(
+            result.json(), valid_put_prj_history_response, exclude_paths
+        )
         assert result.status_code == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.prjs.oda")
@@ -308,7 +310,9 @@ class TestProjectAPI:
             json=data,
             headers={"accept": "application/json"},
         )
-        assert_json_is_equal(result.json(), valid_put_prj_history_response, exclude_paths)
+        assert_json_is_equal(
+            result.json(), valid_put_prj_history_response, exclude_paths
+        )
         assert result.status_code == HTTPStatus.OK
 
         valid_put_prj_history_version_response = load_string_from_file(

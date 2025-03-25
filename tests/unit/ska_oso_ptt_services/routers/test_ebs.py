@@ -134,7 +134,7 @@ class TestExecutionBlockAPI:
                 " found."
             )
         }
-        
+
         assert result.status_code == HTTPStatus.INTERNAL_SERVER_ERROR
         assert result.json() == expected_error_message
 
@@ -151,13 +151,13 @@ class TestExecutionBlockAPI:
         uow_mock.ebs_status_history.query.return_value = json.loads(
             valid_eb_status_history
         )
-        
+
         mock_oda.uow().__enter__.return_value = uow_mock
         result = client.get(
             f"{API_PREFIX}/ebs/eb-mvp01-20240426-5004/status",
             headers={"accept": "application/json"},
         )
-        
+
         assert_json_is_equal(json.dumps(result.json()), valid_eb_status_history)
 
         assert result.status_code == HTTPStatus.OK
@@ -273,7 +273,9 @@ class TestExecutionBlockAPI:
             json=data,
             headers={"accept": "application/json"},
         )
-        assert_json_is_equal(result.json(), valid_put_eb_history_response, exclude_paths)
+        assert_json_is_equal(
+            result.json(), valid_put_eb_history_response, exclude_paths
+        )
         assert result.status_code == HTTPStatus.OK
 
     def test_invalid_put_eb_history(self, client):

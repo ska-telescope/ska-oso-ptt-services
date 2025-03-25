@@ -270,7 +270,9 @@ class TestSBInstanceAPI:
             json=data,
             headers={"accept": "application/json"},
         )
-        assert_json_is_equal(result.json(), valid_put_sbi_history_response, exclude_paths)
+        assert_json_is_equal(
+            result.json(), valid_put_sbi_history_response, exclude_paths
+        )
         assert result.status_code == HTTPStatus.OK
 
     def test_invalid_put_sbd_history(self, client):
