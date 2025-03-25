@@ -2,7 +2,7 @@ import logging
 from enum import EnumMeta
 from typing import Dict
 
-from fastapi import APIRouter, status
+from fastapi import APIRouter
 from ska_oso_pdm.entity_status_history import (
     OSOEBStatus,
     ProjectStatus,
@@ -10,6 +10,7 @@ from ska_oso_pdm.entity_status_history import (
     SBIStatus,
 )
 
+from ska_oso_ptt_services.common.constant import GET_ALL_ENTITY_MODEL
 from ska_oso_ptt_services.models.models import EntityStatusResponse
 
 LOGGER = logging.getLogger(__name__)
@@ -22,12 +23,7 @@ status_router = APIRouter(prefix="/status")
     tags=["Status"],
     summary="Get status dictionary by the entity parameter",
     response_model=EntityStatusResponse,
-    responses={
-        status.HTTP_200_OK: {
-            "description": "Successful Response",
-            "model": EntityStatusResponse,
-        }
-    },
+    responses=GET_ALL_ENTITY_MODEL,
 )
 def get_entity_status(entity_name: str) -> EntityStatusResponse:
     """
@@ -53,4 +49,7 @@ def get_entity_status(entity_name: str) -> EntityStatusResponse:
     if not entity_class:
         raise ValueError(f"Invalid entity name: {entity_name}")
 
-    return {status.name: status.value for status in entity_class}
+    return EntityStatusResponse(
+        entity_type=entity_name.lower(),
+        statuses={status.name: status.value for status in entity_class},
+    )
