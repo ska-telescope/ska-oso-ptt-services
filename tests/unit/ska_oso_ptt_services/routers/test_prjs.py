@@ -81,7 +81,7 @@ class TestProjectAPI:
             "cannot combine date created query or entity query with a user query"
         }
 
-        assert json.loads(result.text) == error
+        assert json.loads(result.json()) == error
 
     @mock.patch("ska_oso_ptt_services.routers.prjs.oda")
     @mock.patch("ska_oso_ptt_services.routers.prjs._get_prj_status")
@@ -102,7 +102,7 @@ class TestProjectAPI:
             f"{API_PREFIX}/prjs/prj-mvp01-20220923-00001",
             headers={"accept": "application/json"},
         )
-        assert_json_is_equal(result.text, valid_prj_with_status)
+        assert_json_is_equal(result.json(), valid_prj_with_status)
         assert result.status_code == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.prjs.oda")
@@ -149,11 +149,11 @@ class TestProjectAPI:
         mock_oda.uow().__enter__.return_value = uow_mock
 
         result = client.get(
-            f"{API_PREFIX}/status/history/prjs",
+            f"{API_PREFIX}/prjs/status/history",
             params={"entity_id": "prj-mvp01-20220923-00001", "prj_version": "1"},
             headers={"accept": "application/json"},
         )
-        assert_json_is_equal(result.text, valid_prj_status_history)
+        assert_json_is_equal(result.json(), valid_prj_status_history)
 
         assert result.status_code == HTTPStatus.OK
 
@@ -166,7 +166,7 @@ class TestProjectAPI:
         uow_mock.prjs_status_history.query.return_value = []
         mock_oda.uow().__enter__.return_value = uow_mock
         result = client.get(
-            f"{API_PREFIX}/status/history/prjs",
+            f"{API_PREFIX}/prjs/status/history",
             params={"entity_id": "prj-t0001-00100", "prj_version": "1"},
             headers={"accept": "application/json"},
         )
@@ -177,7 +177,7 @@ class TestProjectAPI:
                 " found."
             )
         }
-        assert json.loads(result.text) == error
+        assert json.loads(result.json()) == error
         assert result.status_code == HTTPStatus.NOT_FOUND
 
     @mock.patch("ska_oso_ptt_services.routers.prjs._get_prj_status")
@@ -195,12 +195,12 @@ class TestProjectAPI:
         mock_get_prj_status.return_value = json.loads(valid_prj_status)
 
         result = client.get(
-            f"{API_PREFIX}/status/prjs/prj-mvp01-20240426-5004",
+            f"{API_PREFIX}/prjs/prj-mvp01-20240426-5004/status",
             params={"prj_version": "1"},
             headers={"accept": "application/json"},
         )
 
-        assert_json_is_equal(result.text, valid_prj_status)
+        assert_json_is_equal(result.json(), valid_prj_status)
         assert result.status_code == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.prjs._get_prj_status")
@@ -217,7 +217,7 @@ class TestProjectAPI:
         )
 
         result = client.get(
-            f"{API_PREFIX}/status/prjs/{invalid_prj_id}",
+            f"{API_PREFIX}/prjs/{invalid_prj_id}/status",
             params={"prj_version": "1"},
             headers={"accept": "application/json"},
         )
@@ -228,7 +228,7 @@ class TestProjectAPI:
                 " be found."
             )
         }
-        assert json.loads(result.text) == error
+        assert json.loads(result.json()) == error
         assert result.status_code == HTTPStatus.NOT_FOUND
 
     @mock.patch("ska_oso_ptt_services.routers.prjs.oda")
@@ -250,7 +250,7 @@ class TestProjectAPI:
         uow_mock.commit.return_value = "200"
         mock_oda.uow().__enter__.return_value = uow_mock
 
-        url = f"{API_PREFIX}/status/prjs/prj-mvp01-20220923-00001"
+        url = f"{API_PREFIX}/prjs/prj-mvp01-20220923-00001/status"
         data = {
             "current_status": "Draft",
             "previous_status": "Draft",
@@ -268,8 +268,7 @@ class TestProjectAPI:
             json=data,
             headers={"accept": "application/json"},
         )
-        print("qqqqqqqqqqqqqqqqqqqqqqqq", result.text)
-        assert_json_is_equal(result.text, valid_put_prj_history_response, exclude_paths)
+        assert_json_is_equal(result.json(), valid_put_prj_history_response, exclude_paths)
         assert result.status_code == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.prjs.oda")
@@ -291,7 +290,7 @@ class TestProjectAPI:
         uow_mock.commit.return_value = "200"
         mock_oda.uow().__enter__.return_value = uow_mock
 
-        url = f"{API_PREFIX}/status/prjs/prj-mvp01-20220923-00001"
+        url = f"{API_PREFIX}/prjs/prj-mvp01-20220923-00001/status"
         data = {
             "current_status": "Draft",
             "previous_status": "Draft",
@@ -309,7 +308,7 @@ class TestProjectAPI:
             json=data,
             headers={"accept": "application/json"},
         )
-        assert_json_is_equal(result.text, valid_put_prj_history_response, exclude_paths)
+        assert_json_is_equal(result.json(), valid_put_prj_history_response, exclude_paths)
         assert result.status_code == HTTPStatus.OK
 
         valid_put_prj_history_version_response = load_string_from_file(
@@ -330,7 +329,7 @@ class TestProjectAPI:
         uow_mock.commit.return_value = "200"
         mock_oda.uow().__enter__.return_value = uow_mock
 
-        url = f"{API_PREFIX}/status/prjs/prj-mvp01-20220923-00001"
+        url = f"{API_PREFIX}/prjs/prj-mvp01-20220923-00001/status"
         data = {
             "current_status": "Submitted",
             "previous_status": "Draft",
@@ -349,7 +348,7 @@ class TestProjectAPI:
             headers={"accept": "application/json"},
         )
         assert_json_is_equal(
-            result.text, valid_put_prj_history_version_response, exclude_paths
+            result.json(), valid_put_prj_history_version_response, exclude_paths
         )
         assert result.status_code == HTTPStatus.OK
 
@@ -368,14 +367,14 @@ class TestProjectAPI:
         }
 
         result = client.put(
-            f"{API_PREFIX}/status/prjs/prj-t0001-20240702-00002",
+            f"{API_PREFIX}/prjs/prj-t0001-20240702-00002/status",
             params=query_params,
             json=data,
             headers={"accept": "application/json"},
         )
 
         exclude_path = ["root['traceback']"]
-        assert_json_is_equal(result.text, json.dumps(error), exclude_path)
+        assert_json_is_equal(result.json(), json.dumps(error), exclude_path)
         assert result.status_code == HTTPStatus.INTERNAL_SERVER_ERROR
 
     def test_get_sbi_entity_status(self, client):
@@ -384,7 +383,7 @@ class TestProjectAPI:
         """
 
         result_sbi = client.get(
-            f"{API_PREFIX}/get_entity?entity_name=sbi",
+            f"{API_PREFIX}/status/get_entity?entity_name=sbi",
         )
 
         expected_sbi_response = {
@@ -402,7 +401,7 @@ class TestProjectAPI:
         """
 
         result_eb = client.get(
-            f"{API_PREFIX}/get_entity?entity_name=eb",
+            f"{API_PREFIX}/status/get_entity?entity_name=eb",
         )
 
         expected_eb_response = {
@@ -419,7 +418,7 @@ class TestProjectAPI:
         """
 
         result_sbd = client.get(
-            f"{API_PREFIX}/get_entity?entity_name=sbd",
+            f"{API_PREFIX}/status/get_entity?entity_name=sbd",
         )
 
         expected_sbd_response = {
@@ -441,7 +440,7 @@ class TestProjectAPI:
         """
 
         result_prj = client.get(
-            f"{API_PREFIX}/get_entity?entity_name=prj",
+            f"{API_PREFIX}/status/get_entity?entity_name=prj",
         )
 
         expected_prj_response = {
@@ -462,7 +461,7 @@ class TestProjectAPI:
 
         # Test SBI status
         result_invalid_entity = client.get(
-            f"{API_PREFIX}/get_entity?entity_name=ebi",
+            f"{API_PREFIX}/status/get_entity?entity_name=ebi",
         )
         result_json = json.loads(result_invalid_entity.text)["detail"]
         expected_eb_response = (

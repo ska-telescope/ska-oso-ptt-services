@@ -18,7 +18,7 @@ TEST_FILES_PATH = "routers/test_data_files"
 class TestSBInstanceAPI:
     """This class contains unit tests for the SBInstanceAPI resource,
     which is responsible for handling requests related to
-    Scheduling Block Insatnces.
+    Scheduling Block Instances.
     """
 
     @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
@@ -84,7 +84,7 @@ class TestSBInstanceAPI:
             "cannot combine date created query or entity query with a user query"
         }
 
-        assert json.loads(result.text) == error
+        assert json.loads(result.json()) == error
 
     @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
     @mock.patch("ska_oso_ptt_services.routers.sbis._get_sbi_status")
@@ -106,7 +106,7 @@ class TestSBInstanceAPI:
             f"{API_PREFIX}/sbis/sbi-mvp01-20240426-5016",
             headers={"accept": "application/json"},
         )
-        assert_json_is_equal(result.text, valid_sbi)
+        assert_json_is_equal(result.json(), valid_sbi)
         assert result.status_code == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
@@ -154,12 +154,12 @@ class TestSBInstanceAPI:
         )
         mock_oda.uow().__enter__.return_value = uow_mock
         result = client.get(
-            f"{API_PREFIX}/status/history/sbis",
+            f"{API_PREFIX}/sbis/status/history",
             params={"entity_id": "sbi-mvp01-20220923-00002", "sbi_version": "1"},
             headers={"accept": "application/json"},
         )
 
-        assert_json_is_equal(result.text, valid_sbi_status_history)
+        assert_json_is_equal(result.json(), valid_sbi_status_history)
         assert result.status_code == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
@@ -171,7 +171,7 @@ class TestSBInstanceAPI:
         uow_mock.sbis_status_history.query.return_value = []
         mock_oda.uow().__enter__.return_value = uow_mock
         result = client.get(
-            f"{API_PREFIX}/status/history/sbis",
+            f"{API_PREFIX}/sbis/status/history",
             params={"entity_id": "sbi-t000-00100", "sbi_version": "1"},
             headers={"accept": "application/json"},
         )
@@ -181,7 +181,7 @@ class TestSBInstanceAPI:
                 "Not Found. The requested identifier sbi-t000-00100 could not be found."
             )
         }
-        assert json.loads(result.text) == error
+        assert json.loads(result.json()) == error
         assert result.status_code == HTTPStatus.NOT_FOUND
 
     @mock.patch("ska_oso_ptt_services.routers.sbis._get_sbi_status")
@@ -198,12 +198,12 @@ class TestSBInstanceAPI:
         mock_get_sbi_status.return_value = json.loads(valid_sbi_status)
 
         result = client.get(
-            f"{API_PREFIX}/status/sbis/sbi-mvp01-20240426-5016",
+            f"{API_PREFIX}/sbis/sbi-mvp01-20240426-5016/status",
             params={"sbi_version": "1"},
             headers={"accept": "application/json"},
         )
 
-        assert_json_is_equal(result.text, valid_sbi_status)
+        assert_json_is_equal(result.json(), valid_sbi_status)
         assert result.status_code == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.sbis._get_sbi_status")
@@ -220,7 +220,7 @@ class TestSBInstanceAPI:
         )
 
         result = client.get(
-            f"{API_PREFIX}/status/sbis/{invalid_sbi_id}",
+            f"{API_PREFIX}/sbis/{invalid_sbi_id}/status",
             params={"sbi_version": "1"},
             headers={"accept": "application/json"},
         )
@@ -231,7 +231,7 @@ class TestSBInstanceAPI:
                 " be found."
             )
         }
-        assert json.loads(result.text) == error
+        assert json.loads(result.json()) == error
         assert result.status_code == HTTPStatus.NOT_FOUND
 
     @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
@@ -266,11 +266,11 @@ class TestSBInstanceAPI:
         ]
 
         result = client.put(
-            f"{API_PREFIX}/status/sbis/sbi-mvp01-20220923-00002",
+            f"{API_PREFIX}/sbis/sbi-mvp01-20220923-00002/status",
             json=data,
             headers={"accept": "application/json"},
         )
-        assert_json_is_equal(result.text, valid_put_sbi_history_response, exclude_paths)
+        assert_json_is_equal(result.json(), valid_put_sbi_history_response, exclude_paths)
         assert result.status_code == HTTPStatus.OK
 
     def test_invalid_put_sbd_history(self, client):
@@ -288,11 +288,11 @@ class TestSBInstanceAPI:
         }
 
         result = client.put(
-            f"{API_PREFIX}/status/sbds/sbd-t0001-20240702-00002",
+            f"{API_PREFIX}/sbds/sbd-t0001-20240702-00002/status",
             params=query_params,
             json=data,
             headers={"accept": "application/json"},
         )
         exclude_path = ["root['traceback']"]
-        assert_json_is_equal(result.text, json.dumps(error), exclude_path)
+        assert_json_is_equal(result.json(), json.dumps(error), exclude_path)
         assert result.status_code == HTTPStatus.INTERNAL_SERVER_ERROR

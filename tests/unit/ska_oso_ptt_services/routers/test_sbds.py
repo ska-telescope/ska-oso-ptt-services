@@ -81,7 +81,7 @@ class TestSBDefinitionAPI:
             "cannot combine date created query or entity query with a user query"
         }
 
-        assert json.loads(result.text) == error
+        assert json.loads(result.json()) == error
         assert result.status_code == HTTPStatus.BAD_REQUEST
 
     @mock.patch("ska_oso_ptt_services.routers.sbds.oda")
@@ -103,7 +103,7 @@ class TestSBDefinitionAPI:
             f"{API_PREFIX}/sbds/sbd-t0001-20240702-00002",
             headers={"accept": "application/json"},
         )
-        assert_json_is_equal(result.text, valid_sbd)
+        assert_json_is_equal(result.json(), valid_sbd)
         assert result.status_code == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.sbds.oda")
@@ -149,12 +149,12 @@ class TestSBDefinitionAPI:
         mock_oda.uow().__enter__.return_value = uow_mock
 
         result = client.get(
-            f"{API_PREFIX}/status/history/sbds",
+            f"{API_PREFIX}/sbds/status/history",
             params={"entity_id": "sbd-t0001-20240702-00002", "sbd_version": "1"},
             headers={"accept": "application/json"},
         )
 
-        assert_json_is_equal(result.text, valid_sbd_status_history)
+        assert_json_is_equal(result.json(), valid_sbd_status_history)
         assert result.status_code == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.sbds.oda")
@@ -166,7 +166,7 @@ class TestSBDefinitionAPI:
         uow_mock.sbds_status_history.query.return_value = []
         mock_oda.uow().__enter__.return_value = uow_mock
         result = client.get(
-            f"{API_PREFIX}/status/history/sbds",
+            f"{API_PREFIX}/sbds/status/history",
             params={"entity_id": "sbd-t0001-20240702-00100", "sbd_version": "1"},
             headers={"accept": "application/json"},
         )
@@ -177,7 +177,7 @@ class TestSBDefinitionAPI:
                 " be found."
             )
         }
-        assert json.loads(result.text) == error
+        assert json.loads(result.json()) == error
         assert result.status_code == HTTPStatus.NOT_FOUND
 
     @mock.patch("ska_oso_ptt_services.routers.sbds._get_sbd_status")
@@ -195,12 +195,12 @@ class TestSBDefinitionAPI:
         mock_get_sbd_status.return_value = json.loads(valid_sbd_status)
 
         result = client.get(
-            f"{API_PREFIX}/status/sbds/sbd-t0001-20240702-00002",
+            f"{API_PREFIX}/sbds/sbd-t0001-20240702-00002/status",
             params={"sbd_version": "1"},
             headers={"accept": "application/json"},
         )
 
-        assert_json_is_equal(result.text, valid_sbd_status)
+        assert_json_is_equal(result.json(), valid_sbd_status)
         assert result.status_code == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.sbds._get_sbd_status")
@@ -216,7 +216,7 @@ class TestSBDefinitionAPI:
         )
 
         result = client.get(
-            f"{API_PREFIX}/status/sbds/{invalid_sbd_id}",
+            f"{API_PREFIX}/sbds/{invalid_sbd_id}/status",
             params={"sbd_version": "1"},
             headers={"accept": "application/json"},
         )
@@ -227,7 +227,7 @@ class TestSBDefinitionAPI:
                 " be found."
             )
         }
-        assert json.loads(result.text) == error
+        assert json.loads(result.json()) == error
         assert result.status_code == HTTPStatus.NOT_FOUND
 
     @mock.patch("ska_oso_ptt_services.routers.sbds.oda")
@@ -262,11 +262,11 @@ class TestSBDefinitionAPI:
         ]
 
         result = client.put(
-            f"{API_PREFIX}/status/sbds/sbd-t0001-20240702-00002",
+            f"{API_PREFIX}/sbds/sbd-t0001-20240702-00002/status",
             json=data,
             headers={"accept": "application/json"},
         )
-        assert_json_is_equal(result.text, valid_put_sbd_history_response, exclude_paths)
+        assert_json_is_equal(result.json(), valid_put_sbd_history_response, exclude_paths)
         assert result.status_code == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.sbds.oda")
@@ -301,11 +301,11 @@ class TestSBDefinitionAPI:
         ]
 
         result = client.put(
-            f"{API_PREFIX}/status/sbds/sbd-t0001-20240702-00002",
+            f"{API_PREFIX}/sbds/sbd-t0001-20240702-00002/status",
             json=data,
             headers={"accept": "application/json"},
         )
-        assert_json_is_equal(result.text, valid_put_sbd_history_response, exclude_paths)
+        assert_json_is_equal(result.json(), valid_put_sbd_history_response, exclude_paths)
         assert result.status_code == HTTPStatus.OK
 
         valid_put_sbd_history_version_response = load_string_from_file(
@@ -337,12 +337,12 @@ class TestSBDefinitionAPI:
         ]
 
         result = client.put(
-            f"{API_PREFIX}/status/sbds/sbd-t0001-20240702-00002",
+            f"{API_PREFIX}/sbds/sbd-t0001-20240702-00002/status",
             json=data,
             headers={"accept": "application/json"},
         )
         assert_json_is_equal(
-            result.text, valid_put_sbd_history_version_response, exclude_paths
+            result.json(), valid_put_sbd_history_version_response, exclude_paths
         )
         assert result.status_code == HTTPStatus.OK
 
@@ -361,11 +361,11 @@ class TestSBDefinitionAPI:
         }
 
         result = client.put(
-            f"{API_PREFIX}/status/sbds/sbd-t0001-20240702-00002",
+            f"{API_PREFIX}/sbds/sbd-t0001-20240702-00002/status",
             params=query_params,
             json=data,
             headers={"accept": "application/json"},
         )
         exclude_path = ["root['traceback']"]
-        assert_json_is_equal(result.text, json.dumps(error), exclude_path)
+        assert_json_is_equal(result.json(), json.dumps(error), exclude_path)
         assert result.status_code == HTTPStatus.INTERNAL_SERVER_ERROR
