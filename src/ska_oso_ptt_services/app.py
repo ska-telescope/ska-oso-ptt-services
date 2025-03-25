@@ -9,6 +9,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from ska_db_oda.persistence import oda
 from ska_db_oda.persistence.domain.errors import StatusHistoryException
+from ska_ser_logging import configure_logging
 
 from ska_oso_ptt_services.common.error_handling import (
     ODANotFound,
@@ -35,6 +36,10 @@ PRODUCTION = os.getenv("PRODUCTION", "false").lower() == "true"
 ODA_BACKEND_TYPE = os.getenv("ODA_BACKEND_TYPE", "postgres")
 
 LOGGER = logging.getLogger(__name__)
+
+LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
+
+configure_logging(level=LOG_LEVEL)
 
 
 def create_app(production=PRODUCTION) -> FastAPI:

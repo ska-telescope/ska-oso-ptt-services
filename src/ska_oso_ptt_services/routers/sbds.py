@@ -26,7 +26,8 @@ file_name = "response_files/multiple_sbds_with_status_response.json"
 @sbd_router.get(
     "/",
     tags=["SBD"],
-    summary="Get SB Definition filter by the query parameter",
+    summary="Get All SB Definition with status appended, filter by the query parameter"
+    " like created_before, created_after and user namer",
     response_model=List[SBDefinitionStatusModel],
     responses={
         status.HTTP_200_OK: {
@@ -66,7 +67,7 @@ def get_sbds_with_status(
 @sbd_router.get(
     "/{sbd_id}",
     tags=["SBD"],
-    summary="Get SB Definition by identifier",
+    summary="Get specific SB Definition by identifier with status appended",
     response_model=SBDefinitionStatusModel,
     responses={
         status.HTTP_200_OK: {
@@ -95,7 +96,7 @@ def get_sbd_with_status(sbd_id: str) -> SBDefinitionStatusModel:
 @sbd_router.get(
     "/{sbd_id}/status",
     tags=["SBD"],
-    summary="Get SBDefinition by identifier",
+    summary="Get specific SB Definition status by the identifier",
     response_model=SBDStatusHistory,
     responses={
         status.HTTP_200_OK: {
@@ -106,7 +107,7 @@ def get_sbd_with_status(sbd_id: str) -> SBDefinitionStatusModel:
 )
 def get_sbd_status(sbd_id: str, version: str = None) -> SBDStatusHistory:
     """
-    Function that a GET status/sbds/<sbd_id> request is routed to.
+    Function that a GET /sbds/<sbd_id>/status request is routed to.
     This method is used to GET the current status for the given sbd_id
 
     :param sbd_id: Requested identifier from the path parameter
@@ -123,7 +124,7 @@ def get_sbd_status(sbd_id: str, version: str = None) -> SBDStatusHistory:
 @sbd_router.put(
     "/{sbd_id}/status",
     tags=["SBD"],
-    summary="Update SB Definition status by identifier",
+    summary="Update specific SB Definition status by identifier",
     response_model=SBDStatusHistory,
     responses={
         status.HTTP_200_OK: {
@@ -136,7 +137,7 @@ def put_sbd_history(
     sbd_id: str, sbd_status_history: SBDStatusHistory
 ) -> SBDStatusHistory:
     """
-    Function that a PUT status/sbds/<sbd_id> request is routed to.
+    Function that a PUT /sbds/<sbd_id>/status request is routed to.
 
     :param sbd_id: Requested identifier from the path parameter
     :param sbd_status_history: Object of SBDStatusHistory
@@ -161,7 +162,7 @@ def put_sbd_history(
 @sbd_router.get(
     "/status/history",
     tags=["SBD"],
-    summary="Get SB Definition status history by the query parameter",
+    summary="Get specific SB Definition status history by identifier and version",
     response_model=List[SBDStatusHistory],
     responses={
         status.HTTP_200_OK: {
@@ -174,7 +175,7 @@ def get_sbd_status_history(
     query_params: ApiStatusQueryParameters = Depends(),
 ) -> SBDStatusHistory:
     """
-    Function that a GET /status/sbds request is routed to.
+    Function that a GET /status/history request is routed to.
     This method is used to GET status history for the given entity
 
     :param query_params: Parameters to query the ODA by.
@@ -196,7 +197,7 @@ def get_sbd_status_history(
 
 def _get_sbd_status(uow, sbd_id: str, version: str = None) -> Dict[str, Any]:
     """
-    Takes an SBDefinition ID and Version and returns status
+    Takes an SB Definition ID and Version and returns status
     :param: uow: ODA PostgresUnitOfWork
     :param sbd_id: Scheduling Block ID
     :param version: SBD version

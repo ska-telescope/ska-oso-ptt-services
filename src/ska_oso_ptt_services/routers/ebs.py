@@ -22,7 +22,8 @@ eb_router = APIRouter(prefix="/ebs")
 @eb_router.get(
     "/",
     tags=["EB"],
-    summary="Get Execution Block filter by the query parameter",
+    summary="Get All Execution Block with status appended, filter by the query "
+    "parameter like created_before, created_after and user name",
     response_model=List[EBStatusModel],
     responses={
         status.HTTP_200_OK: {
@@ -62,7 +63,7 @@ def get_ebs_with_status(
 @eb_router.get(
     "/{eb_id}",
     tags=["EB"],
-    summary="Get Execution Block by identifier",
+    summary="Get specific Execution Block by identifier with status appended",
     response_model=EBStatusModel,
     responses={
         status.HTTP_200_OK: {
@@ -92,7 +93,7 @@ def get_eb_with_status(eb_id: str) -> EBStatusModel:
 @eb_router.get(
     "/{eb_id}/status",
     tags=["EB"],
-    summary="Get Execution Block status history by the query parameter",
+    summary="Get specific Execution Block status by the identifier",
     response_model=OSOEBStatusHistory,
     responses={
         status.HTTP_200_OK: {
@@ -103,7 +104,7 @@ def get_eb_with_status(eb_id: str) -> EBStatusModel:
 )
 def get_eb_status(eb_id: str, version: int = None) -> OSOEBStatusHistory:
     """
-    Function that a GET status/ebs/<eb_id> request is routed to.
+    Function that a GET /ebs/<eb_id>/status request is routed to.
     This method is used to GET the current status for the given eb_id
 
     :param eb_id: Requested identifier from the path parameter
@@ -119,7 +120,7 @@ def get_eb_status(eb_id: str, version: int = None) -> OSOEBStatusHistory:
 @eb_router.put(
     "/{eb_id}/status",
     tags=["EB"],
-    summary="Get Execution Block by identifier",
+    summary="Update specific Execution Block status by identifier",
     response_model=OSOEBStatusHistory,
     responses={
         status.HTTP_200_OK: {
@@ -132,7 +133,7 @@ def put_eb_history(
     eb_id: str, eb_status_history: OSOEBStatusHistory
 ) -> OSOEBStatusHistory:
     """
-    Function that a PUT status/ebs/<eb_id> request is routed to.
+    Function that a PUT /ebs/<eb_id>/status request is routed to.
 
     :param eb_id: Requested identifier from the path parameter
     :param eb_status_history: Object of OSOEBStatusHistory
@@ -155,7 +156,7 @@ def put_eb_history(
 @eb_router.get(
     "/status/history",
     tags=["EB"],
-    summary="Get Execution Block by identifier",
+    summary="Get specific Execution Block status history by identifier and version",
     response_model=List[OSOEBStatusHistory],
     responses={
         status.HTTP_200_OK: {
@@ -168,7 +169,7 @@ def get_eb_status_history(
     query_params: ApiStatusQueryParameters = Depends(),
 ) -> List[OSOEBStatusHistory]:
     """
-    Function that a GET /status/ebs request is routed to.
+    Function that a GET /status/history request is routed to.
     This method is used to GET status history for the given entity
 
     :param query_params: Parameters to query the ODA by.

@@ -23,7 +23,8 @@ prj_router = APIRouter(prefix="/prjs")
 @prj_router.get(
     "/",
     tags=["PRJ"],
-    summary="Get Project filter by the query parameter",
+    summary="Get All Project with status appended, filter by the query parameter"
+    " like created_before, created_after and user name",
     response_model=List[ProjectStatusModel],
     responses={
         status.HTTP_200_OK: {
@@ -63,7 +64,7 @@ def get_prjs_with_status(
 @prj_router.get(
     "/{prj_id}",
     tags=["PRJ"],
-    summary="Get Project by identifier",
+    summary="Get specific Project by identifier with status appended",
     response_model=ProjectStatusModel,
     responses={
         status.HTTP_200_OK: {
@@ -93,7 +94,7 @@ def get_prj_with_status(prj_id: str) -> ProjectStatusModel:
 @prj_router.get(
     "/{prj_id}/status",
     tags=["PRJ"],
-    summary="Get Project by identifier",
+    summary="Get specific Project status by the identifier",
     response_model=ProjectStatusHistory,
     responses={
         status.HTTP_200_OK: {
@@ -104,7 +105,7 @@ def get_prj_with_status(prj_id: str) -> ProjectStatusModel:
 )
 def get_prj_status(prj_id: str, version: int = None) -> ProjectStatusHistory:
     """
-    Function that a GET status/prjs/<prj_id> request is routed to.
+    Function that a GET /prjs/<prj_id>/status request is routed to.
     This method is used to GET the current status for the given prj_id
 
     :param prj_id: Requested identifier from the path parameter
@@ -120,7 +121,7 @@ def get_prj_status(prj_id: str, version: int = None) -> ProjectStatusHistory:
 @prj_router.put(
     "/prjs/{prj_id}/status",
     tags=["PRJ"],
-    summary="Update Project status by identifier",
+    summary="Update specific Project status by identifier",
     response_model=ProjectStatusHistory,
     responses={
         status.HTTP_200_OK: {
@@ -133,7 +134,7 @@ def put_prj_history(
     prj_id: str, prj_status_history: ProjectStatusHistory
 ) -> ProjectStatusHistory:
     """
-    Function that a PUT status/prjs/<prj_id> request is routed to.
+    Function that a PUT /prjs/<prj_id>/status request is routed to.
 
     :param prj_id: Requested identifier from the path parameter
     :param prj_status_history: Object of ProjectStatusHistory
@@ -157,7 +158,7 @@ def put_prj_history(
 @prj_router.get(
     "/status/history",
     tags=["PRJ"],
-    summary="Get Project status history by the query parameter",
+    summary="Get specific Project status history by identifier and version",
     response_model=List[ProjectStatusHistory],
     responses={
         status.HTTP_200_OK: {
@@ -170,7 +171,7 @@ def get_prj_status_history(
     query_params: ApiStatusQueryParameters = Depends(),
 ) -> List[ProjectStatusHistory]:
     """
-    Function that a GET /status/prjs request is routed to.
+    Function that a GET /status/history request is routed to.
     This method is used to GET status history for the given entity
 
     :param query_params: Parameters to query the ODA by.

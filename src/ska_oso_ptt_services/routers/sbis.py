@@ -23,7 +23,8 @@ sbi_router = APIRouter(prefix="/sbis")
 @sbi_router.get(
     "/",
     tags=["SBI"],
-    summary="Get SB Instance filter by the query parameter",
+    summary="Get All SB Instance with status appended, filter by the query parameter"
+    " like created_before, created_after and user name",
     response_model=List[SBInstanceStatusModel],
     responses={
         status.HTTP_200_OK: {
@@ -63,7 +64,7 @@ def get_sbis_with_status(
 @sbi_router.get(
     "/{sbi_id}",
     tags=["SBI"],
-    summary="Get SB Instance by identifier",
+    summary="Get specific SB Instance by identifier with status appended",
     response_model=SBInstanceStatusModel,
     responses={
         status.HTTP_200_OK: {
@@ -92,7 +93,7 @@ def get_sbi_with_status(sbi_id: str) -> SBInstanceStatusModel:
 @sbi_router.get(
     "/{sbi_id}/status",
     tags=["SBI"],
-    summary="Get SB Instance status history by the query parameter",
+    summary="Get SB Instance status by the identifier",
     response_model=SBIStatusHistory,
     responses={
         status.HTTP_200_OK: {
@@ -103,7 +104,7 @@ def get_sbi_with_status(sbi_id: str) -> SBInstanceStatusModel:
 )
 def get_sbi_status(sbi_id: str, version: int = None):
     """
-    Function that a GET status/sbi/<sbi_id> request is routed to.
+    Function that a GET /sbi/<sbi_id>/status request is routed to.
     This method is used to GET the current status for the given sbi_id
 
     :param sbi_id: Requested identifier from the path parameter
@@ -119,7 +120,7 @@ def get_sbi_status(sbi_id: str, version: int = None):
 @sbi_router.put(
     "/{sbi_id}/status",
     tags=["SBI"],
-    summary="Update SB Instance status by identifier",
+    summary="Update specific SB Instance status by identifier",
     response_model=SBIStatusHistory,
     responses={
         status.HTTP_200_OK: {
@@ -132,7 +133,7 @@ def put_sbi_history(
     sbi_id: str, sbi_status_history: SBIStatusHistory
 ) -> SBIStatusHistory:
     """
-    Function that a PUT  /status/sbis/<sbi_id> request is routed to.
+    Function that a PUT /sbis/<sbi_id>/status request is routed to.
 
     :param sbi_id: Requested identifier from the path parameter
     :param sbi_status_history: Object of SBIStatusHistory
@@ -156,7 +157,7 @@ def put_sbi_history(
 @sbi_router.get(
     "/status/history",
     tags=["SBI"],
-    summary="Get SB Instance status history by the query parameter",
+    summary="Get specific SB Instance status history by identifier and version",
     response_model=List[SBIStatusHistory],
     responses={
         status.HTTP_200_OK: {
@@ -169,7 +170,7 @@ def get_sbi_status_history(
     query_params: ApiStatusQueryParameters = Depends(),
 ) -> SBIStatusHistory:
     """
-    Function that a GET /status/history/sbis request is routed to.
+    Function that a GET /status/history request is routed to.
     This method is used to GET status history for the given entity
 
     :param query_params: Parameters to query the ODA by.
@@ -191,9 +192,9 @@ def get_sbi_status_history(
 
 def _get_sbi_status(uow, sbi_id: str, version: str = None) -> Dict[str, Any]:
     """
-    Takes an SBInstance ID and Version and returns status
+    Takes an SB Instance ID and Version and returns status
     :param: uow: ODA PostgresUnitOfWork
-    :param sbi_id: SBInstance ID
+    :param sbi_id: SB Instance ID
     :param version: SBI version
 
     Returns retrieved SBI status in Dictionary format
