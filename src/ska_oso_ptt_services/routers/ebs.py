@@ -178,7 +178,6 @@ def get_eb_status_history(
     """
     if not isinstance(maybe_qry_params := get_qry_params(query_params), QueryParams):
         return maybe_qry_params
-
     with oda.uow() as uow:
         ebs_status_history = uow.ebs_status_history.query(
             maybe_qry_params, is_status_history=True

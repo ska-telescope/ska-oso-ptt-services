@@ -3,7 +3,7 @@ from http import HTTPStatus
 from unittest import mock
 
 from fastapi.testclient import TestClient
-from ska_oso_pdm import OSOExecutionBlock
+from ska_oso_pdm import OSOEBStatusHistory, OSOExecutionBlock
 
 from ska_oso_ptt_services.app import create_app  # Import your create_app function
 from ska_oso_ptt_services.app import API_PREFIX
@@ -118,3 +118,204 @@ class TestExecutionBlockAPI:
             exclude_paths=["root['metadata']['pdm_version']"],
         )
         assert result.status_code == HTTPStatus.OK
+
+    @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
+    def test_get_eb_with_invalid_status(self, mock_oda):
+        """Verifying that get_eb_with_status throws error if invalid data passed"""
+        invalid_eb_id = "invalid-eb-id-12345"
+
+        uow_mock = mock.MagicMock()
+        uow_mock.ebs.get.side_effect = KeyError(
+            f"Not Found. The requested identifier {invalid_eb_id} could not be found."
+        )
+        # print(f'****************uow_mock.ebs.get: {uow_mock.ebs.get}')
+        mock_oda.uow().__enter__.return_value = uow_mock
+
+        # Perform the GET request with the invalid eb ID
+        result = client.get(
+            f"{API_PREFIX}/ebs/{invalid_eb_id}",
+            headers={"accept": "application/json"},
+        )
+        print(f"**********************888result.get_json(): {result.json()}")
+        # Check if the response contains the expected error message
+        expected_error_message = {
+            "detail": (
+                f"Not Found. The requested identifier {invalid_eb_id} could not be"
+                " found."
+            )
+        }
+        print(f"**********************expected_error_message: {expected_error_message}")
+        # print(f"**********************888result.get_json(): {result.json()}")
+        print(f"*****************************result.status_code::{result.status_code}")
+        assert result.status_code == HTTPStatus.INTERNAL_SERVER_ERROR
+        assert result.json() == expected_error_message
+
+    @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
+    def test_get_eb_status_history(self, mock_oda):
+        """Verifying that get_eb_status_history API returns requested
+        EB status history
+        """
+        valid_eb_status_history = load_string_from_file(
+            f"{TEST_FILES_PATH}/testfile_sample_eb_status_history.json"
+        )
+
+        uow_mock = mock.MagicMock()
+        uow_mock.ebs_status_history.query.return_value = json.loads(
+            valid_eb_status_history
+        )
+        print(
+            f"************uow_mock.ebs_status_history.query.return_value: {uow_mock.ebs_status_history.query.return_value}"
+        )
+        mock_oda.uow().__enter__.return_value = uow_mock
+        result = client.get(
+            f"{API_PREFIX}/ebs/eb-mvp01-20240426-5004/status",
+            headers={"accept": "application/json"},
+        )
+        print(
+            f"******result.text, valid_eb_status_history: {result.json()}\n\n fsfsfs{valid_eb_status_history}"
+        )
+        assert_json_is_equal(json.dumps(result.json()), valid_eb_status_history)
+
+        assert result.status_code == HTTPStatus.OK
+
+    @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
+    def test_invalid_get_eb_status_history(self, mock_oda):
+        """Verifying that test_invalid_get_eb_status_history throws error
+        if invalid data passed
+        """
+        uow_mock = mock.MagicMock()
+        uow_mock.ebs_status_history.query.return_value = []
+        mock_oda.uow().__enter__.return_value = uow_mock
+        result = client.get(
+            f"{API_PREFIX}/ebs/status/history",
+            params={"entity_id": "eb-t0001-00100", "eb_version": "1"},
+            headers={"accept": "application/json"},
+        )
+        print(f"**********result.text::{result.text}")
+
+        error = {
+            "detail": (
+                "Not Found. The requested identifier eb-t0001-00100 could not be found."
+            )
+        }
+
+        assert json.loads(result.text) == error
+        assert result.status_code == HTTPStatus.NOT_FOUND
+
+    @mock.patch("ska_oso_ptt_services.routers.ebs._get_eb_status")
+    @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
+    def test_get_eb_status(self, mock_oda, mock_get_eb_status):
+        """Verifying that test_eb_sbd_status API returns requested EB status"""
+
+        valid_eb_status = load_string_from_file(
+            f"{TEST_FILES_PATH}/testfile_sample_eb_status.json"
+        )
+
+        uow_mock = mock.MagicMock()
+        mock_oda.uow().__enter__.return_value = uow_mock
+
+        mock_get_eb_status.return_value = json.loads(valid_eb_status)
+
+        result = client.get(
+            f"{API_PREFIX}/status/ebs/eb-mvp01-20240426-5004",
+            params={"eb_version": "1"},
+            headers={"accept": "application/json"},
+        )
+        print(f"*******************result.text: {result.text}")
+        print(f"*******************valid_eb_status: {valid_eb_status}")
+
+        assert_json_is_equal(result.text, valid_eb_status)
+        assert result.status_code == HTTPStatus.OK
+
+    @mock.patch("ska_oso_ptt_services.routers.ebs._get_eb_status")
+    @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
+    def test_invalid_get_eb_status(self, mock_oda, mock_get_eb_status):
+        """Verifying that get_eb_status throws error if invalid data passed"""
+        invalid_eb_id = "eb-t0001-20240702-00100"
+
+        uow_mock = mock.MagicMock()
+        mock_oda.uow.__enter__.return_value = uow_mock
+
+        mock_get_eb_status.side_effect = KeyError(
+            f"Not Found. The requested identifier {invalid_eb_id} could not be found."
+        )
+
+        result = client.get(
+            f"{API_PREFIX}/status/ebs/{invalid_eb_id}",
+            params={"eb_version": "1"},
+            headers={"accept": "application/json"},
+        )
+
+        error = {
+            "detail": (
+                "Not Found. The requested identifier eb-t0001-20240702-00100 could not"
+                " be found."
+            )
+        }
+        assert json.loads(result.text) == error
+        assert result.status_code == HTTPStatus.NOT_FOUND
+
+    @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
+    def test_put_eb_history(self, mock_oda):
+        """Verifying that put_eb_history updates the eb status correctly"""
+        valid_put_eb_history_response = load_string_from_file(
+            f"{TEST_FILES_PATH}/testfile_sample_eb_status.json"
+        )
+
+        uow_mock = mock.MagicMock()
+        uow_mock.ebs = ["eb-mvp01-20240426-5004"]
+
+        ebs_status_history_mock = mock.MagicMock()
+        ebs_status_history_mock.add.return_value = (
+            OSOEBStatusHistory.model_validate_json(valid_put_eb_history_response)
+        )
+
+        uow_mock.ebs_status_history = ebs_status_history_mock
+        uow_mock.commit.return_value = "200"
+        mock_oda.uow.__enter__.return_value = uow_mock
+
+        url = f"{API_PREFIX}/status/ebs/eb-mvp01-20240426-5004"
+        data = {
+            "current_status": "Fully Observed",
+            "previous_status": "Created",
+            "eb_version": "1",
+        }
+        exclude_paths = [
+            "root['metadata']['created_on']",
+            "root['metadata']['last_modified_on']",
+            "root['metadata']['version']",
+            "root['metadata']['pdm_version']",
+        ]
+
+        result = client.put(
+            url,
+            json=data,
+            headers={"accept": "application/json"},
+        )
+        assert_json_is_equal(result.text, valid_put_eb_history_response, exclude_paths)
+        assert result.status_code == HTTPStatus.OK
+
+    def test_invalid_put_eb_history(self):
+        """Verifying that put_eb_history error if invalid data passed"""
+        query_params = {"eb_version": "1"}
+        data = {
+            "current1_status": "Fully Observed",
+            "previous_status": "Created",
+            "eb_version": "1",
+        }
+
+        error = {
+            "detail": "KeyError('current_status') with args ('current_status',)",
+            "title": "Internal Server Error",
+        }
+
+        result = client.put(
+            f"{API_PREFIX}/status/ebs/eb-t0001-20240702-00002",
+            params=query_params,
+            json=data,
+            headers={"accept": "application/json"},
+        )
+
+        exclude_path = ["root['traceback']"]
+        assert_json_is_equal(result.text, json.dumps(error), exclude_path)
+        assert result.status_code == HTTPStatus.INTERNAL_SERVER_ERROR
