@@ -1,3 +1,5 @@
+.. _persistent:
+
 Persistence in the ODA
 ==============================
 
