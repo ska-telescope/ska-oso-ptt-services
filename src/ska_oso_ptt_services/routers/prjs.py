@@ -1,22 +1,23 @@
 import logging
-from pathlib import Path
 from typing import Any, Dict, List
 
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends
 from ska_db_oda.persistence import oda
 from ska_db_oda.persistence.domain.query import QueryParams
 from ska_db_oda.rest.api import check_for_mismatch, get_qry_params
 from ska_db_oda.rest.model import ApiQueryParameters, ApiStatusQueryParameters
 from ska_oso_pdm.entity_status_history import ProjectStatusHistory
 
+from ska_oso_ptt_services.common.constant import (
+    GET_ALL_PRJ_MODEL,
+    GET_ID_PRJ_MODEL,
+    GET_ID_PRJ_STATUS_MODEL,
+    GET_PUT_ID_PRJ_STATUS_MODEL,
+)
 from ska_oso_ptt_services.models.models import ProjectStatusModel
-
-# Get the directory of the current script
-current_dir = Path(__file__).parent
 
 LOGGER = logging.getLogger(__name__)
 
-# Ideally would prefix this with ebs but the status entities do not follow the pattern
 prj_router = APIRouter(prefix="/prjs")
 
 
@@ -26,12 +27,7 @@ prj_router = APIRouter(prefix="/prjs")
     summary="Get All Project with status appended, filter by the query parameter"
     " like created_before, created_after and user name",
     response_model=List[ProjectStatusModel],
-    responses={
-        status.HTTP_200_OK: {
-            "description": "Successful Response",
-            "model": List[ProjectStatusModel],
-        }
-    },
+    responses=GET_ALL_PRJ_MODEL,
 )
 def get_prjs_with_status(
     query_params: ApiQueryParameters = Depends(),
@@ -66,12 +62,7 @@ def get_prjs_with_status(
     tags=["PRJ"],
     summary="Get specific Project by identifier with status appended",
     response_model=ProjectStatusModel,
-    responses={
-        status.HTTP_200_OK: {
-            "description": "Successful Response",
-            "model": ProjectStatusModel,
-        }
-    },
+    responses=GET_ID_PRJ_MODEL,
 )
 def get_prj_with_status(prj_id: str) -> ProjectStatusModel:
     """
@@ -96,12 +87,7 @@ def get_prj_with_status(prj_id: str) -> ProjectStatusModel:
     tags=["PRJ"],
     summary="Get specific Project status by the identifier",
     response_model=ProjectStatusHistory,
-    responses={
-        status.HTTP_200_OK: {
-            "description": "Successful Response",
-            "model": ProjectStatusHistory,
-        }
-    },
+    responses=GET_PUT_ID_PRJ_STATUS_MODEL,
 )
 def get_prj_status(prj_id: str, version: int = None) -> ProjectStatusHistory:
     """
@@ -119,16 +105,11 @@ def get_prj_status(prj_id: str, version: int = None) -> ProjectStatusHistory:
 
 
 @prj_router.put(
-    "/prjs/{prj_id}/status",
+    "/{prj_id}/status",
     tags=["PRJ"],
     summary="Update specific Project status by identifier",
     response_model=ProjectStatusHistory,
-    responses={
-        status.HTTP_200_OK: {
-            "description": "Successful Response",
-            "model": ProjectStatusHistory,
-        }
-    },
+    responses=GET_PUT_ID_PRJ_STATUS_MODEL,
 )
 def put_prj_history(
     prj_id: str, prj_status_history: ProjectStatusHistory
@@ -160,12 +141,7 @@ def put_prj_history(
     tags=["PRJ"],
     summary="Get specific Project status history by identifier and version",
     response_model=List[ProjectStatusHistory],
-    responses={
-        status.HTTP_200_OK: {
-            "description": "Successful Response",
-            "model": List[ProjectStatusHistory],
-        }
-    },
+    responses=GET_ID_PRJ_STATUS_MODEL,
 )
 def get_prj_status_history(
     query_params: ApiStatusQueryParameters = Depends(),

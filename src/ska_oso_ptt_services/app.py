@@ -36,10 +36,7 @@ PRODUCTION = os.getenv("PRODUCTION", "false").lower() == "true"
 ODA_BACKEND_TYPE = os.getenv("ODA_BACKEND_TYPE", "postgres")
 
 LOGGER = logging.getLogger(__name__)
-
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
-
-configure_logging(level=LOG_LEVEL)
 
 
 def create_app(production=PRODUCTION) -> FastAPI:
@@ -47,6 +44,7 @@ def create_app(production=PRODUCTION) -> FastAPI:
     Create the Connexion application with required config
     """
     LOGGER.info("Creating FastAPI app")
+    configure_logging(level=LOG_LEVEL)
 
     app = FastAPI(openapi_url=f"{API_PREFIX}/openapi.json", docs_url=f"{API_PREFIX}/ui")
 

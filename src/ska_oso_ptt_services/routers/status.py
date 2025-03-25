@@ -1,7 +1,5 @@
-import json
 import logging
 from enum import EnumMeta
-from pathlib import Path
 from typing import Dict
 
 from fastapi import APIRouter
@@ -12,8 +10,8 @@ from ska_oso_pdm.entity_status_history import (
     SBIStatus,
 )
 
-# Get the directory of the current script
-current_dir = Path(__file__).parent
+from ska_oso_ptt_services.common.constant import GET_ALL_ENTITY_MODEL
+from ska_oso_ptt_services.models.models import EntityStatusResponse
 
 LOGGER = logging.getLogger(__name__)
 
@@ -24,53 +22,10 @@ status_router = APIRouter(prefix="/status")
     "/get_entity",
     tags=["Status"],
     summary="Get status dictionary by the entity parameter",
-    responses={
-        200: {
-            "description": "Successful Response",
-            "content": {
-                "application/json": {
-                    "example": [
-                        json.loads(
-                            (
-                                current_dir
-                                / "response_files/status_entity_response.json"
-                            ).read_text()
-                        )
-                    ]
-                }
-            },
-        },
-        400: {
-            "description": "Bad Request",
-            "content": {
-                "application/json": {
-                    "example": {"message": "Invalid request parameters"}
-                }
-            },
-        },
-        404: {
-            "description": "Not Found",
-            "content": {
-                "application/json": {"example": {"message": "Entity Not Found"}}
-            },
-        },
-        422: {
-            "description": "Unprocessable Content",
-            "content": {
-                "application/json": {"example": {"message": "Invalid Entity Id"}}
-            },
-        },
-        500: {
-            "description": "Internal Server Error",
-            "content": {
-                "application/json": {
-                    "example": {"message": "Internal server error occurred"}
-                }
-            },
-        },
-    },
+    response_model=EntityStatusResponse,
+    responses=GET_ALL_ENTITY_MODEL,
 )
-def get_entity_status(entity_name: str):
+def get_entity_status(entity_name: str) -> EntityStatusResponse:
     """
     Function that returns the status dictionary for a given entity type.
 
@@ -94,4 +49,7 @@ def get_entity_status(entity_name: str):
     if not entity_class:
         raise ValueError(f"Invalid entity name: {entity_name}")
 
-    return {status.name: status.value for status in entity_class}
+    return EntityStatusResponse(
+        entity_type=entity_name.lower(),
+        statuses={status.name: status.value for status in entity_class},
+    )

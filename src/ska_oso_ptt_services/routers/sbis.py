@@ -1,22 +1,23 @@
 import logging
-from pathlib import Path
 from typing import Any, Dict, List
 
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends
 from ska_db_oda.persistence import oda
 from ska_db_oda.persistence.domain.query import QueryParams
 from ska_db_oda.rest.api import check_for_mismatch, get_qry_params
 from ska_db_oda.rest.model import ApiQueryParameters, ApiStatusQueryParameters
 from ska_oso_pdm.entity_status_history import SBIStatusHistory
 
+from ska_oso_ptt_services.common.constant import (
+    GET_ALL_SBI_MODEL,
+    GET_ID_SBI_MODEL,
+    GET_ID_SBI_STATUS_MODEL,
+    GET_PUT_ID_SBI_STATUS_MODEL,
+)
 from ska_oso_ptt_services.models.models import SBInstanceStatusModel
-
-# Get the directory of the current script
-current_dir = Path(__file__).parent
 
 LOGGER = logging.getLogger(__name__)
 
-# Ideally would prefix this with ebs but the status entities do not follow the pattern
 sbi_router = APIRouter(prefix="/sbis")
 
 
@@ -26,12 +27,7 @@ sbi_router = APIRouter(prefix="/sbis")
     summary="Get All SB Instance with status appended, filter by the query parameter"
     " like created_before, created_after and user name",
     response_model=List[SBInstanceStatusModel],
-    responses={
-        status.HTTP_200_OK: {
-            "description": "Successful Response",
-            "model": List[SBInstanceStatusModel],
-        }
-    },
+    responses=GET_ALL_SBI_MODEL,
 )
 def get_sbis_with_status(
     query_params: ApiQueryParameters = Depends(),
@@ -66,12 +62,7 @@ def get_sbis_with_status(
     tags=["SBI"],
     summary="Get specific SB Instance by identifier with status appended",
     response_model=SBInstanceStatusModel,
-    responses={
-        status.HTTP_200_OK: {
-            "description": "Successful Response",
-            "model": SBInstanceStatusModel,
-        }
-    },
+    responses=GET_ID_SBI_MODEL,
 )
 def get_sbi_with_status(sbi_id: str) -> SBInstanceStatusModel:
     """
@@ -95,12 +86,7 @@ def get_sbi_with_status(sbi_id: str) -> SBInstanceStatusModel:
     tags=["SBI"],
     summary="Get SB Instance status by the identifier",
     response_model=SBIStatusHistory,
-    responses={
-        status.HTTP_200_OK: {
-            "description": "Successful Response",
-            "model": SBIStatusHistory,
-        }
-    },
+    responses=GET_PUT_ID_SBI_STATUS_MODEL,
 )
 def get_sbi_status(sbi_id: str, version: int = None):
     """
@@ -122,12 +108,7 @@ def get_sbi_status(sbi_id: str, version: int = None):
     tags=["SBI"],
     summary="Update specific SB Instance status by identifier",
     response_model=SBIStatusHistory,
-    responses={
-        status.HTTP_200_OK: {
-            "description": "Successful Response",
-            "model": SBIStatusHistory,
-        }
-    },
+    responses=GET_PUT_ID_SBI_STATUS_MODEL,
 )
 def put_sbi_history(
     sbi_id: str, sbi_status_history: SBIStatusHistory
@@ -159,12 +140,7 @@ def put_sbi_history(
     tags=["SBI"],
     summary="Get specific SB Instance status history by identifier and version",
     response_model=List[SBIStatusHistory],
-    responses={
-        status.HTTP_200_OK: {
-            "description": "Successful Response",
-            "model": List[SBIStatusHistory],
-        }
-    },
+    responses=GET_ID_SBI_STATUS_MODEL,
 )
 def get_sbi_status_history(
     query_params: ApiStatusQueryParameters = Depends(),
