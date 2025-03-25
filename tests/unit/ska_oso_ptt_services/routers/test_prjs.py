@@ -3,24 +3,16 @@ import json
 from http import HTTPStatus
 from unittest import mock
 
-from fastapi.testclient import TestClient
 from ska_oso_pdm import Project
 from ska_oso_pdm.entity_status_history import ProjectStatusHistory
 
-from ska_oso_ptt_services.routers.app import (
-    create_app,  # Import your create_app function
-)
-from ska_oso_ptt_services.routers.app import API_PREFIX
+from ska_oso_ptt_services.app import API_PREFIX
 from tests.unit.ska_oso_ptt_services.utils import (
     assert_json_is_equal,
     load_string_from_file,
 )
 
-# Create the FastAPI app instance
-app = create_app()
-
-# Create the TestClient with the app instance
-client = TestClient(app)
+TEST_FILES_PATH = "routers/test_data_files"
 
 
 class TestProjectAPI:
@@ -31,10 +23,10 @@ class TestProjectAPI:
 
     @mock.patch("ska_oso_ptt_services.routers.prjs.oda")
     @mock.patch("ska_oso_ptt_services.routers.prjs._get_prj_status")
-    def test_get_prjs_with_status(self, mock_get_prj_status, mock_oda):
+    def test_get_prjs_with_status(self, mock_get_prj_status, mock_oda, client):
         """Verifying that get_prjs_with_status API returns All prjs with status"""
         valid_prjs = load_string_from_file(
-            "routers/test_data_files/testfile_sample_multiple_prjs_with_status.json"
+            f"{TEST_FILES_PATH}/testfile_sample_multiple_prjs_with_status.json"
         )
 
         project = [Project(**x) for x in json.loads(valid_prjs)]
@@ -43,8 +35,8 @@ class TestProjectAPI:
         prjs_mock.query.return_value = project
         uow_mock = mock.MagicMock()
         uow_mock.prjs = prjs_mock
-        mock_get_prj_status.return_value = {"current_status": "Draft"}
-        mock_oda.uow.__enter__.return_value = uow_mock
+        mock_get_prj_status().current_status = "Draft"
+        mock_oda.uow().__enter__.return_value = uow_mock
 
         # Perform the GET request with query parameters using the query_string parameter
         query_params = {
@@ -57,15 +49,15 @@ class TestProjectAPI:
             params=query_params,
             headers={"accept": "application/json"},
         )
-        resultDict = json.loads(result.text)
+        resultDict = result.json()
 
         for res in resultDict:
             del res["metadata"]["pdm_version"]
 
-        assert_json_is_equal(json.dumps(resultDict), valid_prjs)
+        assert_json_is_equal(json.dumps(resultDict), json.dumps(json.loads(valid_prjs)))
         assert result.status_code == HTTPStatus.OK
 
-    def test_invalid_get_prjs_with_status(self):
+    def test_invalid_get_prjs_with_status(self, client):
         """Verifying that get_prjs_with_status throws error if invalid data passed"""
 
         query_params = {
@@ -84,29 +76,27 @@ class TestProjectAPI:
         )
 
         error = {
-            "detail": (
-                "Different query types are not currently supported - for example,"
-                " cannot combine date created query or entity query with a user query"
-            ),
-            "title": "Not Supported",
+            "detail": "Different query types are not currently supported"
+            " - for example, "
+            "cannot combine date created query or entity query with a user query"
         }
 
         assert json.loads(result.text) == error
 
     @mock.patch("ska_oso_ptt_services.routers.prjs.oda")
     @mock.patch("ska_oso_ptt_services.routers.prjs._get_prj_status")
-    def test_get_prj_with_status(self, mock_get_prj_status, mock_oda):
+    def test_get_prj_with_status(self, mock_get_prj_status, mock_oda, client):
         """Verifying that get_prj_with_status API returns requested prj with status"""
         valid_prj_with_status = load_string_from_file(
-            "routers/test_data_files/testfile_sample_prj_with_status.json"
+            f"{TEST_FILES_PATH}/testfile_sample_prj_with_status.json"
         )
 
         prj_mock = mock.MagicMock()
         prj_mock.model_dump.return_value = json.loads(valid_prj_with_status)
         uow_mock = mock.MagicMock()
         uow_mock.prjs.get.return_value = prj_mock
-        mock_get_prj_status.return_value = {"current_status": "Draft"}
-        mock_oda.uow.__enter__.return_value = uow_mock
+        mock_get_prj_status().current_status = "Draft"
+        mock_oda.uow().__enter__.return_value = uow_mock
 
         result = client.get(
             f"{API_PREFIX}/prjs/prj-mvp01-20220923-00001",
@@ -116,7 +106,7 @@ class TestProjectAPI:
         assert result.status_code == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.prjs.oda")
-    def test_get_prj_with_invalid_status(self, mock_oda):
+    def test_get_prj_with_invalid_status(self, mock_oda, client):
         """Verifying that get_prj_with_status throws error if invalid data passed"""
         invalid_prj_id = "invalid-prj-id-12345"
 
@@ -124,7 +114,7 @@ class TestProjectAPI:
         uow_mock.prjs.get.side_effect = KeyError(
             f"Not Found. The requested identifier {invalid_prj_id} could not be found."
         )
-        mock_oda.uow.__enter__.return_value = uow_mock
+        mock_oda.uow().__enter__.return_value = uow_mock
 
         # Perform the GET request with the invalid eb ID
         result = client.get(
@@ -144,19 +134,19 @@ class TestProjectAPI:
         assert result.get_json() == expected_error_message
 
     @mock.patch("ska_oso_ptt_services.routers.prjs.oda")
-    def test_get_prj_status_history(self, mock_oda):
+    def test_get_prj_status_history(self, mock_oda, client):
         """Verifying that get_prj_status_history API returns requested
         prj status history
         """
         valid_prj_status_history = load_string_from_file(
-            "routers/test_data_files/testfile_sample_prj_status_history.json"
+            f"{TEST_FILES_PATH}/testfile_sample_prj_status_history.json"
         )
 
         uow_mock = mock.MagicMock()
         uow_mock.prjs_status_history.query.return_value = json.loads(
             valid_prj_status_history
         )
-        mock_oda.uow.__enter__.return_value = uow_mock
+        mock_oda.uow().__enter__.return_value = uow_mock
 
         result = client.get(
             f"{API_PREFIX}/status/history/prjs",
@@ -168,13 +158,13 @@ class TestProjectAPI:
         assert result.status_code == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.prjs.oda")
-    def test_invalid_get_prj_status_history(self, mock_oda):
+    def test_invalid_get_prj_status_history(self, mock_oda, client):
         """Verifying that test_invalid_get_prj_status_history throws error
         if invalid data passed
         """
         uow_mock = mock.MagicMock()
         uow_mock.prjs_status_history.query.return_value = []
-        mock_oda.uow.__enter__.return_value = uow_mock
+        mock_oda.uow().__enter__.return_value = uow_mock
         result = client.get(
             f"{API_PREFIX}/status/history/prjs",
             params={"entity_id": "prj-t0001-00100", "prj_version": "1"},
@@ -192,15 +182,15 @@ class TestProjectAPI:
 
     @mock.patch("ska_oso_ptt_services.routers.prjs._get_prj_status")
     @mock.patch("ska_oso_ptt_services.routers.prjs.oda")
-    def test_get_prj_status(self, mock_oda, mock_get_prj_status):
+    def test_get_prj_status(self, mock_oda, mock_get_prj_status, client):
         """Verifying that test_prj_sbd_status API returns requested prj status"""
 
         valid_prj_status = load_string_from_file(
-            "routers/test_data_files/testfile_sample_prj_status.json"
+            f"{TEST_FILES_PATH}/testfile_sample_prj_status.json"
         )
 
         uow_mock = mock.MagicMock()
-        mock_oda.uow.__enter__.return_value = uow_mock
+        mock_oda.uow().__enter__.return_value = uow_mock
 
         mock_get_prj_status.return_value = json.loads(valid_prj_status)
 
@@ -215,12 +205,12 @@ class TestProjectAPI:
 
     @mock.patch("ska_oso_ptt_services.routers.prjs._get_prj_status")
     @mock.patch("ska_oso_ptt_services.routers.prjs.oda")
-    def test_invalid_get_prj_status(self, mock_oda, mock_get_prj_status):
+    def test_invalid_get_prj_status(self, mock_oda, mock_get_prj_status, client):
         """Verifying that get_prj_status throws error if invalid data passed"""
         invalid_prj_id = "prj-t0001-20240702-00100"
 
         uow_mock = mock.MagicMock()
-        mock_oda.uow.__enter__.return_value = uow_mock
+        mock_oda.uow().__enter__.return_value = uow_mock
 
         mock_get_prj_status.side_effect = KeyError(
             f"Not Found. The requested identifier {invalid_prj_id} could not be found."
@@ -242,10 +232,10 @@ class TestProjectAPI:
         assert result.status_code == HTTPStatus.NOT_FOUND
 
     @mock.patch("ska_oso_ptt_services.routers.prjs.oda")
-    def test_put_prj_history(self, mock_oda):
+    def test_put_prj_history(self, mock_oda, client):
         """Verifying that put_prj_history updates the prj status correctly"""
         valid_put_prj_history_response = load_string_from_file(
-            "routers/test_data_files/testfile_sample_prj_status.json"
+            f"{TEST_FILES_PATH}/testfile_sample_prj_status.json"
         )
 
         uow_mock = mock.MagicMock()
@@ -258,7 +248,7 @@ class TestProjectAPI:
 
         uow_mock.prjs_status_history = prjs_status_history_mock
         uow_mock.commit.return_value = "200"
-        mock_oda.uow.__enter__.return_value = uow_mock
+        mock_oda.uow().__enter__.return_value = uow_mock
 
         url = f"{API_PREFIX}/status/prjs/prj-mvp01-20220923-00001"
         data = {
@@ -283,10 +273,10 @@ class TestProjectAPI:
         assert result.status_code == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.prjs.oda")
-    def test_put_prj_history_with_two_version(self, mock_oda):
+    def test_put_prj_history_with_two_version(self, mock_oda, client):
         """Verifying that put_prj_history updates the prj status correctly"""
         valid_put_prj_history_response = load_string_from_file(
-            "routers/test_data_files/testfile_sample_prj_status.json"
+            f"{TEST_FILES_PATH}/testfile_sample_prj_status.json"
         )
 
         uow_mock = mock.MagicMock()
@@ -299,7 +289,7 @@ class TestProjectAPI:
 
         uow_mock.prjs_status_history = prjs_status_history_mock
         uow_mock.commit.return_value = "200"
-        mock_oda.uow.__enter__.return_value = uow_mock
+        mock_oda.uow().__enter__.return_value = uow_mock
 
         url = f"{API_PREFIX}/status/prjs/prj-mvp01-20220923-00001"
         data = {
@@ -323,7 +313,7 @@ class TestProjectAPI:
         assert result.status_code == HTTPStatus.OK
 
         valid_put_prj_history_version_response = load_string_from_file(
-            "routers/test_data_files/testfile_sample_prj_status_version.json"
+            f"{TEST_FILES_PATH}/testfile_sample_prj_status_version.json"
         )
 
         uow_mock = mock.MagicMock()
@@ -338,7 +328,7 @@ class TestProjectAPI:
 
         uow_mock.prjs_status_history = prjs_status_history_mock
         uow_mock.commit.return_value = "200"
-        mock_oda.uow.__enter__.return_value = uow_mock
+        mock_oda.uow().__enter__.return_value = uow_mock
 
         url = f"{API_PREFIX}/status/prjs/prj-mvp01-20220923-00001"
         data = {
@@ -363,7 +353,7 @@ class TestProjectAPI:
         )
         assert result.status_code == HTTPStatus.OK
 
-    def test_invalid_put_prj_history(self):
+    def test_invalid_put_prj_history(self, client):
         """Verifying that put_prj_history error if invalid data passed"""
         query_params = {"prj_version": "1"}
         data = {
@@ -388,7 +378,7 @@ class TestProjectAPI:
         assert_json_is_equal(result.text, json.dumps(error), exclude_path)
         assert result.status_code == HTTPStatus.INTERNAL_SERVER_ERROR
 
-    def test_get_sbi_entity_status(self):
+    def test_get_sbi_entity_status(self, client):
         """Verifying that get_entity_status API returns correct status
         values for SBI entity
         """
@@ -406,7 +396,7 @@ class TestProjectAPI:
 
         assert_json_is_equal(result_sbi.text, json.dumps(expected_sbi_response))
 
-    def test_get_eb_entity_status(self):
+    def test_get_eb_entity_status(self, client):
         """Verifying that get_entity_status API returns correct status
         values for EB entity
         """
@@ -423,7 +413,7 @@ class TestProjectAPI:
 
         assert_json_is_equal(result_eb.text, json.dumps(expected_eb_response))
 
-    def test_get_sbd_entity_status(self):
+    def test_get_sbd_entity_status(self, client):
         """Verifying that get_entity_status API returns correct status values
         for SBD entity
         """
@@ -445,7 +435,7 @@ class TestProjectAPI:
 
         assert_json_is_equal(result_sbd.text, json.dumps(expected_sbd_response))
 
-    def test_get_prj_entity_status(self):
+    def test_get_prj_entity_status(self, client):
         """Verifying that get_entity_status API returns correct status
         values for Project entity
         """
@@ -467,7 +457,7 @@ class TestProjectAPI:
 
         assert_json_is_equal(result_prj.text, json.dumps(expected_prj_response))
 
-    def test_get_invalid_entity_status(self):
+    def test_get_invalid_entity_status(self, client):
         """Verifying that get_entity_status API returns error for invalid entity"""
 
         # Test SBI status

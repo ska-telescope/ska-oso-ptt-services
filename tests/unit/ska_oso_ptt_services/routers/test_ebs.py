@@ -2,21 +2,13 @@ import json
 from http import HTTPStatus
 from unittest import mock
 
-from fastapi.testclient import TestClient
 from ska_oso_pdm import OSOEBStatusHistory, OSOExecutionBlock
 
-from ska_oso_ptt_services.app import create_app  # Import your create_app function
 from ska_oso_ptt_services.app import API_PREFIX
 from tests.unit.ska_oso_ptt_services.utils import (
     assert_json_is_equal,
     load_string_from_file,
 )
-
-# Create the FastAPI app instance
-app = create_app()
-
-# Create the TestClient with the app instance
-client = TestClient(app)
 
 TEST_FILES_PATH = "routers/test_data_files"
 
@@ -29,7 +21,7 @@ class TestExecutionBlockAPI:
 
     @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
     @mock.patch("ska_oso_ptt_services.routers.ebs._get_eb_status")
-    def test_get_ebs_with_status(self, mock_get_eb_status, mock_oda):
+    def test_get_ebs_with_status(self, mock_get_eb_status, mock_oda, client):
         """Verifying that get_ebs_with_status API returns All EBs with status"""
         valid_ebs = load_string_from_file(
             f"{TEST_FILES_PATH}/testfile_sample_multiple_ebs_with_status.json"
@@ -65,7 +57,7 @@ class TestExecutionBlockAPI:
 
         assert result.status_code == HTTPStatus.OK
 
-    def test_invalid_get_ebs_with_status(self):
+    def test_invalid_get_ebs_with_status(self, client):
         """Verifying that get_ebs_with_status throws error if invalid data passed"""
 
         query_params = {
@@ -93,7 +85,7 @@ class TestExecutionBlockAPI:
 
     @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
     @mock.patch("ska_oso_ptt_services.routers.ebs._get_eb_status")
-    def test_get_eb_with_status(self, mock_get_eb_status, mock_oda):
+    def test_get_eb_with_status(self, mock_get_eb_status, mock_oda, client):
         """Verifying that get_eb_with_status API returns requested EB with status"""
         valid_eb_with_status = load_string_from_file(
             f"{TEST_FILES_PATH}/testfile_sample_eb_with_status.json"
@@ -120,7 +112,7 @@ class TestExecutionBlockAPI:
         assert result.status_code == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
-    def test_get_eb_with_invalid_status(self, mock_oda):
+    def test_get_eb_with_invalid_status(self, mock_oda, client):
         """Verifying that get_eb_with_status throws error if invalid data passed"""
         invalid_eb_id = "invalid-eb-id-12345"
 
@@ -151,7 +143,7 @@ class TestExecutionBlockAPI:
         assert result.json() == expected_error_message
 
     @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
-    def test_get_eb_status_history(self, mock_oda):
+    def test_get_eb_status_history(self, mock_oda, client):
         """Verifying that get_eb_status_history API returns requested
         EB status history
         """
@@ -179,7 +171,7 @@ class TestExecutionBlockAPI:
         assert result.status_code == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
-    def test_invalid_get_eb_status_history(self, mock_oda):
+    def test_invalid_get_eb_status_history(self, mock_oda, client):
         """Verifying that test_invalid_get_eb_status_history throws error
         if invalid data passed
         """
@@ -204,7 +196,7 @@ class TestExecutionBlockAPI:
 
     @mock.patch("ska_oso_ptt_services.routers.ebs._get_eb_status")
     @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
-    def test_get_eb_status(self, mock_oda, mock_get_eb_status):
+    def test_get_eb_status(self, mock_oda, mock_get_eb_status, client):
         """Verifying that test_eb_sbd_status API returns requested EB status"""
 
         valid_eb_status = load_string_from_file(
@@ -229,12 +221,12 @@ class TestExecutionBlockAPI:
 
     @mock.patch("ska_oso_ptt_services.routers.ebs._get_eb_status")
     @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
-    def test_invalid_get_eb_status(self, mock_oda, mock_get_eb_status):
+    def test_invalid_get_eb_status(self, mock_oda, mock_get_eb_status, client):
         """Verifying that get_eb_status throws error if invalid data passed"""
         invalid_eb_id = "eb-t0001-20240702-00100"
 
         uow_mock = mock.MagicMock()
-        mock_oda.uow.__enter__.return_value = uow_mock
+        mock_oda.uow().__enter__.return_value = uow_mock
 
         mock_get_eb_status.side_effect = KeyError(
             f"Not Found. The requested identifier {invalid_eb_id} could not be found."
@@ -256,7 +248,7 @@ class TestExecutionBlockAPI:
         assert result.status_code == HTTPStatus.NOT_FOUND
 
     @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
-    def test_put_eb_history(self, mock_oda):
+    def test_put_eb_history(self, mock_oda, client):
         """Verifying that put_eb_history updates the eb status correctly"""
         valid_put_eb_history_response = load_string_from_file(
             f"{TEST_FILES_PATH}/testfile_sample_eb_status.json"
@@ -272,7 +264,7 @@ class TestExecutionBlockAPI:
 
         uow_mock.ebs_status_history = ebs_status_history_mock
         uow_mock.commit.return_value = "200"
-        mock_oda.uow.__enter__.return_value = uow_mock
+        mock_oda.uow().__enter__.return_value = uow_mock
 
         url = f"{API_PREFIX}/status/ebs/eb-mvp01-20240426-5004"
         data = {
@@ -295,7 +287,7 @@ class TestExecutionBlockAPI:
         assert_json_is_equal(result.text, valid_put_eb_history_response, exclude_paths)
         assert result.status_code == HTTPStatus.OK
 
-    def test_invalid_put_eb_history(self):
+    def test_invalid_put_eb_history(self, client):
         """Verifying that put_eb_history error if invalid data passed"""
         query_params = {"eb_version": "1"}
         data = {
