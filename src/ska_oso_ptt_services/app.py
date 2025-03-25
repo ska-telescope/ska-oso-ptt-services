@@ -22,6 +22,7 @@ from ska_oso_ptt_services.routers.ebs import eb_router
 from ska_oso_ptt_services.routers.prjs import prj_router
 from ska_oso_ptt_services.routers.sbds import sbd_router
 from ska_oso_ptt_services.routers.sbis import sbi_router
+from ska_oso_ptt_services.routers.status import status_router
 
 KUBE_NAMESPACE = os.getenv("KUBE_NAMESPACE", "ska-oso-ptt-services")
 # FIXME: Find a good way to avoid hardcoding this...
@@ -57,6 +58,7 @@ def create_app(production=PRODUCTION) -> FastAPI:
     app.include_router(sbi_router, prefix=API_PREFIX)
     app.include_router(eb_router, prefix=API_PREFIX)
     app.include_router(prj_router, prefix=API_PREFIX)
+    app.include_router(status_router, prefix=API_PREFIX)
 
     # Add handles for different types of error
     app.exception_handler(ODANotFound)(oda_not_found_handler)
