@@ -60,33 +60,6 @@ class TestProjectAPI:
         assert result.status_code == HTTPStatus.OK
 
     @pytest.mark.skip()
-    def test_invalid_get_prjs_with_status(self, client):
-        """Verifying that get_prjs_with_status throws error if invalid data passed"""
-
-        query_params = {
-            "match_type": "equals",
-            "created_before": "2022-03-28T15:43:53.971548+00:00",
-            "created_after": "2022-03-28T15:43:53.971548+00:00",
-            "last_modified_before": "2022-03-28T15:43:53.971548+00:00",
-            "last_modified_after": "2022-03-28T15:43:53.971548+00:00",
-        }
-
-        # Perform the GET request with query parameters using the query_string parameter
-        result = client.get(
-            f"{API_PREFIX}/prjs",
-            params=query_params,
-            headers={"accept": "application/json"},
-        )
-
-        error = {
-            "detail": "Different query types are not currently supported"
-            " - for example, "
-            "cannot combine date created query or entity query with a user query"
-        }
-
-        assert json.loads(result.json()) == error
-
-    @pytest.mark.skip()
     @mock.patch("ska_oso_ptt_services.routers.prjs.oda")
     @mock.patch("ska_oso_ptt_services.routers.prjs._get_prj_status")
     def test_get_prj_with_status(self, mock_get_prj_status, mock_oda, client):

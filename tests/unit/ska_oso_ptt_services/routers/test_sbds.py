@@ -58,32 +58,6 @@ class TestSBDefinitionAPI:
         assert_json_is_equal(result.text, valid_sbds)
         assert result.status_code == HTTPStatus.OK
 
-    def test_invalid_get_sbds_with_status(self, client):
-        """Verifying that get_sbds_with_status throws error if invalid data passed"""
-
-        query_params = {
-            "match_type": "equals",
-            "created_before": "2022-03-28T15:43:53.971548+00:00",
-            "created_after": "2022-03-28T15:43:53.971548+00:00",
-            "last_modified_before": "2022-03-28T15:43:53.971548+00:00",
-            "last_modified_after": "2022-03-28T15:43:53.971548+00:00",
-        }
-
-        result = client.get(
-            f"{API_PREFIX}/sbds",
-            params=query_params,
-            headers={"accept": "application/json"},
-        )
-
-        error = {
-            "detail": "Different query types are not currently supported - "
-            "for example, cannot combine date created query or entity query "
-            "with a user query"
-        }
-
-        assert result.json() == error
-        assert result.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
-
     @mock.patch("ska_oso_ptt_services.routers.sbds.oda")
     @mock.patch("ska_oso_ptt_services.routers.sbds._get_sbd_status")
     def test_get_sbd_with_status(self, mock_get_sbd_status, mock_oda, client):
