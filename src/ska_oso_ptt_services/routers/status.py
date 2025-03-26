@@ -1,16 +1,8 @@
 import logging
-from enum import EnumMeta
-from typing import Dict
 
 from fastapi import APIRouter
-from ska_oso_pdm.entity_status_history import (
-    OSOEBStatus,
-    ProjectStatus,
-    SBDStatus,
-    SBIStatus,
-)
 
-from ska_oso_ptt_services.common.constant import GET_ALL_ENTITY_MODEL
+from ska_oso_ptt_services.common.constant import GET_ALL_ENTITY_MODEL, entity_map
 from ska_oso_ptt_services.models.models import EntityStatusResponse
 
 LOGGER = logging.getLogger(__name__)
@@ -38,12 +30,6 @@ def get_entity_status(entity_name: str) -> EntityStatusResponse:
     Raises:
         ValueError: If an invalid entity name is provided
     """
-    entity_map: Dict[str, EnumMeta] = {
-        "sbi": SBIStatus,
-        "eb": OSOEBStatus,
-        "prj": ProjectStatus,
-        "sbd": SBDStatus,
-    }
 
     entity_class = entity_map.get(entity_name.lower())
     if not entity_class:

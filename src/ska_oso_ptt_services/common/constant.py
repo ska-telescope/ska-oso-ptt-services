@@ -1,10 +1,15 @@
-from typing import List
+from enum import EnumMeta
+from typing import Dict, List
 
 from fastapi import status
 from ska_oso_pdm.entity_status_history import (
+    OSOEBStatus,
     OSOEBStatusHistory,
+    ProjectStatus,
     ProjectStatusHistory,
+    SBDStatus,
     SBDStatusHistory,
+    SBIStatus,
     SBIStatusHistory,
 )
 
@@ -148,4 +153,12 @@ GET_ALL_ENTITY_MODEL = {
         "description": "Successful Response",
         "model": EntityStatusResponse,
     }
+}
+
+
+entity_map: Dict[str, EnumMeta] = {
+    "sbi": SBIStatus,
+    "eb": OSOEBStatus,
+    "prj": ProjectStatus,
+    "sbd": SBDStatus,
 }

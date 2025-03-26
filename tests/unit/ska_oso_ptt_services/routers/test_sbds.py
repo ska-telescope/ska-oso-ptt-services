@@ -23,7 +23,7 @@ class TestSBDefinitionAPI:
     """
 
     @mock.patch("ska_oso_ptt_services.routers.sbds.oda")
-    @mock.patch("ska_oso_ptt_services.routers.sbds._get_sbd_status")
+    @mock.patch("ska_oso_ptt_services.routers.sbds.common_get_entity_status")
     def test_get_sbds_with_status(self, mock_get_sbd_status, mock_oda, client):
         """Verifying that get_sbds_with_status API returns All SBDS with status"""
 
@@ -59,7 +59,7 @@ class TestSBDefinitionAPI:
         assert result.status_code == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.sbds.oda")
-    @mock.patch("ska_oso_ptt_services.routers.sbds._get_sbd_status")
+    @mock.patch("ska_oso_ptt_services.routers.sbds.common_get_entity_status")
     def test_get_sbd_with_status(self, mock_get_sbd_status, mock_oda, client):
         """Verifying that get_sbd_with_status API returns requested SBD with status"""
         valid_sbd = load_string_from_file(
@@ -160,7 +160,7 @@ class TestSBDefinitionAPI:
         assert result.json() == error
         assert result.status_code == HTTPStatus.NOT_FOUND
 
-    @mock.patch("ska_oso_ptt_services.routers.sbds._get_sbd_status")
+    @mock.patch("ska_oso_ptt_services.routers.sbds.common_get_entity_status")
     @mock.patch("ska_oso_ptt_services.routers.sbds.oda")
     def test_get_sbd_status(self, mock_oda, mock_get_sbd_status, client):
         """Verifying that test_get_sbd_status API returns requested SBD status"""
@@ -183,7 +183,7 @@ class TestSBDefinitionAPI:
         assert_json_is_equal(result.json(), valid_sbd_status)
         assert result.status_code == HTTPStatus.OK
 
-    @mock.patch("ska_oso_ptt_services.routers.sbds._get_sbd_status")
+    @mock.patch("ska_oso_ptt_services.routers.sbds.common_get_entity_status")
     @mock.patch("ska_oso_ptt_services.routers.sbds.oda")
     def test_invalid_get_sbd_status(self, mock_oda, mock_get_sbd_status, client):
         """Verifying that get_sbd_status throws error if invalid data passed"""

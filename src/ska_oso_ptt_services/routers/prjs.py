@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Dict, List
+from typing import List
 
 from fastapi import APIRouter, Depends
 from ska_db_oda.persistence import oda
@@ -15,6 +15,7 @@ from ska_oso_ptt_services.common.constant import (
     GET_PUT_ID_PRJ_STATUS_MODEL,
 )
 from ska_oso_ptt_services.common.error_handling import ODANotFound
+from ska_oso_ptt_services.common.utils import common_get_entity_status
 from ska_oso_ptt_services.models.models import ProjectStatusModel
 
 LOGGER = logging.getLogger(__name__)
@@ -49,8 +50,10 @@ def get_prjs_with_status(
         prj_with_status = [
             {
                 **prj.model_dump(mode="json"),
-                "status": _get_prj_status(
-                    uow=uow, prj_id=prj.prj_id, version=prj.metadata.version
+                "status": common_get_entity_status(
+                    entity_object=uow.prjs_status_history,
+                    entity_id=prj.prj_id,
+                    entity_version=prj.metadata.version,
                 ).current_status,
             }
             for prj in prjs
@@ -76,8 +79,10 @@ def get_prj_with_status(prj_id: str) -> ProjectStatusModel:
     with oda.uow() as uow:
         prj = uow.prjs.get(prj_id)
         prj_json = prj.model_dump(mode="json")
-        prj_json["status"] = _get_prj_status(
-            uow=uow, prj_id=prj_id, version=prj_json["metadata"]["version"]
+        prj_json["status"] = common_get_entity_status(
+            entity_object=uow.prjs_status_history,
+            entity_id=prj_id,
+            entity_version=prj_json["metadata"]["version"],
         ).current_status
 
     return prj_json
@@ -101,7 +106,11 @@ def get_prj_status(prj_id: str, version: int = None) -> ProjectStatusHistory:
         Response, or appropriate error Response
     """
     with oda.uow() as uow:
-        prj_status = _get_prj_status(uow=uow, prj_id=prj_id, version=version)
+        prj_status = common_get_entity_status(
+            entity_object=uow.prjs_status_history,
+            entity_id=prj_id,
+            entity_version=version,
+        )
     return prj_status
 
 
@@ -164,21 +173,3 @@ def get_prj_status_history(
             raise ODANotFound(identifier=query_params.entity_id)
 
     return prjs_status_history
-
-
-def _get_prj_status(uow, prj_id: str, version: str = None) -> Dict[str, Any]:
-    """
-    Takes an Project ID and Version and returns status
-    :param: uow: ODA PostgresUnitOfWork
-    :param prj_id: project ID
-    :param version: project version
-
-    Returns retrieved project status in Dictionary format
-
-    """
-
-    retrieved_prj = uow.prjs_status_history.get(
-        entity_id=prj_id, version=version, is_status_history=False
-    )
-
-    return retrieved_prj

@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Dict, List
+from typing import List
 
 from fastapi import APIRouter, Depends
 from ska_db_oda.persistence import oda
@@ -15,6 +15,7 @@ from ska_oso_ptt_services.common.constant import (
     GET_PUT_ID_SBI_STATUS_MODEL,
 )
 from ska_oso_ptt_services.common.error_handling import ODANotFound
+from ska_oso_ptt_services.common.utils import common_get_entity_status
 from ska_oso_ptt_services.models.models import SBInstanceStatusModel
 
 LOGGER = logging.getLogger(__name__)
@@ -49,8 +50,10 @@ def get_sbis_with_status(
         sbi_with_status = [
             {
                 **sbi.model_dump(mode="json"),
-                "status": _get_sbi_status(
-                    uow=uow, sbi_id=sbi.sbi_id, version=sbi.metadata.version
+                "status": common_get_entity_status(
+                    entity_object=uow.sbis_status_history,
+                    entity_id=sbi.sbi_id,
+                    entity_version=sbi.metadata.version,
                 ).current_status,
             }
             for sbi in sbis
@@ -76,8 +79,10 @@ def get_sbi_with_status(sbi_id: str) -> SBInstanceStatusModel:
     with oda.uow() as uow:
         sbi = uow.sbis.get(sbi_id)
         sbi_json = sbi.model_dump(mode="json")
-        sbi_json["status"] = _get_sbi_status(
-            uow=uow, sbi_id=sbi_id, version=sbi_json["metadata"]["version"]
+        sbi_json["status"] = common_get_entity_status(
+            entity_object=uow.sbis_status_history,
+            entity_id=sbi_id,
+            entity_version=sbi_json["metadata"]["version"],
         ).current_status
     return sbi_json
 
@@ -100,7 +105,11 @@ def get_sbi_status(sbi_id: str, version: int = None):
         Response, or appropriate error Response
     """
     with oda.uow() as uow:
-        sbi_status = _get_sbi_status(uow=uow, sbi_id=sbi_id, version=version)
+        sbi_status = common_get_entity_status(
+            entity_object=uow.sbis_status_history,
+            entity_id=sbi_id,
+            entity_version=version,
+        )
     return sbi_status
 
 
@@ -163,20 +172,3 @@ def get_sbi_status_history(
             raise ODANotFound(identifier=query_params.entity_id)
 
     return sbis_status_history
-
-
-def _get_sbi_status(uow, sbi_id: str, version: str = None) -> Dict[str, Any]:
-    """
-    Takes an SB Instance ID and Version and returns status
-    :param: uow: ODA PostgresUnitOfWork
-    :param sbi_id: SB Instance ID
-    :param version: SBI version
-
-    Returns retrieved SBI status in Dictionary format
-
-    """
-
-    retrieved_sbi = uow.sbis_status_history.get(
-        entity_id=sbi_id, version=version, is_status_history=False
-    )
-    return retrieved_sbi

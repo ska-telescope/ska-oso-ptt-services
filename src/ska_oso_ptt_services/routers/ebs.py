@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Dict, List
+from typing import List
 
 from fastapi import APIRouter, Depends
 from ska_db_oda.persistence import oda
@@ -15,6 +15,7 @@ from ska_oso_ptt_services.common.constant import (
     GET_PUT_ID_EB_STATUS_MODEL,
 )
 from ska_oso_ptt_services.common.error_handling import ODANotFound
+from ska_oso_ptt_services.common.utils import common_get_entity_status
 from ska_oso_ptt_services.models.models import EBStatusModel
 
 LOGGER = logging.getLogger(__name__)
@@ -49,8 +50,10 @@ def get_ebs_with_status(
         eb_with_status = [
             {
                 **eb.model_dump(mode="json"),
-                "status": _get_eb_status(
-                    uow=uow, eb_id=eb.eb_id, version=eb.metadata.version
+                "status": common_get_entity_status(
+                    entity_object=uow.ebs_status_history,
+                    entity_id=eb.eb_id,
+                    entity_version=eb.metadata.version,
                 ).current_status,
             }
             for eb in ebs
@@ -76,8 +79,10 @@ def get_eb_with_status(eb_id: str) -> EBStatusModel:
     with oda.uow() as uow:
         eb = uow.ebs.get(eb_id)
         eb_json = eb.model_dump(mode="json")
-        eb_json["status"] = _get_eb_status(
-            uow=uow, eb_id=eb_id, version=eb_json["metadata"]["version"]
+        eb_json["status"] = common_get_entity_status(
+            entity_object=uow.ebs_status_history,
+            entity_id=eb.eb_id,
+            entity_version=eb_json["metadata"]["version"],
         ).current_status
 
     return eb_json
@@ -101,7 +106,11 @@ def get_eb_status(eb_id: str, version: int = None) -> OSOEBStatusHistory:
         Response, or appropriate error Response
     """
     with oda.uow() as uow:
-        eb_status = _get_eb_status(uow=uow, eb_id=eb_id, version=version)
+        eb_status = common_get_entity_status(
+            entity_object=uow.ebs_status_history,
+            entity_id=eb_id,
+            entity_version=version,
+        )
     return eb_status
 
 
@@ -162,21 +171,3 @@ def get_eb_status_history(
             raise ODANotFound(identifier=query_params.entity_id)
 
     return ebs_status_history
-
-
-def _get_eb_status(uow, eb_id: str, version: str = None) -> Dict[str, Any]:
-    """
-    Takes an EB ID and Version and returns status
-    :param: uow: ODA PostgresUnitOfWork
-    :param eb_id: Execution Block ID
-    :param version: EB version
-
-    Returns retrieved EB status in Dictionary format
-
-    """
-
-    retrieved_eb = uow.ebs_status_history.get(
-        entity_id=eb_id, version=version, is_status_history=False
-    )
-
-    return retrieved_eb

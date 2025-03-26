@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Dict, List
+from typing import List
 
 from fastapi import APIRouter, Depends
 from ska_db_oda.persistence import oda
@@ -15,6 +15,7 @@ from ska_oso_ptt_services.common.constant import (
     GET_PUT_ID_SBD_STATUS_MODEL,
 )
 from ska_oso_ptt_services.common.error_handling import ODANotFound
+from ska_oso_ptt_services.common.utils import common_get_entity_status
 from ska_oso_ptt_services.models.models import SBDefinitionStatusModel
 
 LOGGER = logging.getLogger(__name__)
@@ -49,8 +50,10 @@ def get_sbds_with_status(
         sbd_with_status = [
             {
                 **sbd.model_dump(mode="json"),
-                "status": _get_sbd_status(
-                    uow=uow, sbd_id=sbd.sbd_id, version=sbd.metadata.version
+                "status": common_get_entity_status(
+                    entity_object=uow.sbds_status_history,
+                    entity_id=sbd.sbd_id,
+                    entity_version=sbd.metadata.version,
                 ).current_status,
             }
             for sbd in sbds
@@ -76,8 +79,10 @@ def get_sbd_with_status(sbd_id: str) -> SBDefinitionStatusModel:
     with oda.uow() as uow:
         sbd = uow.sbds.get(sbd_id)
         sbd_json = sbd.model_dump(mode="json")
-        sbd_json["status"] = _get_sbd_status(
-            uow=uow, sbd_id=sbd_id, version=sbd_json["metadata"]["version"]
+        sbd_json["status"] = common_get_entity_status(
+            entity_object=uow.sbds_status_history,
+            entity_id=sbd_id,
+            entity_version=sbd_json["metadata"]["version"],
         ).current_status
     return sbd_json
 
@@ -100,7 +105,11 @@ def get_sbd_status(sbd_id: str, version: str = None) -> SBDStatusHistory:
     appropriate error Response
     """
     with oda.uow() as uow:
-        sbd_status = _get_sbd_status(uow=uow, sbd_id=sbd_id, version=version)
+        sbd_status = common_get_entity_status(
+            entity_object=uow.sbds_status_history,
+            entity_id=sbd_id,
+            entity_version=version,
+        )
 
     return sbd_status
 
@@ -167,19 +176,3 @@ def get_sbd_status_history(
         if not sbds_status_history:
             raise ODANotFound(identifier=query_params.entity_id)
     return sbds_status_history
-
-
-def _get_sbd_status(uow, sbd_id: str, version: str = None) -> Dict[str, Any]:
-    """
-    Takes an SB Definition ID and Version and returns status
-    :param: uow: ODA PostgresUnitOfWork
-    :param sbd_id: Scheduling Block ID
-    :param version: SBD version
-
-    Returns retrieved SBD status in Dictionary format
-    """
-
-    retrieved_sbd = uow.sbds_status_history.get(
-        entity_id=sbd_id, version=version, is_status_history=False
-    )
-    return retrieved_sbd
