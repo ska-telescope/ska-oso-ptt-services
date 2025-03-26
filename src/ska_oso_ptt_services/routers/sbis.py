@@ -14,6 +14,7 @@ from ska_oso_ptt_services.common.constant import (
     GET_ID_SBI_STATUS_MODEL,
     GET_PUT_ID_SBI_STATUS_MODEL,
 )
+from ska_oso_ptt_services.common.error_handling import ODANotFound
 from ska_oso_ptt_services.models.models import SBInstanceStatusModel
 
 LOGGER = logging.getLogger(__name__)
@@ -126,9 +127,7 @@ def put_sbi_history(
 
     with oda.uow() as uow:
         if sbi_id not in uow.sbis:
-            raise KeyError(
-                f"Not found. The requested sbi_id {sbi_id} could not be found."
-            )
+            raise ODANotFound(identifier=sbi_id)
 
         persisted_sbi = uow.sbis_status_history.add(sbi_status_history)
         uow.commit()
@@ -161,7 +160,7 @@ def get_sbi_status_history(
             maybe_qry_params, is_status_history=True
         )
         if not sbis_status_history:
-            raise KeyError("not found")
+            raise ODANotFound(identifier=query_params.entity_id)
 
     return sbis_status_history
 

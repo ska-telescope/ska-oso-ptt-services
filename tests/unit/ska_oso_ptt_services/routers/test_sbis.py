@@ -7,6 +7,7 @@ from ska_oso_pdm import SBInstance
 from ska_oso_pdm.entity_status_history import SBIStatusHistory
 
 from ska_oso_ptt_services.app import API_PREFIX
+from ska_oso_ptt_services.common.error_handling import ODANotFound
 from tests.unit.ska_oso_ptt_services.utils import (
     assert_json_is_equal,
     load_string_from_file,
@@ -78,7 +79,13 @@ class TestSBInstanceAPI:
             f"{API_PREFIX}/sbis/sbi-mvp01-20240426-5016",
             headers={"accept": "application/json"},
         )
-        assert_json_is_equal(result.json(), valid_sbi)
+        result_json = json.dumps(result.json())
+
+        assert_json_is_equal(
+            json.dumps(result_json),
+            json.dumps(json.loads(valid_sbi)),
+            exclude_paths=["root['metadata']['pdm_version']"],
+        )
         assert result.status_code == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
@@ -88,9 +95,7 @@ class TestSBInstanceAPI:
         invalid_sbi_id = "invalid-sbi-id-12345"
 
         uow_mock = mock.MagicMock()
-        uow_mock.sbis.get.side_effect = KeyError(
-            f"Not Found. The requested identifier {invalid_sbi_id} could not be found."
-        )
+        uow_mock.sbis.get.side_effect = ODANotFound(identifier=invalid_sbi_id)
         mock_oda.uow().__enter__.return_value = uow_mock
 
         # Perform the GET request with the invalid sbi ID
@@ -101,14 +106,11 @@ class TestSBInstanceAPI:
 
         # Check if the response contains the expected error message
         expected_error_message = {
-            "detail": (
-                f"Not Found. The requested identifier {invalid_sbi_id} could not be"
-                " found."
-            )
+            "detail": (f"The requested identifier {invalid_sbi_id} could not be found.")
         }
 
         assert result.status_code == HTTPStatus.NOT_FOUND
-        assert result.get_json() == expected_error_message
+        assert result.json() == expected_error_message
 
     @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
     def test_get_sbi_status_history(self, mock_oda, client):
@@ -149,9 +151,7 @@ class TestSBInstanceAPI:
         )
 
         error = {
-            "detail": (
-                "Not Found. The requested identifier sbi-t000-00100 could not be found."
-            )
+            "detail": ("The requested identifier sbi-t000-00100 could not be found.")
         }
         assert json.loads(result.json()) == error
         assert result.status_code == HTTPStatus.NOT_FOUND
@@ -187,9 +187,7 @@ class TestSBInstanceAPI:
         uow_mock = mock.MagicMock()
         mock_oda.uow().__enter__.return_value = uow_mock
 
-        mock_get_sbi_status.side_effect = KeyError(
-            f"Not Found. The requested identifier {invalid_sbi_id} could not be found."
-        )
+        mock_get_sbi_status.side_effect = ODANotFound(identifier=invalid_sbi_id)
 
         result = client.get(
             f"{API_PREFIX}/sbis/{invalid_sbi_id}/status",
@@ -199,7 +197,7 @@ class TestSBInstanceAPI:
 
         error = {
             "detail": (
-                "Not Found. The requested identifier sbi-t0001-20240702-00100 could not"
+                "The requested identifier sbi-t0001-20240702-00100 could not"
                 " be found."
             )
         }

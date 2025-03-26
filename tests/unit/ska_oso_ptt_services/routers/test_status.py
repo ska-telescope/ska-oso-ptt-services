@@ -92,7 +92,6 @@ def test_get_invalid_entity_status(client):
         f"{API_PREFIX}/status/get_entity?entity_name=ebi",
     )
 
-    print(result_invalid_entity.json())
     result_json = json.loads(result_invalid_entity.text)["detail"]
     expected_eb_response = (
         "ValueError('Invalid entity name: ebi') with args ('Invalid entity name:"

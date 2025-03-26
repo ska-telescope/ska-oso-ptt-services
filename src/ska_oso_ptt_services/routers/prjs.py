@@ -14,6 +14,7 @@ from ska_oso_ptt_services.common.constant import (
     GET_ID_PRJ_STATUS_MODEL,
     GET_PUT_ID_PRJ_STATUS_MODEL,
 )
+from ska_oso_ptt_services.common.error_handling import ODANotFound
 from ska_oso_ptt_services.models.models import ProjectStatusModel
 
 LOGGER = logging.getLogger(__name__)
@@ -127,9 +128,7 @@ def put_prj_history(
 
     with oda.uow() as uow:
         if prj_id not in uow.prjs:
-            raise KeyError(
-                f"Not found. The requested prj_id {prj_id} could not be found."
-            )
+            raise ODANotFound(identifier=prj_id)
 
         persisted_prj = uow.prjs_status_history.add(prj_status_history)
         uow.commit()
@@ -162,7 +161,7 @@ def get_prj_status_history(
             maybe_qry_params, is_status_history=True
         )
         if not prjs_status_history:
-            raise KeyError("not found")
+            raise ODANotFound(identifier=query_params.entity_id)
 
     return prjs_status_history
 

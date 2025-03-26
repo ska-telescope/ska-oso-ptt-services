@@ -5,6 +5,7 @@ from unittest import mock
 from ska_oso_pdm import OSOEBStatusHistory, OSOExecutionBlock
 
 from ska_oso_ptt_services.app import API_PREFIX
+from ska_oso_ptt_services.common.error_handling import ODANotFound
 from tests.unit.ska_oso_ptt_services.utils import (
     assert_json_is_equal,
     load_string_from_file,
@@ -79,8 +80,8 @@ class TestExecutionBlockAPI:
         result_json = json.dumps(result.json())
 
         assert_json_is_equal(
-            result_json,
-            valid_eb_with_status,
+            json.dumps(result_json),
+            json.dumps(json.loads(valid_eb_with_status)),
             exclude_paths=["root['metadata']['pdm_version']"],
         )
         assert result.status_code == HTTPStatus.OK
@@ -91,9 +92,7 @@ class TestExecutionBlockAPI:
         invalid_eb_id = "invalid-eb-id-12345"
 
         uow_mock = mock.MagicMock()
-        uow_mock.ebs.get.side_effect = KeyError(
-            f"Not Found. The requested identifier {invalid_eb_id} could not be found."
-        )
+        uow_mock.ebs.get.side_effect = ODANotFound(identifier=invalid_eb_id)
         mock_oda.uow().__enter__.return_value = uow_mock
 
         # Perform the GET request with the invalid eb ID
@@ -103,13 +102,10 @@ class TestExecutionBlockAPI:
         )
         # Check if the response contains the expected error message
         expected_error_message = {
-            "detail": (
-                f"Not Found. The requested identifier {invalid_eb_id} could not be"
-                " found."
-            )
+            "detail": (f"The requested identifier {invalid_eb_id} could not be found.")
         }
 
-        assert result.status_code == HTTPStatus.INTERNAL_SERVER_ERROR
+        assert result.status_code == HTTPStatus.NOT_FOUND
         assert result.json() == expected_error_message
 
     @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
@@ -151,9 +147,7 @@ class TestExecutionBlockAPI:
         )
 
         error = {
-            "detail": (
-                "Not Found. The requested identifier eb-t0001-00100 could not be found."
-            )
+            "detail": "The requested identifier eb-t0001-00100 could not be found."
         }
 
         assert json.loads(result.json()) == error
@@ -191,9 +185,7 @@ class TestExecutionBlockAPI:
         uow_mock = mock.MagicMock()
         mock_oda.uow().__enter__.return_value = uow_mock
 
-        mock_get_eb_status.side_effect = KeyError(
-            f"Not Found. The requested identifier {invalid_eb_id} could not be found."
-        )
+        mock_get_eb_status.side_effect = ODANotFound(identifier=invalid_eb_id)
 
         result = client.get(
             f"{API_PREFIX}/ebs/{invalid_eb_id}/status",
@@ -203,7 +195,7 @@ class TestExecutionBlockAPI:
 
         error = {
             "detail": (
-                "Not Found. The requested identifier eb-t0001-20240702-00100 could not"
+                "The requested identifier eb-t0001-20240702-00100 could not"
                 " be found."
             )
         }

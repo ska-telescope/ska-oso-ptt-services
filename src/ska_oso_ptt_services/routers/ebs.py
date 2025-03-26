@@ -14,6 +14,7 @@ from ska_oso_ptt_services.common.constant import (
     GET_ID_EB_STATUS_MODEL,
     GET_PUT_ID_EB_STATUS_MODEL,
 )
+from ska_oso_ptt_services.common.error_handling import ODANotFound
 from ska_oso_ptt_services.models.models import EBStatusModel
 
 LOGGER = logging.getLogger(__name__)
@@ -127,9 +128,7 @@ def put_eb_history(
 
     with oda.uow() as uow:
         if eb_id not in uow.ebs:
-            raise KeyError(
-                f"Not found. The requested eb_id {eb_id} could not be found."
-            )
+            raise ODANotFound(identifier=eb_id)
         persisted_eb = uow.ebs_status_history.add(eb_status_history)
         uow.commit()
     return persisted_eb
@@ -160,7 +159,7 @@ def get_eb_status_history(
             maybe_qry_params, is_status_history=True
         )
         if not ebs_status_history:
-            raise KeyError("not found")
+            raise ODANotFound(identifier=query_params.entity_id)
 
     return ebs_status_history
 

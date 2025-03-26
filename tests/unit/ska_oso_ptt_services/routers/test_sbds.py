@@ -191,9 +191,7 @@ class TestSBDefinitionAPI:
 
         uow_mock = mock.MagicMock()
         mock_oda.uow().__enter__.return_value = uow_mock
-        mock_get_sbd_status.side_effect = KeyError(
-            f"Not Found. The requested identifier {invalid_sbd_id} could not be found."
-        )
+        mock_get_sbd_status.side_effect = ODANotFound(identifier=invalid_sbd_id)
 
         result = client.get(
             f"{API_PREFIX}/sbds/{invalid_sbd_id}/status",
@@ -203,7 +201,7 @@ class TestSBDefinitionAPI:
 
         error = {
             "detail": (
-                "Not Found. The requested identifier sbd-t0001-20240702-00100 could not"
+                "The requested identifier sbd-t0001-20240702-00100 could not"
                 " be found."
             )
         }
