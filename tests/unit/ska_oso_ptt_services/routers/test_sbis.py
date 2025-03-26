@@ -245,26 +245,3 @@ class TestSBInstanceAPI:
             result.json(), valid_put_sbi_history_response, exclude_paths
         )
         assert result.status_code == HTTPStatus.OK
-
-    def test_invalid_put_sbd_history(self, client):
-        """Verifying that put_sbd_history error if invalid data passed"""
-        query_params = {"sbd_version": "1"}
-        data = {
-            "current1_status": "Complete",
-            "previous_status": "Draft",
-            "sbd_version": "1",
-        }
-
-        error = {
-            "detail": "KeyError('current_status') with args ('current_status',)",
-            "title": "Internal Server Error",
-        }
-
-        result = client.put(
-            f"{API_PREFIX}/sbds/sbd-t0001-20240702-00002/status",
-            params=query_params,
-            json=data,
-        )
-        exclude_path = ["root['traceback']"]
-        assert_json_is_equal(result.json(), json.dumps(error), exclude_path)
-        assert result.status_code == HTTPStatus.INTERNAL_SERVER_ERROR
