@@ -7,6 +7,7 @@ from ska_oso_pdm import SBDefinition
 from ska_oso_pdm.entity_status_history import SBDStatusHistory
 
 from ska_oso_ptt_services.app import API_PREFIX
+from ska_oso_ptt_services.common.error_handling import ODANotFound
 from tests.unit.ska_oso_ptt_services.utils import (
     assert_json_is_equal,
     load_string_from_file,
@@ -50,12 +51,11 @@ class TestSBDefinitionAPI:
         )
 
         resultDict = result.json()
-
         for res in resultDict:
             del res["metadata"]["pdm_version"]
             # del res["targets"]["reference_coordinate"]["epoch"]
 
-        assert_json_is_equal(json.dumps(resultDict), json.dumps(json.loads(valid_sbds)))
+        assert_json_is_equal(result.text, valid_sbds)
         assert result.status_code == HTTPStatus.OK
 
     def test_invalid_get_sbds_with_status(self, client):
@@ -81,8 +81,8 @@ class TestSBDefinitionAPI:
             "with a user query"
         }
 
-        assert json.loads(result.json()) == error
-        assert result.status_code == HTTPStatus.BAD_REQUEST
+        assert result.json() == error
+        assert result.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
 
     @mock.patch("ska_oso_ptt_services.routers.sbds.oda")
     @mock.patch("ska_oso_ptt_services.routers.sbds._get_sbd_status")
@@ -103,7 +103,11 @@ class TestSBDefinitionAPI:
             f"{API_PREFIX}/sbds/sbd-t0001-20240702-00002",
             headers={"accept": "application/json"},
         )
-        assert_json_is_equal(result.json(), valid_sbd)
+        assert_json_is_equal(
+            result.text,
+            valid_sbd,
+            exclude_regex_paths={r"root\[\d+\]\['metadata'\]\['(pdm_version)'\]"},
+        )
         assert result.status_code == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.sbds.oda")
@@ -113,9 +117,7 @@ class TestSBDefinitionAPI:
         invalid_sbd_id = "invalid-sbd-id-12345"
 
         uow_mock = mock.MagicMock()
-        uow_mock.sbds.get.side_effect = KeyError(
-            f"Not Found. The requested identifier {invalid_sbd_id} could not be found."
-        )
+        uow_mock.sbds.get.side_effect = ODANotFound(identifier=invalid_sbd_id)
         mock_oda.uow().__enter__.return_value = uow_mock
 
         result = client.get(
@@ -124,10 +126,8 @@ class TestSBDefinitionAPI:
         )
 
         error = {
-            "detail": (
-                f"Not Found. The requested identifier {invalid_sbd_id} could not be"
-                " found."
-            )
+            "detail": "The requested identifier invalid-sbd-id-12345 "
+            "could not be found."
         }
 
         assert result.json() == error
@@ -153,8 +153,15 @@ class TestSBDefinitionAPI:
             params={"entity_id": "sbd-t0001-20240702-00002", "sbd_version": "1"},
             headers={"accept": "application/json"},
         )
+        result_dict = result.json()
 
-        assert_json_is_equal(result.json(), valid_sbd_status_history)
+        assert_json_is_equal(
+            json.dumps(result_dict),
+            valid_sbd_status_history,
+            exclude_regex_paths={
+                r"root\[\d+\]\['metadata'\]\['(pdm_version|version)'\]"
+            },
+        )
         assert result.status_code == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.sbds.oda")
@@ -165,6 +172,7 @@ class TestSBDefinitionAPI:
         uow_mock = mock.MagicMock()
         uow_mock.sbds_status_history.query.return_value = []
         mock_oda.uow().__enter__.return_value = uow_mock
+
         result = client.get(
             f"{API_PREFIX}/sbds/status/history",
             params={"entity_id": "sbd-t0001-20240702-00100", "sbd_version": "1"},
@@ -172,12 +180,10 @@ class TestSBDefinitionAPI:
         )
 
         error = {
-            "detail": (
-                "Not Found. The requested identifier sbd-t0001-20240702-00100 could not"
-                " be found."
-            )
+            "detail": "The requested identifier sbd-t0001-20240702-00100 "
+            "could not be found."
         }
-        assert json.loads(result.json()) == error
+        assert result.json() == error
         assert result.status_code == HTTPStatus.NOT_FOUND
 
     @mock.patch("ska_oso_ptt_services.routers.sbds._get_sbd_status")

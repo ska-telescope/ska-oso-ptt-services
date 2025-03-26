@@ -14,6 +14,7 @@ from ska_oso_ptt_services.common.constant import (
     GET_ID_SBD_STATUS_MODEL,
     GET_PUT_ID_SBD_STATUS_MODEL,
 )
+from ska_oso_ptt_services.common.error_handling import ODANotFound
 from ska_oso_ptt_services.models.models import SBDefinitionStatusModel
 
 LOGGER = logging.getLogger(__name__)
@@ -164,7 +165,7 @@ def get_sbd_status_history(
         )
 
         if not sbds_status_history:
-            raise KeyError("not found")
+            raise ODANotFound(identifier=query_params.entity_id)
     return sbds_status_history
 
 
