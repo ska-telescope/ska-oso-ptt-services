@@ -268,7 +268,6 @@ class TestSBInstanceAPI:
         result = client.put(
             f"{API_PREFIX}/sbis/sbi-mvp01-20220923-00002/status",
             json=data,
-            headers={"accept": "application/json"},
         )
         assert_json_is_equal(
             result.json(), valid_put_sbi_history_response, exclude_paths
@@ -293,7 +292,6 @@ class TestSBInstanceAPI:
             f"{API_PREFIX}/sbds/sbd-t0001-20240702-00002/status",
             params=query_params,
             json=data,
-            headers={"accept": "application/json"},
         )
         exclude_path = ["root['traceback']"]
         assert_json_is_equal(result.json(), json.dumps(error), exclude_path)

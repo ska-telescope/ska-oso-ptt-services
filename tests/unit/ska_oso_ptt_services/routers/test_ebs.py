@@ -271,7 +271,6 @@ class TestExecutionBlockAPI:
         result = client.put(
             url,
             json=data,
-            headers={"accept": "application/json"},
         )
         assert_json_is_equal(
             result.json(), valid_put_eb_history_response, exclude_paths
@@ -296,7 +295,6 @@ class TestExecutionBlockAPI:
             f"{API_PREFIX}/ebs/eb-t0001-20240702-00002/status",
             params=query_params,
             json=data,
-            headers={"accept": "application/json"},
         )
 
         exclude_path = ["root['traceback']"]
