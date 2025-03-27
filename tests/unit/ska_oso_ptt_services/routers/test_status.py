@@ -1,4 +1,4 @@
-import json
+from http import HTTPStatus
 
 import pytest
 
@@ -79,9 +79,8 @@ def test_entity_status_api(entity_name: str, expected_response, client):
         f"{API_PREFIX}/status/get_entity?entity_name={entity_name}",
     )
 
-    assert_json_is_equal(
-        json.dumps(result_response.json()), json.dumps(expected_response)
-    )
+    assert_json_is_equal(result_response.json(), expected_response)
+    assert result_response.status_code == HTTPStatus.OK
 
 
 def test_get_invalid_entity_status(client):
@@ -91,9 +90,9 @@ def test_get_invalid_entity_status(client):
         f"{API_PREFIX}/status/get_entity?entity_name=ebi",
     )
 
-    # result_json = json.loads(result_invalid_entity.text)["detail"]
     expected_entity_response = {
         "detail": "The requested entity ebi could not be found."
     }
 
-    assert result_invalid_entity.json() == expected_entity_response
+    assert_json_is_equal(result_invalid_entity.json(), expected_entity_response)
+    assert result_invalid_entity.status_code == HTTPStatus.NOT_FOUND

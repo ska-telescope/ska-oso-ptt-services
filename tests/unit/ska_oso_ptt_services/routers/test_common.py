@@ -1,4 +1,3 @@
-import json
 from http import HTTPStatus
 
 import pytest
@@ -37,9 +36,9 @@ def test_invalid_get_all_entity_with_status(entity_name, expected_response, clie
         f"{API_PREFIX}/{entity_name}",
         params=query_params,
         headers={"accept": "application/json"},
-    )
+    ).json()
 
-    assert json.dumps(result_response.json()), json.dumps(json.loads(expected_response))
+    assert_json_is_equal(result_response, expected_response)
 
 
 @pytest.mark.parametrize(
@@ -154,5 +153,5 @@ def test_invalid_put_all_entity_history(
         json=entity_data,
     )
 
-    assert_json_is_equal(json.dumps(result.json()), json.dumps(expected_error))
+    assert_json_is_equal(result.json(), expected_error)
     assert result.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
