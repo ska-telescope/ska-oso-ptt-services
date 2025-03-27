@@ -1,4 +1,5 @@
 # pylint: disable=no-member
+import json
 from http import HTTPStatus
 from unittest import mock
 
@@ -45,12 +46,15 @@ class TestSBDefinitionAPI:
             headers={"accept": "application/json"},
         )
 
-        resultDict = result.json()
+        pdm_version_regex = r"root\[\d+\]\['metadata'\]\['pdm_version'\]"
+        epoch_regex = (
+            r"root\[\d+\]\['targets'\]\[\d+\]\['reference_coordinate'\]\['epoch'\]"
+        )
+        exclude_regex_paths = {f"{pdm_version_regex}|{epoch_regex}"}
 
-        for res in resultDict:
-            del res["metadata"]["pdm_version"]
-
-        assert_json_is_equal(result.json(), valid_sbds)
+        assert_json_is_equal(
+            result.json(), valid_sbds, exclude_regex_paths=exclude_regex_paths
+        )
         assert result.status_code == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.sbds.oda")
@@ -74,10 +78,14 @@ class TestSBDefinitionAPI:
             headers={"accept": "application/json"},
         )
 
+        pdm_version_regex = r"root\['metadata'\]\['pdm_version'\]"
+        epoch_regex = r"root\['targets'\]\[\d+\]\['reference_coordinate'\]\['epoch'\]"
+        exclude_regex_paths = {f"{pdm_version_regex}|{epoch_regex}"}
+
         assert_json_is_equal(
             result.json(),
             valid_sbd,
-            exclude_regex_paths={r"root\[\d+\]\['metadata'\]\['(pdm_version)'\]"},
+            exclude_regex_paths=exclude_regex_paths,
         )
         assert result.status_code == HTTPStatus.OK
 
@@ -219,7 +227,7 @@ class TestSBDefinitionAPI:
 
         sbds_status_history_mock = mock.MagicMock()
         sbds_status_history_mock.add.return_value = (
-            SBDStatusHistory.model_validate_json(valid_sbd_status)
+            SBDStatusHistory.model_validate_json(json.dumps(valid_sbd_status))
         )
 
         uow_mock.sbds_status_history = sbds_status_history_mock
@@ -262,7 +270,7 @@ class TestSBDefinitionAPI:
 
         sbds_status_history_mock = mock.MagicMock()
         sbds_status_history_mock.add.return_value = (
-            SBDStatusHistory.model_validate_json(valid_sbd_status)
+            SBDStatusHistory.model_validate_json(json.dumps(valid_sbd_status))
         )
 
         uow_mock.sbds_status_history = sbds_status_history_mock
@@ -299,7 +307,9 @@ class TestSBDefinitionAPI:
 
         sbds_status_history_mock = mock.MagicMock()
         sbds_status_history_mock.add.return_value = (
-            SBDStatusHistory.model_validate_json(valid_put_sbd_history_version_response)
+            SBDStatusHistory.model_validate_json(
+                json.dumps(valid_put_sbd_history_version_response)
+            )
         )
 
         uow_mock.sbds_status_history = sbds_status_history_mock

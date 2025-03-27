@@ -1,4 +1,4 @@
-{
+[{
   "current_status": "Executing",
   "sbi_ref": "sbi-mvp01-20220923-00002",
   "sbi_version": 1,
@@ -10,3 +10,4 @@
   },
   "previous_status": "Created"
 }
+]

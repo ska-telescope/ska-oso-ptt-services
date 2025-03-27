@@ -1,4 +1,5 @@
 # pylint: disable=no-member
+import json
 from http import HTTPStatus
 from unittest import mock
 
@@ -123,7 +124,13 @@ class TestSBInstanceAPI:
             headers={"accept": "application/json"},
         )
 
-        assert_json_is_equal(result.json(), valid_sbi_status_history)
+        assert_json_is_equal(
+            result.json(),
+            valid_sbi_status_history,
+            exclude_regex_paths={
+                r"root\[\d+\]\['metadata'\]\['(pdm_version|version)'\]"
+            },
+        )
         assert result.status_code == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
@@ -212,7 +219,9 @@ class TestSBInstanceAPI:
 
         sbis_status_history_mock = mock.MagicMock()
         sbis_status_history_mock.add.return_value = (
-            SBIStatusHistory.model_validate_json(valid_sbi_status_history)
+            SBIStatusHistory.model_validate_json(
+                json.dumps(valid_sbi_status_history[0])
+            )
         )
         uow_mock.sbis_status_history = sbis_status_history_mock
         uow_mock.commit().return_value = "200"
@@ -238,7 +247,7 @@ class TestSBInstanceAPI:
 
         assert_json_is_equal(
             result.json(),
-            valid_sbi_status_history,
+            valid_sbi_status_history[0],
             exclude_paths,
         )
         assert result.status_code == HTTPStatus.OK

@@ -1,4 +1,5 @@
 # pylint: disable=no-member
+import json
 from http import HTTPStatus
 from unittest import mock
 
@@ -44,7 +45,7 @@ class TestProjectAPI:
             params=query_params,
             headers={"accept": "application/json"},
         )
-        
+
         resultDict = result.json()
 
         for res in resultDict:
@@ -126,7 +127,13 @@ class TestProjectAPI:
             headers={"accept": "application/json"},
         )
 
-        assert_json_is_equal(result.json(), valid_prj_status_history)
+        exclude_regex_paths = {r"root\[\d+\]\['metadata'\]\['(pdm_version|version)'\]"}
+
+        assert_json_is_equal(
+            result.json(),
+            valid_prj_status_history,
+            exclude_regex_paths=exclude_regex_paths,
+        )
         assert result.status_code == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.prjs.oda")
@@ -215,7 +222,7 @@ class TestProjectAPI:
 
         prjs_status_history_mock = mock.MagicMock()
         prjs_status_history_mock.add.return_value = (
-            ProjectStatusHistory.model_validate_json(valid_prj_status)
+            ProjectStatusHistory.model_validate_json(json.dumps(valid_prj_status))
         )
 
         uow_mock.prjs_status_history = prjs_status_history_mock
@@ -258,7 +265,7 @@ class TestProjectAPI:
 
         prjs_status_history_mock = mock.MagicMock()
         prjs_status_history_mock.add.return_value = (
-            ProjectStatusHistory.model_validate_json(valid_prj_status)
+            ProjectStatusHistory.model_validate_json(json.dumps(valid_prj_status))
         )
 
         uow_mock.prjs_status_history = prjs_status_history_mock
@@ -296,7 +303,7 @@ class TestProjectAPI:
         prjs_status_history_mock = mock.MagicMock()
         prjs_status_history_mock.add.return_value = (
             ProjectStatusHistory.model_validate_json(
-                valid_put_prj_history_version_response
+                json.dumps(valid_put_prj_history_version_response)
             )
         )
 

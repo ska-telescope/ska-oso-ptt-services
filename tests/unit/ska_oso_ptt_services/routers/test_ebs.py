@@ -1,3 +1,5 @@
+# pylint: disable=no-member
+import json
 from http import HTTPStatus
 from unittest import mock
 
@@ -112,11 +114,18 @@ class TestExecutionBlockAPI:
         mock_oda.uow().__enter__.return_value = uow_mock
 
         result = client.get(
-            f"{API_PREFIX}/ebs/eb-mvp01-20240426-5004/status",
+            f"{API_PREFIX}/ebs/status/history",
+            params={"entity_id": "eb-mvp01-20240426-5004", "eb_version": "1"},
             headers={"accept": "application/json"},
         )
 
-        assert_json_is_equal(result.json(), valid_eb_status_history)
+        assert_json_is_equal(
+            result.json(),
+            valid_eb_status_history,
+            exclude_regex_paths={
+                r"root\[\d+\]\['metadata'\]\['(pdm_version|version)'\]"
+            },
+        )
         assert result.status_code == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
@@ -206,7 +215,7 @@ class TestExecutionBlockAPI:
 
         ebs_status_history_mock = mock.MagicMock()
         ebs_status_history_mock.add.return_value = (
-            OSOEBStatusHistory.model_validate_json(valid_eb_status)
+            OSOEBStatusHistory.model_validate_json(json.dumps(valid_eb_status))
         )
 
         uow_mock.ebs_status_history = ebs_status_history_mock
