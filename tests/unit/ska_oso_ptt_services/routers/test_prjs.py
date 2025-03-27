@@ -44,6 +44,7 @@ class TestProjectAPI:
             params=query_params,
             headers={"accept": "application/json"},
         )
+        
         resultDict = result.json()
 
         for res in resultDict:
