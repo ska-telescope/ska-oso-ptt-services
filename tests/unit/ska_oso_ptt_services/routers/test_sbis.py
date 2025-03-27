@@ -153,7 +153,7 @@ class TestSBInstanceAPI:
         error = {
             "detail": ("The requested identifier sbi-t000-00100 could not be found.")
         }
-        assert json.loads(result.json()) == error
+        assert result.json() == error
         assert result.status_code == HTTPStatus.NOT_FOUND
 
     @mock.patch("ska_oso_ptt_services.routers.sbis.common_get_entity_status")

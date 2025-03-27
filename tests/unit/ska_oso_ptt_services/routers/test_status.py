@@ -84,7 +84,6 @@ def test_entity_status_api(entity_name: str, expected_response, client):
     )
 
 
-@pytest.mark.skip()
 def test_get_invalid_entity_status(client):
     """Verifying that get_entity_status API returns error for invalid entity"""
 
@@ -92,10 +91,9 @@ def test_get_invalid_entity_status(client):
         f"{API_PREFIX}/status/get_entity?entity_name=ebi",
     )
 
-    result_json = json.loads(result_invalid_entity.text)["detail"]
-    expected_eb_response = (
-        "ValueError('Invalid entity name: ebi') with args ('Invalid entity name:"
-        " ebi',)"
-    )
+    # result_json = json.loads(result_invalid_entity.text)["detail"]
+    expected_entity_response = {
+        "detail": "The requested entity ebi could not be found."
+    }
 
-    assert result_json == expected_eb_response
+    assert result_invalid_entity.json() == expected_entity_response

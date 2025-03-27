@@ -63,6 +63,24 @@ class ODANotFound(ODAError):
         super().__init__(message)
 
 
+class EntityNotFound(ODAError):
+    """
+    Exception raised when an entity cannot be found in the data store
+    """
+
+    def __init__(
+        self, *, entity: Optional[str] = None, message: Optional[str] = None
+    ) -> None:
+        if message:
+            pass
+        elif entity:
+            message = f"The requested entity {entity} could not be found."
+        else:
+            message = "The requested entity could not be found."
+
+        super().__init__(message)
+
+
 async def oda_not_found_handler(request: Request, err: ODANotFound) -> JSONResponse:
     """
     A custom handler function to deal with NotFoundInODA raised by the ODA and

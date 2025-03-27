@@ -3,6 +3,7 @@ import logging
 from fastapi import APIRouter
 
 from ska_oso_ptt_services.common.constant import GET_ALL_ENTITY_MODEL, entity_map
+from ska_oso_ptt_services.common.error_handling import EntityNotFound
 from ska_oso_ptt_services.models.models import EntityStatusResponse
 
 LOGGER = logging.getLogger(__name__)
@@ -33,7 +34,7 @@ def get_entity_status(entity_name: str) -> EntityStatusResponse:
 
     entity_class = entity_map.get(entity_name.lower())
     if not entity_class:
-        raise ValueError(f"Invalid entity name: {entity_name}")
+        raise EntityNotFound(entity=entity_name)
 
     return EntityStatusResponse(
         entity_type=entity_name.lower(),

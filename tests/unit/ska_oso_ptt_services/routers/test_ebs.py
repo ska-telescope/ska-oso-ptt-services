@@ -128,7 +128,7 @@ class TestExecutionBlockAPI:
             headers={"accept": "application/json"},
         )
 
-        assert_json_is_equal(json.dumps(result.json()), valid_eb_status_history)
+        assert result.json() == valid_eb_status_history
 
         assert result.status_code == HTTPStatus.OK
 
@@ -150,7 +150,7 @@ class TestExecutionBlockAPI:
             "detail": "The requested identifier eb-t0001-00100 could not be found."
         }
 
-        assert json.loads(result.json()) == error
+        assert result.json() == error
         assert result.status_code == HTTPStatus.NOT_FOUND
 
     @mock.patch("ska_oso_ptt_services.routers.ebs.common_get_entity_status")
