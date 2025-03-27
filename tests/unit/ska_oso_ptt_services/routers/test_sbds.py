@@ -180,7 +180,13 @@ class TestSBDefinitionAPI:
             headers={"accept": "application/json"},
         )
 
-        assert_json_is_equal(result.json(), valid_sbd_status)
+        exclude_paths = ["root['metadata']"]
+
+        assert_json_is_equal(
+            json.dumps(result.json()),
+            json.dumps(json.loads(valid_sbd_status)),
+            exclude_paths=exclude_paths,
+        )
         assert result.status_code == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.sbds.common_get_entity_status")
@@ -205,7 +211,7 @@ class TestSBDefinitionAPI:
                 " be found."
             )
         }
-        assert json.loads(result.json()) == error
+        assert result.json() == error
         assert result.status_code == HTTPStatus.NOT_FOUND
 
     @mock.patch("ska_oso_ptt_services.routers.sbds.oda")

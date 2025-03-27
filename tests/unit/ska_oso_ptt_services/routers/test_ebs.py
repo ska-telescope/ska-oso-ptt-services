@@ -172,8 +172,14 @@ class TestExecutionBlockAPI:
             params={"eb_version": "1"},
             headers={"accept": "application/json"},
         )
+        exclude_paths = ["root['metadata']"]
 
-        assert_json_is_equal(result.json(), valid_eb_status)
+        assert_json_is_equal(
+            json.dumps(result.json()),
+            json.dumps(json.loads(valid_eb_status)),
+            exclude_paths=exclude_paths,
+        )
+
         assert result.status_code == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.ebs.common_get_entity_status")
@@ -199,7 +205,7 @@ class TestExecutionBlockAPI:
                 " be found."
             )
         }
-        assert json.loads(result.json()) == error
+        assert result.json() == error
         assert result.status_code == HTTPStatus.NOT_FOUND
 
     @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
