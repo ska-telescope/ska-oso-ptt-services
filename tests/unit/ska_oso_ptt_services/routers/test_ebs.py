@@ -16,8 +16,10 @@ class TestExecutionBlockAPI:
 
     @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
     @mock.patch("ska_oso_ptt_services.routers.ebs.common_get_entity_status")
-    def test_get_ebs_with_status(self, mock_get_eb_status, mock_oda, client, valid_ebs):
-        """Verifying that get_ebs_with_status API returns All EBs with status"""
+    def test_get_multiple_eb_with_status(
+        self, mock_get_eb_status, mock_oda, client, valid_ebs
+    ):
+        """Verifying that get_multiple_eb_with_status API returns All EBs with status"""
 
         execution_block = [OSOExecutionBlock(**x) for x in valid_ebs]
 
@@ -50,10 +52,11 @@ class TestExecutionBlockAPI:
 
     @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
     @mock.patch("ska_oso_ptt_services.routers.ebs.common_get_entity_status")
-    def test_get_eb_with_status(
+    def test_get_single_eb_with_status(
         self, mock_get_eb_status, mock_oda, client, valid_eb_with_status
     ):
-        """Verifying that get_eb_with_status API returns requested EB with status"""
+        """Verifying that get_single_eb_with_status API returns
+        requested EB with status"""
 
         eb_mock = mock.MagicMock()
         eb_mock.model_dump.return_value = valid_eb_with_status
@@ -74,8 +77,9 @@ class TestExecutionBlockAPI:
         assert result.status_code == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
-    def test_get_eb_with_invalid_status(self, mock_oda, client):
-        """Verifying that get_eb_with_status throws error if invalid data passed"""
+    def test_get_single_eb_with_invalid_status(self, mock_oda, client):
+        """Verifying that get_single_eb_with_invalid_status throws error
+        if invalid data passed"""
 
         invalid_eb_id = "invalid-eb-id-12345"
 
@@ -96,8 +100,10 @@ class TestExecutionBlockAPI:
         assert result.status_code == HTTPStatus.NOT_FOUND
 
     @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
-    def test_get_eb_status_history(self, mock_oda, client, valid_eb_status_history):
-        """Verifying that get_eb_status_history API returns requested
+    def test_get_single_eb_status_history(
+        self, mock_oda, client, valid_eb_status_history
+    ):
+        """Verifying that get_single_eb_status_history API returns requested
         EB status history
         """
 
@@ -114,8 +120,8 @@ class TestExecutionBlockAPI:
         assert result.status_code == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
-    def test_invalid_get_eb_status_history(self, mock_oda, client):
-        """Verifying that test_invalid_get_eb_status_history throws error
+    def test_get_single_invalid_eb_status_history(self, mock_oda, client):
+        """Verifying that get_single_invalid_eb_status_history throws error
         if invalid data passed
         """
 
@@ -138,8 +144,10 @@ class TestExecutionBlockAPI:
 
     @mock.patch("ska_oso_ptt_services.routers.ebs.common_get_entity_status")
     @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
-    def test_get_eb_status(self, mock_oda, mock_get_eb_status, client, valid_eb_status):
-        """Verifying that test_eb_sbd_status API returns requested EB status"""
+    def test_get_single_eb_status(
+        self, mock_oda, mock_get_eb_status, client, valid_eb_status
+    ):
+        """Verifying that get_single_eb_status API returns requested EB status"""
 
         uow_mock = mock.MagicMock()
         mock_oda.uow().__enter__.return_value = uow_mock
@@ -163,8 +171,9 @@ class TestExecutionBlockAPI:
 
     @mock.patch("ska_oso_ptt_services.routers.ebs.common_get_entity_status")
     @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
-    def test_invalid_get_eb_status(self, mock_oda, mock_get_eb_status, client):
-        """Verifying that get_eb_status throws error if invalid data passed"""
+    def test_get_single_invalid_eb_status(self, mock_oda, mock_get_eb_status, client):
+        """Verifying that get_single_invalid_eb_status throws error
+        if invalid data passed"""
 
         invalid_eb_id = "eb-t0001-20240702-00100"
 

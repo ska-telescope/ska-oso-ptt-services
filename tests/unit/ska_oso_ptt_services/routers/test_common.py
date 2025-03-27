@@ -21,8 +21,9 @@ common_error = {
         ("prjs", common_error),
     ],
 )
-def test_invalid_get_all_entity_with_status(entity_name, expected_response, client):
-    """Verifying that get_all_entity_with_status throws error if invalid data passed"""
+def test_get_invalid_all_entity_with_status(entity_name, expected_response, client):
+    """Verifying that get_invalid_all_entity_with_status throws error
+    if invalid data passed"""
 
     query_params = {
         "match_type": "equals",
@@ -142,10 +143,10 @@ def test_invalid_get_all_entity_with_status(entity_name, expected_response, clie
         ),
     ],
 )
-def test_invalid_put_all_entity_history(
+def test_put_invalid_all_entity_history(
     entity_name, entity_id, query_params, entity_data, expected_error, client
 ):
-    """Verifying that put_all_entity_history error if invalid data passed"""
+    """Verifying that put_invalid_all_entity_history error if invalid data passed"""
 
     result = client.put(
         f"{API_PREFIX}/{entity_name}/{entity_id}/status",

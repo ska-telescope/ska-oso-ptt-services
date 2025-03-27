@@ -18,10 +18,11 @@ class TestSBDefinitionAPI:
 
     @mock.patch("ska_oso_ptt_services.routers.sbds.oda")
     @mock.patch("ska_oso_ptt_services.routers.sbds.common_get_entity_status")
-    def test_get_sbds_with_status(
+    def test_get_multiple_sbd_with_status(
         self, mock_get_sbd_status, mock_oda, client, valid_sbds
     ):
-        """Verifying that get_sbds_with_status API returns All SBDS with status"""
+        """Verifying that get_multiple_sbd_with_status API returns
+        All SBDS with status"""
 
         sbd_definitions = [SBDefinition(**sbd) for sbd in valid_sbds]
 
@@ -54,10 +55,11 @@ class TestSBDefinitionAPI:
 
     @mock.patch("ska_oso_ptt_services.routers.sbds.oda")
     @mock.patch("ska_oso_ptt_services.routers.sbds.common_get_entity_status")
-    def test_get_sbd_with_status(
+    def test_get_single_sbd_with_status(
         self, mock_get_sbd_status, mock_oda, client, valid_sbd
     ):
-        """Verifying that get_sbd_with_status API returns requested SBD with status"""
+        """Verifying that get_single_sbd_with_status API returns requested
+        SBD with status"""
 
         sbd_mock = mock.MagicMock()
         sbd_mock.model_dump.return_value = valid_sbd
@@ -80,8 +82,9 @@ class TestSBDefinitionAPI:
         assert result.status_code == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.sbds.oda")
-    def test_get_sbd_with_invalid_status(self, mock_oda, client):
-        """Verifying that get_sbd_with_status throws error if invalid data passed"""
+    def test_get_single_sbd_with_invalid_status(self, mock_oda, client):
+        """Verifying that get_single_sbd_with_invalid_status throws error
+        if invalid data passed"""
 
         invalid_sbd_id = "invalid-sbd-id-12345"
 
@@ -103,10 +106,11 @@ class TestSBDefinitionAPI:
         assert result.status_code == HTTPStatus.NOT_FOUND
 
     @mock.patch("ska_oso_ptt_services.routers.sbds.oda")
-    def test_get_sbd_status_history(self, mock_oda, client, valid_sbd_status_history):
-        """Verifying that get_sbd_status_history API returns requested
-        SBD status history
-        """
+    def test_get_single_sbd_status_history(
+        self, mock_oda, client, valid_sbd_status_history
+    ):
+        """Verifying that get_single_sbd_status_history API returns requested
+        SBD status history"""
 
         uow_mock = mock.MagicMock()
         uow_mock.sbds_status_history.query.return_value = valid_sbd_status_history
@@ -130,10 +134,9 @@ class TestSBDefinitionAPI:
         assert result.status_code == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.sbds.oda")
-    def test_invalid_get_sbd_status_history(self, mock_oda, client):
-        """Verifying that test_invalid_get_sbd_status_history throws error
-        if invalid data passed
-        """
+    def test_get_single_invalid_sbd_status_history(self, mock_oda, client):
+        """Verifying that get_single_invalid_sbd_status_history throws error
+        if invalid data passed"""
 
         uow_mock = mock.MagicMock()
         uow_mock.sbds_status_history.query.return_value = []
@@ -155,10 +158,10 @@ class TestSBDefinitionAPI:
 
     @mock.patch("ska_oso_ptt_services.routers.sbds.common_get_entity_status")
     @mock.patch("ska_oso_ptt_services.routers.sbds.oda")
-    def test_get_sbd_status(
+    def test_get_single_sbd_status(
         self, mock_oda, mock_get_sbd_status, client, valid_sbd_status
     ):
-        """Verifying that test_get_sbd_status API returns requested SBD status"""
+        """Verifying that get_single_sbd_status API returns requested SBD status"""
 
         uow_mock = mock.MagicMock()
         mock_oda.uow().__enter__.return_value = uow_mock
@@ -181,8 +184,9 @@ class TestSBDefinitionAPI:
 
     @mock.patch("ska_oso_ptt_services.routers.sbds.common_get_entity_status")
     @mock.patch("ska_oso_ptt_services.routers.sbds.oda")
-    def test_invalid_get_sbd_status(self, mock_oda, mock_get_sbd_status, client):
-        """Verifying that get_sbd_status throws error if invalid data passed"""
+    def test_get_single_invalid_sbd_status(self, mock_oda, mock_get_sbd_status, client):
+        """Verifying that get_single_invalid_sbd_status throws error
+        if invalid data passed"""
 
         invalid_sbd_id = "sbd-t0001-20240702-00100"
 

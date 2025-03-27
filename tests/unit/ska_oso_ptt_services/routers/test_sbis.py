@@ -18,10 +18,11 @@ class TestSBInstanceAPI:
 
     @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
     @mock.patch("ska_oso_ptt_services.routers.sbis.common_get_entity_status")
-    def test_get_sbis_with_status(
+    def test_get_multiple_sbi_with_status(
         self, mock_get_sbi_status, mock_oda, client, valid_sbis
     ):
-        """Verifying that get_sbis_with_status API returns All SBIs with status"""
+        """Verifying that get_multiple_sbi_with_status API returns
+        All SBIs with status"""
 
         sbi_instance = [SBInstance(**x) for x in valid_sbis]
 
@@ -54,10 +55,11 @@ class TestSBInstanceAPI:
 
     @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
     @mock.patch("ska_oso_ptt_services.routers.sbis.common_get_entity_status")
-    def test_get_sbi_with_status(
+    def test_get_single_sbi_with_status(
         self, mock_get_sbi_status, mock_oda, client, valid_sbi
     ):
-        """Verifying that get_sbi_with_status API returns requested SBI with status"""
+        """Verifying that get_single_sbi_with_status API returns requested
+        SBI with status"""
 
         sbi_mock = mock.MagicMock()
         sbi_mock.model_dump.return_value = valid_sbi
@@ -82,8 +84,9 @@ class TestSBInstanceAPI:
         assert result.status_code == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
-    def test_get_sbi_with_invalid_status(self, mock_oda, client):
-        """Verifying that get_sbi_with_status throws error if invalid data passed"""
+    def test_get_single_sbi_with_invalid_status(self, mock_oda, client):
+        """Verifying that get_single_sbi_with_invalid_status throws error
+        if invalid data passed"""
 
         invalid_sbi_id = "invalid-sbi-id-12345"
 
@@ -104,10 +107,11 @@ class TestSBInstanceAPI:
         assert result.status_code == HTTPStatus.NOT_FOUND
 
     @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
-    def test_get_sbi_status_history(self, mock_oda, client, valid_sbi_status_history):
-        """Verifying that get_sbi_status_history API returns requested
-        SBI status history
-        """
+    def test_get_single_sbi_status_history(
+        self, mock_oda, client, valid_sbi_status_history
+    ):
+        """Verifying that get_single_sbi_status_history API returns requested
+        SBI status history"""
 
         uow_mock = mock.MagicMock()
         uow_mock.sbis_status_history.query.return_value = valid_sbi_status_history
@@ -123,8 +127,8 @@ class TestSBInstanceAPI:
         assert result.status_code == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
-    def test_invalid_get_sbi_status_history(self, mock_oda, client):
-        """Verifying that test_invalid_get_sbi_status_history throws error
+    def test_get_single_invalid_sbi_status_history(self, mock_oda, client):
+        """Verifying that get_single_invalid_sbi_status_history throws error
         if invalid data passed
         """
 
@@ -147,10 +151,10 @@ class TestSBInstanceAPI:
 
     @mock.patch("ska_oso_ptt_services.routers.sbis.common_get_entity_status")
     @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
-    def test_get_sbi_status(
+    def test_get_single_sbi_status(
         self, mock_oda, mock_get_sbi_status, client, valid_sbi_status
     ):
-        """Verifying that test_get_sbi_status API returns requested SBI status"""
+        """Verifying that get_single_sbi_status API returns requested SBI status"""
 
         uow_mock = mock.MagicMock()
         mock_oda.uow().__enter__.return_value = uow_mock
@@ -173,8 +177,9 @@ class TestSBInstanceAPI:
 
     @mock.patch("ska_oso_ptt_services.routers.sbis.common_get_entity_status")
     @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
-    def test_invalid_get_sbi_status(self, mock_oda, mock_get_sbi_status, client):
-        """Verifying that get_sbi_status throws error if invalid data passed"""
+    def test_get_single_invalid_sbi_status(self, mock_oda, mock_get_sbi_status, client):
+        """Verifying that get_single_invalid_sbi_status throws error
+        if invalid data passed"""
 
         invalid_sbi_id = "sbi-t0001-20240702-00100"
 
