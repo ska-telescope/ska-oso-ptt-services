@@ -137,9 +137,7 @@ def put_sbd_history(
 
     with oda.uow() as uow:
         if sbd_id not in uow.sbds:
-            raise KeyError(
-                f"Not found. The requested sbd_id {sbd_id} could not be found."
-            )
+            raise ODANotFound(identifier=sbd_id)
 
         persisted_sbd = uow.sbds_status_history.add(sbd_status_history)
 

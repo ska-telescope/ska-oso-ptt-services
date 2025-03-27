@@ -218,14 +218,14 @@ class TestExecutionBlockAPI:
         )
 
         uow_mock.ebs_status_history = ebs_status_history_mock
-        uow_mock.commit.return_value = "200"
+        uow_mock.commit().return_value = "200"
         mock_oda.uow().__enter__.return_value = uow_mock
 
         url = f"{API_PREFIX}/ebs/eb-mvp01-20240426-5004/status"
         data = {
             "current_status": "Fully Observed",
             "previous_status": "Created",
-            "eb_version": "1",
+            "eb_ref": "eb-mvp01-20240426-5004",
         }
         exclude_paths = [
             "root['metadata']['created_on']",
@@ -238,7 +238,10 @@ class TestExecutionBlockAPI:
             url,
             json=data,
         )
+
         assert_json_is_equal(
-            result.json(), valid_put_eb_history_response, exclude_paths
+            json.dumps(result.json()),
+            json.dumps(json.loads(valid_put_eb_history_response)),
+            exclude_paths,
         )
         assert result.status_code == HTTPStatus.OK

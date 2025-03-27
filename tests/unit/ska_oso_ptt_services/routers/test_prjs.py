@@ -218,14 +218,14 @@ class TestProjectAPI:
         )
 
         uow_mock.prjs_status_history = prjs_status_history_mock
-        uow_mock.commit.return_value = "200"
+        uow_mock.commit().return_value = "200"
         mock_oda.uow().__enter__.return_value = uow_mock
 
         url = f"{API_PREFIX}/prjs/prj-mvp01-20220923-00001/status"
         data = {
             "current_status": "Draft",
             "previous_status": "Draft",
-            "prj_version": "1",
+            "prj_ref": "prj-mvp01-20220923-00001",
         }
         exclude_paths = [
             "root['metadata']['created_on']",
@@ -238,8 +238,11 @@ class TestProjectAPI:
             url,
             json=data,
         )
+
         assert_json_is_equal(
-            result.json(), valid_put_prj_history_response, exclude_paths
+            json.dumps(result.json()),
+            json.dumps(json.loads(valid_put_prj_history_response)),
+            exclude_paths,
         )
         assert result.status_code == HTTPStatus.OK
 
@@ -259,14 +262,14 @@ class TestProjectAPI:
         )
 
         uow_mock.prjs_status_history = prjs_status_history_mock
-        uow_mock.commit.return_value = "200"
+        uow_mock.commit().return_value = "200"
         mock_oda.uow().__enter__.return_value = uow_mock
 
         url = f"{API_PREFIX}/prjs/prj-mvp01-20220923-00001/status"
         data = {
             "current_status": "Draft",
             "previous_status": "Draft",
-            "prj_version": "1",
+            "prj_ref": "prj-mvp01-20220923-00001",
         }
         exclude_paths = [
             "root['metadata']['created_on']",
@@ -279,8 +282,11 @@ class TestProjectAPI:
             url,
             json=data,
         )
+
         assert_json_is_equal(
-            result.json(), valid_put_prj_history_response, exclude_paths
+            json.dumps(result.json()),
+            json.dumps(json.loads(valid_put_prj_history_response)),
+            exclude_paths,
         )
         assert result.status_code == HTTPStatus.OK
 
@@ -299,14 +305,14 @@ class TestProjectAPI:
         )
 
         uow_mock.prjs_status_history = prjs_status_history_mock
-        uow_mock.commit.return_value = "200"
+        uow_mock.commit().return_value = "200"
         mock_oda.uow().__enter__.return_value = uow_mock
 
         url = f"{API_PREFIX}/prjs/prj-mvp01-20220923-00001/status"
         data = {
             "current_status": "Submitted",
             "previous_status": "Draft",
-            "prj_version": "2",
+            "prj_ref": "prj-mvp01-20220923-00001",
         }
         exclude_paths = [
             "root['metadata']['created_on']",
@@ -319,7 +325,10 @@ class TestProjectAPI:
             url,
             json=data,
         )
+
         assert_json_is_equal(
-            result.json(), valid_put_prj_history_version_response, exclude_paths
+            json.dumps(result.json()),
+            json.dumps(json.loads(valid_put_prj_history_version_response)),
+            exclude_paths,
         )
         assert result.status_code == HTTPStatus.OK

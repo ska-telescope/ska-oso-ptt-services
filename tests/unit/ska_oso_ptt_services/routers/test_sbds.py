@@ -224,13 +224,13 @@ class TestSBDefinitionAPI:
         )
 
         uow_mock.sbds_status_history = sbds_status_history_mock
-        uow_mock.commit.return_value = "200"
+        uow_mock.commit().return_value = "200"
         mock_oda.uow().__enter__.return_value = uow_mock
 
         data = {
             "current_status": "Complete",
             "previous_status": "Draft",
-            "sbd_version": "1",
+            "sbd_ref": "sbd-t0001-20240702-00002",
         }
         exclude_paths = [
             "root['metadata']['created_on']",
@@ -244,7 +244,9 @@ class TestSBDefinitionAPI:
             json=data,
         )
         assert_json_is_equal(
-            result.json(), valid_put_sbd_history_response, exclude_paths
+            json.dumps(result.json()),
+            json.dumps(json.loads(valid_put_sbd_history_response)),
+            exclude_paths,
         )
         assert result.status_code == HTTPStatus.OK
 
@@ -264,13 +266,13 @@ class TestSBDefinitionAPI:
         )
 
         uow_mock.sbds_status_history = sbds_status_history_mock
-        uow_mock.commit.return_value = "200"
+        uow_mock.commit().return_value = "200"
         mock_oda.uow().__enter__.return_value = uow_mock
 
         data = {
             "current_status": "Complete",
             "previous_status": "Draft",
-            "sbd_version": "1",
+            "sbd_ref": "sbd-t0001-20240702-00002",
         }
         exclude_paths = [
             "root['metadata']['created_on']",
@@ -284,7 +286,9 @@ class TestSBDefinitionAPI:
             json=data,
         )
         assert_json_is_equal(
-            result.json(), valid_put_sbd_history_response, exclude_paths
+            json.dumps(result.json()),
+            json.dumps(json.loads(valid_put_sbd_history_response)),
+            exclude_paths=exclude_paths,
         )
         assert result.status_code == HTTPStatus.OK
 
@@ -301,13 +305,13 @@ class TestSBDefinitionAPI:
         )
 
         uow_mock.sbds_status_history = sbds_status_history_mock
-        uow_mock.commit.return_value = "200"
+        uow_mock.commit().return_value = "200"
         mock_oda.uow().__enter__.return_value = uow_mock
 
         data = {
             "current_status": "Observed",
             "previous_status": "Draft",
-            "sbd_version": "2",
+            "sbd_ref": "sbd-t0001-20240702-00002",
         }
         exclude_paths = [
             "root['metadata']['created_on']",
@@ -320,7 +324,10 @@ class TestSBDefinitionAPI:
             f"{API_PREFIX}/sbds/sbd-t0001-20240702-00002/status",
             json=data,
         )
+
         assert_json_is_equal(
-            result.json(), valid_put_sbd_history_version_response, exclude_paths
+            json.dumps(result.json()),
+            json.dumps(json.loads(valid_put_sbd_history_version_response)),
+            exclude_paths=exclude_paths,
         )
         assert result.status_code == HTTPStatus.OK

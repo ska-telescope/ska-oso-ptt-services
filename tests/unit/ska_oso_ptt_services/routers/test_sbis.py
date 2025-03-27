@@ -220,13 +220,13 @@ class TestSBInstanceAPI:
             SBIStatusHistory.model_validate_json(valid_put_sbi_history_response)
         )
         uow_mock.sbis_status_history = sbis_status_history_mock
-        uow_mock.commit.return_value = "200"
+        uow_mock.commit().return_value = "200"
         mock_oda.uow().__enter__.return_value = uow_mock
 
         data = {
             "current_status": "Executing",
             "previous_status": "Created",
-            "sbi_version": "1",
+            "sbi_ref": "sbi-mvp01-20220923-00002",
         }
         exclude_paths = [
             "root['metadata']['created_on']",
@@ -239,7 +239,10 @@ class TestSBInstanceAPI:
             f"{API_PREFIX}/sbis/sbi-mvp01-20220923-00002/status",
             json=data,
         )
+
         assert_json_is_equal(
-            result.json(), valid_put_sbi_history_response, exclude_paths
+            json.dumps(result.json()),
+            json.dumps(json.loads(valid_put_sbi_history_response)),
+            exclude_paths,
         )
         assert result.status_code == HTTPStatus.OK
