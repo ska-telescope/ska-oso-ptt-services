@@ -1,0 +1,3734 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "FastAPI",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/ska-oso-ptt-services/ptt/api/v0/ebs/": {
+      "get": {
+        "tags": [
+          "EB"
+        ],
+        "summary": "Get All Execution Block with status appended, filter by the query parameter like created_before, created_after and user name",
+        "description": "Function that a GET /ebs request is routed to.\n\n:param query_params: Parameters to query the ODA by.\n:return: All ExecutionBlocks present with status wrapped in a Response,\n     or appropriate error Response",
+        "operationId": "get_ebs_with_status_ska_oso_ptt_services_ptt_api_v0_ebs__get",
+        "parameters": [
+          {
+            "name": "user",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "User"
+            }
+          },
+          {
+            "name": "match_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/MatchType",
+              "default": "equals"
+            }
+          },
+          {
+            "name": "query_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/DateQueryType"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Query Type"
+            }
+          },
+          {
+            "name": "created_before",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Created Before"
+            }
+          },
+          {
+            "name": "created_after",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Created After"
+            }
+          },
+          {
+            "name": "last_modified_before",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Last Modified Before"
+            }
+          },
+          {
+            "name": "last_modified_after",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Last Modified After"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EBStatusModel-Input"
+                  },
+                  "title": "Response 200 Get Ebs With Status Ska Oso Ptt Services Ptt Api V0 Ebs  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ska-oso-ptt-services/ptt/api/v0/ebs/{eb_id}": {
+      "get": {
+        "tags": [
+          "EB"
+        ],
+        "summary": "Get specific Execution Block by identifier with status appended",
+        "description": "Function that a GET /ebs/\u003Ceb_id\u003E request is routed to.\n\n:param eb_id: Requested identifier from the path parameter\n:return: The ExecutionBlock with status wrapped in a Response,\n    or appropriate error Response",
+        "operationId": "get_eb_with_status_ska_oso_ptt_services_ptt_api_v0_ebs__eb_id__get",
+        "parameters": [
+          {
+            "name": "eb_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Eb Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EBStatusModel-Input"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ska-oso-ptt-services/ptt/api/v0/ebs/{eb_id}/status": {
+      "get": {
+        "tags": [
+          "EB"
+        ],
+        "summary": "Get specific Execution Block status by the identifier",
+        "description": "Function that a GET /ebs/\u003Ceb_id\u003E/status request is routed to.\nThis method is used to GET the current status for the given eb_id\n\n:param eb_id: Requested identifier from the path parameter\n:param version: Requested identifier from the path parameter\n:return: The current entity status,OSOEBStatusHistory wrapped in a\n    Response, or appropriate error Response",
+        "operationId": "get_eb_status_ska_oso_ptt_services_ptt_api_v0_ebs__eb_id__status_get",
+        "parameters": [
+          {
+            "name": "eb_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Eb Id"
+            }
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "title": "Version"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OSOEBStatusHistory-Input"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "EB"
+        ],
+        "summary": "Update specific Execution Block status by identifier",
+        "description": "Function that a PUT /ebs/\u003Ceb_id\u003E/status request is routed to.\n\n:param eb_id: Requested identifier from the path parameter\n:param eb_status_history: Object of OSOEBStatusHistory\n:return: The ExecutionBlock wrapped in a Response, or appropriate error Response",
+        "operationId": "put_eb_history_ska_oso_ptt_services_ptt_api_v0_ebs__eb_id__status_put",
+        "parameters": [
+          {
+            "name": "eb_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Eb Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OSOEBStatusHistory-Input"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OSOEBStatusHistory-Input"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ska-oso-ptt-services/ptt/api/v0/ebs/status/history": {
+      "get": {
+        "tags": [
+          "EB"
+        ],
+        "summary": "Get specific Execution Block status history by identifier and version",
+        "description": "Function that a GET /status/history request is routed to.\nThis method is used to GET status history for the given entity\n\n:param query_params: Parameters to query the ODA by.\n:return: The status history, OSOEBStatusHistory wrapped in a Response,\n    or appropriate error Response",
+        "operationId": "get_eb_status_history_ska_oso_ptt_services_ptt_api_v0_ebs_status_history_get",
+        "parameters": [
+          {
+            "name": "entity_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Entity Id"
+            }
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Version"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OSOEBStatusHistory-Input"
+                  },
+                  "title": "Response 200 Get Eb Status History Ska Oso Ptt Services Ptt Api V0 Ebs Status History Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ActivityCall": {
+        "properties": {
+          "activity_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Activity Ref"
+          },
+          "executed_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Executed At"
+          },
+          "runtime_args": {
+            "items": {
+              "$ref": "#/components/schemas/FunctionArgs"
+            },
+            "type": "array",
+            "title": "Runtime Args"
+          }
+        },
+        "type": "object",
+        "title": "ActivityCall"
+      },
+      "AltAzCoordinates-Input": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "altaz",
+              "horizontal"
+            ],
+            "title": "Kind",
+            "default": "altaz"
+          },
+          "az": {
+            "type": "number",
+            "title": "Az"
+          },
+          "el": {
+            "type": "number",
+            "title": "El"
+          },
+          "unit": {
+            "prefixItems": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "type": "array",
+            "maxItems": 2,
+            "minItems": 2,
+            "title": "Unit",
+            "default": [
+              "deg",
+              "deg"
+            ]
+          },
+          "reference_frame": {
+            "$ref": "#/components/schemas/HorizontalCoordinatesReferenceFrame",
+            "default": "altaz"
+          }
+        },
+        "type": "object",
+        "required": [
+          "az",
+          "el"
+        ],
+        "title": "AltAzCoordinates"
+      },
+      "AltAzCoordinates-Output": {
+        "type": "object"
+      },
+      "AngleUnits": {
+        "type": "string",
+        "enum": [
+          "deg",
+          "arcmin",
+          "arcsec"
+        ],
+        "title": "AngleUnits",
+        "description": "Enumeration of units used to measure angles."
+      },
+      "Aperture": {
+        "properties": {
+          "station_id": {
+            "type": "integer",
+            "maximum": 511,
+            "minimum": 0,
+            "title": "Station Id"
+          },
+          "substation_id": {
+            "type": "integer",
+            "title": "Substation Id"
+          },
+          "weighting_key": {
+            "type": "string",
+            "title": "Weighting Key",
+            "default": "uniform"
+          }
+        },
+        "type": "object",
+        "required": [
+          "station_id",
+          "substation_id"
+        ],
+        "title": "Aperture",
+        "description": "Aperture specifies how the aperture of a subarray beam should be\nconfigured.\n\n:param station_id: ID of station\n:param substation_id: ID of sub station\n:param weighting_key: weighting key value"
+      },
+      "Author": {
+        "properties": {
+          "pis": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Pis"
+          },
+          "cois": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Cois"
+          }
+        },
+        "type": "object",
+        "title": "Author",
+        "description": "The author of a Proposal"
+      },
+      "Beam-Output": {
+        "type": "object"
+      },
+      "BeamFunction": {
+        "type": "string",
+        "enum": [
+          "visibilities",
+          "pulsar search",
+          "pulsar timing",
+          "vlbi",
+          "transient buffer"
+        ],
+        "title": "BeamFunction",
+        "description": "Enumeration of possible functions for an SDP Beam."
+      },
+      "BeamMapping": {
+        "properties": {
+          "beam_ref": {
+            "type": "string",
+            "title": "Beam Ref"
+          },
+          "field_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Field Ref"
+          },
+          "channels_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Channels Ref"
+          },
+          "polarisations_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Polarisations Ref"
+          }
+        },
+        "type": "object",
+        "required": [
+          "beam_ref"
+        ],
+        "title": "BeamMapping",
+        "description": "Class to hold mapping of beam parameters to scans"
+      },
+      "CBFConfiguration": {
+        "properties": {
+          "fsps": {
+            "items": {
+              "$ref": "#/components/schemas/FSPConfiguration"
+            },
+            "type": "array",
+            "title": "Fsps"
+          },
+          "vlbi": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/VLBIConfiguration"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "title": "CBFConfiguration",
+        "description": "Class to hold all FSP and VLBI configurations.\n\n:param fsps: List of the FSP configurations to set\n:param vlbi: the VLBI configuration to set (optional)"
+      },
+      "CSPConfiguration": {
+        "properties": {
+          "config_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Config Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name",
+            "default": ""
+          },
+          "subarray": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SubarrayConfiguration"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "common": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CommonConfiguration"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "cbf": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CBFConfiguration"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "midcbf": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MidCBFConfiguration"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "lowcbf": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LowCBFConfiguration"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "pst": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PSTConfiguration"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "pss": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PSSConfiguration"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "title": "CSPConfiguration",
+        "description": "Class to hold all CSP configuration.\n\n:param config_id: an ID for CSP configuration\n:param name: a user-friendly name to identify the CSP configuration\n:param subarray_config: Sub-array configuration to set\n:param common_config: the common CSP elements to set\n:param cbf_config: the CBF configurations to set\n:param midcbf_config: the MidCBF configurations to set\n:param lowcbf_config: the LowCBF configurations to set\n:param pst_config: the PST configurations to set\n:param pss_config: the PSS configurations to set"
+      },
+      "ChannelAveragingFactor": {
+        "type": "integer",
+        "enum": [1, 2, 3, 4, 6, 8, 12, 16, 24, 31, 32, 48],
+        "title": "ChannelAveragingFactor"
+      },
+      "Channels": {
+        "properties": {
+          "channels_id": {
+            "type": "string",
+            "title": "Channels Id"
+          },
+          "spectral_windows": {
+            "items": {
+              "$ref": "#/components/schemas/SpectralWindow"
+            },
+            "type": "array",
+            "title": "Spectral Windows"
+          }
+        },
+        "type": "object",
+        "required": [
+          "channels_id",
+          "spectral_windows"
+        ],
+        "title": "Channels",
+        "description": "Class to hold Channel configuration"
+      },
+      "CommonConfiguration": {
+        "properties": {
+          "subarray_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Subarray Id"
+          },
+          "band_5_tuning": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Band 5 Tuning"
+          }
+        },
+        "type": "object",
+        "title": "CommonConfiguration",
+        "description": "Class to hold the CSP sub-elements.\n\n:param subarray_id: an ID of sub-array device (optional)\n:param band_5_tuning: list of integer (optional)"
+      },
+      "CoordinatesOffset": {
+        "properties": {
+          "x": {
+            "type": "number",
+            "title": "X",
+            "default": 0
+          },
+          "y": {
+            "type": "number",
+            "title": "Y",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "title": "CoordinatesOffset",
+        "description": "CoordinatesOffset defines a unitless pointing offset from a reference\nposition. Units are expected to be provided in a separate field."
+      },
+      "Correlation": {
+        "properties": {
+          "spw_id": {
+            "type": "integer",
+            "title": "Spw Id",
+            "description": "Integer identifying the spectral window within this CSP setup"
+          },
+          "logical_fsp_ids": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Logical Fsp Ids",
+            "description": "Frequency slice processors that will be used to produce this spectral window"
+          },
+          "zoom_factor": {
+            "type": "integer",
+            "maximum": 7,
+            "minimum": 0,
+            "title": "Zoom Factor",
+            "description": "Integer (0-7) defining the zoom window to use. '0' means non-zoom i.e. standard continuum"
+          },
+          "centre_frequency": {
+            "type": "number",
+            "title": "Centre Frequency",
+            "description": "Centre frequency of the spectral window"
+          },
+          "number_of_channels": {
+            "type": "integer",
+            "title": "Number Of Channels",
+            "description": "Number of channels that the correlator will produce"
+          },
+          "integration_time_ms": {
+            "type": "number",
+            "title": "Integration Time Ms",
+            "description": "Averaging time in ms after which the correlator will output a visibility"
+          }
+        },
+        "type": "object",
+        "required": [
+          "spw_id",
+          "logical_fsp_ids",
+          "zoom_factor",
+          "centre_frequency",
+          "number_of_channels",
+          "integration_time_ms"
+        ],
+        "title": "Correlation",
+        "description": "Class to hold the spectral windows that will be produced by the correlator\".\n\n:param spw_id: Integer identifying the spectral window within this CSP setup\n:param logical_fsp_ids: Frequency slice processors that will be used to produce this spectral window.\n:param zoom_factor: Integer (0-7) defining the zoom window to use. '0' means non-zoom i.e. standard continuum.\n:param centre_frequency: Centre frequency of the spectral window\n:param number_of_channels: Number of channels that the correlator will produce\n:param integration_time_ms: Averaging time after which the correlator will output a visibility"
+      },
+      "CorrelationSPWConfiguration": {
+        "properties": {
+          "spw_id": {
+            "type": "integer",
+            "maximum": 27,
+            "minimum": 1,
+            "title": "Spw Id"
+          },
+          "logical_fsp_ids": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Logical Fsp Ids"
+          },
+          "receptors": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Receptors"
+          },
+          "zoom_factor": {
+            "type": "integer",
+            "maximum": 6,
+            "minimum": 0,
+            "title": "Zoom Factor"
+          },
+          "centre_frequency": {
+            "type": "number",
+            "title": "Centre Frequency"
+          },
+          "number_of_channels": {
+            "type": "integer",
+            "title": "Number Of Channels"
+          },
+          "channel_averaging_factor": {
+            "$ref": "#/components/schemas/ChannelAveragingFactor",
+            "default": 1
+          },
+          "time_integration_factor": {
+            "type": "integer",
+            "maximum": 10,
+            "minimum": 1,
+            "title": "Time Integration Factor"
+          }
+        },
+        "type": "object",
+        "required": [
+          "spw_id",
+          "logical_fsp_ids",
+          "zoom_factor",
+          "centre_frequency",
+          "number_of_channels",
+          "time_integration_factor"
+        ],
+        "title": "CorrelationSPWConfiguration",
+        "description": "CorrelationSPWConfiguration defines the configuration for a CSP Frequency Slice\nProcessor.\n\n:param swp_id: SWP configuration ID [1..27]\n:param logical_fsp_ids: Logical FPS Ids\n:param receptors: list of receptors\n:param zoom_factor: zoom factor [0..6]\n:param centre_frequency: Centre Frequency\n:param number_of_channels: Number of Channels\n:param channel_averaging_factor: Channel Average Factor\n:param time_integration_factor: integer multiple of correlation integration time (140ms) [1..10]"
+      },
+      "CrossScanParameters": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "const": "CrossScanParameters",
+            "title": "Kind",
+            "default": "CrossScanParameters"
+          },
+          "offset_arcsec": {
+            "type": "number",
+            "title": "Offset Arcsec",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "title": "CrossScanParameters",
+        "description": "CrossScanParameters defines the properties of an observing pattern that\nuses a cross scan observing pattern, typically used for pointing\ncalibrations."
+      },
+      "DateQueryType": {
+        "type": "string",
+        "enum": [
+          "created_between",
+          "modified_between"
+        ],
+        "title": "DateQueryType"
+      },
+      "DishAllocation": {
+        "properties": {
+          "dish_allocation_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dish Allocation Id"
+          },
+          "selected_subarray_definition": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Selected Subarray Definition"
+          },
+          "dish_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true,
+            "title": "Dish Ids",
+            "default": []
+          }
+        },
+        "type": "object",
+        "title": "DishAllocation",
+        "description": "Represents the required dish array for an observation described by an SBDefinition\n\n:param dish_allocation_id: The identifier of this object within the SBDefinition\n:param selected_subarray_definition: The subarray definition, e.g. AA1. This could be inferred from the\n    dish_ids but is stored here as well for UI purposes.\n:param dish_ids: The identifier of the dishes in the allocation, e.g. SKA063"
+      },
+      "EBStatusModel-Input": {
+        "properties": {
+          "interface": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Interface"
+          },
+          "eb_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Eb Id"
+          },
+          "metadata": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Metadata"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "telescope": {
+            "$ref": "#/components/schemas/TelescopeType"
+          },
+          "sbd_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sbd Ref"
+          },
+          "sbd_version": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sbd Version"
+          },
+          "sbi_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sbi Ref"
+          },
+          "request_responses": {
+            "items": {
+              "$ref": "#/components/schemas/RequestResponse"
+            },
+            "type": "array",
+            "title": "Request Responses"
+          },
+          "status": {
+            "$ref": "#/components/schemas/OSOEBStatus"
+          }
+        },
+        "type": "object",
+        "required": [
+          "telescope",
+          "status"
+        ],
+        "title": "EBStatusModel"
+      },
+      "EBStatusModel-Output": {
+        "type": "object"
+      },
+      "EntityStatusResponse": {
+        "properties": {
+          "str": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Str"
+          }
+        },
+        "type": "object",
+        "required": [
+          "str"
+        ],
+        "title": "EntityStatusResponse"
+      },
+      "EquatorialCoordinates-Input": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "const": "equatorial",
+            "title": "Kind",
+            "default": "equatorial"
+          },
+          "ra": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Ra",
+            "default": 0
+          },
+          "dec": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Dec",
+            "default": 0
+          },
+          "reference_frame": {
+            "$ref": "#/components/schemas/EquatorialCoordinatesReferenceFrame",
+            "default": "icrs"
+          },
+          "epoch": {
+            "type": "number",
+            "title": "Epoch",
+            "description": "Epoch of proper motion, date when proper motion offset was zero. Note this is an astronomical epoch, not a Unix epoch timestamp",
+            "default": 2000
+          },
+          "unit": {
+            "prefixItems": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "type": "array",
+            "maxItems": 2,
+            "minItems": 2,
+            "title": "Unit",
+            "default": [
+              "hourangle",
+              "deg"
+            ]
+          }
+        },
+        "type": "object",
+        "title": "EquatorialCoordinates",
+        "description": "SiderealTarget represents the argument for SKA scheduling block."
+      },
+      "EquatorialCoordinates-Output": {
+        "type": "object"
+      },
+      "EquatorialCoordinatesPST-Input": {
+        "properties": {
+          "ra_str": {
+            "type": "string",
+            "title": "Ra Str"
+          },
+          "dec_str": {
+            "type": "string",
+            "title": "Dec Str"
+          },
+          "pm_ra": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pm Ra",
+            "default": 0
+          },
+          "pm_dec": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pm Dec",
+            "default": 0
+          },
+          "parallax": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parallax",
+            "default": 0
+          },
+          "epoch": {
+            "type": "number",
+            "title": "Epoch",
+            "description": "Epoch of proper motion, date when proper motion offset was zero. Note this is an astronomical epoch, not a Unix epoch timestamp",
+            "default": 2000
+          },
+          "target_id": {
+            "type": "string",
+            "title": "Target Id"
+          },
+          "reference_frame": {
+            "$ref": "#/components/schemas/EquatorialCoordinatesReferenceFrame",
+            "default": "icrs"
+          }
+        },
+        "type": "object",
+        "required": [
+          "ra_str",
+          "dec_str",
+          "target_id"
+        ],
+        "title": "EquatorialCoordinatesPST"
+      },
+      "EquatorialCoordinatesPST-Output": {
+        "type": "object"
+      },
+      "EquatorialCoordinatesReferenceFrame": {
+        "type": "string",
+        "enum": [
+          "icrs",
+          "fk5"
+        ],
+        "title": "EquatorialCoordinatesReferenceFrame",
+        "description": "Enumeration of reference frames supported by an EquatorialCoordinates"
+      },
+      "ErrorWrapper": {
+        "properties": {
+          "detail": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Detail"
+          },
+          "stacktrace": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stacktrace"
+          }
+        },
+        "type": "object",
+        "title": "ErrorWrapper"
+      },
+      "ExecutionBlock": {
+        "properties": {
+          "eb_id": {
+            "type": "string",
+            "title": "Eb Id"
+          },
+          "max_length": {
+            "type": "number",
+            "title": "Max Length"
+          },
+          "context": {
+            "type": "object",
+            "title": "Context"
+          },
+          "beams": {
+            "items": {
+              "$ref": "#/components/schemas/ska_oso_pdm__sb_definition__sdp__beam__Beam"
+            },
+            "type": "array",
+            "title": "Beams"
+          },
+          "scan_types": {
+            "items": {
+              "$ref": "#/components/schemas/ScanType"
+            },
+            "type": "array",
+            "title": "Scan Types"
+          },
+          "channels": {
+            "items": {
+              "$ref": "#/components/schemas/Channels"
+            },
+            "type": "array",
+            "title": "Channels"
+          },
+          "polarisations": {
+            "items": {
+              "$ref": "#/components/schemas/Polarisation"
+            },
+            "type": "array",
+            "title": "Polarisations"
+          }
+        },
+        "type": "object",
+        "required": [
+          "eb_id",
+          "max_length",
+          "beams",
+          "scan_types",
+          "channels",
+          "polarisations"
+        ],
+        "title": "ExecutionBlock",
+        "description": "ExecutionBlock captures the Execution Block resources and pipeline configuration\nrequired to process an execution block.\n\n:param eb_id: execution block ID\n:param max_length: maximum length\n:param context: context\n:param beams: list of Beams\n:param scan_types: list of EB scan types\n:param channels: list of EB channels\n:param polarisations: list of polarisations"
+      },
+      "FSPConfiguration": {
+        "properties": {
+          "fsp_id": {
+            "type": "integer",
+            "maximum": 27,
+            "minimum": 1,
+            "title": "Fsp Id"
+          },
+          "function_mode": {
+            "$ref": "#/components/schemas/FSPFunctionMode"
+          },
+          "frequency_slice_id": {
+            "type": "integer",
+            "maximum": 26,
+            "minimum": 1,
+            "title": "Frequency Slice Id"
+          },
+          "integration_factor": {
+            "type": "integer",
+            "maximum": 10,
+            "minimum": 1,
+            "title": "Integration Factor"
+          },
+          "zoom_factor": {
+            "type": "integer",
+            "maximum": 6,
+            "minimum": 0,
+            "title": "Zoom Factor"
+          },
+          "channel_averaging_map": {
+            "items": {
+              "prefixItems": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "integer"
+                }
+              ],
+              "type": "array",
+              "maxItems": 2,
+              "minItems": 2
+            },
+            "type": "array",
+            "maxItems": 20,
+            "title": "Channel Averaging Map"
+          },
+          "output_link_map": {
+            "items": {
+              "items": {
+
+              },
+              "type": "array"
+            },
+            "type": "array",
+            "title": "Output Link Map"
+          },
+          "channel_offset": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Channel Offset"
+          },
+          "zoom_window_tuning": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Zoom Window Tuning"
+          }
+        },
+        "type": "object",
+        "required": [
+          "fsp_id",
+          "function_mode",
+          "frequency_slice_id",
+          "integration_factor",
+          "zoom_factor"
+        ],
+        "title": "FSPConfiguration",
+        "description": "FSPConfiguration defines the configuration for a CSP Frequency Slice\nProcessor.\n\nChannel averaging map is an optional list of 20 x (int,int) tuples.\n\n:param fsp_id: FSP configuration ID [1..27]\n:param function_mode: FSP function mode\n:param frequency_slice_id: frequency slicer ID [1..26]\n:param zoom_factor: zoom factor [0..6]\n:param integration_factor: integer multiple of correlation integration time (140ms) [1..10]\n:param channel_averaging_map: Optional channel averaging map\n:param output_link_map: Optional output_link_map\n:param channel_offset: Optional channel offset value in integer\n:param zoom_window_tuning: Optional zoom window tuning value in integer"
+      },
+      "FSPFunctionMode": {
+        "type": "string",
+        "enum": [
+          "CORR",
+          "PSS-BF",
+          "PST-BF",
+          "VLBI"
+        ],
+        "title": "FSPFunctionMode",
+        "description": "FSPFunctionMode is an enumeration of the available FSP modes."
+      },
+      "FilesystemScript": {
+        "properties": {
+          "function_args": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/PythonArguments-Input"
+            },
+            "type": "object",
+            "title": "Function Args"
+          },
+          "kind": {
+            "type": "string",
+            "const": "filesystem",
+            "title": "Kind",
+            "default": "filesystem"
+          },
+          "path": {
+            "type": "string",
+            "title": "Path"
+          }
+        },
+        "type": "object",
+        "required": [
+          "path"
+        ],
+        "title": "FilesystemScript",
+        "description": "Represents an FilesystemScript to be run as an activity in an SKA scheduling block."
+      },
+      "FivePointParameters": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "const": "FivePointParameters",
+            "title": "Kind",
+            "default": "FivePointParameters"
+          },
+          "offset_arcsec": {
+            "type": "number",
+            "title": "Offset Arcsec",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "title": "FivePointParameters",
+        "description": "FivePointParameters defines the properties of an observing pattern that\nuses a five-point observing pattern centred on a reference position."
+      },
+      "FunctionArgs": {
+        "properties": {
+          "function_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Function Name"
+          },
+          "function_args": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PythonArguments-Input"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "title": "FunctionArgs",
+        "description": "Represents a Python function & its arguments"
+      },
+      "GalacticCoordinates-Input": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "const": "galactic",
+            "title": "Kind",
+            "default": "galactic"
+          },
+          "l": {
+            "type": "number",
+            "title": "L",
+            "description": "Galactic longitude in degrees"
+          },
+          "b": {
+            "type": "number",
+            "title": "B",
+            "description": "Galactic latitude in degrees"
+          },
+          "pm_l": {
+            "type": "number",
+            "title": "Pm L",
+            "description": "Proper motion in the longitudinal direction, in mas/yr",
+            "default": 0
+          },
+          "pm_b": {
+            "type": "number",
+            "title": "Pm B",
+            "description": "Proper motion in the latitudinal direction, in mas/yr",
+            "default": 0
+          },
+          "epoch": {
+            "type": "number",
+            "title": "Epoch",
+            "description": "Epoch of proper motion, date when proper motion offset was zero. Note this is an astronomical epoch, not a Unix epoch timestamp",
+            "default": 2000
+          },
+          "parallax": {
+            "type": "number",
+            "title": "Parallax",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "required": [
+          "l",
+          "b"
+        ],
+        "title": "GalacticCoordinates",
+        "description": "Coordinates defined in a Galactic frame"
+      },
+      "GalacticCoordinates-Output": {
+        "type": "object"
+      },
+      "GitScript": {
+        "properties": {
+          "function_args": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/PythonArguments-Input"
+            },
+            "type": "object",
+            "title": "Function Args"
+          },
+          "kind": {
+            "type": "string",
+            "const": "git",
+            "title": "Kind",
+            "default": "git"
+          },
+          "repo": {
+            "type": "string",
+            "title": "Repo"
+          },
+          "path": {
+            "type": "string",
+            "title": "Path"
+          },
+          "branch": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Branch"
+          },
+          "commit": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Commit"
+          }
+        },
+        "type": "object",
+        "required": [
+          "repo",
+          "path"
+        ],
+        "title": "GitScript",
+        "description": "Represents an GitScript to be run as an activity in an SKA scheduling block."
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "HorizontalCoordinates-Input": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "altaz",
+              "horizontal"
+            ],
+            "title": "Kind",
+            "default": "horizontal"
+          },
+          "az": {
+            "type": "number",
+            "title": "Az"
+          },
+          "el": {
+            "type": "number",
+            "title": "El"
+          },
+          "unit": {
+            "prefixItems": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "type": "array",
+            "maxItems": 2,
+            "minItems": 2,
+            "title": "Unit",
+            "default": [
+              "deg",
+              "deg"
+            ]
+          },
+          "reference_frame": {
+            "$ref": "#/components/schemas/HorizontalCoordinatesReferenceFrame",
+            "default": "altaz"
+          }
+        },
+        "type": "object",
+        "required": [
+          "az",
+          "el"
+        ],
+        "title": "HorizontalCoordinates"
+      },
+      "HorizontalCoordinates-Output": {
+        "type": "object"
+      },
+      "HorizontalCoordinatesReferenceFrame": {
+        "type": "string",
+        "enum": [
+          "altaz"
+        ],
+        "title": "HorizontalCoordinatesReferenceFrame",
+        "description": "Enumeration of reference frames supported by a HorizontalCoordinates."
+      },
+      "ICRSCoordinates-Input": {
+        "properties": {
+          "ra_str": {
+            "type": "string",
+            "title": "Ra Str"
+          },
+          "dec_str": {
+            "type": "string",
+            "title": "Dec Str"
+          },
+          "pm_ra": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pm Ra",
+            "default": 0
+          },
+          "pm_dec": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pm Dec",
+            "default": 0
+          },
+          "parallax": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parallax",
+            "default": 0
+          },
+          "epoch": {
+            "type": "number",
+            "title": "Epoch",
+            "description": "Epoch of proper motion, date when proper motion offset was zero. Note this is an astronomical epoch, not a Unix epoch timestamp",
+            "default": 2000
+          },
+          "kind": {
+            "type": "string",
+            "const": "icrs",
+            "title": "Kind",
+            "default": "icrs"
+          },
+          "reference_frame": {
+            "type": "string",
+            "const": "icrs",
+            "title": "Reference Frame",
+            "default": "icrs"
+          }
+        },
+        "type": "object",
+        "required": [
+          "ra_str",
+          "dec_str"
+        ],
+        "title": "ICRSCoordinates"
+      },
+      "ICRSCoordinates-Output": {
+        "type": "object"
+      },
+      "InlineScript": {
+        "properties": {
+          "function_args": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/PythonArguments-Input"
+            },
+            "type": "object",
+            "title": "Function Args"
+          },
+          "kind": {
+            "type": "string",
+            "const": "inline",
+            "title": "Kind",
+            "default": "inline"
+          },
+          "content": {
+            "type": "string",
+            "title": "Content"
+          }
+        },
+        "type": "object",
+        "required": [
+          "content"
+        ],
+        "title": "InlineScript",
+        "description": "Represents an InlineScript to be ran as an activity in an SKA scheduling block."
+      },
+      "LowCBFConfiguration": {
+        "properties": {
+          "do_pst": {
+            "type": "boolean",
+            "title": "Do Pst",
+            "description": "Boolean indicating that pulsar-timing observations are to be performed",
+            "default": false
+          },
+          "correlation_spws": {
+            "items": {
+              "$ref": "#/components/schemas/Correlation"
+            },
+            "type": "array",
+            "title": "Correlation Spws",
+            "description": "List of Correlation objects"
+          }
+        },
+        "type": "object",
+        "required": [
+          "correlation_spws"
+        ],
+        "title": "LowCBFConfiguration",
+        "description": "Class to hold the LOW CBF configuration specification.\n\n:param do_pst: Boolean indicating that pulsar-timing observations are to be performed.\n:param correlation_spws: List of Correlation objects"
+      },
+      "MCCSAllocation": {
+        "properties": {
+          "mccs_allocation_id": {
+            "type": "string",
+            "title": "Mccs Allocation Id"
+          },
+          "selected_subarray_definition": {
+            "$ref": "#/components/schemas/SubArrayLOW"
+          },
+          "subarray_beams": {
+            "items": {
+              "$ref": "#/components/schemas/SubarrayBeamConfiguration"
+            },
+            "type": "array",
+            "title": "Subarray Beams"
+          }
+        },
+        "type": "object",
+        "required": [
+          "mccs_allocation_id",
+          "selected_subarray_definition",
+          "subarray_beams"
+        ],
+        "title": "MCCSAllocation",
+        "description": "MCCSAllocation is a Python representation of the MCCS allocation segment\nof a scheduling block.\n\n:param mccs_allocation_id: stations ID's to allocate\n:param selected_subarray_definition: name of pre-defined/standard configuration\n:param subarray_beams: subarray beam list"
+      },
+      "MatchType": {
+        "type": "string",
+        "enum": [
+          "equals",
+          "starts_with",
+          "contains"
+        ],
+        "title": "MatchType"
+      },
+      "Metadata": {
+        "properties": {
+          "version": {
+            "type": "integer",
+            "title": "Version",
+            "default": 1
+          },
+          "created_by": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Created By"
+          },
+          "created_on": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created On"
+          },
+          "last_modified_by": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Modified By"
+          },
+          "last_modified_on": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Last Modified On"
+          },
+          "pdm_version": {
+            "type": "string",
+            "pattern": "^\\d+\\.\\d+\\.\\d+[-\\w]*$",
+            "title": "PDM version",
+            "description": "The version of the PDM used to generate the entity",
+            "default": "17.2.0"
+          }
+        },
+        "type": "object",
+        "title": "Metadata",
+        "description": "Represents metadata about other entities."
+      },
+      "MidCBFConfiguration": {
+        "properties": {
+          "frequency_band": {
+            "$ref": "#/components/schemas/ReceiverBand"
+          },
+          "subbands": {
+            "items": {
+              "$ref": "#/components/schemas/Subband"
+            },
+            "type": "array",
+            "title": "Subbands"
+          }
+        },
+        "type": "object",
+        "required": [
+          "frequency_band"
+        ],
+        "title": "MidCBFConfiguration",
+        "description": "Class to hold all Correlation SPW configurations.\n\n:param frequency_band: Frequency Band\n:param subbands: list of subbands configurations"
+      },
+      "OSOEBStatus": {
+        "type": "string",
+        "enum": [
+          "Created",
+          "Fully Observed",
+          "Failed"
+        ],
+        "title": "OSOEBStatus"
+      },
+      "OSOEBStatusHistory-Input": {
+        "properties": {
+          "metadata": {
+            "$ref": "#/components/schemas/Metadata"
+          },
+          "eb_ref": {
+            "type": "string",
+            "title": "Eb Ref"
+          },
+          "eb_version": {
+            "type": "integer",
+            "title": "Eb Version",
+            "default": 1
+          },
+          "current_status": {
+            "$ref": "#/components/schemas/OSOEBStatus",
+            "default": "Created"
+          },
+          "previous_status": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/OSOEBStatus"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": "Created"
+          }
+        },
+        "type": "object",
+        "required": [
+          "eb_ref"
+        ],
+        "title": "OSOEBStatusHistory"
+      },
+      "OSOEBStatusHistory-Output": {
+        "type": "object"
+      },
+      "ObservingBlock": {
+        "properties": {
+          "obs_block_id": {
+            "type": "string",
+            "title": "Obs Block Id"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "sbd_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Sbd Ids"
+          }
+        },
+        "type": "object",
+        "required": [
+          "obs_block_id"
+        ],
+        "title": "ObservingBlock"
+      },
+      "PSSConfiguration": {
+        "properties": {
+
+        },
+        "type": "object",
+        "title": "PSSConfiguration",
+        "description": "Class to hold PSS configurations."
+      },
+      "PSTConfiguration": {
+        "properties": {
+
+        },
+        "type": "object",
+        "title": "PSTConfiguration",
+        "description": "Class to hold PST configurations."
+      },
+      "PbDependency": {
+        "properties": {
+          "pb_ref": {
+            "type": "string",
+            "title": "Pb Ref"
+          },
+          "kind": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Kind"
+          }
+        },
+        "type": "object",
+        "required": [
+          "pb_ref",
+          "kind"
+        ],
+        "title": "PbDependency",
+        "description": "Class to hold Dependencies for ProcessingBlock"
+      },
+      "PointedMosaicParameters": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "const": "PointedMosaicParameters",
+            "title": "Kind",
+            "default": "PointedMosaicParameters"
+          },
+          "offsets": {
+            "items": {
+              "$ref": "#/components/schemas/CoordinatesOffset"
+            },
+            "type": "array",
+            "title": "Offsets"
+          },
+          "units": {
+            "$ref": "#/components/schemas/AngleUnits"
+          }
+        },
+        "type": "object",
+        "required": [
+          "units"
+        ],
+        "title": "PointedMosaicParameters",
+        "description": "PointedMosaicParameters defines the properties for an observing pattern\nconsisting of a single receptor pointing with n optional offsets from\nthe reference position."
+      },
+      "PointingCorrection": {
+        "type": "string",
+        "enum": [
+          "MAINTAIN",
+          "UPDATE",
+          "RESET"
+        ],
+        "title": "PointingCorrection",
+        "description": "Operation to apply to the pointing correction model.\n\nMAINTAIN: continue applying the current pointing correction model\nUPDATE: wait for (if necessary) and apply new pointing calibration solution\nRESET: reset the applied pointing correction to the pointing model defaults"
+      },
+      "PointingKind": {
+        "type": "string",
+        "enum": [
+          "FivePointParameters",
+          "SinglePointParameters",
+          "CrossScanParameters",
+          "RasterParameters",
+          "StarRasterParameters",
+          "SpiralParameters",
+          "PointedMosaicParameters"
+        ],
+        "title": "PointingKind"
+      },
+      "PointingPattern": {
+        "properties": {
+          "active": {
+            "$ref": "#/components/schemas/PointingKind",
+            "default": "SinglePointParameters"
+          },
+          "parameters": {
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/FivePointParameters"
+                },
+                {
+                  "$ref": "#/components/schemas/CrossScanParameters"
+                },
+                {
+                  "$ref": "#/components/schemas/SinglePointParameters"
+                },
+                {
+                  "$ref": "#/components/schemas/RasterParameters"
+                },
+                {
+                  "$ref": "#/components/schemas/StarRasterParameters"
+                },
+                {
+                  "$ref": "#/components/schemas/SpiralParameters"
+                },
+                {
+                  "$ref": "#/components/schemas/PointedMosaicParameters"
+                }
+              ],
+              "discriminator": {
+                "propertyName": "kind",
+                "mapping": {
+                  "CrossScanParameters": "#/components/schemas/CrossScanParameters",
+                  "FivePointParameters": "#/components/schemas/FivePointParameters",
+                  "PointedMosaicParameters": "#/components/schemas/PointedMosaicParameters",
+                  "RasterParameters": "#/components/schemas/RasterParameters",
+                  "SinglePointParameters": "#/components/schemas/SinglePointParameters",
+                  "SpiralParameters": "#/components/schemas/SpiralParameters",
+                  "StarRasterParameters": "#/components/schemas/StarRasterParameters"
+                }
+              }
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Parameters"
+          }
+        },
+        "type": "object",
+        "title": "PointingPattern",
+        "description": "PointingPattern holds the user-configured pointing patterns and current active\npattern for receptor pointing patterns associated with a target.\n\nOne of each pointing pattern type can be held in the parameters list. Only the\nactive pattern will be used for observing; the remainder provide an easy way to\nrecover previously edited observing parameters for the target."
+      },
+      "Polarisation": {
+        "properties": {
+          "polarisations_id": {
+            "type": "string",
+            "title": "Polarisations Id"
+          },
+          "corr_type": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Corr Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "polarisations_id",
+          "corr_type"
+        ],
+        "title": "Polarisation",
+        "description": "Class that defines an SDP Polarisation configuration"
+      },
+      "ProcessingBlock": {
+        "properties": {
+          "pb_id": {
+            "type": "string",
+            "title": "Pb Id"
+          },
+          "script": {
+            "$ref": "#/components/schemas/Script"
+          },
+          "sbi_refs": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Sbi Refs"
+          },
+          "parameters": {
+            "type": "object",
+            "title": "Parameters"
+          },
+          "dependencies": {
+            "items": {
+              "$ref": "#/components/schemas/PbDependency"
+            },
+            "type": "array",
+            "title": "Dependencies"
+          }
+        },
+        "type": "object",
+        "required": [
+          "pb_id",
+          "script"
+        ],
+        "title": "ProcessingBlock",
+        "description": "Class to hold ProcessingBlock configuration"
+      },
+      "ProjectStatus": {
+        "type": "string",
+        "enum": [
+          "Draft",
+          "Submitted",
+          "Ready",
+          "In Progress",
+          "Observed",
+          "Complete",
+          "Cancelled",
+          "Out of Time"
+        ],
+        "title": "ProjectStatus"
+      },
+      "ProjectStatusHistory-Input": {
+        "properties": {
+          "metadata": {
+            "$ref": "#/components/schemas/Metadata"
+          },
+          "prj_ref": {
+            "type": "string",
+            "title": "Prj Ref"
+          },
+          "prj_version": {
+            "type": "integer",
+            "title": "Prj Version",
+            "default": 1
+          },
+          "current_status": {
+            "$ref": "#/components/schemas/ProjectStatus",
+            "default": "Draft"
+          },
+          "previous_status": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ProjectStatus"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": "Draft"
+          }
+        },
+        "type": "object",
+        "required": [
+          "prj_ref"
+        ],
+        "title": "ProjectStatusHistory"
+      },
+      "ProjectStatusHistory-Output": {
+        "type": "object"
+      },
+      "ProjectStatusModel-Input": {
+        "properties": {
+          "interface": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Interface"
+          },
+          "prj_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Prj Id"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "metadata": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Metadata"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "author": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Author"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "obs_blocks": {
+            "items": {
+              "$ref": "#/components/schemas/ObservingBlock"
+            },
+            "type": "array",
+            "title": "Obs Blocks"
+          },
+          "status": {
+            "$ref": "#/components/schemas/ProjectStatus"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "title": "ProjectStatusModel"
+      },
+      "ProjectStatusModel-Output": {
+        "type": "object"
+      },
+      "PythonArguments-Input": {
+        "properties": {
+          "args": {
+            "items": {
+
+            },
+            "type": "array",
+            "title": "Args"
+          },
+          "kwargs": {
+            "type": "object",
+            "title": "Kwargs"
+          }
+        },
+        "type": "object",
+        "title": "PythonArguments",
+        "description": "Represents the arguments for a Python callable."
+      },
+      "PythonArguments-Output": {
+        "type": "object"
+      },
+      "Quantity-Input": {
+        "properties": {
+          "value": {
+            "type": "number",
+            "title": "Value"
+          },
+          "unit": {
+            "type": "string",
+            "title": "Unit"
+          }
+        },
+        "type": "object",
+        "required": [
+          "value"
+        ],
+        "title": "Quantity"
+      },
+      "Quantity-Output": {
+        "additionalProperties": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "type": "object"
+      },
+      "RadialVelocity": {
+        "properties": {
+          "quantity": {
+            "$ref": "#/components/schemas/RadialVelocityQuantity"
+          },
+          "definition": {
+            "$ref": "#/components/schemas/RadialVelocityDefinition",
+            "default": "RADIO"
+          },
+          "reference_frame": {
+            "$ref": "#/components/schemas/RadialVelocityReferenceFrame",
+            "default": "LSRK"
+          },
+          "redshift": {
+            "type": "number",
+            "title": "Redshift",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "title": "RadialVelocity",
+        "description": "Radial velocity measures the line-of-sight velocity of an astronomical\nsource.\n\nIn principle, the radial velocity can be converted to and from the target\nredshift. However, these values are persisted separately to give the user\nthe option of inputting either value.\n\nA velocity must also define the reference frame and definition that are\napplicable to the velocity. By default, these have values of:\n\n- definition = RADIO\n- reference_frame = LSRK\n- redshift = 0.0"
+      },
+      "RadialVelocityDefinition": {
+        "type": "string",
+        "enum": [
+          "OPTICAL",
+          "RADIO",
+          "RELATIVISTIC"
+        ],
+        "title": "RadialVelocityDefinition",
+        "description": "Enumeration of reference definitions supported by a RadialVelocity.\n\nThe sky frequency (ν) at which we must observe a spectral line is derived\nfrom the rest frequency of the spectral line (ν₀), the line-of-sight\nvelocity of the source (V), and the speed of light (c). The relativistic\nvelocity, or true line-of-sight velocity, is related to the observed and\nrest frequencies by\n\n    V= c * (ν₀²− ν²) / (v₀² + v²)\n\nThis equation is a bit cumbersome to use; in astronomy two different\napproximations are typically used:\n\nOptical Velocity:\n\n    Voptical = c * (λ − λ₀) / λ₀ = cz\n\n(z is the redshift of the source; λ and λ₀ are the corresponding observed\nand rest wavelengths, respectively)\n\nRadio Velocity:\n\n    Vradio = c * (ν₀ − ν) / v₀ = c * (λ−λ₀) / λ\n\nThe radio and optical velocities are not identical. Particularly, Voptical\nand Vradio diverge for large velocities. Optical velocities are commonly\nused for (Helio/Barycentric) extragalactic observations; (LSRK) radio\nvelocities are typical for Galactic observations.\n\nTaken from https://science.nrao.edu/facilities/vla/docs/manuals/obsguide/modes/line"
+      },
+      "RadialVelocityQuantity": {
+        "properties": {
+          "value": {
+            "type": "number",
+            "title": "Value"
+          },
+          "unit": {
+            "type": "string",
+            "enum": [
+              "m / s",
+              "km / s"
+            ],
+            "title": "Unit"
+          }
+        },
+        "type": "object",
+        "required": [
+          "value"
+        ],
+        "title": "RadialVelocityQuantity"
+      },
+      "RadialVelocityReferenceFrame": {
+        "type": "string",
+        "enum": [
+          "TOPOCENTRIC",
+          "LSRK",
+          "BARYCENTRIC"
+        ],
+        "title": "RadialVelocityReferenceFrame",
+        "description": "Reference frame in which the radial velocity is defined.\n\nThe Earth rotates, revolves around the Sun, rotates around the Galaxy,\nmoves within the Local Group, and shows motion against the Cosmic\nMicrowave Background. As for the convention above, any source velocity\nmust therefore also always be specified relative to a reference frame.\n\nVarious velocity rest frames are used in the literature. The following\ntable lists their name, the motion that is corrected for, and the maximum\namplitude of the velocity correction. Each rest frame correction is\nincremental to the preceding row:\n\nVelocity                     Rest Frame                              Correct for + max correction (km/s)\n===========================  ======================================  ======================================\nTopocentric                  Telescope                                   Nothing (0)\nGeocentric                   Earth Center                            Earth rotation (0.5)\nEarth-Moon Barycentric       Earth+Moon center of mass               Motion around Earth+Moon center of mass (0.013)\nHeliocentric                 Center of the Sun                           Earth orbital motion (30)\nBarycentric                  Earth+Sun center of mass                    Earth+Sun center of mass (0.012)\nLocal Standard of Rest           Center of Mass of local stars               Solar motion relative to nearby stars (20)\nGalactocentric               Center of Milky Way                     Milky Way Rotation (230)\nLocal Group Barycentric      Local Group center of mass              Milky Way Motion (100)\nVirgocentric                     Center of the Local Virgo supercluster  Local Group motion (300)\nCosmic Microwave Background  CMB                                     Local Supercluster Motion (600)\n\nThe velocity frame should be chosen based on the science. For most\nobservations, however, one of the following three reference frames is\ncommonly used:\n\n- Topocentric is the reference frame of the observatory (defining the sky\n  frequency of the observations). Visibilities in a measurement set are\n  typically stored in this frame.\n\n- Local Standard of Rest is the native output of images in CASA. Note that\n  there are two varieties of LSR: the kinematic LSR (LSRK) and the dynamic\n  (LSRD) definitions for the kinematic and dynamic centers, respectively.\n  In almost all cases LSRK is being used and the less precise name LSR is\n  usually used synonymously with the more modern LSRK definition.\n\n- Barycentric is a commonly used frame that has virtually replaced the\n  older Heliocentric standard. Given the small difference between the\n  Barycentric and Heliocentric frames, they are frequently used\n  interchangeably.\n\nTaken from https://science.nrao.edu/facilities/vla/docs/manuals/obsguide/modes/line"
+      },
+      "RasterParameters": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "const": "RasterParameters",
+            "title": "Kind",
+            "default": "RasterParameters"
+          },
+          "row_length_arcsec": {
+            "type": "number",
+            "title": "Row Length Arcsec",
+            "default": 0
+          },
+          "row_offset_arcsec": {
+            "type": "number",
+            "title": "Row Offset Arcsec",
+            "default": 0
+          },
+          "n_rows": {
+            "type": "integer",
+            "title": "N Rows",
+            "default": 1
+          },
+          "pa": {
+            "type": "number",
+            "title": "Pa",
+            "default": 0
+          },
+          "unidirectional": {
+            "type": "boolean",
+            "title": "Unidirectional",
+            "default": false
+          }
+        },
+        "type": "object",
+        "title": "RasterParameters",
+        "description": "RasterParameters defines the properties of an observing pattern that\nuses a raster pattern centred on a reference position."
+      },
+      "ReceiverBand": {
+        "type": "string",
+        "enum": [
+          "1",
+          "2",
+          "5a",
+          "5b"
+        ],
+        "title": "ReceiverBand",
+        "description": "ReceiverBand is an enumeration of SKA MID receiver bands."
+      },
+      "RequestResponse": {
+        "properties": {
+          "request": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Request"
+          },
+          "request_args": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PythonArguments-Input"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status"
+          },
+          "response": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ResponseWrapper"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "error": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ErrorWrapper"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "request_sent_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Request Sent At"
+          },
+          "response_received_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Response Received At"
+          }
+        },
+        "type": "object",
+        "title": "RequestResponse"
+      },
+      "Resources": {
+        "properties": {
+          "csp_links": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Csp Links"
+          },
+          "receptors": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Receptors"
+          },
+          "receive_nodes": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Receive Nodes"
+          }
+        },
+        "type": "object",
+        "title": "Resources",
+        "description": "Class to hold SDP Resources"
+      },
+      "ResponseWrapper": {
+        "properties": {
+          "result": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Result"
+          }
+        },
+        "type": "object",
+        "title": "ResponseWrapper"
+      },
+      "SBDStatus": {
+        "type": "string",
+        "enum": [
+          "Draft",
+          "Submitted",
+          "Ready",
+          "In Progress",
+          "Observed",
+          "Suspended",
+          "Failed Processing",
+          "Complete"
+        ],
+        "title": "SBDStatus"
+      },
+      "SBDStatusHistory-Input": {
+        "properties": {
+          "metadata": {
+            "$ref": "#/components/schemas/Metadata"
+          },
+          "sbd_ref": {
+            "type": "string",
+            "title": "Sbd Ref"
+          },
+          "sbd_version": {
+            "type": "integer",
+            "title": "Sbd Version",
+            "default": 1
+          },
+          "current_status": {
+            "$ref": "#/components/schemas/SBDStatus",
+            "default": "Draft"
+          },
+          "previous_status": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SBDStatus"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": "Draft"
+          }
+        },
+        "type": "object",
+        "required": [
+          "sbd_ref"
+        ],
+        "title": "SBDStatusHistory"
+      },
+      "SBDStatusHistory-Output": {
+        "type": "object"
+      },
+      "SBDefinitionStatusModel-Input": {
+        "properties": {
+          "interface": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Interface",
+            "default": "https://schema.skao.int/ska-oso-pdm-sbd/0.1"
+          },
+          "sbd_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sbd Id"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "telescope": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TelescopeType"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "metadata": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Metadata"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "prj_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Prj Ref"
+          },
+          "activities": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/InlineScript"
+                    },
+                    {
+                      "$ref": "#/components/schemas/FilesystemScript"
+                    },
+                    {
+                      "$ref": "#/components/schemas/GitScript"
+                    }
+                  ],
+                  "discriminator": {
+                    "propertyName": "kind",
+                    "mapping": {
+                      "filesystem": "#/components/schemas/FilesystemScript",
+                      "git": "#/components/schemas/GitScript",
+                      "inline": "#/components/schemas/InlineScript"
+                    }
+                  }
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Activities"
+          },
+          "targets": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/Target"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Targets"
+          },
+          "scan_definitions": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/ScanDefinition"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Scan Definitions"
+          },
+          "scan_sequence": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Scan Sequence"
+          },
+          "sdp_configuration": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SDPConfiguration"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "csp_configurations": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/CSPConfiguration"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Csp Configurations"
+          },
+          "dish_allocations": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DishAllocation"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "mccs_allocation": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MCCSAllocation"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "status": {
+            "$ref": "#/components/schemas/SBDStatus"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "title": "SBDefinitionStatusModel"
+      },
+      "SBDefinitionStatusModel-Output": {
+        "type": "object"
+      },
+      "SBIStatus": {
+        "type": "string",
+        "enum": [
+          "Created",
+          "Executing",
+          "Observed",
+          "Failed"
+        ],
+        "title": "SBIStatus"
+      },
+      "SBIStatusHistory-Input": {
+        "properties": {
+          "metadata": {
+            "$ref": "#/components/schemas/Metadata"
+          },
+          "sbi_ref": {
+            "type": "string",
+            "title": "Sbi Ref"
+          },
+          "sbi_version": {
+            "type": "integer",
+            "title": "Sbi Version",
+            "default": 1
+          },
+          "current_status": {
+            "$ref": "#/components/schemas/SBIStatus",
+            "default": "Created"
+          },
+          "previous_status": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SBIStatus"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": "Created"
+          }
+        },
+        "type": "object",
+        "required": [
+          "sbi_ref"
+        ],
+        "title": "SBIStatusHistory"
+      },
+      "SBIStatusHistory-Output": {
+        "type": "object"
+      },
+      "SBInstanceStatusModel-Input": {
+        "properties": {
+          "interface": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Interface"
+          },
+          "sbi_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sbi Id"
+          },
+          "metadata": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Metadata"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "telescope": {
+            "$ref": "#/components/schemas/TelescopeType"
+          },
+          "sbd_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sbd Ref"
+          },
+          "sbd_version": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sbd Version"
+          },
+          "eb_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Eb Ref"
+          },
+          "subarray_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Subarray Id"
+          },
+          "activities": {
+            "items": {
+              "$ref": "#/components/schemas/ActivityCall"
+            },
+            "type": "array",
+            "title": "Activities"
+          },
+          "status": {
+            "$ref": "#/components/schemas/SBIStatus"
+          }
+        },
+        "type": "object",
+        "required": [
+          "telescope",
+          "status"
+        ],
+        "title": "SBInstanceStatusModel"
+      },
+      "SBInstanceStatusModel-Output": {
+        "type": "object"
+      },
+      "SDPConfiguration": {
+        "properties": {
+          "execution_block": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ExecutionBlock"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "resources": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Resources"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "processing_blocks": {
+            "items": {
+              "$ref": "#/components/schemas/ProcessingBlock"
+            },
+            "type": "array",
+            "title": "Processing Blocks"
+          }
+        },
+        "type": "object",
+        "title": "SDPConfiguration",
+        "description": "SDPConfiguration captures the SDP resources and pipeline configuration\nrequired to process an execution block.\n\n:param execution_block: the SDP ExecutionBlock object\n:param resources: external resources\n:param processing_blocks: list of SDP ProcessingBlock objects"
+      },
+      "ScanDefinition": {
+        "properties": {
+          "scan_definition_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Scan Definition Id"
+          },
+          "scan_duration_ms": {
+            "type": "number",
+            "title": "Scan Duration Ms",
+            "gt": "PT0S"
+          },
+          "target_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Target Ref"
+          },
+          "mccs_allocation_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mccs Allocation Ref"
+          },
+          "dish_allocation_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dish Allocation Ref"
+          },
+          "scan_type_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Scan Type Ref"
+          },
+          "csp_configuration_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Csp Configuration Ref"
+          },
+          "scan_intent": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Scan Intent"
+          },
+          "pointing_correction": {
+            "$ref": "#/components/schemas/PointingCorrection",
+            "default": "MAINTAIN"
+          }
+        },
+        "type": "object",
+        "required": [
+          "scan_duration_ms"
+        ],
+        "title": "ScanDefinition",
+        "description": "ScanDefinition represents the instrument configuration for a single scan.\n\n:param scan_definition_id: the unique ID for this scan definition\n:param scan_duration_ms: scan duration\n:target_ref: ID of target to observe\n:mccs_allocation_ref: ID of MCCS Config\n:target_beam_configuration_refs: SKA LOW sub-array beam configurations to apply during this scan.\n:dish_allocation_ref: SKA MID dish configuration ID during this scan.\n:scan_type_ref: SKA MID scan type ID\n:csp_configuration_ref: SKA MID  Central Signal Processor ID\n:pointing_correction: operation to apply to the pointing correction model."
+      },
+      "ScanType": {
+        "properties": {
+          "scan_type_id": {
+            "type": "string",
+            "title": "Scan Type Id"
+          },
+          "derive_from": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Derive From"
+          },
+          "beams": {
+            "items": {
+              "$ref": "#/components/schemas/BeamMapping"
+            },
+            "type": "array",
+            "title": "Beams"
+          }
+        },
+        "type": "object",
+        "required": [
+          "scan_type_id"
+        ],
+        "title": "ScanType",
+        "description": "Class to hold ScanType configuration"
+      },
+      "Script": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "kind": {
+            "$ref": "#/components/schemas/ScriptKind"
+          },
+          "version": {
+            "type": "string",
+            "title": "Version"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "kind",
+          "version"
+        ],
+        "title": "Script",
+        "description": "Class to hold Script for ProcessingBlock"
+      },
+      "ScriptKind": {
+        "type": "string",
+        "enum": [
+          "realtime",
+          "batch"
+        ],
+        "title": "ScriptKind",
+        "description": "Enumeration class to hold the kind of processing script"
+      },
+      "SinglePointParameters": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "const": "SinglePointParameters",
+            "title": "Kind",
+            "default": "SinglePointParameters"
+          },
+          "offset_x_arcsec": {
+            "type": "number",
+            "title": "Offset X Arcsec",
+            "default": 0
+          },
+          "offset_y_arcsec": {
+            "type": "number",
+            "title": "Offset Y Arcsec",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "title": "SinglePointParameters",
+        "description": "SinglePointParameters defines the properties for an observing pattern\nconsisting of a single receptor pointing with an optional offset from\nthe reference position."
+      },
+      "SolarSystemObject-Input": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "sso",
+              "special"
+            ],
+            "title": "Kind",
+            "default": "sso"
+          },
+          "reference_frame": {
+            "type": "string",
+            "const": "special",
+            "title": "Reference Frame",
+            "default": "special"
+          },
+          "name": {
+            "$ref": "#/components/schemas/SolarSystemObjectName"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "title": "SolarSystemObject",
+        "description": "Planet represents the argument for SKA scheduling block."
+      },
+      "SolarSystemObject-Output": {
+        "type": "object"
+      },
+      "SolarSystemObjectName": {
+        "type": "string",
+        "enum": [
+          "Sun",
+          "Moon",
+          "Mercury",
+          "Venus",
+          "Mars",
+          "Jupiter",
+          "Saturn",
+          "Uranus",
+          "Neptune"
+        ],
+        "title": "SolarSystemObjectName",
+        "description": "SolarSystemObjectName represents name of the solar system object."
+      },
+      "SpecialCoordinates-Input": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "sso",
+              "special"
+            ],
+            "title": "Kind",
+            "default": "special"
+          },
+          "reference_frame": {
+            "type": "string",
+            "const": "special",
+            "title": "Reference Frame",
+            "default": "special"
+          },
+          "name": {
+            "$ref": "#/components/schemas/SolarSystemObjectName"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "title": "SpecialCoordinates"
+      },
+      "SpecialCoordinates-Output": {
+        "type": "object"
+      },
+      "SpectralWindow": {
+        "properties": {
+          "spectral_window_id": {
+            "type": "string",
+            "title": "Spectral Window Id"
+          },
+          "count": {
+            "type": "integer",
+            "title": "Count"
+          },
+          "start": {
+            "type": "integer",
+            "title": "Start"
+          },
+          "freq_min": {
+            "type": "number",
+            "title": "Freq Min"
+          },
+          "freq_max": {
+            "type": "number",
+            "title": "Freq Max"
+          },
+          "stride": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stride"
+          },
+          "link_map": {
+            "items": {
+              "items": {
+
+              },
+              "type": "array"
+            },
+            "type": "array",
+            "title": "Link Map"
+          }
+        },
+        "type": "object",
+        "required": [
+          "spectral_window_id",
+          "count",
+          "start",
+          "freq_min",
+          "freq_max"
+        ],
+        "title": "SpectralWindow",
+        "description": "Class to hold Spectral Windows configuration"
+      },
+      "SpiralParameters": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "const": "SpiralParameters",
+            "title": "Kind",
+            "default": "SpiralParameters"
+          },
+          "scan_extent": {
+            "$ref": "#/components/schemas/Quantity-Input"
+          },
+          "track_time": {
+            "$ref": "#/components/schemas/Quantity-Input"
+          },
+          "cycle_track_time": {
+            "$ref": "#/components/schemas/Quantity-Input"
+          },
+          "slow_time": {
+            "$ref": "#/components/schemas/Quantity-Input"
+          },
+          "sample_time": {
+            "$ref": "#/components/schemas/Quantity-Input"
+          },
+          "scan_speed": {
+            "$ref": "#/components/schemas/Quantity-Input"
+          },
+          "slew_speed": {
+            "$ref": "#/components/schemas/Quantity-Input"
+          },
+          "twist_factor": {
+            "type": "number",
+            "title": "Twist Factor",
+            "default": 1
+          },
+          "high_el_slowdown_factor": {
+            "type": "number",
+            "title": "High El Slowdown Factor",
+            "default": 2
+          }
+        },
+        "type": "object",
+        "title": "SpiralParameters",
+        "description": "SpiralParameters defines the properties of holography observations\nto support MID holography observing\n\nThese parameters are accepted by the MeerKAT holography script but are not\nincluded in the trajectory JSON.\n\n* scan_extent: Diameter of beam pattern to measure, in degrees (default 10.0).\n* track_time: Extra time in seconds for scanning antennas to track when\n  passing over the target (default 10.0)\n* cycle_track_time: Extra time or scanning antennas to track when passing\n  over target (default 30.0)\n* slow_time: Time in seconds to slow down at start and end of each spiral arm\n  (default 6.0)\n* sample_time: Time in seconds to spend on each sample point generated\n  (default 0.25)\n* scan_speed: Scan speed in degrees per second (default 0.1)\n* slew_speed: Speed at which to slew in degrees per second, or if negative number\n  then this multiplied by scan_speed (default -1.0)\n* twist_factor Spiral twist factor (0.0 for straight radial, 1.0 standard spiral)\n  (default standard spiral = 1.0)\n* high_el_slowdown_factor: Factor by which to slow down nominal scanning speed at\n  90 degree elevation, linearly scaled from factor of 1 at 60 degrees elevation\n  (default 2.0)"
+      },
+      "StarRasterParameters": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "const": "StarRasterParameters",
+            "title": "Kind",
+            "default": "StarRasterParameters"
+          },
+          "row_length_arcsec": {
+            "type": "number",
+            "title": "Row Length Arcsec",
+            "default": 0
+          },
+          "n_rows": {
+            "type": "integer",
+            "title": "N Rows",
+            "default": 1
+          },
+          "row_offset_angle": {
+            "type": "number",
+            "title": "Row Offset Angle",
+            "default": 0
+          },
+          "unidirectional": {
+            "type": "boolean",
+            "title": "Unidirectional",
+            "default": false
+          }
+        },
+        "type": "object",
+        "title": "StarRasterParameters",
+        "description": "StarRasterParameters defines the properties of an observing pattern that\nuses a star raster pattern centred on a reference position."
+      },
+      "SubArrayLOW": {
+        "type": "string",
+        "enum": [
+          "AA0.5",
+          "AA1",
+          "AA2",
+          "AA2 (core only)",
+          "AA*",
+          "AA* (core only)",
+          "AA4",
+          "AA4 (core only)",
+          "Low ITF",
+          "Custom"
+        ],
+        "title": "SubArrayLOW"
+      },
+      "SubarrayBeamConfiguration": {
+        "properties": {
+          "apertures": {
+            "items": {
+              "$ref": "#/components/schemas/Aperture"
+            },
+            "type": "array",
+            "title": "Apertures"
+          },
+          "subarray_beam_id": {
+            "type": "integer",
+            "maximum": 48,
+            "minimum": 1,
+            "title": "Subarray Beam Id"
+          },
+          "number_of_channels": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Number Of Channels",
+            "deprecated": true
+          }
+        },
+        "type": "object",
+        "required": [
+          "apertures",
+          "subarray_beam_id"
+        ],
+        "title": "SubarrayBeamConfiguration",
+        "description": "SubarrayBeamConfiguration specifies how SKA LOW sub-array should be\nconfigured.\n\n:param apertures: list of aperture in this subarray\n:param subarray_beam_id: ID of subarray beam this config maps to\n:param number_of_channels: number of channels in this subarray beam,\n    this field represents the maximum number of channels that the SBD\n    will require. It should be calculated from the set of CSP\n    configurations instead of being defined by the user but is optional\n    in SubarrayBeamConfiguration for now for backwards compatibility."
+      },
+      "SubarrayConfiguration": {
+        "properties": {
+          "subarray_name": {
+            "type": "string",
+            "title": "Subarray Name"
+          }
+        },
+        "type": "object",
+        "required": [
+          "subarray_name"
+        ],
+        "title": "SubarrayConfiguration",
+        "description": "Class to hold the parameters relevant only for the current sub-array device.\n\n:param sub-array_name: Name of the sub-array"
+      },
+      "Subband": {
+        "properties": {
+          "band_5_tuning": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Band 5 Tuning"
+          },
+          "frequency_slice_offset": {
+            "$ref": "#/components/schemas/Quantity-Input"
+          },
+          "correlation_spws": {
+            "items": {
+              "$ref": "#/components/schemas/CorrelationSPWConfiguration"
+            },
+            "type": "array",
+            "title": "Correlation Spws"
+          }
+        },
+        "type": "object",
+        "title": "Subband",
+        "description": "Class to hold sub-band\n\n:param band_5_tuning: Band 5 Tuning\n:param frequency_slice_offset: Optional Frequency Slice Offset in AstropyQuantity\n:param correlation_spws: List of Correlation Spws"
+      },
+      "Target": {
+        "properties": {
+          "target_id": {
+            "type": "string",
+            "title": "Target Id",
+            "default": ""
+          },
+          "name": {
+            "type": "string",
+            "title": "Name",
+            "default": ""
+          },
+          "pointing_pattern": {
+            "$ref": "#/components/schemas/PointingPattern"
+          },
+          "reference_coordinate": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SpecialCoordinates-Input"
+              },
+              {
+                "$ref": "#/components/schemas/GalacticCoordinates-Input"
+              },
+              {
+                "$ref": "#/components/schemas/AltAzCoordinates-Input"
+              },
+              {
+                "$ref": "#/components/schemas/ICRSCoordinates-Input"
+              },
+              {
+                "$ref": "#/components/schemas/EquatorialCoordinates-Input"
+              },
+              {
+                "$ref": "#/components/schemas/SolarSystemObject-Input"
+              },
+              {
+                "$ref": "#/components/schemas/HorizontalCoordinates-Input"
+              }
+            ],
+            "title": "Reference Coordinate"
+          },
+          "radial_velocity": {
+            "$ref": "#/components/schemas/RadialVelocity"
+          },
+          "tied_array_beams": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TiedArrayBeams"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "title": "Target",
+        "description": "Target represents the receptor pointing for an SKA observation, consisting\nof a reference position and a pointing pattern to be used when observing\nthe target.\n\nDefault pointing patterns and equatorial coordinates will be set if not\nprovided."
+      },
+      "TelescopeType": {
+        "type": "string",
+        "enum": [
+          "ska_mid",
+          "ska_low",
+          "MeerKAT"
+        ],
+        "title": "TelescopeType"
+      },
+      "TiedArrayBeams": {
+        "properties": {
+          "pst_beams": {
+            "items": {
+              "$ref": "#/components/schemas/ska_oso_pdm___shared__target__Beam-Input"
+            },
+            "type": "array",
+            "title": "Pst Beams"
+          },
+          "pss_beams": {
+            "items": {
+              "$ref": "#/components/schemas/ska_oso_pdm___shared__target__Beam-Input"
+            },
+            "type": "array",
+            "title": "Pss Beams"
+          },
+          "vlbi_beams": {
+            "items": {
+              "$ref": "#/components/schemas/ska_oso_pdm___shared__target__Beam-Input"
+            },
+            "type": "array",
+            "title": "Vlbi Beams"
+          }
+        },
+        "type": "object",
+        "title": "TiedArrayBeams",
+        "description": "Tied Array Beam argument lists."
+      },
+      "VLBIConfiguration": {
+        "properties": {
+
+        },
+        "type": "object",
+        "title": "VLBIConfiguration",
+        "description": "Class to hold VLBI configurations."
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "ska_oso_pdm___shared__target__Beam-Input": {
+        "properties": {
+          "beam_id": {
+            "type": "integer",
+            "title": "Beam Id"
+          },
+          "beam_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Beam Name"
+          },
+          "beam_coordinate": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/EquatorialCoordinatesPST-Input"
+              },
+              {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/SpecialCoordinates-Input"
+                  },
+                  {
+                    "$ref": "#/components/schemas/GalacticCoordinates-Input"
+                  },
+                  {
+                    "$ref": "#/components/schemas/AltAzCoordinates-Input"
+                  },
+                  {
+                    "$ref": "#/components/schemas/ICRSCoordinates-Input"
+                  },
+                  {
+                    "$ref": "#/components/schemas/EquatorialCoordinates-Input"
+                  },
+                  {
+                    "$ref": "#/components/schemas/SolarSystemObject-Input"
+                  },
+                  {
+                    "$ref": "#/components/schemas/HorizontalCoordinates-Input"
+                  }
+                ]
+              }
+            ],
+            "title": "Beam Coordinate"
+          },
+          "stn_weights": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Stn Weights"
+          }
+        },
+        "type": "object",
+        "required": [
+          "beam_id",
+          "beam_coordinate"
+        ],
+        "title": "Beam",
+        "description": "Tied Array Beam arguments.\n\nArgs:\n    beam_id (int): integer identifying this tied-array beam. It should be unique within each tied-array-beam class\n    beam_name (str): string\n    beam_coordinate (EquatorialCoordinatesPST): position on sky at which beam will be formed. It should lie within the HPBW of the station beam\n    stn_weights (List(float)): array of weights, one for each station."
+      },
+      "ska_oso_pdm__sb_definition__sdp__beam__Beam": {
+        "properties": {
+          "beam_id": {
+            "type": "string",
+            "title": "Beam Id"
+          },
+          "function": {
+            "$ref": "#/components/schemas/BeamFunction"
+          },
+          "search_beam_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Search Beam Id"
+          },
+          "timing_beam_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Timing Beam Id"
+          },
+          "vlbi_beam_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Vlbi Beam Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "beam_id",
+          "function"
+        ],
+        "title": "Beam",
+        "description": "Class that defines an SDP Beam configuration."
+      }
+    }
+  }
+}
