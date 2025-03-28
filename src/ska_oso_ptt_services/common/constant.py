@@ -8,7 +8,6 @@ from ska_oso_pdm.entity_status_history import (
     SBIStatus,
 )
 
-
 entity_map: Dict[str, EnumMeta] = {
     "sbi": SBIStatus,
     "eb": OSOEBStatus,

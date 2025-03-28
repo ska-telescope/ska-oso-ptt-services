@@ -4,8 +4,8 @@ from fastapi import APIRouter
 
 from ska_oso_ptt_services.common.constant import entity_map
 from ska_oso_ptt_services.common.error_handling import EntityNotFound
-from ska_oso_ptt_services.models.models import EntityStatusResponse
 from ska_oso_ptt_services.common.utils import get_responses
+from ska_oso_ptt_services.models.models import EntityStatusResponse
 
 LOGGER = logging.getLogger(__name__)
 
