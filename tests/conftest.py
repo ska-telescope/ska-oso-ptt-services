@@ -20,7 +20,7 @@ def load_json_from_file(filename):
         return json.load(json_file)
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def client_get():
 
     app = create_app()
@@ -29,7 +29,7 @@ def client_get():
     return partial(client.get, headers={"accept": "application/json"})
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def client_put():
 
     app = create_app()
