@@ -1,5 +1,6 @@
 import json
 import os
+from functools import partial
 
 import pytest
 from fastapi.testclient import TestClient
@@ -20,11 +21,21 @@ def load_json_from_file(filename):
 
 
 @pytest.fixture
-def client():
+def client_get():
 
     app = create_app()
+    client = TestClient(app)
 
-    return TestClient(app)
+    return partial(client.get, headers={"accept": "application/json"})
+
+
+@pytest.fixture
+def client_put():
+
+    app = create_app()
+    client = TestClient(app)
+
+    return partial(client.put)
 
 
 @pytest.fixture

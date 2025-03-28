@@ -20,7 +20,7 @@ class TestSBDefinitionAPI:
     @mock.patch("ska_oso_ptt_services.routers.sbds.oda")
     @mock.patch("ska_oso_ptt_services.routers.sbds.common_get_entity_status")
     def test_get_multiple_sbd_with_status(
-        self, mock_get_sbd_status, mock_oda, client, valid_sbds
+        self, mock_get_sbd_status, mock_oda, client_get, valid_sbds
     ):
         """Verifying that get_multiple_sbd_with_status API returns
         All SBDS with status"""
@@ -40,11 +40,7 @@ class TestSBDefinitionAPI:
             "created_after": "2022-03-28T15:43:53.971548+00:00",
         }
 
-        result = client.get(
-            f"{API_PREFIX}/sbds",
-            params=query_params,
-            headers={"accept": "application/json"},
-        )
+        result = client_get(f"{API_PREFIX}/sbds", params=query_params)
 
         pdm_version_regex = r"root\[\d+\]\['metadata'\]\['pdm_version'\]"
         epoch_regex = (
@@ -60,7 +56,7 @@ class TestSBDefinitionAPI:
     @mock.patch("ska_oso_ptt_services.routers.sbds.oda")
     @mock.patch("ska_oso_ptt_services.routers.sbds.common_get_entity_status")
     def test_get_single_sbd_with_status(
-        self, mock_get_sbd_status, mock_oda, client, valid_sbd
+        self, mock_get_sbd_status, mock_oda, client_get, valid_sbd
     ):
         """Verifying that get_single_sbd_with_status API returns requested
         SBD with status"""
@@ -73,10 +69,7 @@ class TestSBDefinitionAPI:
         mock_get_sbd_status().current_status = "Draft"
         mock_oda.uow().__enter__.return_value = uow_mock
 
-        result = client.get(
-            f"{API_PREFIX}/sbds/sbd-t0001-20240702-00002",
-            headers={"accept": "application/json"},
-        )
+        result = client_get(f"{API_PREFIX}/sbds/sbd-t0001-20240702-00002")
 
         pdm_version_regex = r"root\['metadata'\]\['pdm_version'\]"
         epoch_regex = r"root\['targets'\]\[\d+\]\['reference_coordinate'\]\['epoch'\]"
@@ -90,7 +83,7 @@ class TestSBDefinitionAPI:
         assert result.status_code == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.sbds.oda")
-    def test_get_single_sbd_with_invalid_status(self, mock_oda, client):
+    def test_get_single_sbd_with_invalid_status(self, mock_oda, client_get):
         """Verifying that get_single_sbd_with_invalid_status throws error
         if invalid data passed"""
 
@@ -100,10 +93,7 @@ class TestSBDefinitionAPI:
         uow_mock.sbds.get.side_effect = ODANotFound(identifier=invalid_sbd_id)
         mock_oda.uow().__enter__.return_value = uow_mock
 
-        result = client.get(
-            f"{API_PREFIX}/sbds/{invalid_sbd_id}",
-            headers={"accept": "application/json"},
-        )
+        result = client_get(f"{API_PREFIX}/sbds/{invalid_sbd_id}")
 
         error = {
             "detail": "The requested identifier invalid-sbd-id-12345 "
@@ -115,7 +105,7 @@ class TestSBDefinitionAPI:
 
     @mock.patch("ska_oso_ptt_services.routers.sbds.oda")
     def test_get_single_sbd_status_history(
-        self, mock_oda, client, valid_sbd_status_history
+        self, mock_oda, client_get, valid_sbd_status_history
     ):
         """Verifying that get_single_sbd_status_history API returns requested
         SBD status history"""
@@ -124,10 +114,9 @@ class TestSBDefinitionAPI:
         uow_mock.sbds_status_history.query.return_value = valid_sbd_status_history
         mock_oda.uow().__enter__.return_value = uow_mock
 
-        result = client.get(
+        result = client_get(
             f"{API_PREFIX}/sbds/status/history",
             params={"entity_id": "sbd-t0001-20240702-00002", "sbd_version": "1"},
-            headers={"accept": "application/json"},
         )
 
         result_dict = result.json()
@@ -142,7 +131,7 @@ class TestSBDefinitionAPI:
         assert result.status_code == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.sbds.oda")
-    def test_get_single_invalid_sbd_status_history(self, mock_oda, client):
+    def test_get_single_invalid_sbd_status_history(self, mock_oda, client_get):
         """Verifying that get_single_invalid_sbd_status_history throws error
         if invalid data passed"""
 
@@ -150,10 +139,9 @@ class TestSBDefinitionAPI:
         uow_mock.sbds_status_history.query.return_value = []
         mock_oda.uow().__enter__.return_value = uow_mock
 
-        result = client.get(
+        result = client_get(
             f"{API_PREFIX}/sbds/status/history",
             params={"entity_id": "sbd-t0001-20240702-00100", "sbd_version": "1"},
-            headers={"accept": "application/json"},
         )
 
         error = {
@@ -167,7 +155,7 @@ class TestSBDefinitionAPI:
     @mock.patch("ska_oso_ptt_services.routers.sbds.common_get_entity_status")
     @mock.patch("ska_oso_ptt_services.routers.sbds.oda")
     def test_get_single_sbd_status(
-        self, mock_oda, mock_get_sbd_status, client, valid_sbd_status
+        self, mock_oda, mock_get_sbd_status, client_get, valid_sbd_status
     ):
         """Verifying that get_single_sbd_status API returns requested SBD status"""
 
@@ -175,10 +163,9 @@ class TestSBDefinitionAPI:
         mock_oda.uow().__enter__.return_value = uow_mock
         mock_get_sbd_status.return_value = valid_sbd_status
 
-        result = client.get(
+        result = client_get(
             f"{API_PREFIX}/sbds/sbd-t0001-20240702-00002/status",
             params={"sbd_version": "1"},
-            headers={"accept": "application/json"},
         )
 
         exclude_paths = ["root['metadata']"]
@@ -192,7 +179,9 @@ class TestSBDefinitionAPI:
 
     @mock.patch("ska_oso_ptt_services.routers.sbds.common_get_entity_status")
     @mock.patch("ska_oso_ptt_services.routers.sbds.oda")
-    def test_get_single_invalid_sbd_status(self, mock_oda, mock_get_sbd_status, client):
+    def test_get_single_invalid_sbd_status(
+        self, mock_oda, mock_get_sbd_status, client_get
+    ):
         """Verifying that get_single_invalid_sbd_status throws error
         if invalid data passed"""
 
@@ -202,10 +191,8 @@ class TestSBDefinitionAPI:
         mock_oda.uow().__enter__.return_value = uow_mock
         mock_get_sbd_status.side_effect = ODANotFound(identifier=invalid_sbd_id)
 
-        result = client.get(
-            f"{API_PREFIX}/sbds/{invalid_sbd_id}/status",
-            params={"sbd_version": "1"},
-            headers={"accept": "application/json"},
+        result = client_get(
+            f"{API_PREFIX}/sbds/{invalid_sbd_id}/status", params={"sbd_version": "1"}
         )
 
         error = {
@@ -219,7 +206,7 @@ class TestSBDefinitionAPI:
         assert result.status_code == HTTPStatus.NOT_FOUND
 
     @mock.patch("ska_oso_ptt_services.routers.sbds.oda")
-    def test_put_sbd_history(self, mock_oda, client, valid_sbd_status):
+    def test_put_sbd_history(self, mock_oda, client_put, valid_sbd_status):
         """Verifying that put_sbd_history updates the sbd status correctly"""
 
         uow_mock = mock.MagicMock()
@@ -247,9 +234,8 @@ class TestSBDefinitionAPI:
             "root['metadata']['pdm_version']",
         ]
 
-        result = client.put(
-            f"{API_PREFIX}/sbds/sbd-t0001-20240702-00002/status",
-            json=data,
+        result = client_put(
+            f"{API_PREFIX}/sbds/sbd-t0001-20240702-00002/status", json=data
         )
 
         assert_json_is_equal(
@@ -261,7 +247,11 @@ class TestSBDefinitionAPI:
 
     @mock.patch("ska_oso_ptt_services.routers.sbds.oda")
     def test_put_sbd_history_version(
-        self, mock_oda, client, valid_sbd_status, valid_put_sbd_history_version_response
+        self,
+        mock_oda,
+        client_put,
+        valid_sbd_status,
+        valid_put_sbd_history_version_response,
     ):
         """Verifying that put_sbd_history updates the sbd status correctly"""
 
@@ -290,9 +280,8 @@ class TestSBDefinitionAPI:
             "root['metadata']['pdm_version']",
         ]
 
-        result = client.put(
-            f"{API_PREFIX}/sbds/sbd-t0001-20240702-00002/status",
-            json=data,
+        result = client_put(
+            f"{API_PREFIX}/sbds/sbd-t0001-20240702-00002/status", json=data
         )
 
         assert_json_is_equal(
@@ -329,9 +318,8 @@ class TestSBDefinitionAPI:
             "root['metadata']['pdm_version']",
         ]
 
-        result = client.put(
-            f"{API_PREFIX}/sbds/sbd-t0001-20240702-00002/status",
-            json=data,
+        result = client_put(
+            f"{API_PREFIX}/sbds/sbd-t0001-20240702-00002/status", json=data
         )
 
         assert_json_is_equal(

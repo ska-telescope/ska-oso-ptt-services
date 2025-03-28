@@ -21,7 +21,7 @@ common_error = {
         ("prjs", common_error),
     ],
 )
-def test_get_invalid_all_entity_with_status(entity_name, expected_response, client):
+def test_get_invalid_all_entity_with_status(entity_name, expected_response, client_get):
     """Verifying that get_invalid_all_entity_with_status throws error
     if invalid data passed"""
 
@@ -33,10 +33,8 @@ def test_get_invalid_all_entity_with_status(entity_name, expected_response, clie
         "last_modified_after": "2022-03-28T15:43:53.971548+00:00",
     }
 
-    result_response = client.get(
-        f"{API_PREFIX}/{entity_name}",
-        params=query_params,
-        headers={"accept": "application/json"},
+    result_response = client_get(
+        f"{API_PREFIX}/{entity_name}", params=query_params
     ).json()
 
     assert_json_is_equal(result_response, expected_response)
@@ -144,11 +142,11 @@ def test_get_invalid_all_entity_with_status(entity_name, expected_response, clie
     ],
 )
 def test_put_invalid_all_entity_history(
-    entity_name, entity_id, query_params, entity_data, expected_error, client
+    entity_name, entity_id, query_params, entity_data, expected_error, client_put
 ):
     """Verifying that put_invalid_all_entity_history error if invalid data passed"""
 
-    result = client.put(
+    result = client_put(
         f"{API_PREFIX}/{entity_name}/{entity_id}/status",
         params=query_params,
         json=entity_data,

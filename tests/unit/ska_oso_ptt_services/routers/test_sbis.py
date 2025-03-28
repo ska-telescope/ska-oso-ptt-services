@@ -20,7 +20,7 @@ class TestSBInstanceAPI:
     @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
     @mock.patch("ska_oso_ptt_services.routers.sbis.common_get_entity_status")
     def test_get_multiple_sbi_with_status(
-        self, mock_get_sbi_status, mock_oda, client, valid_sbis
+        self, mock_get_sbi_status, mock_oda, client_get, valid_sbis
     ):
         """Verifying that get_multiple_sbi_with_status API returns
         All SBIs with status"""
@@ -40,11 +40,7 @@ class TestSBInstanceAPI:
             "created_after": "2022-03-28T15:43:53.971548+00:00",
         }
 
-        result = client.get(
-            f"{API_PREFIX}/sbis",
-            params=query_params,
-            headers={"accept": "application/json"},
-        )
+        result = client_get(f"{API_PREFIX}/sbis", params=query_params)
 
         resultDict = result.json()
 
@@ -57,7 +53,7 @@ class TestSBInstanceAPI:
     @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
     @mock.patch("ska_oso_ptt_services.routers.sbis.common_get_entity_status")
     def test_get_single_sbi_with_status(
-        self, mock_get_sbi_status, mock_oda, client, valid_sbi
+        self, mock_get_sbi_status, mock_oda, client_get, valid_sbi
     ):
         """Verifying that get_single_sbi_with_status API returns requested
         SBI with status"""
@@ -70,10 +66,7 @@ class TestSBInstanceAPI:
         mock_get_sbi_status().current_status = "Created"
         mock_oda.uow().__enter__.return_value = uow_mock
 
-        result = client.get(
-            f"{API_PREFIX}/sbis/sbi-mvp01-20240426-5016",
-            headers={"accept": "application/json"},
-        )
+        result = client_get(f"{API_PREFIX}/sbis/sbi-mvp01-20240426-5016")
 
         exclude_paths = ["root['metadata']['pdm_version']"]
 
@@ -85,7 +78,7 @@ class TestSBInstanceAPI:
         assert result.status_code == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
-    def test_get_single_sbi_with_invalid_status(self, mock_oda, client):
+    def test_get_single_sbi_with_invalid_status(self, mock_oda, client_get):
         """Verifying that get_single_sbi_with_invalid_status throws error
         if invalid data passed"""
 
@@ -95,10 +88,7 @@ class TestSBInstanceAPI:
         uow_mock.sbis.get.side_effect = ODANotFound(identifier=invalid_sbi_id)
         mock_oda.uow().__enter__.return_value = uow_mock
 
-        result = client.get(
-            f"{API_PREFIX}/sbis/{invalid_sbi_id}",
-            headers={"accept": "application/json"},
-        )
+        result = client_get(f"{API_PREFIX}/sbis/{invalid_sbi_id}")
 
         expected_error_message = {
             "detail": (f"The requested identifier {invalid_sbi_id} could not be found.")
@@ -109,7 +99,7 @@ class TestSBInstanceAPI:
 
     @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
     def test_get_single_sbi_status_history(
-        self, mock_oda, client, valid_sbi_status_history
+        self, mock_oda, client_get, valid_sbi_status_history
     ):
         """Verifying that get_single_sbi_status_history API returns requested
         SBI status history"""
@@ -118,10 +108,9 @@ class TestSBInstanceAPI:
         uow_mock.sbis_status_history.query.return_value = valid_sbi_status_history
         mock_oda.uow().__enter__.return_value = uow_mock
 
-        result = client.get(
+        result = client_get(
             f"{API_PREFIX}/sbis/status/history",
             params={"entity_id": "sbi-mvp01-20220923-00002", "sbi_version": "1"},
-            headers={"accept": "application/json"},
         )
 
         assert_json_is_equal(
@@ -134,7 +123,7 @@ class TestSBInstanceAPI:
         assert result.status_code == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
-    def test_get_single_invalid_sbi_status_history(self, mock_oda, client):
+    def test_get_single_invalid_sbi_status_history(self, mock_oda, client_get):
         """Verifying that get_single_invalid_sbi_status_history throws error
         if invalid data passed
         """
@@ -143,10 +132,9 @@ class TestSBInstanceAPI:
         uow_mock.sbis_status_history.query.return_value = []
         mock_oda.uow().__enter__.return_value = uow_mock
 
-        result = client.get(
+        result = client_get(
             f"{API_PREFIX}/sbis/status/history",
             params={"entity_id": "sbi-t000-00100", "sbi_version": "1"},
-            headers={"accept": "application/json"},
         )
 
         error = {
@@ -159,7 +147,7 @@ class TestSBInstanceAPI:
     @mock.patch("ska_oso_ptt_services.routers.sbis.common_get_entity_status")
     @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
     def test_get_single_sbi_status(
-        self, mock_oda, mock_get_sbi_status, client, valid_sbi_status
+        self, mock_oda, mock_get_sbi_status, client_get, valid_sbi_status
     ):
         """Verifying that get_single_sbi_status API returns requested SBI status"""
 
@@ -167,10 +155,9 @@ class TestSBInstanceAPI:
         mock_oda.uow().__enter__.return_value = uow_mock
         mock_get_sbi_status.return_value = valid_sbi_status
 
-        result = client.get(
+        result = client_get(
             f"{API_PREFIX}/sbis/sbi-mvp01-20240426-5016/status",
             params={"sbi_version": "1"},
-            headers={"accept": "application/json"},
         )
 
         exclude_paths = ["root['metadata']"]
@@ -184,7 +171,9 @@ class TestSBInstanceAPI:
 
     @mock.patch("ska_oso_ptt_services.routers.sbis.common_get_entity_status")
     @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
-    def test_get_single_invalid_sbi_status(self, mock_oda, mock_get_sbi_status, client):
+    def test_get_single_invalid_sbi_status(
+        self, mock_oda, mock_get_sbi_status, client_get
+    ):
         """Verifying that get_single_invalid_sbi_status throws error
         if invalid data passed"""
 
@@ -194,10 +183,8 @@ class TestSBInstanceAPI:
         mock_oda.uow().__enter__.return_value = uow_mock
         mock_get_sbi_status.side_effect = ODANotFound(identifier=invalid_sbi_id)
 
-        result = client.get(
-            f"{API_PREFIX}/sbis/{invalid_sbi_id}/status",
-            params={"sbi_version": "1"},
-            headers={"accept": "application/json"},
+        result = client_get(
+            f"{API_PREFIX}/sbis/{invalid_sbi_id}/status", params={"sbi_version": "1"}
         )
 
         error = {
@@ -211,7 +198,7 @@ class TestSBInstanceAPI:
         assert result.status_code == HTTPStatus.NOT_FOUND
 
     @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
-    def test_put_sbi_history(self, mock_oda, client, valid_sbi_status_history):
+    def test_put_sbi_history(self, mock_oda, client_put, valid_sbi_status_history):
         """Verifying that put_sbi_history updates the sbi status correctly"""
 
         uow_mock = mock.MagicMock()
@@ -240,9 +227,8 @@ class TestSBInstanceAPI:
             "root['metadata']['pdm_version']",
         ]
 
-        result = client.put(
-            f"{API_PREFIX}/sbis/sbi-mvp01-20220923-00002/status",
-            json=data,
+        result = client_put(
+            f"{API_PREFIX}/sbis/sbi-mvp01-20220923-00002/status", json=data
         )
 
         assert_json_is_equal(

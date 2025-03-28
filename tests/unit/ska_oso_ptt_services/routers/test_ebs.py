@@ -19,7 +19,7 @@ class TestExecutionBlockAPI:
     @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
     @mock.patch("ska_oso_ptt_services.routers.ebs.common_get_entity_status")
     def test_get_multiple_eb_with_status(
-        self, mock_get_eb_status, mock_oda, client, valid_ebs
+        self, mock_get_eb_status, mock_oda, client_get, valid_ebs
     ):
         """Verifying that get_multiple_eb_with_status API returns All EBs with status"""
 
@@ -38,11 +38,7 @@ class TestExecutionBlockAPI:
             "created_after": "2022-03-28T15:43:53.971548+00:00",
         }
 
-        result = client.get(
-            f"{API_PREFIX}/ebs",
-            params=query_params,
-            headers={"accept": "application/json"},
-        )
+        result = client_get(f"{API_PREFIX}/ebs", params=query_params)
 
         resultDict = result.json()
 
@@ -55,7 +51,7 @@ class TestExecutionBlockAPI:
     @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
     @mock.patch("ska_oso_ptt_services.routers.ebs.common_get_entity_status")
     def test_get_single_eb_with_status(
-        self, mock_get_eb_status, mock_oda, client, valid_eb_with_status
+        self, mock_get_eb_status, mock_oda, client_get, valid_eb_with_status
     ):
         """Verifying that get_single_eb_with_status API returns
         requested EB with status"""
@@ -68,10 +64,7 @@ class TestExecutionBlockAPI:
         mock_get_eb_status().current_status = "Fully Observed"
         mock_oda.uow().__enter__.return_value = uow_mock
 
-        result = client.get(
-            f"{API_PREFIX}/ebs/eb-mvp01-20240426-5004",
-            headers={"accept": "application/json"},
-        )
+        result = client_get(f"{API_PREFIX}/ebs/eb-mvp01-20240426-5004")
 
         exclude_paths = ["root['metadata']['pdm_version']"]
 
@@ -79,7 +72,7 @@ class TestExecutionBlockAPI:
         assert result.status_code == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
-    def test_get_single_eb_with_invalid_status(self, mock_oda, client):
+    def test_get_single_eb_with_invalid_status(self, mock_oda, client_get):
         """Verifying that get_single_eb_with_invalid_status throws error
         if invalid data passed"""
 
@@ -89,10 +82,7 @@ class TestExecutionBlockAPI:
         uow_mock.ebs.get.side_effect = ODANotFound(identifier=invalid_eb_id)
         mock_oda.uow().__enter__.return_value = uow_mock
 
-        result = client.get(
-            f"{API_PREFIX}/ebs/{invalid_eb_id}",
-            headers={"accept": "application/json"},
-        )
+        result = client_get(f"{API_PREFIX}/ebs/{invalid_eb_id}")
 
         expected_error_message = {
             "detail": (f"The requested identifier {invalid_eb_id} could not be found.")
@@ -103,7 +93,7 @@ class TestExecutionBlockAPI:
 
     @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
     def test_get_single_eb_status_history(
-        self, mock_oda, client, valid_eb_status_history
+        self, mock_oda, client_get, valid_eb_status_history
     ):
         """Verifying that get_single_eb_status_history API returns requested
         EB status history
@@ -113,10 +103,9 @@ class TestExecutionBlockAPI:
         uow_mock.ebs_status_history.query.return_value = valid_eb_status_history
         mock_oda.uow().__enter__.return_value = uow_mock
 
-        result = client.get(
+        result = client_get(
             f"{API_PREFIX}/ebs/status/history",
             params={"entity_id": "eb-mvp01-20240426-5004", "eb_version": "1"},
-            headers={"accept": "application/json"},
         )
 
         assert_json_is_equal(
@@ -129,7 +118,7 @@ class TestExecutionBlockAPI:
         assert result.status_code == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
-    def test_get_single_invalid_eb_status_history(self, mock_oda, client):
+    def test_get_single_invalid_eb_status_history(self, mock_oda, client_get):
         """Verifying that get_single_invalid_eb_status_history throws error
         if invalid data passed
         """
@@ -138,10 +127,9 @@ class TestExecutionBlockAPI:
         uow_mock.ebs_status_history.query.return_value = []
         mock_oda.uow().__enter__.return_value = uow_mock
 
-        result = client.get(
+        result = client_get(
             f"{API_PREFIX}/ebs/status/history",
             params={"entity_id": "eb-t0001-00100", "eb_version": "1"},
-            headers={"accept": "application/json"},
         )
 
         error = {
@@ -154,7 +142,7 @@ class TestExecutionBlockAPI:
     @mock.patch("ska_oso_ptt_services.routers.ebs.common_get_entity_status")
     @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
     def test_get_single_eb_status(
-        self, mock_oda, mock_get_eb_status, client, valid_eb_status
+        self, mock_oda, mock_get_eb_status, client_get, valid_eb_status
     ):
         """Verifying that get_single_eb_status API returns requested EB status"""
 
@@ -163,10 +151,9 @@ class TestExecutionBlockAPI:
 
         mock_get_eb_status.return_value = valid_eb_status
 
-        result = client.get(
+        result = client_get(
             f"{API_PREFIX}/ebs/eb-mvp01-20240426-5004/status",
             params={"eb_version": "1"},
-            headers={"accept": "application/json"},
         )
 
         exclude_paths = ["root['metadata']"]
@@ -180,7 +167,9 @@ class TestExecutionBlockAPI:
 
     @mock.patch("ska_oso_ptt_services.routers.ebs.common_get_entity_status")
     @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
-    def test_get_single_invalid_eb_status(self, mock_oda, mock_get_eb_status, client):
+    def test_get_single_invalid_eb_status(
+        self, mock_oda, mock_get_eb_status, client_get
+    ):
         """Verifying that get_single_invalid_eb_status throws error
         if invalid data passed"""
 
@@ -190,10 +179,8 @@ class TestExecutionBlockAPI:
         mock_oda.uow().__enter__.return_value = uow_mock
         mock_get_eb_status.side_effect = ODANotFound(identifier=invalid_eb_id)
 
-        result = client.get(
-            f"{API_PREFIX}/ebs/{invalid_eb_id}/status",
-            params={"eb_version": "1"},
-            headers={"accept": "application/json"},
+        result = client_get(
+            f"{API_PREFIX}/ebs/{invalid_eb_id}/status", params={"eb_version": "1"}
         )
 
         error = {
@@ -207,7 +194,7 @@ class TestExecutionBlockAPI:
         assert result.status_code == HTTPStatus.NOT_FOUND
 
     @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
-    def test_put_eb_history(self, mock_oda, client, valid_eb_status):
+    def test_put_eb_history(self, mock_oda, client_put, valid_eb_status):
         """Verifying that put_eb_history updates the eb status correctly"""
 
         uow_mock = mock.MagicMock()
@@ -235,9 +222,8 @@ class TestExecutionBlockAPI:
             "root['metadata']['pdm_version']",
         ]
 
-        result = client.put(
-            f"{API_PREFIX}/ebs/eb-mvp01-20240426-5004/status",
-            json=data,
+        result = client_put(
+            f"{API_PREFIX}/ebs/eb-mvp01-20240426-5004/status", json=data
         )
 
         assert_json_is_equal(
