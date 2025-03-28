@@ -2,9 +2,10 @@ import logging
 
 from fastapi import APIRouter
 
-from ska_oso_ptt_services.common.constant import GET_ALL_ENTITY_MODEL, entity_map
+from ska_oso_ptt_services.common.constant import entity_map
 from ska_oso_ptt_services.common.error_handling import EntityNotFound
 from ska_oso_ptt_services.models.models import EntityStatusResponse
+from ska_oso_ptt_services.common.utils import get_responses
 
 LOGGER = logging.getLogger(__name__)
 
@@ -16,7 +17,7 @@ status_router = APIRouter(prefix="/status")
     tags=["Status"],
     summary="Get status dictionary by the entity parameter",
     response_model=EntityStatusResponse,
-    responses=GET_ALL_ENTITY_MODEL,
+    responses=get_responses(EntityStatusResponse),
 )
 def get_entity_status(entity_name: str) -> EntityStatusResponse:
     """

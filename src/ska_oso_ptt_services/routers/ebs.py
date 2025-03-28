@@ -8,14 +8,8 @@ from ska_db_oda.rest.api import check_for_mismatch, get_qry_params
 from ska_db_oda.rest.model import ApiQueryParameters, ApiStatusQueryParameters
 from ska_oso_pdm.entity_status_history import OSOEBStatusHistory
 
-from ska_oso_ptt_services.common.constant import (
-    GET_ALL_EB_MODEL,
-    GET_ID_EB_MODEL,
-    GET_ID_EB_STATUS_MODEL,
-    GET_PUT_ID_EB_STATUS_MODEL,
-)
 from ska_oso_ptt_services.common.error_handling import ODANotFound
-from ska_oso_ptt_services.common.utils import common_get_entity_status
+from ska_oso_ptt_services.common.utils import common_get_entity_status, get_responses
 from ska_oso_ptt_services.models.models import EBStatusModel
 
 LOGGER = logging.getLogger(__name__)
@@ -29,7 +23,7 @@ eb_router = APIRouter(prefix="/ebs")
     summary="Get All Execution Block with status appended, filter by the query "
     "parameter like created_before, created_after and user name",
     response_model=List[EBStatusModel],
-    responses=GET_ALL_EB_MODEL,
+    responses=get_responses(List[EBStatusModel]),
 )
 def get_ebs_with_status(
     query_params: ApiQueryParameters = Depends(),
@@ -66,7 +60,7 @@ def get_ebs_with_status(
     tags=["EB"],
     summary="Get specific Execution Block by identifier with status appended",
     response_model=EBStatusModel,
-    responses=GET_ID_EB_MODEL,
+    responses=get_responses(EBStatusModel),
 )
 def get_eb_with_status(eb_id: str) -> EBStatusModel:
     """
@@ -93,7 +87,7 @@ def get_eb_with_status(eb_id: str) -> EBStatusModel:
     tags=["EB"],
     summary="Get specific Execution Block status by the identifier",
     response_model=OSOEBStatusHistory,
-    responses=GET_PUT_ID_EB_STATUS_MODEL,
+    responses=get_responses(OSOEBStatusHistory),
 )
 def get_eb_status(eb_id: str, version: int = None) -> OSOEBStatusHistory:
     """
@@ -119,7 +113,7 @@ def get_eb_status(eb_id: str, version: int = None) -> OSOEBStatusHistory:
     tags=["EB"],
     summary="Update specific Execution Block status by identifier",
     response_model=OSOEBStatusHistory,
-    responses=GET_PUT_ID_EB_STATUS_MODEL,
+    responses=get_responses(OSOEBStatusHistory),
 )
 def put_eb_history(
     eb_id: str, eb_status_history: OSOEBStatusHistory
@@ -148,7 +142,7 @@ def put_eb_history(
     tags=["EB"],
     summary="Get specific Execution Block status history by identifier and version",
     response_model=List[OSOEBStatusHistory],
-    responses=GET_ID_EB_STATUS_MODEL,
+    responses=get_responses(List[OSOEBStatusHistory]),
 )
 def get_eb_status_history(
     query_params: ApiStatusQueryParameters = Depends(),

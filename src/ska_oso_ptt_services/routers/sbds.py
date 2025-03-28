@@ -8,14 +8,8 @@ from ska_db_oda.rest.api import check_for_mismatch, get_qry_params
 from ska_db_oda.rest.model import ApiQueryParameters, ApiStatusQueryParameters
 from ska_oso_pdm.entity_status_history import SBDStatusHistory
 
-from ska_oso_ptt_services.common.constant import (
-    GET_ALL_SBD_MODEL,
-    GET_ID_SBD_MODEL,
-    GET_ID_SBD_STATUS_MODEL,
-    GET_PUT_ID_SBD_STATUS_MODEL,
-)
 from ska_oso_ptt_services.common.error_handling import ODANotFound
-from ska_oso_ptt_services.common.utils import common_get_entity_status
+from ska_oso_ptt_services.common.utils import common_get_entity_status, get_responses
 from ska_oso_ptt_services.models.models import SBDefinitionStatusModel
 
 LOGGER = logging.getLogger(__name__)
@@ -29,7 +23,7 @@ sbd_router = APIRouter(prefix="/sbds")
     summary="Get All SB Definition with status appended, filter by the query parameter"
     " like created_before, created_after and user namer",
     response_model=List[SBDefinitionStatusModel],
-    responses=GET_ALL_SBD_MODEL,
+    responses=get_responses(List[SBDefinitionStatusModel]),
 )
 def get_sbds_with_status(
     query_params: ApiQueryParameters = Depends(),
@@ -66,7 +60,7 @@ def get_sbds_with_status(
     tags=["SBD"],
     summary="Get specific SB Definition by identifier with status appended",
     response_model=SBDefinitionStatusModel,
-    responses=GET_ID_SBD_MODEL,
+    responses=get_responses(SBDefinitionStatusModel),
 )
 def get_sbd_with_status(sbd_id: str) -> SBDefinitionStatusModel:
     """
@@ -92,7 +86,7 @@ def get_sbd_with_status(sbd_id: str) -> SBDefinitionStatusModel:
     tags=["SBD"],
     summary="Get specific SB Definition status by the identifier",
     response_model=SBDStatusHistory,
-    responses=GET_PUT_ID_SBD_STATUS_MODEL,
+    responses=get_responses(SBDStatusHistory),
 )
 def get_sbd_status(sbd_id: str, version: str = None) -> SBDStatusHistory:
     """
@@ -119,7 +113,7 @@ def get_sbd_status(sbd_id: str, version: str = None) -> SBDStatusHistory:
     tags=["SBD"],
     summary="Update specific SB Definition status by identifier",
     response_model=SBDStatusHistory,
-    responses=GET_PUT_ID_SBD_STATUS_MODEL,
+    responses=get_responses(SBDStatusHistory),
 )
 def put_sbd_history(
     sbd_id: str, sbd_status_history: SBDStatusHistory
@@ -150,7 +144,7 @@ def put_sbd_history(
     tags=["SBD"],
     summary="Get specific SB Definition status history by identifier and version",
     response_model=List[SBDStatusHistory],
-    responses=GET_ID_SBD_STATUS_MODEL,
+    responses=get_responses(List[SBDStatusHistory]),
 )
 def get_sbd_status_history(
     query_params: ApiStatusQueryParameters = Depends(),

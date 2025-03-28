@@ -1,4 +1,5 @@
-from typing import Any, Dict
+from typing import Any, Dict, List
+from fastapi import status
 
 
 def common_get_entity_status(
@@ -19,3 +20,23 @@ def common_get_entity_status(
     )
 
     return retrieved_entity
+
+def get_responses(
+    response_model
+) -> Dict[str, Any]:
+    """
+    Takes response_model as argument and returns responses dict
+    :param: response_model: entity_object
+
+    Returns formatted response dictionary
+
+    """
+
+    responses = {
+        status.HTTP_200_OK: {
+            "description": "Successful Response",
+            "model": response_model,
+        }
+    }
+
+    return responses

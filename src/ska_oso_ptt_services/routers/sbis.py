@@ -8,14 +8,8 @@ from ska_db_oda.rest.api import check_for_mismatch, get_qry_params
 from ska_db_oda.rest.model import ApiQueryParameters, ApiStatusQueryParameters
 from ska_oso_pdm.entity_status_history import SBIStatusHistory
 
-from ska_oso_ptt_services.common.constant import (
-    GET_ALL_SBI_MODEL,
-    GET_ID_SBI_MODEL,
-    GET_ID_SBI_STATUS_MODEL,
-    GET_PUT_ID_SBI_STATUS_MODEL,
-)
 from ska_oso_ptt_services.common.error_handling import ODANotFound
-from ska_oso_ptt_services.common.utils import common_get_entity_status
+from ska_oso_ptt_services.common.utils import common_get_entity_status, get_responses
 from ska_oso_ptt_services.models.models import SBInstanceStatusModel
 
 LOGGER = logging.getLogger(__name__)
@@ -29,7 +23,7 @@ sbi_router = APIRouter(prefix="/sbis")
     summary="Get All SB Instance with status appended, filter by the query parameter"
     " like created_before, created_after and user name",
     response_model=List[SBInstanceStatusModel],
-    responses=GET_ALL_SBI_MODEL,
+    responses=get_responses(List[SBInstanceStatusModel]),
 )
 def get_sbis_with_status(
     query_params: ApiQueryParameters = Depends(),
@@ -66,7 +60,7 @@ def get_sbis_with_status(
     tags=["SBI"],
     summary="Get specific SB Instance by identifier with status appended",
     response_model=SBInstanceStatusModel,
-    responses=GET_ID_SBI_MODEL,
+    responses=get_responses(SBInstanceStatusModel),
 )
 def get_sbi_with_status(sbi_id: str) -> SBInstanceStatusModel:
     """
@@ -92,7 +86,7 @@ def get_sbi_with_status(sbi_id: str) -> SBInstanceStatusModel:
     tags=["SBI"],
     summary="Get SB Instance status by the identifier",
     response_model=SBIStatusHistory,
-    responses=GET_PUT_ID_SBI_STATUS_MODEL,
+    responses=get_responses(SBIStatusHistory),
 )
 def get_sbi_status(sbi_id: str, version: int = None):
     """
@@ -118,7 +112,7 @@ def get_sbi_status(sbi_id: str, version: int = None):
     tags=["SBI"],
     summary="Update specific SB Instance status by identifier",
     response_model=SBIStatusHistory,
-    responses=GET_PUT_ID_SBI_STATUS_MODEL,
+    responses=get_responses(SBIStatusHistory),
 )
 def put_sbi_history(
     sbi_id: str, sbi_status_history: SBIStatusHistory
@@ -148,7 +142,7 @@ def put_sbi_history(
     tags=["SBI"],
     summary="Get specific SB Instance status history by identifier and version",
     response_model=List[SBIStatusHistory],
-    responses=GET_ID_SBI_STATUS_MODEL,
+    responses=get_responses(List[SBIStatusHistory]),
 )
 def get_sbi_status_history(
     query_params: ApiStatusQueryParameters = Depends(),
