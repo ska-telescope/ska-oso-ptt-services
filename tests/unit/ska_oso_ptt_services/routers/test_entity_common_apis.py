@@ -26,7 +26,7 @@ def test_get_invalid_all_entity_with_status(entity_name, expected_response, clie
     if invalid data passed"""
 
     query_params = {
-        "match_type": "equals",
+        "query_type": "created_between",
         "created_before": "2022-03-28T15:43:53.971548+00:00",
         "created_after": "2022-03-28T15:43:53.971548+00:00",
         "last_modified_before": "2022-03-28T15:43:53.971548+00:00",

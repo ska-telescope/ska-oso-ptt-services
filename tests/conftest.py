@@ -40,6 +40,7 @@ def client_put():
 
 @pytest.fixture
 def create_entity_object():
+    
     def _create_entity_object(filename: str):
         return load_json_from_file(f"{TEST_FILES_PATH}/{filename}")
 

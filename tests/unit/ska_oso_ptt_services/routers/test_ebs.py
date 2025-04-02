@@ -40,7 +40,7 @@ class TestExecutionBlockAPI:
         mock_oda.uow().__enter__.return_value = uow_mock
 
         query_params = {
-            "match_type": "equals",
+            "query_type": "created_between",
             "created_after": "2022-03-28T15:43:53.971548+00:00",
         }
 
