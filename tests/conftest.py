@@ -47,7 +47,9 @@ def valid_ebs():
 
 @pytest.fixture
 def valid_eb_with_status():
-    return load_json_from_file(f"{TEST_FILES_PATH}/testfile_sample_eb_with_status.json")
+    return load_json_from_file(
+        f"{TEST_FILES_PATH}/testfile_sample_multiple_ebs_with_status.json"
+    )[0]
 
 
 @pytest.fixture
@@ -59,7 +61,9 @@ def valid_eb_status_history():
 
 @pytest.fixture
 def valid_eb_status():
-    return load_json_from_file(f"{TEST_FILES_PATH}/testfile_sample_eb_status.json")
+    return load_json_from_file(
+        f"{TEST_FILES_PATH}/testfile_sample_eb_status_history.json"
+    )[0]
 
 
 @pytest.fixture
@@ -72,8 +76,8 @@ def valid_sbds():
 @pytest.fixture
 def valid_sbd():
     return load_json_from_file(
-        f"{TEST_FILES_PATH}/testfile_sample_sbd_json_with_status.json"
-    )
+        f"{TEST_FILES_PATH}/testfile_sample_multiple_sbds_with_status.json"
+    )[0]
 
 
 @pytest.fixture
@@ -85,14 +89,16 @@ def valid_sbd_status_history():
 
 @pytest.fixture
 def valid_sbd_status():
-    return load_json_from_file(f"{TEST_FILES_PATH}/testfile_sample_sbd_status.json")
+    return load_json_from_file(
+        f"{TEST_FILES_PATH}/testfile_sample_sbd_status_history.json"
+    )[0]
 
 
 @pytest.fixture
 def valid_put_sbd_history_version_response():
     return load_json_from_file(
-        f"{TEST_FILES_PATH}/testfile_sample_sbd_status_version.json"
-    )
+        f"{TEST_FILES_PATH}/testfile_sample_sbd_status_history.json"
+    )[0]
 
 
 @pytest.fixture
@@ -118,14 +124,16 @@ def valid_prj_status_history():
 
 @pytest.fixture
 def valid_prj_status():
-    return load_json_from_file(f"{TEST_FILES_PATH}/testfile_sample_prj_status.json")
+    return load_json_from_file(
+        f"{TEST_FILES_PATH}/testfile_sample_prj_status_history.json"
+    )[0]
 
 
 @pytest.fixture
 def valid_put_prj_history_version_response():
     return load_json_from_file(
-        f"{TEST_FILES_PATH}/testfile_sample_prj_status_version.json"
-    )
+        f"{TEST_FILES_PATH}/testfile_sample_prj_status_history.json"
+    )[0]
 
 
 @pytest.fixture
@@ -138,8 +146,8 @@ def valid_sbis():
 @pytest.fixture
 def valid_sbi():
     return load_json_from_file(
-        f"{TEST_FILES_PATH}/testfile_sample_sbi_with_status.json"
-    )
+        f"{TEST_FILES_PATH}/testfile_sample_multiple_sbis_with_status.json"
+    )[0]
 
 
 @pytest.fixture
@@ -151,4 +159,6 @@ def valid_sbi_status_history():
 
 @pytest.fixture
 def valid_sbi_status():
-    return load_json_from_file(f"{TEST_FILES_PATH}/testfile_sample_sbi_status.json")
+    return load_json_from_file(
+        f"{TEST_FILES_PATH}/testfile_sample_sbi_status_history.json"
+    )[0]
