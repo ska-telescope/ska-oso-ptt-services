@@ -3,10 +3,12 @@ import json
 from http import HTTPStatus
 from unittest import mock
 
+import pytest
 from ska_oso_pdm import OSOEBStatusHistory, OSOExecutionBlock
 
 from ska_oso_ptt_services.app import API_PREFIX
 from ska_oso_ptt_services.common.error_handling import ODANotFound
+# from tests.conftest import json_loader
 from tests.unit.ska_oso_ptt_services.utils import assert_json_is_equal
 
 
@@ -18,12 +20,13 @@ class TestExecutionBlockAPI:
 
     @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
     @mock.patch("ska_oso_ptt_services.routers.ebs.common_get_entity_status")
+    @pytest.mark.parametrize("json_loader", ["testfile_sample_multiple_ebs_with_status.json"], indirect=True)
     def test_get_multiple_eb_with_status(
-        self, mock_get_eb_status, mock_oda, client_get, valid_ebs
+        self, mock_get_eb_status, mock_oda, client_get, json_loader
     ):
         """Verifying that get_multiple_eb_with_status API returns All EBs with status"""
 
-        execution_block = [OSOExecutionBlock(**x) for x in valid_ebs]
+        execution_block = [OSOExecutionBlock(**x) for x in json_loader.read_json()]
 
         ebs_mock = mock.MagicMock()
         ebs_mock.query.return_value = execution_block
@@ -45,7 +48,7 @@ class TestExecutionBlockAPI:
         for res in resultDict:
             del res["metadata"]["pdm_version"]
 
-        assert_json_is_equal(resultDict, valid_ebs)
+        assert_json_is_equal(resultDict, json_loader.read_json())
         assert result.status_code == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.ebs.oda")

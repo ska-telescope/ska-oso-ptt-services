@@ -37,6 +37,19 @@ def client_put():
 
     return partial(client.put)
 
+class FileLoader:
+    def __init__(self, file_path):
+        self.file_path = f"{TEST_FILES_PATH}/{file_path}"
+
+    def read_json(self):
+        return load_json_from_file(
+        self.file_path
+    )
+        
+@pytest.fixture
+def json_loader(request):
+    """Fixture to load different file paths dynamically"""
+    return FileLoader(request.param)
 
 @pytest.fixture
 def valid_ebs():
