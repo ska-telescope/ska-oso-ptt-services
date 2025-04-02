@@ -20,10 +20,14 @@ class TestSBDefinitionAPI:
     @mock.patch("ska_oso_ptt_services.routers.sbds.oda")
     @mock.patch("ska_oso_ptt_services.routers.sbds.common_get_entity_status")
     def test_get_multiple_sbd_with_status(
-        self, mock_get_sbd_status, mock_oda, client_get, valid_sbds
+        self, mock_get_sbd_status, mock_oda, client_get, create_entity_object
     ):
         """Verifying that get_multiple_sbd_with_status API returns
         All SBDS with status"""
+
+        valid_sbds = create_entity_object(
+            "testfile_sample_multiple_sbds_with_status.json"
+        )
 
         sbd_definitions = [SBDefinition(**sbd) for sbd in valid_sbds]
 
@@ -56,10 +60,14 @@ class TestSBDefinitionAPI:
     @mock.patch("ska_oso_ptt_services.routers.sbds.oda")
     @mock.patch("ska_oso_ptt_services.routers.sbds.common_get_entity_status")
     def test_get_single_sbd_with_status(
-        self, mock_get_sbd_status, mock_oda, client_get, valid_sbd
+        self, mock_get_sbd_status, mock_oda, client_get, create_entity_object
     ):
         """Verifying that get_single_sbd_with_status API returns requested
         SBD with status"""
+
+        valid_sbd = create_entity_object(
+            "testfile_sample_multiple_sbds_with_status.json"
+        )[0]
 
         sbd_mock = mock.MagicMock()
         sbd_mock.model_dump.return_value = valid_sbd
@@ -105,10 +113,14 @@ class TestSBDefinitionAPI:
 
     @mock.patch("ska_oso_ptt_services.routers.sbds.oda")
     def test_get_single_sbd_status_history(
-        self, mock_oda, client_get, valid_sbd_status_history
+        self, mock_oda, client_get, create_entity_object
     ):
         """Verifying that get_single_sbd_status_history API returns requested
         SBD status history"""
+
+        valid_sbd_status_history = create_entity_object(
+            "testfile_sample_sbd_status_history.json"
+        )
 
         uow_mock = mock.MagicMock()
         uow_mock.sbds_status_history.query.return_value = valid_sbd_status_history
@@ -155,9 +167,13 @@ class TestSBDefinitionAPI:
     @mock.patch("ska_oso_ptt_services.routers.sbds.common_get_entity_status")
     @mock.patch("ska_oso_ptt_services.routers.sbds.oda")
     def test_get_single_sbd_status(
-        self, mock_oda, mock_get_sbd_status, client_get, valid_sbd_status
+        self, mock_oda, mock_get_sbd_status, client_get, create_entity_object
     ):
         """Verifying that get_single_sbd_status API returns requested SBD status"""
+
+        valid_sbd_status = create_entity_object(
+            "testfile_sample_sbd_status_history.json"
+        )[0]
 
         uow_mock = mock.MagicMock()
         mock_oda.uow().__enter__.return_value = uow_mock
@@ -206,8 +222,12 @@ class TestSBDefinitionAPI:
         assert result.status_code == HTTPStatus.NOT_FOUND
 
     @mock.patch("ska_oso_ptt_services.routers.sbds.oda")
-    def test_put_sbd_history(self, mock_oda, client_put, valid_sbd_status):
+    def test_put_sbd_history(self, mock_oda, client_put, create_entity_object):
         """Verifying that put_sbd_history updates the sbd status correctly"""
+
+        valid_sbd_status = create_entity_object(
+            "testfile_sample_sbd_status_history.json"
+        )[0]
 
         uow_mock = mock.MagicMock()
         uow_mock.sbds = ["sbd-t0001-20240702-00002"]
@@ -246,14 +266,12 @@ class TestSBDefinitionAPI:
         assert result.status_code == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.sbds.oda")
-    def test_put_sbd_history_version(
-        self,
-        mock_oda,
-        client_put,
-        valid_sbd_status,
-        valid_put_sbd_history_version_response,
-    ):
+    def test_put_sbd_history_version(self, mock_oda, client_put, create_entity_object):
         """Verifying that put_sbd_history updates the sbd status correctly"""
+
+        valid_sbd_status = create_entity_object(
+            "testfile_sample_sbd_status_history.json"
+        )[0]
 
         uow_mock = mock.MagicMock()
         uow_mock.sbds = ["sbd-t0001-20240702-00002"]
@@ -290,6 +308,10 @@ class TestSBDefinitionAPI:
             exclude_paths,
         )
         assert result.status_code == HTTPStatus.OK
+
+        valid_put_sbd_history_version_response = create_entity_object(
+            "testfile_sample_sbd_status_history.json"
+        )[0]
 
         uow_mock = mock.MagicMock()
         uow_mock.sbds = ["sbd-t0001-20240702-00002"]

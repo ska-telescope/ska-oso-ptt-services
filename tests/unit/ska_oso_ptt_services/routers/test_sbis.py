@@ -20,10 +20,14 @@ class TestSBInstanceAPI:
     @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
     @mock.patch("ska_oso_ptt_services.routers.sbis.common_get_entity_status")
     def test_get_multiple_sbi_with_status(
-        self, mock_get_sbi_status, mock_oda, client_get, valid_sbis
+        self, mock_get_sbi_status, mock_oda, client_get, create_entity_object
     ):
         """Verifying that get_multiple_sbi_with_status API returns
         All SBIs with status"""
+
+        valid_sbis = create_entity_object(
+            "testfile_sample_multiple_sbis_with_status.json"
+        )
 
         sbi_instance = [SBInstance(**x) for x in valid_sbis]
 
@@ -53,10 +57,14 @@ class TestSBInstanceAPI:
     @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
     @mock.patch("ska_oso_ptt_services.routers.sbis.common_get_entity_status")
     def test_get_single_sbi_with_status(
-        self, mock_get_sbi_status, mock_oda, client_get, valid_sbi
+        self, mock_get_sbi_status, mock_oda, client_get, create_entity_object
     ):
         """Verifying that get_single_sbi_with_status API returns requested
         SBI with status"""
+
+        valid_sbi = create_entity_object(
+            "testfile_sample_multiple_sbis_with_status.json"
+        )[0]
 
         sbi_mock = mock.MagicMock()
         sbi_mock.model_dump.return_value = valid_sbi
@@ -99,10 +107,14 @@ class TestSBInstanceAPI:
 
     @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
     def test_get_single_sbi_status_history(
-        self, mock_oda, client_get, valid_sbi_status_history
+        self, mock_oda, client_get, create_entity_object
     ):
         """Verifying that get_single_sbi_status_history API returns requested
         SBI status history"""
+
+        valid_sbi_status_history = create_entity_object(
+            "testfile_sample_sbi_status_history.json"
+        )
 
         uow_mock = mock.MagicMock()
         uow_mock.sbis_status_history.query.return_value = valid_sbi_status_history
@@ -147,9 +159,13 @@ class TestSBInstanceAPI:
     @mock.patch("ska_oso_ptt_services.routers.sbis.common_get_entity_status")
     @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
     def test_get_single_sbi_status(
-        self, mock_oda, mock_get_sbi_status, client_get, valid_sbi_status
+        self, mock_oda, mock_get_sbi_status, client_get, create_entity_object
     ):
         """Verifying that get_single_sbi_status API returns requested SBI status"""
+
+        valid_sbi_status = create_entity_object(
+            "testfile_sample_sbi_status_history.json"
+        )[0]
 
         uow_mock = mock.MagicMock()
         mock_oda.uow().__enter__.return_value = uow_mock
@@ -198,8 +214,12 @@ class TestSBInstanceAPI:
         assert result.status_code == HTTPStatus.NOT_FOUND
 
     @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
-    def test_put_sbi_history(self, mock_oda, client_put, valid_sbi_status_history):
+    def test_put_sbi_history(self, mock_oda, client_put, create_entity_object):
         """Verifying that put_sbi_history updates the sbi status correctly"""
+
+        valid_sbi_status_history = create_entity_object(
+            "testfile_sample_sbi_status_history.json"
+        )
 
         uow_mock = mock.MagicMock()
         uow_mock.sbis = ["sbi-mvp01-20220923-00002"]

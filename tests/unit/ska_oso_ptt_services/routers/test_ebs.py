@@ -19,9 +19,13 @@ class TestExecutionBlockAPI:
     @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
     @mock.patch("ska_oso_ptt_services.routers.ebs.common_get_entity_status")
     def test_get_multiple_eb_with_status(
-        self, mock_get_eb_status, mock_oda, client_get, valid_ebs
+        self, mock_get_eb_status, mock_oda, client_get, create_entity_object
     ):
         """Verifying that get_multiple_eb_with_status API returns All EBs with status"""
+
+        valid_ebs = create_entity_object(
+            "testfile_sample_multiple_ebs_with_status.json"
+        )
 
         execution_block = [OSOExecutionBlock(**x) for x in valid_ebs]
 
@@ -51,10 +55,14 @@ class TestExecutionBlockAPI:
     @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
     @mock.patch("ska_oso_ptt_services.routers.ebs.common_get_entity_status")
     def test_get_single_eb_with_status(
-        self, mock_get_eb_status, mock_oda, client_get, valid_eb_with_status
+        self, mock_get_eb_status, mock_oda, client_get, create_entity_object
     ):
         """Verifying that get_single_eb_with_status API returns
         requested EB with status"""
+
+        valid_eb_with_status = create_entity_object(
+            "testfile_sample_multiple_ebs_with_status.json"
+        )[0]
 
         eb_mock = mock.MagicMock()
         eb_mock.model_dump.return_value = valid_eb_with_status
@@ -93,11 +101,15 @@ class TestExecutionBlockAPI:
 
     @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
     def test_get_single_eb_status_history(
-        self, mock_oda, client_get, valid_eb_status_history
+        self, mock_oda, client_get, create_entity_object
     ):
         """Verifying that get_single_eb_status_history API returns requested
         EB status history
         """
+
+        valid_eb_status_history = create_entity_object(
+            "testfile_sample_eb_status_history.json"
+        )
 
         uow_mock = mock.MagicMock()
         uow_mock.ebs_status_history.query.return_value = valid_eb_status_history
@@ -142,9 +154,13 @@ class TestExecutionBlockAPI:
     @mock.patch("ska_oso_ptt_services.routers.ebs.common_get_entity_status")
     @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
     def test_get_single_eb_status(
-        self, mock_oda, mock_get_eb_status, client_get, valid_eb_status
+        self, mock_oda, mock_get_eb_status, client_get, create_entity_object
     ):
         """Verifying that get_single_eb_status API returns requested EB status"""
+
+        valid_eb_status = create_entity_object(
+            "testfile_sample_eb_status_history.json"
+        )[0]
 
         uow_mock = mock.MagicMock()
         mock_oda.uow().__enter__.return_value = uow_mock
@@ -194,8 +210,12 @@ class TestExecutionBlockAPI:
         assert result.status_code == HTTPStatus.NOT_FOUND
 
     @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
-    def test_put_eb_history(self, mock_oda, client_put, valid_eb_status):
+    def test_put_eb_history(self, mock_oda, client_put, create_entity_object):
         """Verifying that put_eb_history updates the eb status correctly"""
+
+        valid_eb_status = create_entity_object(
+            "testfile_sample_eb_status_history.json"
+        )[0]
 
         uow_mock = mock.MagicMock()
         uow_mock.ebs = ["eb-mvp01-20240426-5004"]

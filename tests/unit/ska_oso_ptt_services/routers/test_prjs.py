@@ -20,10 +20,14 @@ class TestProjectAPI:
     @mock.patch("ska_oso_ptt_services.routers.prjs.oda")
     @mock.patch("ska_oso_ptt_services.routers.prjs.common_get_entity_status")
     def test_get_multiple_prj_with_status(
-        self, mock_get_prj_status, mock_oda, client_get, valid_prjs
+        self, mock_get_prj_status, mock_oda, client_get, create_entity_object
     ):
         """Verifying that get_multiple_prj_with_status API returns
         All prjs with status"""
+
+        valid_prjs = create_entity_object(
+            "testfile_sample_multiple_prjs_with_status.json"
+        )
 
         project = [Project(**x) for x in valid_prjs]
 
@@ -53,10 +57,14 @@ class TestProjectAPI:
     @mock.patch("ska_oso_ptt_services.routers.prjs.oda")
     @mock.patch("ska_oso_ptt_services.routers.prjs.common_get_entity_status")
     def test_get_single_prj_with_status(
-        self, mock_get_prj_status, mock_oda, client_get, valid_prj_with_status
+        self, mock_get_prj_status, mock_oda, client_get, create_entity_object
     ):
         """Verifying that get_single_prj_with_status API returns requested
         prj with status"""
+
+        valid_prj_with_status = create_entity_object(
+            "testfile_sample_prj_with_status.json"
+        )
 
         prj_mock = mock.MagicMock()
         prj_mock.model_dump.return_value = valid_prj_with_status
@@ -101,11 +109,15 @@ class TestProjectAPI:
 
     @mock.patch("ska_oso_ptt_services.routers.prjs.oda")
     def test_get_single_prj_status_history(
-        self, mock_oda, client_get, valid_prj_status_history
+        self, mock_oda, client_get, create_entity_object
     ):
         """Verifying that get_single_prj_status_history API returns requested
         prj status history
         """
+
+        valid_prj_status_history = create_entity_object(
+            "testfile_sample_prj_status_history.json"
+        )
 
         uow_mock = mock.MagicMock()
         uow_mock.prjs_status_history.query.return_value = valid_prj_status_history
@@ -149,10 +161,14 @@ class TestProjectAPI:
     @mock.patch("ska_oso_ptt_services.routers.prjs.common_get_entity_status")
     @mock.patch("ska_oso_ptt_services.routers.prjs.oda")
     def test_get_single_prj_status(
-        self, mock_oda, mock_get_prj_status, client_get, valid_prj_status
+        self, mock_oda, mock_get_prj_status, client_get, create_entity_object
     ):
         """Verifying that test_get_single_prj_status API returns
         requested prj status"""
+
+        valid_prj_status = create_entity_object(
+            "testfile_sample_prj_status_history.json"
+        )[0]
 
         uow_mock = mock.MagicMock()
         mock_oda.uow().__enter__.return_value = uow_mock
@@ -201,8 +217,12 @@ class TestProjectAPI:
         assert result.status_code == HTTPStatus.NOT_FOUND
 
     @mock.patch("ska_oso_ptt_services.routers.prjs.oda")
-    def test_put_prj_history(self, mock_oda, client_put, valid_prj_status):
+    def test_put_prj_history(self, mock_oda, client_put, create_entity_object):
         """Verifying that put_prj_history updates the prj status correctly"""
+
+        valid_prj_status = create_entity_object(
+            "testfile_sample_prj_status_history.json"
+        )[0]
 
         uow_mock = mock.MagicMock()
         uow_mock.prjs = ["prj-mvp01-20220923-00001"]
@@ -242,13 +262,13 @@ class TestProjectAPI:
 
     @mock.patch("ska_oso_ptt_services.routers.prjs.oda")
     def test_put_prj_history_with_two_version(
-        self,
-        mock_oda,
-        client_put,
-        valid_prj_status,
-        valid_put_prj_history_version_response,
+        self, mock_oda, client_put, create_entity_object
     ):
         """Verifying that put_prj_history updates the prj status correctly"""
+
+        valid_prj_status = create_entity_object(
+            "testfile_sample_prj_status_history.json"
+        )[0]
 
         uow_mock = mock.MagicMock()
         uow_mock.prjs = ["prj-mvp01-20220923-00001"]
@@ -285,6 +305,10 @@ class TestProjectAPI:
             exclude_paths,
         )
         assert result.status_code == HTTPStatus.OK
+
+        valid_put_prj_history_version_response = create_entity_object(
+            "testfile_sample_prj_status_history.json"
+        )[0]
 
         uow_mock = mock.MagicMock()
         uow_mock.prjs = ["prj-mvp01-20220923-00001"]
