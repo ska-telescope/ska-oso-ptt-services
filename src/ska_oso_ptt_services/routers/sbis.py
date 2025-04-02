@@ -18,7 +18,7 @@ sbi_router = APIRouter(prefix="/sbis")
 
 
 @sbi_router.get(
-    "/",
+    "",
     tags=["SBI"],
     summary="Get All SB Instance with status appended, filter by the query parameter"
     " like created_before, created_after and user name",
@@ -36,8 +36,6 @@ def get_sbis_with_status(
          or appropriate error Response
     """
     maybe_qry_params = get_qry_params(query_params)
-    if not isinstance(maybe_qry_params, QueryParams):
-        return maybe_qry_params
 
     with oda.uow() as uow:
         sbis = uow.sbis.query(maybe_qry_params)

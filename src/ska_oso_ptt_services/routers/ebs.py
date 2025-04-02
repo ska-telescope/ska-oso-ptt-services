@@ -18,7 +18,7 @@ eb_router = APIRouter(prefix="/ebs")
 
 
 @eb_router.get(
-    "/",
+    "",
     tags=["EB"],
     summary="Get All Execution Block with status appended, filter by the query "
     "parameter like created_before, created_after and user name",
@@ -35,12 +35,10 @@ def get_ebs_with_status(
     :return: All ExecutionBlocks present with status wrapped in a Response,
          or appropriate error Response
     """
-    maybe_qry_params = get_qry_params(query_params)
-    if not isinstance(maybe_qry_params, QueryParams):
-        return maybe_qry_params
+    query_params = get_qry_params(query_params)
 
     with oda.uow() as uow:
-        ebs = uow.ebs.query(maybe_qry_params)
+        ebs = uow.ebs.query(query_params)
         eb_with_status = [
             {
                 **eb.model_dump(mode="json"),

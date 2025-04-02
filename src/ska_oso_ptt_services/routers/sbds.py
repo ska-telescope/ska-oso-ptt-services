@@ -18,7 +18,7 @@ sbd_router = APIRouter(prefix="/sbds")
 
 
 @sbd_router.get(
-    "/",
+    "",
     tags=["SBD"],
     summary="Get All SB Definition with status appended, filter by the query parameter"
     " like created_before, created_after and user namer",
@@ -36,8 +36,6 @@ def get_sbds_with_status(
      error Response
     """
     maybe_qry_params = get_qry_params(query_params)
-    if not isinstance(maybe_qry_params, QueryParams):
-        return maybe_qry_params
 
     with oda.uow() as uow:
         sbds = uow.sbds.query(maybe_qry_params)
