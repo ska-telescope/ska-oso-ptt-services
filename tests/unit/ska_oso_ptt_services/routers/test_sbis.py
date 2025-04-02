@@ -8,6 +8,10 @@ from ska_oso_pdm.entity_status_history import SBIStatusHistory
 
 from ska_oso_ptt_services.app import API_PREFIX
 from ska_oso_ptt_services.common.error_handling import ODANotFound
+from tests.unit.ska_oso_ptt_services.common.constant import (
+    MULTIPLE_SBIS,
+    MULTIPLE_SBIS_STATUS,
+)
 from tests.unit.ska_oso_ptt_services.utils import assert_json_is_equal
 
 
@@ -25,9 +29,7 @@ class TestSBInstanceAPI:
         """Verifying that get_multiple_sbi_with_status API returns
         All SBIs with status"""
 
-        valid_sbis = create_entity_object(
-            "testfile_sample_multiple_sbis_with_status.json"
-        )
+        valid_sbis = create_entity_object(MULTIPLE_SBIS)
 
         sbi_instance = [SBInstance(**x) for x in valid_sbis]
 
@@ -62,9 +64,7 @@ class TestSBInstanceAPI:
         """Verifying that get_single_sbi_with_status API returns requested
         SBI with status"""
 
-        valid_sbi = create_entity_object(
-            "testfile_sample_multiple_sbis_with_status.json"
-        )[0]
+        valid_sbi = create_entity_object(MULTIPLE_SBIS)[0]
 
         sbi_mock = mock.MagicMock()
         sbi_mock.model_dump.return_value = valid_sbi
@@ -112,9 +112,7 @@ class TestSBInstanceAPI:
         """Verifying that get_single_sbi_status_history API returns requested
         SBI status history"""
 
-        valid_sbi_status_history = create_entity_object(
-            "testfile_sample_sbi_status_history.json"
-        )
+        valid_sbi_status_history = create_entity_object(MULTIPLE_SBIS_STATUS)
 
         uow_mock = mock.MagicMock()
         uow_mock.sbis_status_history.query.return_value = valid_sbi_status_history
@@ -163,9 +161,7 @@ class TestSBInstanceAPI:
     ):
         """Verifying that get_single_sbi_status API returns requested SBI status"""
 
-        valid_sbi_status = create_entity_object(
-            "testfile_sample_sbi_status_history.json"
-        )[0]
+        valid_sbi_status = create_entity_object(MULTIPLE_SBIS_STATUS)[0]
 
         uow_mock = mock.MagicMock()
         mock_oda.uow().__enter__.return_value = uow_mock
@@ -217,9 +213,7 @@ class TestSBInstanceAPI:
     def test_put_sbi_history(self, mock_oda, client_put, create_entity_object):
         """Verifying that put_sbi_history updates the sbi status correctly"""
 
-        valid_sbi_status_history = create_entity_object(
-            "testfile_sample_sbi_status_history.json"
-        )
+        valid_sbi_status_history = create_entity_object(MULTIPLE_SBIS_STATUS)
 
         uow_mock = mock.MagicMock()
         uow_mock.sbis = ["sbi-mvp01-20220923-00002"]

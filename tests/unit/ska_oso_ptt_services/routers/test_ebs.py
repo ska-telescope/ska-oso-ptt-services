@@ -7,6 +7,10 @@ from ska_oso_pdm import OSOEBStatusHistory, OSOExecutionBlock
 
 from ska_oso_ptt_services.app import API_PREFIX
 from ska_oso_ptt_services.common.error_handling import ODANotFound
+from tests.unit.ska_oso_ptt_services.common.constant import (
+    MULTIPLE_EBS,
+    MULTIPLE_EBS_STATUS,
+)
 from tests.unit.ska_oso_ptt_services.utils import assert_json_is_equal
 
 
@@ -23,9 +27,7 @@ class TestExecutionBlockAPI:
     ):
         """Verifying that get_multiple_eb_with_status API returns All EBs with status"""
 
-        valid_ebs = create_entity_object(
-            "testfile_sample_multiple_ebs_with_status.json"
-        )
+        valid_ebs = create_entity_object(MULTIPLE_EBS)
 
         execution_block = [OSOExecutionBlock(**x) for x in valid_ebs]
 
@@ -60,9 +62,7 @@ class TestExecutionBlockAPI:
         """Verifying that get_single_eb_with_status API returns
         requested EB with status"""
 
-        valid_eb_with_status = create_entity_object(
-            "testfile_sample_multiple_ebs_with_status.json"
-        )[0]
+        valid_eb_with_status = create_entity_object(MULTIPLE_EBS)[0]
 
         eb_mock = mock.MagicMock()
         eb_mock.model_dump.return_value = valid_eb_with_status
@@ -107,9 +107,7 @@ class TestExecutionBlockAPI:
         EB status history
         """
 
-        valid_eb_status_history = create_entity_object(
-            "testfile_sample_eb_status_history.json"
-        )
+        valid_eb_status_history = create_entity_object(MULTIPLE_EBS_STATUS)
 
         uow_mock = mock.MagicMock()
         uow_mock.ebs_status_history.query.return_value = valid_eb_status_history
@@ -158,9 +156,7 @@ class TestExecutionBlockAPI:
     ):
         """Verifying that get_single_eb_status API returns requested EB status"""
 
-        valid_eb_status = create_entity_object(
-            "testfile_sample_eb_status_history.json"
-        )[0]
+        valid_eb_status = create_entity_object(MULTIPLE_EBS_STATUS)[0]
 
         uow_mock = mock.MagicMock()
         mock_oda.uow().__enter__.return_value = uow_mock
@@ -213,9 +209,7 @@ class TestExecutionBlockAPI:
     def test_put_eb_history(self, mock_oda, client_put, create_entity_object):
         """Verifying that put_eb_history updates the eb status correctly"""
 
-        valid_eb_status = create_entity_object(
-            "testfile_sample_eb_status_history.json"
-        )[0]
+        valid_eb_status = create_entity_object(MULTIPLE_EBS_STATUS)[0]
 
         uow_mock = mock.MagicMock()
         uow_mock.ebs = ["eb-mvp01-20240426-5004"]

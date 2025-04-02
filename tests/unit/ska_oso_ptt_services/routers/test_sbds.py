@@ -8,6 +8,10 @@ from ska_oso_pdm.entity_status_history import SBDStatusHistory
 
 from ska_oso_ptt_services.app import API_PREFIX
 from ska_oso_ptt_services.common.error_handling import ODANotFound
+from tests.unit.ska_oso_ptt_services.common.constant import (
+    MULTIPLE_SBDS,
+    MULTIPLE_SBDS_STATUS,
+)
 from tests.unit.ska_oso_ptt_services.utils import assert_json_is_equal
 
 
@@ -25,9 +29,7 @@ class TestSBDefinitionAPI:
         """Verifying that get_multiple_sbd_with_status API returns
         All SBDS with status"""
 
-        valid_sbds = create_entity_object(
-            "testfile_sample_multiple_sbds_with_status.json"
-        )
+        valid_sbds = create_entity_object(MULTIPLE_SBDS)
 
         sbd_definitions = [SBDefinition(**sbd) for sbd in valid_sbds]
 
@@ -65,9 +67,7 @@ class TestSBDefinitionAPI:
         """Verifying that get_single_sbd_with_status API returns requested
         SBD with status"""
 
-        valid_sbd = create_entity_object(
-            "testfile_sample_multiple_sbds_with_status.json"
-        )[0]
+        valid_sbd = create_entity_object(MULTIPLE_SBDS)[0]
 
         sbd_mock = mock.MagicMock()
         sbd_mock.model_dump.return_value = valid_sbd
@@ -118,9 +118,7 @@ class TestSBDefinitionAPI:
         """Verifying that get_single_sbd_status_history API returns requested
         SBD status history"""
 
-        valid_sbd_status_history = create_entity_object(
-            "testfile_sample_sbd_status_history.json"
-        )
+        valid_sbd_status_history = create_entity_object(MULTIPLE_SBDS_STATUS)
 
         uow_mock = mock.MagicMock()
         uow_mock.sbds_status_history.query.return_value = valid_sbd_status_history
@@ -171,9 +169,7 @@ class TestSBDefinitionAPI:
     ):
         """Verifying that get_single_sbd_status API returns requested SBD status"""
 
-        valid_sbd_status = create_entity_object(
-            "testfile_sample_sbd_status_history.json"
-        )[0]
+        valid_sbd_status = create_entity_object(MULTIPLE_SBDS_STATUS)[0]
 
         uow_mock = mock.MagicMock()
         mock_oda.uow().__enter__.return_value = uow_mock
@@ -225,9 +221,7 @@ class TestSBDefinitionAPI:
     def test_put_sbd_history(self, mock_oda, client_put, create_entity_object):
         """Verifying that put_sbd_history updates the sbd status correctly"""
 
-        valid_sbd_status = create_entity_object(
-            "testfile_sample_sbd_status_history.json"
-        )[0]
+        valid_sbd_status = create_entity_object(MULTIPLE_SBDS_STATUS)[0]
 
         uow_mock = mock.MagicMock()
         uow_mock.sbds = ["sbd-t0001-20240702-00002"]
@@ -269,9 +263,7 @@ class TestSBDefinitionAPI:
     def test_put_sbd_history_version(self, mock_oda, client_put, create_entity_object):
         """Verifying that put_sbd_history updates the sbd status correctly"""
 
-        valid_sbd_status = create_entity_object(
-            "testfile_sample_sbd_status_history.json"
-        )[0]
+        valid_sbd_status = create_entity_object(MULTIPLE_SBDS_STATUS)[0]
 
         uow_mock = mock.MagicMock()
         uow_mock.sbds = ["sbd-t0001-20240702-00002"]
@@ -310,7 +302,7 @@ class TestSBDefinitionAPI:
         assert result.status_code == HTTPStatus.OK
 
         valid_put_sbd_history_version_response = create_entity_object(
-            "testfile_sample_sbd_status_history.json"
+            MULTIPLE_SBDS_STATUS
         )[0]
 
         uow_mock = mock.MagicMock()
