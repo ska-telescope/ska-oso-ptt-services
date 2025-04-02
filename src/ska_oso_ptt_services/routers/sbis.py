@@ -3,7 +3,6 @@ from typing import List
 
 from fastapi import APIRouter, Depends
 from ska_db_oda.persistence import oda
-from ska_db_oda.persistence.domain.query import QueryParams
 from ska_db_oda.rest.api import check_for_mismatch, get_qry_params
 from ska_db_oda.rest.model import ApiQueryParameters, ApiStatusQueryParameters
 from ska_oso_pdm.entity_status_history import SBIStatusHistory
@@ -35,10 +34,11 @@ def get_sbis_with_status(
     :return: All SBInstance present with status wrapped in a Response,
          or appropriate error Response
     """
-    maybe_qry_params = get_qry_params(query_params)
+
+    query_params = get_qry_params(query_params)
 
     with oda.uow() as uow:
-        sbis = uow.sbis.query(maybe_qry_params)
+        sbis = uow.sbis.query(query_params)
         sbi_with_status = [
             {
                 **sbi.model_dump(mode="json"),
@@ -153,12 +153,12 @@ def get_sbi_status_history(
     :return: The status history, SBIStatusHistory wrapped in a Response,
         or appropriate error Response
     """
-    if not isinstance(maybe_qry_params := get_qry_params(query_params), QueryParams):
-        return maybe_qry_params
+
+    query_params = get_qry_params(query_params)
 
     with oda.uow() as uow:
         sbis_status_history = uow.sbis_status_history.query(
-            maybe_qry_params, is_status_history=True
+            query_params, is_status_history=True
         )
         if not sbis_status_history:
             raise ODANotFound(identifier=query_params.entity_id)

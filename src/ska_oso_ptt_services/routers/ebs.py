@@ -3,7 +3,6 @@ from typing import List
 
 from fastapi import APIRouter, Depends
 from ska_db_oda.persistence import oda
-from ska_db_oda.persistence.domain.query import QueryParams
 from ska_db_oda.rest.api import check_for_mismatch, get_qry_params
 from ska_db_oda.rest.model import ApiQueryParameters, ApiStatusQueryParameters
 from ska_oso_pdm.entity_status_history import OSOEBStatusHistory
@@ -153,11 +152,12 @@ def get_eb_status_history(
     :return: The status history, OSOEBStatusHistory wrapped in a Response,
         or appropriate error Response
     """
-    if not isinstance(maybe_qry_params := get_qry_params(query_params), QueryParams):
-        return maybe_qry_params
+
+    query_params = get_qry_params(query_params)
+
     with oda.uow() as uow:
         ebs_status_history = uow.ebs_status_history.query(
-            maybe_qry_params, is_status_history=True
+            query_params, is_status_history=True
         )
         if not ebs_status_history:
             raise ODANotFound(identifier=query_params.entity_id)
