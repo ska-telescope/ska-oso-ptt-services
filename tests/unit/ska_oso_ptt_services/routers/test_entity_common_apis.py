@@ -41,6 +41,77 @@ def test_get_invalid_all_entity_with_status(entity_name, expected_response, clie
 
 
 @pytest.mark.parametrize(
+    "entity_name, entity_id, entity_data, expected_response",
+    [
+        (
+            "ebs",
+            "eb-mvp01-20240426-5003",
+            {
+                "current_status": "Fully Observed",
+                "previous_status": "Created",
+                "eb_ref": "eb-mvp01-20240426-5004",
+            },
+            {
+                "detail": "There is a mismatch between the identifier for the endpoint "
+                "eb-mvp01-20240426-5003 and the JSON payload eb-mvp01-20240426-5004"
+            },
+        ),
+        (
+            "sbis",
+            "sbi-mvp01-20240426-5003",
+            {
+                "current_status": "Executing",
+                "previous_status": "Created",
+                "sbi_ref": "sbi-mvp01-20240426-5004",
+            },
+            {
+                "detail": "There is a mismatch between the identifier for the endpoint "
+                "sbi-mvp01-20240426-5003 and the JSON payload sbi-mvp01-20240426-5004"
+            },
+        ),
+        (
+            "sbds",
+            "sbd-mvp01-20240426-5003",
+            {
+                "current_status": "Submitted",
+                "previous_status": "Draft",
+                "sbd_ref": "sbd-mvp01-20240426-5004",
+            },
+            {
+                "detail": "There is a mismatch between the identifier for the endpoint "
+                "sbd-mvp01-20240426-5003 and the JSON payload sbd-mvp01-20240426-5004"
+            },
+        ),
+        (
+            "prjs",
+            "prj-mvp01-20240426-5003",
+            {
+                "current_status": "Submitted",
+                "previous_status": "Draft",
+                "prj_ref": "prj-mvp01-20240426-5004",
+            },
+            {
+                "detail": "There is a mismatch between the identifier for the endpoint "
+                "prj-mvp01-20240426-5003 and the JSON payload prj-mvp01-20240426-5004"
+            },
+        ),
+    ],
+)
+def test_put_entity_mismatch_history(
+    entity_name, entity_id, entity_data, expected_response, client_put
+):
+    """Verifying that put_entity_mismatch_history throws error
+    if invalid data passed"""
+
+    result_response = client_put(
+        f"{API_PREFIX}/{entity_name}/{entity_id}/status", json=entity_data
+    )
+
+    assert_json_is_equal(result_response.json(), expected_response)
+    assert result_response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
+
+
+@pytest.mark.parametrize(
     "entity_name, entity_id, query_params, entity_data, expected_error",
     [
         (
