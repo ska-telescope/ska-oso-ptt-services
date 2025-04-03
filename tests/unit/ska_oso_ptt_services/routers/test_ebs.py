@@ -44,15 +44,13 @@ class TestExecutionBlockAPI:
             "created_after": "2022-03-28T15:43:53.971548+00:00",
         }
 
-        result = client_get(f"{API_PREFIX}/ebs", params=query_params)
+        result = client_get(f"{API_PREFIX}/ebs", params=query_params).json()
 
-        resultDict = result.json()
-
-        for res in resultDict:
+        for res in result["result_data"]:
             del res["metadata"]["pdm_version"]
 
-        assert_json_is_equal(resultDict, valid_ebs)
-        assert result.status_code == HTTPStatus.OK
+        assert_json_is_equal(result["result_data"], valid_ebs)
+        assert result["result_code"] == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
     @mock.patch("ska_oso_ptt_services.routers.ebs.common_get_entity_status")
@@ -72,12 +70,12 @@ class TestExecutionBlockAPI:
         mock_get_eb_status().current_status = "Fully Observed"
         mock_oda.uow().__enter__.return_value = uow_mock
 
-        result = client_get(f"{API_PREFIX}/ebs/eb-mvp01-20240426-5004")
+        result = client_get(f"{API_PREFIX}/ebs/eb-mvp01-20240426-5004").json()
 
         exclude_paths = ["root['metadata']['pdm_version']"]
 
-        assert_json_is_equal(result.json(), valid_eb_with_status, exclude_paths)
-        assert result.status_code == HTTPStatus.OK
+        assert_json_is_equal(result["result_data"], valid_eb_with_status, exclude_paths)
+        assert result["result_code"] == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
     def test_get_single_eb_with_invalid_status(self, mock_oda, client_get):
@@ -90,14 +88,14 @@ class TestExecutionBlockAPI:
         uow_mock.ebs.get.side_effect = ODANotFound(identifier=invalid_eb_id)
         mock_oda.uow().__enter__.return_value = uow_mock
 
-        result = client_get(f"{API_PREFIX}/ebs/{invalid_eb_id}")
+        result = client_get(f"{API_PREFIX}/ebs/{invalid_eb_id}").json()
 
         expected_error_message = {
             "detail": (f"The requested identifier {invalid_eb_id} could not be found.")
         }
 
-        assert_json_is_equal(result.json(), expected_error_message)
-        assert result.status_code == HTTPStatus.NOT_FOUND
+        assert_json_is_equal(result["result_data"], expected_error_message)
+        assert result["result_code"] == HTTPStatus.NOT_FOUND
 
     @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
     def test_get_single_eb_status_history(
@@ -116,16 +114,16 @@ class TestExecutionBlockAPI:
         result = client_get(
             f"{API_PREFIX}/ebs/status/history",
             params={"entity_id": "eb-mvp01-20240426-5004", "eb_version": "1"},
-        )
+        ).json()
 
         assert_json_is_equal(
-            result.json(),
+            result["result_data"],
             valid_eb_status_history,
             exclude_regex_paths={
                 r"root\[\d+\]\['metadata'\]\['(pdm_version|version)'\]"
             },
         )
-        assert result.status_code == HTTPStatus.OK
+        assert result["result_code"] == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
     def test_get_single_invalid_eb_status_history(self, mock_oda, client_get):
@@ -140,14 +138,14 @@ class TestExecutionBlockAPI:
         result = client_get(
             f"{API_PREFIX}/ebs/status/history",
             params={"entity_id": "eb-t0001-00100", "eb_version": "1"},
-        )
+        ).json()
 
         error = {
             "detail": "The requested identifier eb-t0001-00100 could not be found."
         }
 
-        assert_json_is_equal(result.json(), error)
-        assert result.status_code == HTTPStatus.NOT_FOUND
+        assert_json_is_equal(result["result_data"], error)
+        assert result["result_code"] == HTTPStatus.NOT_FOUND
 
     @mock.patch("ska_oso_ptt_services.routers.ebs.common_get_entity_status")
     @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
@@ -166,16 +164,16 @@ class TestExecutionBlockAPI:
         result = client_get(
             f"{API_PREFIX}/ebs/eb-mvp01-20240426-5004/status",
             params={"eb_version": "1"},
-        )
+        ).json()
 
         exclude_paths = ["root['metadata']"]
 
         assert_json_is_equal(
-            result.json(),
+            result["result_data"],
             valid_eb_status,
             exclude_paths=exclude_paths,
         )
-        assert result.status_code == HTTPStatus.OK
+        assert result["result_code"] == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.ebs.common_get_entity_status")
     @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
@@ -193,7 +191,7 @@ class TestExecutionBlockAPI:
 
         result = client_get(
             f"{API_PREFIX}/ebs/{invalid_eb_id}/status", params={"eb_version": "1"}
-        )
+        ).json()
 
         error = {
             "detail": (
@@ -202,8 +200,8 @@ class TestExecutionBlockAPI:
             )
         }
 
-        assert_json_is_equal(result.json(), error)
-        assert result.status_code == HTTPStatus.NOT_FOUND
+        assert_json_is_equal(result["result_data"], error)
+        assert result["result_code"] == HTTPStatus.NOT_FOUND
 
     @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
     def test_put_eb_history(self, mock_oda, client_put, create_entity_object):
@@ -238,11 +236,11 @@ class TestExecutionBlockAPI:
 
         result = client_put(
             f"{API_PREFIX}/ebs/eb-mvp01-20240426-5004/status", json=data
-        )
+        ).json()
 
         assert_json_is_equal(
-            result.json(),
+            result["result_data"],
             valid_eb_status,
             exclude_paths,
         )
-        assert result.status_code == HTTPStatus.OK
+        assert result["result_code"] == HTTPStatus.OK

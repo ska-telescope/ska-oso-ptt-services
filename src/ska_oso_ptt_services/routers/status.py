@@ -1,11 +1,12 @@
 import logging
+from http import HTTPStatus
 
 from fastapi import APIRouter
 
 from ska_oso_ptt_services.common.constant import entity_map
 from ska_oso_ptt_services.common.error_handling import EntityNotFound
-from ska_oso_ptt_services.common.utils import get_responses
-from ska_oso_ptt_services.models.models import EntityStatusResponse
+from ska_oso_ptt_services.common.utils import convert_to_response_object, get_responses
+from ska_oso_ptt_services.models.models import ApiResponse, EntityStatusResponse
 
 LOGGER = logging.getLogger(__name__)
 
@@ -16,10 +17,10 @@ status_router = APIRouter(prefix="/status")
     "/get_entity",
     tags=["Status"],
     summary="Get status dictionary by the entity parameter",
-    response_model=EntityStatusResponse,
-    responses=get_responses(EntityStatusResponse),
+    response_model=ApiResponse[EntityStatusResponse],
+    responses=get_responses(ApiResponse[EntityStatusResponse]),
 )
-def get_entity_status(entity_name: str) -> EntityStatusResponse:
+def get_entity_status(entity_name: str) -> ApiResponse[EntityStatusResponse]:
     """
     Function that returns the status dictionary for a given entity type.
 
@@ -35,9 +36,14 @@ def get_entity_status(entity_name: str) -> EntityStatusResponse:
 
     entity_class = entity_map.get(entity_name.lower())
     if not entity_class:
-        raise EntityNotFound(entity=entity_name)
+        return convert_to_response_object(
+            EntityNotFound(entity=entity_name).message, result_code=HTTPStatus.NOT_FOUND
+        )
 
-    return EntityStatusResponse(
-        entity_type=entity_name.lower(),
-        statuses={status.name: status.value for status in entity_class},
+    return convert_to_response_object(
+        EntityStatusResponse(
+            entity_type=entity_name.lower(),
+            statuses={status.name: status.value for status in entity_class},
+        ),
+        result_code=HTTPStatus.OK,
     )

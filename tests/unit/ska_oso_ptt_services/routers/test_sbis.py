@@ -54,7 +54,7 @@ class TestSBInstanceAPI:
             del res["metadata"]["pdm_version"]
 
         assert_json_is_equal(resultDict, valid_sbis)
-        assert result.status_code == HTTPStatus.OK
+        assert result["result_code"] == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
     @mock.patch("ska_oso_ptt_services.routers.sbis.common_get_entity_status")
@@ -83,7 +83,7 @@ class TestSBInstanceAPI:
             valid_sbi,
             exclude_paths,
         )
-        assert result.status_code == HTTPStatus.OK
+        assert result["result_code"] == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
     def test_get_single_sbi_with_invalid_status(self, mock_oda, client_get):
@@ -103,7 +103,7 @@ class TestSBInstanceAPI:
         }
 
         assert_json_is_equal(result.json(), expected_error_message)
-        assert result.status_code == HTTPStatus.NOT_FOUND
+        assert result["result_code"] == HTTPStatus.NOT_FOUND
 
     @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
     def test_get_single_sbi_status_history(
@@ -130,7 +130,7 @@ class TestSBInstanceAPI:
                 r"root\[\d+\]\['metadata'\]\['(pdm_version|version)'\]"
             },
         )
-        assert result.status_code == HTTPStatus.OK
+        assert result["result_code"] == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
     def test_get_single_invalid_sbi_status_history(self, mock_oda, client_get):
@@ -152,7 +152,7 @@ class TestSBInstanceAPI:
         }
 
         assert_json_is_equal(result.json(), error)
-        assert result.status_code == HTTPStatus.NOT_FOUND
+        assert result["result_code"] == HTTPStatus.NOT_FOUND
 
     @mock.patch("ska_oso_ptt_services.routers.sbis.common_get_entity_status")
     @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
@@ -179,7 +179,7 @@ class TestSBInstanceAPI:
             valid_sbi_status,
             exclude_paths,
         )
-        assert result.status_code == HTTPStatus.OK
+        assert result["result_code"] == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.sbis.common_get_entity_status")
     @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
@@ -207,7 +207,7 @@ class TestSBInstanceAPI:
         }
 
         assert_json_is_equal(result.json(), error)
-        assert result.status_code == HTTPStatus.NOT_FOUND
+        assert result["result_code"] == HTTPStatus.NOT_FOUND
 
     @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
     def test_put_sbi_history(self, mock_oda, client_put, create_entity_object):
@@ -250,4 +250,4 @@ class TestSBInstanceAPI:
             valid_sbi_status_history[0],
             exclude_paths,
         )
-        assert result.status_code == HTTPStatus.OK
+        assert result["result_code"] == HTTPStatus.OK

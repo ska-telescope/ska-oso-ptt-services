@@ -54,7 +54,7 @@ class TestProjectAPI:
             del res["metadata"]["pdm_version"]
 
         assert_json_is_equal(resultDict, valid_prjs)
-        assert result.status_code == HTTPStatus.OK
+        assert result["result_code"] == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.prjs.oda")
     @mock.patch("ska_oso_ptt_services.routers.prjs.common_get_entity_status")
@@ -85,7 +85,7 @@ class TestProjectAPI:
             valid_prj_with_status,
             exclude_paths,
         )
-        assert result.status_code == HTTPStatus.OK
+        assert result["result_code"] == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.prjs.oda")
     def test_get_single_prj_with_invalid_status(self, mock_oda, client_get):
@@ -105,7 +105,7 @@ class TestProjectAPI:
         }
 
         assert_json_is_equal(result.json(), expected_error_message)
-        assert result.status_code == HTTPStatus.NOT_FOUND
+        assert result["result_code"] == HTTPStatus.NOT_FOUND
 
     @mock.patch("ska_oso_ptt_services.routers.prjs.oda")
     def test_get_single_prj_status_history(
@@ -133,7 +133,7 @@ class TestProjectAPI:
             valid_prj_status_history,
             exclude_regex_paths=exclude_regex_paths,
         )
-        assert result.status_code == HTTPStatus.OK
+        assert result["result_code"] == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.prjs.oda")
     def test_get_single_invalid_prj_status_history(self, mock_oda, client_get):
@@ -154,7 +154,7 @@ class TestProjectAPI:
         }
 
         assert_json_is_equal(result.json(), error)
-        assert result.status_code == HTTPStatus.NOT_FOUND
+        assert result["result_code"] == HTTPStatus.NOT_FOUND
 
     @mock.patch("ska_oso_ptt_services.routers.prjs.common_get_entity_status")
     @mock.patch("ska_oso_ptt_services.routers.prjs.oda")
@@ -182,7 +182,7 @@ class TestProjectAPI:
             valid_prj_status,
             exclude_paths,
         )
-        assert result.status_code == HTTPStatus.OK
+        assert result["result_code"] == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.prjs.common_get_entity_status")
     @mock.patch("ska_oso_ptt_services.routers.prjs.oda")
@@ -210,7 +210,7 @@ class TestProjectAPI:
         }
 
         assert_json_is_equal(result.json(), error)
-        assert result.status_code == HTTPStatus.NOT_FOUND
+        assert result["result_code"] == HTTPStatus.NOT_FOUND
 
     @mock.patch("ska_oso_ptt_services.routers.prjs.oda")
     def test_put_prj_history(self, mock_oda, client_put, create_entity_object):
@@ -252,7 +252,7 @@ class TestProjectAPI:
             valid_prj_status,
             exclude_paths,
         )
-        assert result.status_code == HTTPStatus.OK
+        assert result["result_code"] == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.prjs.oda")
     def test_put_prj_history_with_two_version(
@@ -296,7 +296,7 @@ class TestProjectAPI:
             valid_prj_status,
             exclude_paths,
         )
-        assert result.status_code == HTTPStatus.OK
+        assert result["result_code"] == HTTPStatus.OK
 
         valid_put_prj_history_version_response = create_entity_object(
             MULTIPLE_PRJS_STATUS
@@ -338,4 +338,4 @@ class TestProjectAPI:
             valid_put_prj_history_version_response,
             exclude_paths,
         )
-        assert result.status_code == HTTPStatus.OK
+        assert result["result_code"] == HTTPStatus.OK

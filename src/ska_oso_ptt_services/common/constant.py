@@ -14,3 +14,6 @@ entity_map: Dict[str, EnumMeta] = {
     "prj": ProjectStatus,
     "sbd": SBDStatus,
 }
+
+API_RESPONSE_RESULT_STATUS_SUCCESS = "success"
+API_RESPONSE_RESULT_STATUS_FAILED = "failed"

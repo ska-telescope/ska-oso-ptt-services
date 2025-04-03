@@ -224,4 +224,4 @@ def test_put_invalid_all_entity_history(
     )
 
     assert_json_is_equal(result.json(), expected_error)
-    assert result.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
+    assert result["result_code"] == HTTPStatus.UNPROCESSABLE_ENTITY

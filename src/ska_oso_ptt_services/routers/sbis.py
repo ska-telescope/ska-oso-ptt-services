@@ -1,15 +1,20 @@
 import logging
-from typing import List
+from http import HTTPStatus
 
 from fastapi import APIRouter, Depends
 from ska_db_oda.persistence import oda
-from ska_db_oda.rest.api import check_for_mismatch, get_qry_params
+from ska_db_oda.rest.api import get_qry_params
 from ska_db_oda.rest.model import ApiQueryParameters, ApiStatusQueryParameters
 from ska_oso_pdm.entity_status_history import SBIStatusHistory
 
 from ska_oso_ptt_services.common.error_handling import ODANotFound
-from ska_oso_ptt_services.common.utils import common_get_entity_status, get_responses
-from ska_oso_ptt_services.models.models import SBInstanceStatusModel
+from ska_oso_ptt_services.common.utils import (
+    check_entity_id_mismatch,
+    common_get_entity_status,
+    convert_to_response_object,
+    get_responses,
+)
+from ska_oso_ptt_services.models.models import ApiResponse, SBInstanceStatusModel
 
 LOGGER = logging.getLogger(__name__)
 
@@ -21,12 +26,12 @@ sbi_router = APIRouter(prefix="/sbis")
     tags=["SBI"],
     summary="Get All SB Instance with status appended, filter by the query parameter"
     " like created_before, created_after and user name",
-    response_model=List[SBInstanceStatusModel],
-    responses=get_responses(List[SBInstanceStatusModel]),
+    response_model=ApiResponse[SBInstanceStatusModel],
+    responses=get_responses(ApiResponse[SBInstanceStatusModel]),
 )
 def get_sbis_with_status(
     query_params: ApiQueryParameters = Depends(),
-) -> List[SBInstanceStatusModel]:
+) -> ApiResponse[SBInstanceStatusModel]:
     """
     Function that a GET /sbis request is routed to.
 
@@ -50,17 +55,17 @@ def get_sbis_with_status(
             }
             for sbi in sbis
         ]
-    return sbi_with_status
+    return convert_to_response_object(sbi_with_status, result_code=HTTPStatus.OK)
 
 
 @sbi_router.get(
     "/{sbi_id}",
     tags=["SBI"],
     summary="Get specific SB Instance by identifier with status appended",
-    response_model=SBInstanceStatusModel,
-    responses=get_responses(SBInstanceStatusModel),
+    response_model=ApiResponse[SBInstanceStatusModel],
+    responses=get_responses(ApiResponse[SBInstanceStatusModel]),
 )
-def get_sbi_with_status(sbi_id: str) -> SBInstanceStatusModel:
+def get_sbi_with_status(sbi_id: str) -> ApiResponse[SBInstanceStatusModel]:
     """
     Function that a GET /sbis/<sbi_id> request is routed to.
 
@@ -69,6 +74,12 @@ def get_sbi_with_status(sbi_id: str) -> SBInstanceStatusModel:
          or appropriate error Response
     """
     with oda.uow() as uow:
+
+        if sbi_id not in uow.sbis:
+            return convert_to_response_object(
+                ODANotFound(identifier=sbi_id).message, result_code=HTTPStatus.NOT_FOUND
+            )
+
         sbi = uow.sbis.get(sbi_id)
         sbi_json = sbi.model_dump(mode="json")
         sbi_json["status"] = common_get_entity_status(
@@ -76,17 +87,17 @@ def get_sbi_with_status(sbi_id: str) -> SBInstanceStatusModel:
             entity_id=sbi_id,
             entity_version=sbi_json["metadata"]["version"],
         ).current_status
-    return sbi_json
+    return convert_to_response_object(sbi_json, result_code=HTTPStatus.OK)
 
 
 @sbi_router.get(
     "/{sbi_id}/status",
     tags=["SBI"],
     summary="Get SB Instance status by the identifier",
-    response_model=SBIStatusHistory,
-    responses=get_responses(SBIStatusHistory),
+    response_model=ApiResponse[SBIStatusHistory],
+    responses=get_responses(ApiResponse[SBIStatusHistory]),
 )
-def get_sbi_status(sbi_id: str, version: int = None):
+def get_sbi_status(sbi_id: str, version: int = None) -> ApiResponse[SBIStatusHistory]:
     """
     Function that a GET /sbi/<sbi_id>/status request is routed to.
     This method is used to GET the current status for the given sbi_id
@@ -97,24 +108,30 @@ def get_sbi_status(sbi_id: str, version: int = None):
         Response, or appropriate error Response
     """
     with oda.uow() as uow:
+
+        if sbi_id not in uow.sbis:
+            return convert_to_response_object(
+                ODANotFound(identifier=sbi_id).message, result_code=HTTPStatus.NOT_FOUND
+            )
+
         sbi_status = common_get_entity_status(
             entity_object=uow.sbis_status_history,
             entity_id=sbi_id,
             entity_version=version,
         )
-    return sbi_status
+    return convert_to_response_object(sbi_status, result_code=HTTPStatus.OK)
 
 
 @sbi_router.put(
     "/{sbi_id}/status",
     tags=["SBI"],
     summary="Update specific SB Instance status by identifier",
-    response_model=SBIStatusHistory,
-    responses=get_responses(SBIStatusHistory),
+    response_model=ApiResponse[SBIStatusHistory],
+    responses=get_responses(ApiResponse[SBIStatusHistory]),
 )
 def put_sbi_history(
     sbi_id: str, sbi_status_history: SBIStatusHistory
-) -> SBIStatusHistory:
+) -> ApiResponse[SBIStatusHistory]:
     """
     Function that a PUT /sbis/<sbi_id>/status request is routed to.
 
@@ -123,28 +140,35 @@ def put_sbi_history(
     :return: The SBInstance wrapped in a Response, or appropriate error Response
     """
 
-    if response := check_for_mismatch(sbi_id, sbi_status_history.sbi_ref):
+    response = check_entity_id_mismatch(sbi_id, sbi_status_history.sbi_ref)
+
+    if response:
+
         return response
 
     with oda.uow() as uow:
+
         if sbi_id not in uow.sbis:
-            raise ODANotFound(identifier=sbi_id)
+
+            return convert_to_response_object(
+                ODANotFound(identifier=sbi_id).message, result_code=HTTPStatus.NOT_FOUND
+            )
 
         persisted_sbi = uow.sbis_status_history.add(sbi_status_history)
         uow.commit()
-    return persisted_sbi
+    return convert_to_response_object(persisted_sbi, result_code=HTTPStatus.OK)
 
 
 @sbi_router.get(
     "/status/history",
     tags=["SBI"],
     summary="Get specific SB Instance status history by identifier and version",
-    response_model=List[SBIStatusHistory],
-    responses=get_responses(List[SBIStatusHistory]),
+    response_model=ApiResponse[SBIStatusHistory],
+    responses=get_responses(ApiResponse[SBIStatusHistory]),
 )
 def get_sbi_status_history(
     query_params: ApiStatusQueryParameters = Depends(),
-) -> SBIStatusHistory:
+) -> ApiResponse[SBIStatusHistory]:
     """
     Function that a GET /status/history request is routed to.
     This method is used to GET status history for the given entity
@@ -157,10 +181,15 @@ def get_sbi_status_history(
     query_params = get_qry_params(query_params)
 
     with oda.uow() as uow:
+
         sbis_status_history = uow.sbis_status_history.query(
             query_params, is_status_history=True
         )
         if not sbis_status_history:
-            raise ODANotFound(identifier=query_params.entity_id)
 
-    return sbis_status_history
+            return convert_to_response_object(
+                ODANotFound(identifier=query_params.entity_id).message,
+                result_code=HTTPStatus.NOT_FOUND,
+            )
+
+    return convert_to_response_object(sbis_status_history, result_code=HTTPStatus.OK)
