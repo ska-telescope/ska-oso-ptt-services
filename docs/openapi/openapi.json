@@ -5,14 +5,726 @@
     "version": "0.1.0"
   },
   "paths": {
-    "/ska-oso-ptt-services/ptt/api/v0/ebs/": {
+    "/ska-oso-ptt-services/ptt/api/v0/sbds": {
+      "get": {
+        "tags": [
+          "SBD"
+        ],
+        "summary": "Get All SB Definition with status appended, filter by the query parameter like created_before, created_after and user namer",
+        "description": "Function that a GET /sbds request is routed to.\n\n:param query_params: Parameters to query the ODA by.\n:return: All SBDefinitions present with status wrapped in a Response, or appropriate\n error Response",
+        "operationId": "get_sbds_with_status_ska_oso_ptt_services_ptt_api_v0_sbds_get",
+        "parameters": [
+          {
+            "name": "user",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "User"
+            }
+          },
+          {
+            "name": "match_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/MatchType",
+              "default": "equals"
+            }
+          },
+          {
+            "name": "query_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/DateQueryType"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Query Type"
+            }
+          },
+          {
+            "name": "created_before",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Created Before"
+            }
+          },
+          {
+            "name": "created_after",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Created After"
+            }
+          },
+          {
+            "name": "last_modified_before",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Last Modified Before"
+            }
+          },
+          {
+            "name": "last_modified_after",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Last Modified After"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SBDefinitionStatusModel-Input"
+                  },
+                  "title": "Response 200 Get Sbds With Status Ska Oso Ptt Services Ptt Api V0 Sbds Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ska-oso-ptt-services/ptt/api/v0/sbds/{sbd_id}": {
+      "get": {
+        "tags": [
+          "SBD"
+        ],
+        "summary": "Get specific SB Definition by identifier with status appended",
+        "description": "Function that a GET /sbds/\u003Csbd_id\u003E request is routed to.\n\n:param sbd_id: Requested identifier from the path parameter\n:return: The SBDefinition with status wrapped in a Response, or appropriate error\n Response",
+        "operationId": "get_sbd_with_status_ska_oso_ptt_services_ptt_api_v0_sbds__sbd_id__get",
+        "parameters": [
+          {
+            "name": "sbd_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Sbd Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SBDefinitionStatusModel-Input"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ska-oso-ptt-services/ptt/api/v0/sbds/{sbd_id}/status": {
+      "get": {
+        "tags": [
+          "SBD"
+        ],
+        "summary": "Get specific SB Definition status by the identifier",
+        "description": "Function that a GET /sbds/\u003Csbd_id\u003E/status request is routed to.\nThis method is used to GET the current status for the given sbd_id\n\n:param sbd_id: Requested identifier from the path parameter\n:param version: Requested identifier from the path parameter\n:return: The current entity status, SBDStatusHistory wrapped in a Response, or\nappropriate error Response",
+        "operationId": "get_sbd_status_ska_oso_ptt_services_ptt_api_v0_sbds__sbd_id__status_get",
+        "parameters": [
+          {
+            "name": "sbd_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Sbd Id"
+            }
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "Version"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SBDStatusHistory-Input"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "SBD"
+        ],
+        "summary": "Update specific SB Definition status by identifier",
+        "description": "Function that a PUT /sbds/\u003Csbd_id\u003E/status request is routed to.\n\n:param sbd_id: Requested identifier from the path parameter\n:param sbd_status_history: Object of SBDStatusHistory\n:return: The SBDefinition wrapped in a Response, or appropriate error Response",
+        "operationId": "put_sbd_history_ska_oso_ptt_services_ptt_api_v0_sbds__sbd_id__status_put",
+        "parameters": [
+          {
+            "name": "sbd_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Sbd Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SBDStatusHistory-Input"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SBDStatusHistory-Input"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ska-oso-ptt-services/ptt/api/v0/sbds/status/history": {
+      "get": {
+        "tags": [
+          "SBD"
+        ],
+        "summary": "Get specific SB Definition status history by identifier and version",
+        "description": "Function that a GET /status/history request is routed to.\nThis method is used to GET status history for the given entity\n\n:param query_params: Parameters to query the ODA by.\n:return: The status history, SBDStatusHistory wrapped in a Response, or appropriate\n error Response",
+        "operationId": "get_sbd_status_history_ska_oso_ptt_services_ptt_api_v0_sbds_status_history_get",
+        "parameters": [
+          {
+            "name": "entity_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Entity Id"
+            }
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Version"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SBDStatusHistory-Input"
+                  },
+                  "title": "Response 200 Get Sbd Status History Ska Oso Ptt Services Ptt Api V0 Sbds Status History Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ska-oso-ptt-services/ptt/api/v0/sbis": {
+      "get": {
+        "tags": [
+          "SBI"
+        ],
+        "summary": "Get All SB Instance with status appended, filter by the query parameter like created_before, created_after and user name",
+        "description": "Function that a GET /sbis request is routed to.\n\n:param query_params: Parameters to query the ODA by.\n:return: All SBInstance present with status wrapped in a Response,\n     or appropriate error Response",
+        "operationId": "get_sbis_with_status_ska_oso_ptt_services_ptt_api_v0_sbis_get",
+        "parameters": [
+          {
+            "name": "user",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "User"
+            }
+          },
+          {
+            "name": "match_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/MatchType",
+              "default": "equals"
+            }
+          },
+          {
+            "name": "query_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/DateQueryType"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Query Type"
+            }
+          },
+          {
+            "name": "created_before",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Created Before"
+            }
+          },
+          {
+            "name": "created_after",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Created After"
+            }
+          },
+          {
+            "name": "last_modified_before",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Last Modified Before"
+            }
+          },
+          {
+            "name": "last_modified_after",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Last Modified After"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SBInstanceStatusModel-Input"
+                  },
+                  "title": "Response 200 Get Sbis With Status Ska Oso Ptt Services Ptt Api V0 Sbis Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ska-oso-ptt-services/ptt/api/v0/sbis/{sbi_id}": {
+      "get": {
+        "tags": [
+          "SBI"
+        ],
+        "summary": "Get specific SB Instance by identifier with status appended",
+        "description": "Function that a GET /sbis/\u003Csbi_id\u003E request is routed to.\n\n:param sbd_id: Requested identifier from the path parameter\n:return: The SBInstance with status wrapped in a Response,\n     or appropriate error Response",
+        "operationId": "get_sbi_with_status_ska_oso_ptt_services_ptt_api_v0_sbis__sbi_id__get",
+        "parameters": [
+          {
+            "name": "sbi_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Sbi Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SBInstanceStatusModel-Input"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ska-oso-ptt-services/ptt/api/v0/sbis/{sbi_id}/status": {
+      "get": {
+        "tags": [
+          "SBI"
+        ],
+        "summary": "Get SB Instance status by the identifier",
+        "description": "Function that a GET /sbi/\u003Csbi_id\u003E/status request is routed to.\nThis method is used to GET the current status for the given sbi_id\n\n:param sbi_id: Requested identifier from the path parameter\n:param version: Requested identifier from the path parameter\n:return: The current entity status,SBIStatusHistory wrapped in a\n    Response, or appropriate error Response",
+        "operationId": "get_sbi_status_ska_oso_ptt_services_ptt_api_v0_sbis__sbi_id__status_get",
+        "parameters": [
+          {
+            "name": "sbi_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Sbi Id"
+            }
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "title": "Version"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SBIStatusHistory-Input"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "SBI"
+        ],
+        "summary": "Update specific SB Instance status by identifier",
+        "description": "Function that a PUT /sbis/\u003Csbi_id\u003E/status request is routed to.\n\n:param sbi_id: Requested identifier from the path parameter\n:param sbi_status_history: Object of SBIStatusHistory\n:return: The SBInstance wrapped in a Response, or appropriate error Response",
+        "operationId": "put_sbi_history_ska_oso_ptt_services_ptt_api_v0_sbis__sbi_id__status_put",
+        "parameters": [
+          {
+            "name": "sbi_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Sbi Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SBIStatusHistory-Input"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SBIStatusHistory-Input"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ska-oso-ptt-services/ptt/api/v0/sbis/status/history": {
+      "get": {
+        "tags": [
+          "SBI"
+        ],
+        "summary": "Get specific SB Instance status history by identifier and version",
+        "description": "Function that a GET /status/history request is routed to.\nThis method is used to GET status history for the given entity\n\n:param query_params: Parameters to query the ODA by.\n:return: The status history, SBIStatusHistory wrapped in a Response,\n    or appropriate error Response",
+        "operationId": "get_sbi_status_history_ska_oso_ptt_services_ptt_api_v0_sbis_status_history_get",
+        "parameters": [
+          {
+            "name": "entity_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Entity Id"
+            }
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Version"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SBIStatusHistory-Input"
+                  },
+                  "title": "Response 200 Get Sbi Status History Ska Oso Ptt Services Ptt Api V0 Sbis Status History Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ska-oso-ptt-services/ptt/api/v0/ebs": {
       "get": {
         "tags": [
           "EB"
         ],
         "summary": "Get All Execution Block with status appended, filter by the query parameter like created_before, created_after and user name",
         "description": "Function that a GET /ebs request is routed to.\n\n:param query_params: Parameters to query the ODA by.\n:return: All ExecutionBlocks present with status wrapped in a Response,\n     or appropriate error Response",
-        "operationId": "get_ebs_with_status_ska_oso_ptt_services_ptt_api_v0_ebs__get",
+        "operationId": "get_ebs_with_status_ska_oso_ptt_services_ptt_api_v0_ebs_get",
         "parameters": [
           {
             "name": "user",
@@ -134,7 +846,7 @@
                   "items": {
                     "$ref": "#/components/schemas/EBStatusModel-Input"
                   },
-                  "title": "Response 200 Get Ebs With Status Ska Oso Ptt Services Ptt Api V0 Ebs  Get"
+                  "title": "Response 200 Get Ebs With Status Ska Oso Ptt Services Ptt Api V0 Ebs Get"
                 }
               }
             }
@@ -344,6 +1056,405 @@
                     "$ref": "#/components/schemas/OSOEBStatusHistory-Input"
                   },
                   "title": "Response 200 Get Eb Status History Ska Oso Ptt Services Ptt Api V0 Ebs Status History Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ska-oso-ptt-services/ptt/api/v0/prjs": {
+      "get": {
+        "tags": [
+          "PRJ"
+        ],
+        "summary": "Get All Project with status appended, filter by the query parameter like created_before, created_after and user name",
+        "description": "Function that a GET /prjs request is routed to.\n\n:param query_params: Parameters to query the ODA by.\n:return: All Project present with status wrapped in a Response,\n     or appropriate error Response",
+        "operationId": "get_prjs_with_status_ska_oso_ptt_services_ptt_api_v0_prjs_get",
+        "parameters": [
+          {
+            "name": "user",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "User"
+            }
+          },
+          {
+            "name": "match_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/MatchType",
+              "default": "equals"
+            }
+          },
+          {
+            "name": "query_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/DateQueryType"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Query Type"
+            }
+          },
+          {
+            "name": "created_before",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Created Before"
+            }
+          },
+          {
+            "name": "created_after",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Created After"
+            }
+          },
+          {
+            "name": "last_modified_before",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Last Modified Before"
+            }
+          },
+          {
+            "name": "last_modified_after",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Last Modified After"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectStatusModel-Input"
+                  },
+                  "title": "Response 200 Get Prjs With Status Ska Oso Ptt Services Ptt Api V0 Prjs Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ska-oso-ptt-services/ptt/api/v0/prjs/{prj_id}": {
+      "get": {
+        "tags": [
+          "PRJ"
+        ],
+        "summary": "Get specific Project by identifier with status appended",
+        "description": "Function that a GET /prjs/\u003Cprj_id\u003E request is routed to.\n\n:param prj_id: Requested identifier from the path parameter\n:return: The Project with status wrapped in a Response,\n    or appropriate error Response",
+        "operationId": "get_prj_with_status_ska_oso_ptt_services_ptt_api_v0_prjs__prj_id__get",
+        "parameters": [
+          {
+            "name": "prj_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Prj Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectStatusModel-Input"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ska-oso-ptt-services/ptt/api/v0/prjs/{prj_id}/status": {
+      "get": {
+        "tags": [
+          "PRJ"
+        ],
+        "summary": "Get specific Project status by the identifier",
+        "description": "Function that a GET /prjs/\u003Cprj_id\u003E/status request is routed to.\nThis method is used to GET the current status for the given prj_id\n\n:param prj_id: Requested identifier from the path parameter\n:param version: Requested identifier from the path parameter\n:return: The current entity status,ProjectStatusHistory wrapped in a\n    Response, or appropriate error Response",
+        "operationId": "get_prj_status_ska_oso_ptt_services_ptt_api_v0_prjs__prj_id__status_get",
+        "parameters": [
+          {
+            "name": "prj_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Prj Id"
+            }
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "title": "Version"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectStatusHistory-Input"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "PRJ"
+        ],
+        "summary": "Update specific Project status by identifier",
+        "description": "Function that a PUT /prjs/\u003Cprj_id\u003E/status request is routed to.\n\n:param prj_id: Requested identifier from the path parameter\n:param prj_status_history: Object of ProjectStatusHistory\n:return: The Project wrapped in a Response, or appropriate error Response",
+        "operationId": "put_prj_history_ska_oso_ptt_services_ptt_api_v0_prjs__prj_id__status_put",
+        "parameters": [
+          {
+            "name": "prj_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Prj Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectStatusHistory-Input"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectStatusHistory-Input"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ska-oso-ptt-services/ptt/api/v0/prjs/status/history": {
+      "get": {
+        "tags": [
+          "PRJ"
+        ],
+        "summary": "Get specific Project status history by identifier and version",
+        "description": "Function that a GET /status/history request is routed to.\nThis method is used to GET status history for the given entity\n\n:param query_params: Parameters to query the ODA by.\n:return: The status history, ProjectStatusHistory wrapped in a Response,\n    or appropriate error Response",
+        "operationId": "get_prj_status_history_ska_oso_ptt_services_ptt_api_v0_prjs_status_history_get",
+        "parameters": [
+          {
+            "name": "entity_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Entity Id"
+            }
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Version"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectStatusHistory-Input"
+                  },
+                  "title": "Response 200 Get Prj Status History Ska Oso Ptt Services Ptt Api V0 Prjs Status History Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ska-oso-ptt-services/ptt/api/v0/status/get_entity": {
+      "get": {
+        "tags": [
+          "Status"
+        ],
+        "summary": "Get status dictionary by the entity parameter",
+        "description": "Function that returns the status dictionary for a given entity type.\n\nArgs:\n    entity_name: The name of the entity type (sbi, eb, prj, or sbd)\n\nReturns:\n    Tuple containing dictionary of status names and values, and HTTP status code\n\nRaises:\n    ValueError: If an invalid entity name is provided",
+        "operationId": "get_entity_status_ska_oso_ptt_services_ptt_api_v0_status_get_entity_get",
+        "parameters": [
+          {
+            "name": "entity_name",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Entity Name"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EntityStatusResponse"
                 }
               }
             }
@@ -1016,17 +2127,28 @@
       },
       "EntityStatusResponse": {
         "properties": {
-          "str": {
+          "entity_type": {
+            "type": "string",
+            "enum": [
+              "sbi",
+              "eb",
+              "prj",
+              "sbd"
+            ],
+            "title": "Entity Type"
+          },
+          "statuses": {
             "additionalProperties": {
               "type": "string"
             },
             "type": "object",
-            "title": "Str"
+            "title": "Statuses"
           }
         },
         "type": "object",
         "required": [
-          "str"
+          "entity_type",
+          "statuses"
         ],
         "title": "EntityStatusResponse"
       },
