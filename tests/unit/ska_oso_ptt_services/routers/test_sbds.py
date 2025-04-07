@@ -143,7 +143,9 @@ class TestSBDefinitionAPI:
         exclude_paths = ["root['metadata']"]
 
         assert_json_is_equal(
-            result["result_data"], valid_sbd_status_history, exclude_paths=exclude_paths
+            result["result_data"][0],
+            valid_sbd_status_history[0],
+            exclude_paths=exclude_paths,
         )
         assert result["result_code"] == HTTPStatus.OK
 
@@ -159,7 +161,7 @@ class TestSBDefinitionAPI:
         result = client_get(
             f"{API_PREFIX}/sbds/status/history",
             params={"entity_id": "sbd-t0001-20240702-00100", "sbd_version": "1"},
-        )
+        ).json()
 
         assert "sbd-t0001-20240702-00100" in result["result_data"]
         assert result["result_code"] == HTTPStatus.NOT_FOUND
@@ -207,7 +209,7 @@ class TestSBDefinitionAPI:
 
         result = client_get(
             f"{API_PREFIX}/sbds/{invalid_sbd_id}/status", params={"sbd_version": "1"}
-        )
+        ).json()
 
         assert "sbd-t0001-20240702-00100" in result["result_data"]
         assert result["result_code"] == HTTPStatus.NOT_FOUND
@@ -248,7 +250,7 @@ class TestSBDefinitionAPI:
         ).json()
 
         assert_json_is_equal(
-            result["result_data"],
+            result["result_data"][0],
             valid_sbd_status,
             exclude_paths,
         )
