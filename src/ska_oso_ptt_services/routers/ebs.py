@@ -39,9 +39,21 @@ def get_ebs_with_status(
     :return: All ExecutionBlocks present with status wrapped in a Response,
          or appropriate error Response
     """
-    query_params = get_qry_params(query_params)
+
+    # TODO need to revisit this for a better approach
+
+    try:
+
+        query_params = get_qry_params(query_params)
+
+    except Exception as error_msg:  # pylint: disable=W0718
+
+        return convert_to_response_object(
+            str(error_msg), result_code=HTTPStatus.NOT_FOUND
+        )
 
     with oda.uow() as uow:
+
         ebs = uow.ebs.query(query_params)
         eb_with_status = [
             {
@@ -54,7 +66,7 @@ def get_ebs_with_status(
             }
             for eb in ebs
         ]
-    return convert_to_response_object(eb_with_status, result_code=HTTPStatus.OK)
+        return convert_to_response_object(eb_with_status, result_code=HTTPStatus.OK)
 
 
 @eb_router.get(
@@ -98,7 +110,7 @@ def get_eb_with_status(eb_id: str) -> ApiResponse[EBStatusModel]:
                 error_msg.message, result_code=HTTPStatus.NOT_FOUND
             )
 
-        except Exception as error_msg:
+        except Exception as error_msg:  # pylint: disable=W0718
 
             return convert_to_response_object(
                 str(error_msg), result_code=HTTPStatus.NOT_FOUND
@@ -145,7 +157,7 @@ def get_eb_status(eb_id: str, version: int = None) -> ApiResponse[OSOEBStatusHis
                 error_msg.message, result_code=HTTPStatus.NOT_FOUND
             )
 
-        except Exception as error_msg:
+        except Exception as error_msg:  # pylint: disable=W0718
 
             return convert_to_response_object(
                 str(error_msg), result_code=HTTPStatus.NOT_FOUND
@@ -198,7 +210,7 @@ def put_eb_history(
                 error_msg.message, result_code=HTTPStatus.NOT_FOUND
             )
 
-        except Exception as error_msg:
+        except Exception as error_msg:  # pylint: disable=W0718
 
             return convert_to_response_object(
                 str(error_msg), result_code=HTTPStatus.NOT_FOUND

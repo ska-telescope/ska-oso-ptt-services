@@ -40,7 +40,15 @@ def get_sbis_with_status(
          or appropriate error Response
     """
 
-    query_params = get_qry_params(query_params)
+    try:
+
+        query_params = get_qry_params(query_params)
+
+    except Exception as error_msg:  # pylint: disable=W0718
+
+        return convert_to_response_object(
+            str(error_msg), result_code=HTTPStatus.NOT_FOUND
+        )
 
     with oda.uow() as uow:
         sbis = uow.sbis.query(query_params)
@@ -99,7 +107,7 @@ def get_sbi_with_status(sbi_id: str) -> ApiResponse[SBInstanceStatusModel]:
                 error_msg.message, result_code=HTTPStatus.NOT_FOUND
             )
 
-        except Exception as error_msg:
+        except Exception as error_msg:  # pylint: disable=W0718
 
             return convert_to_response_object(
                 str(error_msg), result_code=HTTPStatus.NOT_FOUND
@@ -147,7 +155,7 @@ def get_sbi_status(sbi_id: str, version: int = None) -> ApiResponse[SBIStatusHis
                 error_msg.message, result_code=HTTPStatus.NOT_FOUND
             )
 
-        except Exception as error_msg:
+        except Exception as error_msg:  # pylint: disable=W0718
 
             return convert_to_response_object(
                 str(error_msg), result_code=HTTPStatus.NOT_FOUND
@@ -201,7 +209,7 @@ def put_sbi_history(
                 error_msg.message, result_code=HTTPStatus.NOT_FOUND
             )
 
-        except Exception as error_msg:
+        except Exception as error_msg:  # pylint: disable=W0718
 
             return convert_to_response_object(
                 str(error_msg), result_code=HTTPStatus.NOT_FOUND

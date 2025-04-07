@@ -40,7 +40,15 @@ def get_sbds_with_status(
      error Response
     """
 
-    query_params = get_qry_params(query_params)
+    try:
+
+        query_params = get_qry_params(query_params)
+
+    except Exception as error_msg:  # pylint: disable=W0718
+
+        return convert_to_response_object(
+            str(error_msg), result_code=HTTPStatus.NOT_FOUND
+        )
 
     with oda.uow() as uow:
         sbds = uow.sbds.query(query_params)
@@ -99,7 +107,7 @@ def get_sbd_with_status(sbd_id: str) -> ApiResponse[SBDefinitionStatusModel]:
                 error_msg.message, result_code=HTTPStatus.NOT_FOUND
             )
 
-        except Exception as error_msg:
+        except Exception as error_msg:  # pylint: disable=W0718
 
             return convert_to_response_object(
                 str(error_msg), result_code=HTTPStatus.NOT_FOUND
@@ -147,7 +155,7 @@ def get_sbd_status(sbd_id: str, version: str = None) -> ApiResponse[SBDStatusHis
                 error_msg.message, result_code=HTTPStatus.NOT_FOUND
             )
 
-        except Exception as error_msg:
+        except Exception as error_msg:  # pylint: disable=W0718
 
             return convert_to_response_object(
                 str(error_msg), result_code=HTTPStatus.NOT_FOUND
@@ -202,7 +210,7 @@ def put_sbd_history(
                 error_msg.message, result_code=HTTPStatus.NOT_FOUND
             )
 
-        except Exception as error_msg:
+        except Exception as error_msg:  # pylint: disable=W0718
 
             return convert_to_response_object(
                 str(error_msg), result_code=HTTPStatus.NOT_FOUND
