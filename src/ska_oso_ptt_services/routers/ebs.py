@@ -84,6 +84,7 @@ def get_eb_with_status(eb_id: str) -> ApiResponse[EBStatusModel]:
     :return: The ExecutionBlock with status wrapped in a Response,
         or appropriate error Response
     """
+
     with oda.uow() as uow:
 
         try:
@@ -134,6 +135,7 @@ def get_eb_status(eb_id: str, version: int = None) -> ApiResponse[OSOEBStatusHis
     :return: The current entity status,OSOEBStatusHistory wrapped in a
         Response, or appropriate error Response
     """
+
     with oda.uow() as uow:
 
         try:

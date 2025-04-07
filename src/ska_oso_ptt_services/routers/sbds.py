@@ -81,6 +81,7 @@ def get_sbd_with_status(sbd_id: str) -> ApiResponse[SBDefinitionStatusModel]:
     :return: The SBDefinition with status wrapped in a Response, or appropriate error
      Response
     """
+
     with oda.uow() as uow:
 
         try:
@@ -131,6 +132,7 @@ def get_sbd_status(sbd_id: str, version: str = None) -> ApiResponse[SBDStatusHis
     :return: The current entity status, SBDStatusHistory wrapped in a Response, or
     appropriate error Response
     """
+
     with oda.uow() as uow:
 
         try:

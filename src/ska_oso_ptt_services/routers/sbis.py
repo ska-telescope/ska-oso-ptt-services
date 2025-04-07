@@ -81,6 +81,7 @@ def get_sbi_with_status(sbi_id: str) -> ApiResponse[SBInstanceStatusModel]:
     :return: The SBInstance with status wrapped in a Response,
          or appropriate error Response
     """
+
     with oda.uow() as uow:
 
         try:
@@ -131,6 +132,7 @@ def get_sbi_status(sbi_id: str, version: int = None) -> ApiResponse[SBIStatusHis
     :return: The current entity status,SBIStatusHistory wrapped in a
         Response, or appropriate error Response
     """
+
     with oda.uow() as uow:
 
         try:

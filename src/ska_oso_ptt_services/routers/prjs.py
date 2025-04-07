@@ -81,6 +81,7 @@ def get_prj_with_status(prj_id: str) -> ApiResponse[ProjectStatusModel]:
     :return: The Project with status wrapped in a Response,
         or appropriate error Response
     """
+
     with oda.uow() as uow:
 
         try:
@@ -133,6 +134,7 @@ def get_prj_status(
     :return: The current entity status,ProjectStatusHistory wrapped in a
         Response, or appropriate error Response
     """
+
     with oda.uow() as uow:
 
         try:

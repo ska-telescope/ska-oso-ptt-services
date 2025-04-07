@@ -14,5 +14,6 @@ The PTT API endpoints, with the accepted requests and expected responses, are do
 
 .. Will be taken care in NAK-1231 MR
 .. openapi:: ../../openapi/openapi.json
-..    :examples:
+
+
 
