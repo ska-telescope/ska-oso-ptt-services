@@ -93,6 +93,18 @@ def get_sbi_with_status(sbi_id: str) -> ApiResponse[SBInstanceStatusModel]:
                 str(error_msg), result_code=HTTPStatus.NOT_FOUND
             )
 
+        except ODANotFound as error_msg:
+
+            return convert_to_response_object(
+                error_msg.message, result_code=HTTPStatus.NOT_FOUND
+            )
+
+        except Exception as error_msg:
+
+            return convert_to_response_object(
+                str(error_msg), result_code=HTTPStatus.NOT_FOUND
+            )
+
 
 @sbi_router.get(
     "/{sbi_id}/status",
@@ -124,6 +136,18 @@ def get_sbi_status(sbi_id: str, version: int = None) -> ApiResponse[SBIStatusHis
             return convert_to_response_object(sbi_status, result_code=HTTPStatus.OK)
 
         except KeyError as error_msg:
+
+            return convert_to_response_object(
+                str(error_msg), result_code=HTTPStatus.NOT_FOUND
+            )
+
+        except ODANotFound as error_msg:
+
+            return convert_to_response_object(
+                error_msg.message, result_code=HTTPStatus.NOT_FOUND
+            )
+
+        except Exception as error_msg:
 
             return convert_to_response_object(
                 str(error_msg), result_code=HTTPStatus.NOT_FOUND
@@ -164,6 +188,18 @@ def put_sbi_history(
             return convert_to_response_object(persisted_sbi, result_code=HTTPStatus.OK)
 
         except KeyError as error_msg:
+
+            return convert_to_response_object(
+                str(error_msg), result_code=HTTPStatus.NOT_FOUND
+            )
+
+        except ODANotFound as error_msg:
+
+            return convert_to_response_object(
+                error_msg.message, result_code=HTTPStatus.NOT_FOUND
+            )
+
+        except Exception as error_msg:
 
             return convert_to_response_object(
                 str(error_msg), result_code=HTTPStatus.NOT_FOUND

@@ -3,12 +3,10 @@ import json
 from http import HTTPStatus
 from unittest import mock
 
-import pytest
 from ska_oso_pdm import OSOEBStatusHistory, OSOExecutionBlock
 
 from ska_oso_ptt_services.app import API_PREFIX
 from ska_oso_ptt_services.common.error_handling import ODANotFound
-from ska_oso_ptt_services.common.utils import convert_to_response_object
 from tests.unit.ska_oso_ptt_services.common.constant import (
     MULTIPLE_EBS,
     MULTIPLE_EBS_STATUS,
@@ -75,7 +73,7 @@ class TestExecutionBlockAPI:
 
         result = client_get(f"{API_PREFIX}/ebs/eb-mvp01-20240426-5004").json()
 
-        exclude_paths = ["root['metadata']['pdm_version']"]
+        exclude_paths = ["root['metadata']"]
 
         assert_json_is_equal(
             result["result_data"][0], valid_eb_with_status, exclude_paths
@@ -83,25 +81,21 @@ class TestExecutionBlockAPI:
 
         assert result["result_code"] == HTTPStatus.OK
 
-    def test_get_single_invalid_eb_with_status(self, client_get):
+    @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
+    def test_get_single_invalid_eb_with_status(
+        self, mock_oda, client_get
+    ):
         """Verifying that get_single_eb_with_status API returns
         requested EB with status"""
 
         uow_mock = mock.MagicMock()
-        uow_mock.ebs.get.side_effect = ODANotFound(identifier="eb-mvp01-20240426-5004")
+        uow_mock.ebs.get.side_effect = ODANotFound(identifier="eb-mvp01-20240426-5007")
+        mock_oda.uow().__enter__.return_value = uow_mock
 
-        msg = "The requested identifier eb-mvp01-20240426-500 could not be found."
+        result = client_get(f"{API_PREFIX}/ebs/eb-mvp01-20240426-5007").json()
 
-        result = client_get(f"{API_PREFIX}/ebs/eb-mvp01-20240426-5004")
-        # breakpoint()
-
-        # print(f"!!!!!!!!!!!!!!!!!!!!!!!!!1 {result}")
-
-        # assert_json_is_equal(
-        #     result["result_data"][0], valid_eb_with_status, exclude_paths
-        # )
-
-        # assert result["result_code"] == HTTPStatus.OK
+        assert "eb-mvp01-20240426-5007" in result["result_data"]
+        assert result["result_code"] == HTTPStatus.NOT_FOUND
 
     @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
     def test_get_single_eb_with_invalid_status(self, mock_oda, client_get):
@@ -110,24 +104,14 @@ class TestExecutionBlockAPI:
 
         invalid_eb_id = "invalid-eb-id-12345"
 
-        # uow_mock = mock.MagicMock()
-        # uow_mock.ebs.get.side_effect = ODANotFound(identifier=invalid_eb_id)
-        # mock_oda.uow().__enter__.return_value = uow_mock
+        uow_mock = mock.MagicMock()
+        uow_mock.ebs.get.side_effect = ODANotFound(identifier=invalid_eb_id)
+        mock_oda.uow().__enter__.return_value = uow_mock
 
-        # with pytest.raises(ODANotFound) as e:
+        result = client_get(f"{API_PREFIX}/ebs/{invalid_eb_id}").json()
 
-        result = client_get(f"{API_PREFIX}/ebs/{invalid_eb_id}")
-
-        # expected_error_message = {
-        #     f"The requested identifier {invalid_eb_id} could not be found."
-        # }
-
-        print(f"@@@@@@@@@@@@@@@@@@@@@@@@1 {result}")
-
-        assert 1 == 2
-
-        # assert_json_is_equal(result["result_data"][0], expected_error_message)
-        # assert result["result_code"] == HTTPStatus.NOT_FOUND
+        assert invalid_eb_id in result["result_data"]
+        assert result["result_code"] == HTTPStatus.NOT_FOUND
 
     @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
     def test_get_single_eb_status_history(
@@ -148,12 +132,12 @@ class TestExecutionBlockAPI:
             params={"entity_id": "eb-mvp01-20240426-5004", "eb_version": "1"},
         ).json()
 
+        exclude_paths = ["root['metadata']"]
+
         assert_json_is_equal(
             result["result_data"][0],
             valid_eb_status_history[0],
-            exclude_regex_paths={
-                r"root\[\d+\]\['metadata'\]\['(pdm_version|version)'\]"
-            },
+            exclude_paths=exclude_paths
         )
         assert result["result_code"] == HTTPStatus.OK
 

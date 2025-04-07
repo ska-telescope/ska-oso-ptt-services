@@ -46,14 +46,12 @@ class TestSBInstanceAPI:
             "created_after": "2022-03-28T15:43:53.971548+00:00",
         }
 
-        result = client_get(f"{API_PREFIX}/sbis", params=query_params)
+        result = client_get(f"{API_PREFIX}/sbis", params=query_params).json()
 
-        resultDict = result.json()
-
-        for res in resultDict:
+        for res in result["result_data"]:
             del res["metadata"]["pdm_version"]
 
-        assert_json_is_equal(resultDict, valid_sbis)
+        assert_json_is_equal(result["result_data"], valid_sbis)
         assert result["result_code"] == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
@@ -74,16 +72,32 @@ class TestSBInstanceAPI:
         mock_get_sbi_status().current_status = "Created"
         mock_oda.uow().__enter__.return_value = uow_mock
 
-        result = client_get(f"{API_PREFIX}/sbis/sbi-mvp01-20240426-5016")
+        result = client_get(f"{API_PREFIX}/sbis/sbi-mvp01-20240426-5016").json()
 
         exclude_paths = ["root['metadata']['pdm_version']"]
 
         assert_json_is_equal(
-            result.json(),
+            result["result_data"][0],
             valid_sbi,
             exclude_paths,
         )
         assert result["result_code"] == HTTPStatus.OK
+
+    @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
+    def test_get_single_invalid_sbi_with_status(
+        self, mock_oda, client_get
+    ):
+        """Verifying that get_single_sbi_with_status API returns
+        requested sbi with status"""
+
+        uow_mock = mock.MagicMock()
+        uow_mock.sbis.get.side_effect = ODANotFound(identifier="sbi-mvp01-20240426-5007")
+        mock_oda.uow().__enter__.return_value = uow_mock
+
+        result = client_get(f"{API_PREFIX}/sbis/sbi-mvp01-20240426-5007").json()
+
+        assert "sbi-mvp01-20240426-5007" in result["result_data"]
+        assert result["result_code"] == HTTPStatus.NOT_FOUND
 
     @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
     def test_get_single_sbi_with_invalid_status(self, mock_oda, client_get):
@@ -96,13 +110,9 @@ class TestSBInstanceAPI:
         uow_mock.sbis.get.side_effect = ODANotFound(identifier=invalid_sbi_id)
         mock_oda.uow().__enter__.return_value = uow_mock
 
-        result = client_get(f"{API_PREFIX}/sbis/{invalid_sbi_id}")
+        result = client_get(f"{API_PREFIX}/sbis/{invalid_sbi_id}").json()
 
-        expected_error_message = {
-            "detail": (f"The requested identifier {invalid_sbi_id} could not be found.")
-        }
-
-        assert_json_is_equal(result.json(), expected_error_message)
+        assert invalid_sbi_id in result["result_data"]
         assert result["result_code"] == HTTPStatus.NOT_FOUND
 
     @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
@@ -121,10 +131,10 @@ class TestSBInstanceAPI:
         result = client_get(
             f"{API_PREFIX}/sbis/status/history",
             params={"entity_id": "sbi-mvp01-20220923-00002", "sbi_version": "1"},
-        )
+        ).json()
 
         assert_json_is_equal(
-            result.json(),
+            result["result_data"],
             valid_sbi_status_history,
             exclude_regex_paths={
                 r"root\[\d+\]\['metadata'\]\['(pdm_version|version)'\]"
@@ -145,13 +155,9 @@ class TestSBInstanceAPI:
         result = client_get(
             f"{API_PREFIX}/sbis/status/history",
             params={"entity_id": "sbi-t000-00100", "sbi_version": "1"},
-        )
+        ).json()
 
-        error = {
-            "detail": ("The requested identifier sbi-t000-00100 could not be found.")
-        }
-
-        assert_json_is_equal(result.json(), error)
+        assert "sbi-t000-00100" in result["result_data"]
         assert result["result_code"] == HTTPStatus.NOT_FOUND
 
     @mock.patch("ska_oso_ptt_services.routers.sbis.common_get_entity_status")
@@ -170,12 +176,12 @@ class TestSBInstanceAPI:
         result = client_get(
             f"{API_PREFIX}/sbis/sbi-mvp01-20240426-5016/status",
             params={"sbi_version": "1"},
-        )
+        ).json()
 
         exclude_paths = ["root['metadata']"]
 
         assert_json_is_equal(
-            result.json(),
+            result["result_data"][0],
             valid_sbi_status,
             exclude_paths,
         )
@@ -197,23 +203,16 @@ class TestSBInstanceAPI:
 
         result = client_get(
             f"{API_PREFIX}/sbis/{invalid_sbi_id}/status", params={"sbi_version": "1"}
-        )
+        ).json()
 
-        error = {
-            "detail": (
-                "The requested identifier sbi-t0001-20240702-00100 could not"
-                " be found."
-            )
-        }
-
-        assert_json_is_equal(result.json(), error)
+        assert "sbi-t0001-20240702-00100" in result["result_data"]
         assert result["result_code"] == HTTPStatus.NOT_FOUND
 
     @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
     def test_put_sbi_history(self, mock_oda, client_put, create_entity_object):
         """Verifying that put_sbi_history updates the sbi status correctly"""
 
-        valid_sbi_status_history = create_entity_object(MULTIPLE_SBIS_STATUS)
+        valid_sbi_status = create_entity_object(MULTIPLE_SBIS_STATUS)[0]
 
         uow_mock = mock.MagicMock()
         uow_mock.sbis = ["sbi-mvp01-20220923-00002"]
@@ -221,7 +220,7 @@ class TestSBInstanceAPI:
         sbis_status_history_mock = mock.MagicMock()
         sbis_status_history_mock.add.return_value = (
             SBIStatusHistory.model_validate_json(
-                json.dumps(valid_sbi_status_history[0])
+                json.dumps(valid_sbi_status)
             )
         )
         uow_mock.sbis_status_history = sbis_status_history_mock
@@ -243,11 +242,11 @@ class TestSBInstanceAPI:
 
         result = client_put(
             f"{API_PREFIX}/sbis/sbi-mvp01-20220923-00002/status", json=data
-        )
+        ).json()
 
         assert_json_is_equal(
-            result.json(),
-            valid_sbi_status_history[0],
+            result["result_data"][0],
+            valid_sbi_status,
             exclude_paths,
         )
         assert result["result_code"] == HTTPStatus.OK

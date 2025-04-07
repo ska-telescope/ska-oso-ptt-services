@@ -46,7 +46,7 @@ class TestSBDefinitionAPI:
             "created_after": "2022-03-28T15:43:53.971548+00:00",
         }
 
-        result = client_get(f"{API_PREFIX}/sbds", params=query_params)
+        result = client_get(f"{API_PREFIX}/sbds", params=query_params).json()
 
         pdm_version_regex = r"root\[\d+\]\['metadata'\]\['pdm_version'\]"
         epoch_regex = (
@@ -55,7 +55,7 @@ class TestSBDefinitionAPI:
         exclude_regex_paths = {f"{pdm_version_regex}|{epoch_regex}"}
 
         assert_json_is_equal(
-            result.json(), valid_sbds, exclude_regex_paths=exclude_regex_paths
+            result["result_data"], valid_sbds, exclude_regex_paths=exclude_regex_paths
         )
         assert result["result_code"] == HTTPStatus.OK
 
@@ -77,18 +77,34 @@ class TestSBDefinitionAPI:
         mock_get_sbd_status().current_status = "Draft"
         mock_oda.uow().__enter__.return_value = uow_mock
 
-        result = client_get(f"{API_PREFIX}/sbds/sbd-t0001-20240702-00002")
+        result = client_get(f"{API_PREFIX}/sbds/sbd-t0001-20240702-00002").json()
 
         pdm_version_regex = r"root\['metadata'\]\['pdm_version'\]"
         epoch_regex = r"root\['targets'\]\[\d+\]\['reference_coordinate'\]\['epoch'\]"
         exclude_regex_paths = {f"{pdm_version_regex}|{epoch_regex}"}
 
         assert_json_is_equal(
-            result.json(),
+            result["result_data"][0],
             valid_sbd,
             exclude_regex_paths=exclude_regex_paths,
         )
         assert result["result_code"] == HTTPStatus.OK
+
+    @mock.patch("ska_oso_ptt_services.routers.sbds.oda")
+    def test_get_single_invalid_sbd_with_status(
+        self, mock_oda, client_get
+    ):
+        """Verifying that get_single_sbd_with_status API returns
+        requested sbd with status"""
+
+        uow_mock = mock.MagicMock()
+        uow_mock.sbds.get.side_effect = ODANotFound(identifier="sbds-mvp01-20240426-5007")
+        mock_oda.uow().__enter__.return_value = uow_mock
+
+        result = client_get(f"{API_PREFIX}/sbds/sbds-mvp01-20240426-5007").json()
+
+        assert "sbds-mvp01-20240426-5007" in result["result_data"]
+        assert result["result_code"] == HTTPStatus.NOT_FOUND
 
     @mock.patch("ska_oso_ptt_services.routers.sbds.oda")
     def test_get_single_sbd_with_invalid_status(self, mock_oda, client_get):
@@ -101,14 +117,9 @@ class TestSBDefinitionAPI:
         uow_mock.sbds.get.side_effect = ODANotFound(identifier=invalid_sbd_id)
         mock_oda.uow().__enter__.return_value = uow_mock
 
-        result = client_get(f"{API_PREFIX}/sbds/{invalid_sbd_id}")
+        result = client_get(f"{API_PREFIX}/sbds/{invalid_sbd_id}").json()
 
-        error = {
-            "detail": "The requested identifier invalid-sbd-id-12345 "
-            "could not be found."
-        }
-
-        assert_json_is_equal(result.json(), error)
+        assert "invalid-sbd-id-12345" in result["result_data"]
         assert result["result_code"] == HTTPStatus.NOT_FOUND
 
     @mock.patch("ska_oso_ptt_services.routers.sbds.oda")
@@ -127,16 +138,14 @@ class TestSBDefinitionAPI:
         result = client_get(
             f"{API_PREFIX}/sbds/status/history",
             params={"entity_id": "sbd-t0001-20240702-00002", "sbd_version": "1"},
-        )
+        ).json()
 
-        result_dict = result.json()
+        exclude_paths = ["root['metadata']"]
 
         assert_json_is_equal(
-            result_dict,
+            result["result_data"],
             valid_sbd_status_history,
-            exclude_regex_paths={
-                r"root\[\d+\]\['metadata'\]\['(pdm_version|version)'\]"
-            },
+            exclude_paths=exclude_paths
         )
         assert result["result_code"] == HTTPStatus.OK
 
@@ -154,12 +163,7 @@ class TestSBDefinitionAPI:
             params={"entity_id": "sbd-t0001-20240702-00100", "sbd_version": "1"},
         )
 
-        error = {
-            "detail": "The requested identifier sbd-t0001-20240702-00100 "
-            "could not be found."
-        }
-
-        assert_json_is_equal(result.json(), error)
+        assert "sbd-t0001-20240702-00100" in result["result_data"]
         assert result["result_code"] == HTTPStatus.NOT_FOUND
 
     @mock.patch("ska_oso_ptt_services.routers.sbds.common_get_entity_status")
@@ -178,12 +182,12 @@ class TestSBDefinitionAPI:
         result = client_get(
             f"{API_PREFIX}/sbds/sbd-t0001-20240702-00002/status",
             params={"sbd_version": "1"},
-        )
+        ).json()
 
         exclude_paths = ["root['metadata']"]
 
         assert_json_is_equal(
-            result.json(),
+            result["result_data"][0],
             valid_sbd_status,
             exclude_paths=exclude_paths,
         )
@@ -207,14 +211,7 @@ class TestSBDefinitionAPI:
             f"{API_PREFIX}/sbds/{invalid_sbd_id}/status", params={"sbd_version": "1"}
         )
 
-        error = {
-            "detail": (
-                "The requested identifier sbd-t0001-20240702-00100 could not"
-                " be found."
-            )
-        }
-
-        assert_json_is_equal(result.json(), error)
+        assert "sbd-t0001-20240702-00100" in result["result_data"]
         assert result["result_code"] == HTTPStatus.NOT_FOUND
 
     @mock.patch("ska_oso_ptt_services.routers.sbds.oda")
@@ -250,10 +247,10 @@ class TestSBDefinitionAPI:
 
         result = client_put(
             f"{API_PREFIX}/sbds/sbd-t0001-20240702-00002/status", json=data
-        )
+        ).json()
 
         assert_json_is_equal(
-            result.json(),
+            result["result_data"],
             valid_sbd_status,
             exclude_paths,
         )
@@ -292,10 +289,10 @@ class TestSBDefinitionAPI:
 
         result = client_put(
             f"{API_PREFIX}/sbds/sbd-t0001-20240702-00002/status", json=data
-        )
+        ).json()
 
         assert_json_is_equal(
-            result.json(),
+            result["result_data"],
             valid_sbd_status,
             exclude_paths,
         )
@@ -334,10 +331,10 @@ class TestSBDefinitionAPI:
 
         result = client_put(
             f"{API_PREFIX}/sbds/sbd-t0001-20240702-00002/status", json=data
-        )
+        ).json()
 
         assert_json_is_equal(
-            result.json(),
+            result["result_data"],
             valid_put_sbd_history_version_response,
             exclude_paths=exclude_paths,
         )

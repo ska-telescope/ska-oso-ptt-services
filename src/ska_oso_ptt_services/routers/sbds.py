@@ -93,6 +93,18 @@ def get_sbd_with_status(sbd_id: str) -> ApiResponse[SBDefinitionStatusModel]:
                 str(error_msg), result_code=HTTPStatus.NOT_FOUND
             )
 
+        except ODANotFound as error_msg:
+
+            return convert_to_response_object(
+                error_msg.message, result_code=HTTPStatus.NOT_FOUND
+            )
+
+        except Exception as error_msg:
+
+            return convert_to_response_object(
+                str(error_msg), result_code=HTTPStatus.NOT_FOUND
+            )
+
 
 @sbd_router.get(
     "/{sbd_id}/status",
@@ -124,6 +136,18 @@ def get_sbd_status(sbd_id: str, version: str = None) -> ApiResponse[SBDStatusHis
             return convert_to_response_object(sbd_status, result_code=HTTPStatus.OK)
 
         except KeyError as error_msg:
+
+            return convert_to_response_object(
+                str(error_msg), result_code=HTTPStatus.NOT_FOUND
+            )
+
+        except ODANotFound as error_msg:
+
+            return convert_to_response_object(
+                error_msg.message, result_code=HTTPStatus.NOT_FOUND
+            )
+
+        except Exception as error_msg:
 
             return convert_to_response_object(
                 str(error_msg), result_code=HTTPStatus.NOT_FOUND
@@ -165,6 +189,18 @@ def put_sbd_history(
             return convert_to_response_object(persisted_sbd, result_code=HTTPStatus.OK)
 
         except KeyError as error_msg:
+
+            return convert_to_response_object(
+                str(error_msg), result_code=HTTPStatus.NOT_FOUND
+            )
+
+        except ODANotFound as error_msg:
+
+            return convert_to_response_object(
+                error_msg.message, result_code=HTTPStatus.NOT_FOUND
+            )
+
+        except Exception as error_msg:
 
             return convert_to_response_object(
                 str(error_msg), result_code=HTTPStatus.NOT_FOUND

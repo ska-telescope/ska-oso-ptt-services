@@ -63,6 +63,25 @@ class ODANotFound(ODAError):
         super().__init__(message)
 
 
+# TODO replace all exception with this one
+class ApiResponseErrorException(ODAError):
+    """
+    Exception raised when an entity cannot be found in the data store
+    """
+
+    def __init__(
+        self, *, identifier: Optional[str] = None, message: Optional[str] = None
+    ) -> None:
+        if message:
+            pass
+        elif identifier:
+            message = f"The requested identifier {identifier} could not be found."
+        else:
+            message = "The requested identifier could not be found."
+
+        super().__init__(message)
+
+
 class EntityNotFound(ODAError):
     """
     Exception raised when an entity cannot be found in the data store

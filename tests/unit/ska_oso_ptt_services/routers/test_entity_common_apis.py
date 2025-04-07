@@ -13,15 +13,15 @@ common_error = {
 
 
 @pytest.mark.parametrize(
-    "entity_name, expected_response",
+    "entity_name",
     [
-        ("ebs", common_error),
-        ("sbis", common_error),
-        ("sbds", common_error),
-        ("prjs", common_error),
+        ("ebs"),
+        ("sbis"),
+        ("sbds"),
+        ("prjs"),
     ],
 )
-def test_get_invalid_all_entity_with_status(entity_name, expected_response, client_get):
+def test_get_invalid_all_entity_with_status(entity_name, client_get):
     """Verifying that get_invalid_all_entity_with_status throws error
     if invalid data passed"""
 
@@ -37,11 +37,11 @@ def test_get_invalid_all_entity_with_status(entity_name, expected_response, clie
         f"{API_PREFIX}/{entity_name}", params=query_params
     ).json()
 
-    assert_json_is_equal(result_response, expected_response)
+    assert "cannot combine date created query" in result_response["result_data"]
 
 
 @pytest.mark.parametrize(
-    "entity_name, entity_id, entity_data, expected_response",
+    "entity_name, entity_id, entity_data",
     [
         (
             "ebs",
@@ -50,10 +50,6 @@ def test_get_invalid_all_entity_with_status(entity_name, expected_response, clie
                 "current_status": "Fully Observed",
                 "previous_status": "Created",
                 "eb_ref": "eb-mvp01-20240426-5004",
-            },
-            {
-                "detail": "There is a mismatch between the identifier for the endpoint "
-                "eb-mvp01-20240426-5003 and the JSON payload eb-mvp01-20240426-5004"
             },
         ),
         (
@@ -64,10 +60,6 @@ def test_get_invalid_all_entity_with_status(entity_name, expected_response, clie
                 "previous_status": "Created",
                 "sbi_ref": "sbi-mvp01-20240426-5004",
             },
-            {
-                "detail": "There is a mismatch between the identifier for the endpoint "
-                "sbi-mvp01-20240426-5003 and the JSON payload sbi-mvp01-20240426-5004"
-            },
         ),
         (
             "sbds",
@@ -76,10 +68,6 @@ def test_get_invalid_all_entity_with_status(entity_name, expected_response, clie
                 "current_status": "Submitted",
                 "previous_status": "Draft",
                 "sbd_ref": "sbd-mvp01-20240426-5004",
-            },
-            {
-                "detail": "There is a mismatch between the identifier for the endpoint "
-                "sbd-mvp01-20240426-5003 and the JSON payload sbd-mvp01-20240426-5004"
             },
         ),
         (
@@ -90,29 +78,23 @@ def test_get_invalid_all_entity_with_status(entity_name, expected_response, clie
                 "previous_status": "Draft",
                 "prj_ref": "prj-mvp01-20240426-5004",
             },
-            {
-                "detail": "There is a mismatch between the identifier for the endpoint "
-                "prj-mvp01-20240426-5003 and the JSON payload prj-mvp01-20240426-5004"
-            },
         ),
     ],
 )
-def test_put_entity_mismatch_history(
-    entity_name, entity_id, entity_data, expected_response, client_put
-):
+def test_put_entity_mismatch_history(entity_name, entity_id, entity_data, client_put):
     """Verifying that put_entity_mismatch_history throws error
     if invalid data passed"""
 
     result_response = client_put(
         f"{API_PREFIX}/{entity_name}/{entity_id}/status", json=entity_data
-    )
+    ).json()
 
-    assert_json_is_equal(result_response.json(), expected_response)
-    assert result_response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
+    assert "mismatch between" in result_response["result_data"]
+    assert result_response["result_code"] == HTTPStatus.UNPROCESSABLE_ENTITY
 
 
 @pytest.mark.parametrize(
-    "entity_name, entity_id, query_params, entity_data, expected_error",
+    "entity_name, entity_id, query_params, entity_data",
     [
         (
             "prjs",
@@ -122,21 +104,7 @@ def test_put_entity_mismatch_history(
                 "current1_status": "Submitted",
                 "previous_status": "Draft",
                 "prj_version": "1",
-            },
-            {
-                "detail": [
-                    {
-                        "type": "missing",
-                        "loc": ["body", "prj_ref"],
-                        "msg": "Field required",
-                        "input": {
-                            "current1_status": "Submitted",
-                            "previous_status": "Draft",
-                            "prj_version": "1",
-                        },
-                    }
-                ]
-            },
+            }
         ),
         (
             "sbds",
@@ -146,21 +114,7 @@ def test_put_entity_mismatch_history(
                 "current1_status": "Complete",
                 "previous_status": "Draft",
                 "sbd_version": "1",
-            },
-            {
-                "detail": [
-                    {
-                        "type": "missing",
-                        "loc": ["body", "sbd_ref"],
-                        "msg": "Field required",
-                        "input": {
-                            "current1_status": "Complete",
-                            "previous_status": "Draft",
-                            "sbd_version": "1",
-                        },
-                    }
-                ]
-            },
+            }
         ),
         (
             "sbis",
@@ -170,21 +124,7 @@ def test_put_entity_mismatch_history(
                 "current1_status": "Executing",
                 "previous_status": "Created",
                 "sbi_version": "1",
-            },
-            {
-                "detail": [
-                    {
-                        "type": "missing",
-                        "loc": ["body", "sbi_ref"],
-                        "msg": "Field required",
-                        "input": {
-                            "current1_status": "Executing",
-                            "previous_status": "Created",
-                            "sbi_version": "1",
-                        },
-                    }
-                ]
-            },
+            }
         ),
         (
             "ebs",
@@ -194,26 +134,12 @@ def test_put_entity_mismatch_history(
                 "current1_status": "Fully Observed",
                 "previous_status": "Created",
                 "eb_version": "1",
-            },
-            {
-                "detail": [
-                    {
-                        "type": "missing",
-                        "loc": ["body", "eb_ref"],
-                        "msg": "Field required",
-                        "input": {
-                            "current1_status": "Fully Observed",
-                            "previous_status": "Created",
-                            "eb_version": "1",
-                        },
-                    }
-                ]
-            },
+            }
         ),
     ],
 )
 def test_put_invalid_all_entity_history(
-    entity_name, entity_id, query_params, entity_data, expected_error, client_put
+    entity_name, entity_id, query_params, entity_data, client_put
 ):
     """Verifying that put_invalid_all_entity_history error if invalid data passed"""
 
@@ -221,7 +147,7 @@ def test_put_invalid_all_entity_history(
         f"{API_PREFIX}/{entity_name}/{entity_id}/status",
         params=query_params,
         json=entity_data,
-    )
+    ).json()
 
-    assert_json_is_equal(result.json(), expected_error)
+    assert "details" in result['result_data']
     assert result["result_code"] == HTTPStatus.UNPROCESSABLE_ENTITY

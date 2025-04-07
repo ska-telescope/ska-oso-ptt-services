@@ -93,6 +93,18 @@ def get_prj_with_status(prj_id: str) -> ApiResponse[ProjectStatusModel]:
                 str(error_msg), result_code=HTTPStatus.NOT_FOUND
             )
 
+        except ODANotFound as error_msg:
+
+            return convert_to_response_object(
+                error_msg.message, result_code=HTTPStatus.NOT_FOUND
+            )
+
+        except Exception as error_msg:
+
+            return convert_to_response_object(
+                str(error_msg), result_code=HTTPStatus.NOT_FOUND
+            )
+
 
 @prj_router.get(
     "/{prj_id}/status",
@@ -126,6 +138,18 @@ def get_prj_status(
             return convert_to_response_object(prj_status, result_code=HTTPStatus.OK)
 
         except KeyError as error_msg:
+
+            return convert_to_response_object(
+                str(error_msg), result_code=HTTPStatus.NOT_FOUND
+            )
+
+        except ODANotFound as error_msg:
+
+            return convert_to_response_object(
+                error_msg.message, result_code=HTTPStatus.NOT_FOUND
+            )
+
+        except Exception as error_msg:
 
             return convert_to_response_object(
                 str(error_msg), result_code=HTTPStatus.NOT_FOUND
@@ -166,6 +190,18 @@ def put_prj_history(
             return convert_to_response_object(persisted_prj, result_code=HTTPStatus.OK)
 
         except KeyError as error_msg:
+
+            return convert_to_response_object(
+                str(error_msg), result_code=HTTPStatus.NOT_FOUND
+            )
+
+        except ODANotFound as error_msg:
+
+            return convert_to_response_object(
+                error_msg.message, result_code=HTTPStatus.NOT_FOUND
+            )
+
+        except Exception as error_msg:
 
             return convert_to_response_object(
                 str(error_msg), result_code=HTTPStatus.NOT_FOUND
