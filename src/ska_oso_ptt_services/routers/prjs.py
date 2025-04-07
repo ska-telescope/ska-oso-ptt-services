@@ -87,9 +87,11 @@ def get_prj_with_status(prj_id: str) -> ApiResponse[ProjectStatusModel]:
 
             return convert_to_response_object(prj_json, result_code=HTTPStatus.OK)
 
-        except KeyError as e:
+        except KeyError as error_msg:
 
-            return convert_to_response_object(e, result_code=HTTPStatus.NOT_FOUND)
+            return convert_to_response_object(
+                str(error_msg), result_code=HTTPStatus.NOT_FOUND
+            )
 
 
 @prj_router.get(
@@ -123,9 +125,11 @@ def get_prj_status(
 
             return convert_to_response_object(prj_status, result_code=HTTPStatus.OK)
 
-        except KeyError as e:
+        except KeyError as error_msg:
 
-            return convert_to_response_object(e, result_code=HTTPStatus.NOT_FOUND)
+            return convert_to_response_object(
+                str(error_msg), result_code=HTTPStatus.NOT_FOUND
+            )
 
 
 @prj_router.put(
@@ -161,9 +165,11 @@ def put_prj_history(
 
             return convert_to_response_object(persisted_prj, result_code=HTTPStatus.OK)
 
-        except KeyError as e:
+        except KeyError as error_msg:
 
-            return convert_to_response_object(e, result_code=HTTPStatus.NOT_FOUND)
+            return convert_to_response_object(
+                str(error_msg), result_code=HTTPStatus.NOT_FOUND
+            )
 
 
 @prj_router.get(

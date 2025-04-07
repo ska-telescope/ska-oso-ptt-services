@@ -86,9 +86,11 @@ def get_eb_with_status(eb_id: str) -> ApiResponse[EBStatusModel]:
 
             return convert_to_response_object(eb_json, result_code=HTTPStatus.OK)
 
-        except KeyError as e:
+        except KeyError as error_msg:
 
-            return convert_to_response_object(e, result_code=HTTPStatus.NOT_FOUND)
+            return convert_to_response_object(
+                str(error_msg), result_code=HTTPStatus.NOT_FOUND
+            )
 
 
 @eb_router.get(
@@ -121,9 +123,11 @@ def get_eb_status(eb_id: str, version: int = None) -> ApiResponse[OSOEBStatusHis
                 eb_status.model_dump(mode="json"), result_code=HTTPStatus.OK
             )
 
-        except KeyError as e:
+        except KeyError as error_msg:
 
-            return convert_to_response_object(e, result_code=HTTPStatus.NOT_FOUND)
+            return convert_to_response_object(
+                str(error_msg), result_code=HTTPStatus.NOT_FOUND
+            )
 
 
 @eb_router.put(
@@ -160,9 +164,11 @@ def put_eb_history(
                 persisted_eb.model_dump(mode="json"), result_code=HTTPStatus.OK
             )
 
-        except KeyError as e:
+        except KeyError as error_msg:
 
-            return convert_to_response_object(e, result_code=HTTPStatus.NOT_FOUND)
+            return convert_to_response_object(
+                str(error_msg), result_code=HTTPStatus.NOT_FOUND
+            )
 
 
 @eb_router.get(

@@ -87,9 +87,11 @@ def get_sbi_with_status(sbi_id: str) -> ApiResponse[SBInstanceStatusModel]:
 
             return convert_to_response_object(sbi_json, result_code=HTTPStatus.OK)
 
-        except KeyError as e:
+        except KeyError as error_msg:
 
-            return convert_to_response_object(e, result_code=HTTPStatus.NOT_FOUND)
+            return convert_to_response_object(
+                str(error_msg), result_code=HTTPStatus.NOT_FOUND
+            )
 
 
 @sbi_router.get(
@@ -121,9 +123,11 @@ def get_sbi_status(sbi_id: str, version: int = None) -> ApiResponse[SBIStatusHis
 
             return convert_to_response_object(sbi_status, result_code=HTTPStatus.OK)
 
-        except KeyError as e:
+        except KeyError as error_msg:
 
-            return convert_to_response_object(e, result_code=HTTPStatus.NOT_FOUND)
+            return convert_to_response_object(
+                str(error_msg), result_code=HTTPStatus.NOT_FOUND
+            )
 
 
 @sbi_router.put(
@@ -159,9 +163,11 @@ def put_sbi_history(
 
             return convert_to_response_object(persisted_sbi, result_code=HTTPStatus.OK)
 
-        except KeyError as e:
+        except KeyError as error_msg:
 
-            return convert_to_response_object(e, result_code=HTTPStatus.NOT_FOUND)
+            return convert_to_response_object(
+                str(error_msg), result_code=HTTPStatus.NOT_FOUND
+            )
 
 
 @sbi_router.get(
