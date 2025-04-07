@@ -38,6 +38,7 @@ def get_ebs_with_status(
     :param query_params: Parameters to query the ODA by.
     :return: All ExecutionBlocks present with status wrapped in a Response,
     or appropriate error Response
+
     """
 
     # TODO need to revisit this for a better approach
@@ -235,7 +236,6 @@ def get_eb_status_history(
     """
     Function that a GET /status/history request is routed to.
     This method is used to GET status history for the given entity
-
 
     :param query_params: Parameters to query the ODA by.
     :return: The status history, OSOEBStatusHistory wrapped in a Response,
