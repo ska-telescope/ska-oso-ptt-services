@@ -186,7 +186,9 @@ def put_sbd_history(
 
             uow.commit()
 
-            return convert_to_response_object(persisted_sbd, result_code=HTTPStatus.OK)
+            return convert_to_response_object(
+                persisted_sbd.model_dump(mode="json"), result_code=HTTPStatus.OK
+            )
 
         except KeyError as error_msg:
 

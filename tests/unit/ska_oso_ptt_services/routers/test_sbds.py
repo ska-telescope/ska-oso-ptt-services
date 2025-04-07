@@ -91,14 +91,14 @@ class TestSBDefinitionAPI:
         assert result["result_code"] == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.sbds.oda")
-    def test_get_single_invalid_sbd_with_status(
-        self, mock_oda, client_get
-    ):
+    def test_get_single_invalid_sbd_with_status(self, mock_oda, client_get):
         """Verifying that get_single_sbd_with_status API returns
         requested sbd with status"""
 
         uow_mock = mock.MagicMock()
-        uow_mock.sbds.get.side_effect = ODANotFound(identifier="sbds-mvp01-20240426-5007")
+        uow_mock.sbds.get.side_effect = ODANotFound(
+            identifier="sbds-mvp01-20240426-5007"
+        )
         mock_oda.uow().__enter__.return_value = uow_mock
 
         result = client_get(f"{API_PREFIX}/sbds/sbds-mvp01-20240426-5007").json()
@@ -143,9 +143,7 @@ class TestSBDefinitionAPI:
         exclude_paths = ["root['metadata']"]
 
         assert_json_is_equal(
-            result["result_data"],
-            valid_sbd_status_history,
-            exclude_paths=exclude_paths
+            result["result_data"], valid_sbd_status_history, exclude_paths=exclude_paths
         )
         assert result["result_code"] == HTTPStatus.OK
 
@@ -292,7 +290,7 @@ class TestSBDefinitionAPI:
         ).json()
 
         assert_json_is_equal(
-            result["result_data"],
+            result["result_data"][0],
             valid_sbd_status,
             exclude_paths,
         )
@@ -334,7 +332,7 @@ class TestSBDefinitionAPI:
         ).json()
 
         assert_json_is_equal(
-            result["result_data"],
+            result["result_data"][0],
             valid_put_sbd_history_version_response,
             exclude_paths=exclude_paths,
         )

@@ -187,7 +187,9 @@ def put_prj_history(
             persisted_prj = uow.prjs_status_history.add(prj_status_history)
             uow.commit()
 
-            return convert_to_response_object(persisted_prj, result_code=HTTPStatus.OK)
+            return convert_to_response_object(
+                persisted_prj.model_dump(mode="json"), result_code=HTTPStatus.OK
+            )
 
         except KeyError as error_msg:
 

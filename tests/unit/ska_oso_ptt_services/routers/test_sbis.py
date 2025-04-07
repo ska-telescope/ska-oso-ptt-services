@@ -84,14 +84,14 @@ class TestSBInstanceAPI:
         assert result["result_code"] == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.sbis.oda")
-    def test_get_single_invalid_sbi_with_status(
-        self, mock_oda, client_get
-    ):
+    def test_get_single_invalid_sbi_with_status(self, mock_oda, client_get):
         """Verifying that get_single_sbi_with_status API returns
         requested sbi with status"""
 
         uow_mock = mock.MagicMock()
-        uow_mock.sbis.get.side_effect = ODANotFound(identifier="sbi-mvp01-20240426-5007")
+        uow_mock.sbis.get.side_effect = ODANotFound(
+            identifier="sbi-mvp01-20240426-5007"
+        )
         mock_oda.uow().__enter__.return_value = uow_mock
 
         result = client_get(f"{API_PREFIX}/sbis/sbi-mvp01-20240426-5007").json()
@@ -219,9 +219,7 @@ class TestSBInstanceAPI:
 
         sbis_status_history_mock = mock.MagicMock()
         sbis_status_history_mock.add.return_value = (
-            SBIStatusHistory.model_validate_json(
-                json.dumps(valid_sbi_status)
-            )
+            SBIStatusHistory.model_validate_json(json.dumps(valid_sbi_status))
         )
         uow_mock.sbis_status_history = sbis_status_history_mock
         uow_mock.commit().return_value = "200"

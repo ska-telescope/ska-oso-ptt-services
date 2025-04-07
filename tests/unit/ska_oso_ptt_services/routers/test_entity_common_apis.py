@@ -3,13 +3,6 @@ from http import HTTPStatus
 import pytest
 
 from ska_oso_ptt_services.app import API_PREFIX
-from tests.unit.ska_oso_ptt_services.utils import assert_json_is_equal
-
-common_error = {
-    "detail": "Different query types are not currently supported"
-    " - for example, "
-    "cannot combine date created query or entity query with a user query"
-}
 
 
 @pytest.mark.parametrize(
@@ -104,7 +97,7 @@ def test_put_entity_mismatch_history(entity_name, entity_id, entity_data, client
                 "current1_status": "Submitted",
                 "previous_status": "Draft",
                 "prj_version": "1",
-            }
+            },
         ),
         (
             "sbds",
@@ -114,7 +107,7 @@ def test_put_entity_mismatch_history(entity_name, entity_id, entity_data, client
                 "current1_status": "Complete",
                 "previous_status": "Draft",
                 "sbd_version": "1",
-            }
+            },
         ),
         (
             "sbis",
@@ -124,7 +117,7 @@ def test_put_entity_mismatch_history(entity_name, entity_id, entity_data, client
                 "current1_status": "Executing",
                 "previous_status": "Created",
                 "sbi_version": "1",
-            }
+            },
         ),
         (
             "ebs",
@@ -134,7 +127,7 @@ def test_put_entity_mismatch_history(entity_name, entity_id, entity_data, client
                 "current1_status": "Fully Observed",
                 "previous_status": "Created",
                 "eb_version": "1",
-            }
+            },
         ),
     ],
 )
@@ -149,5 +142,7 @@ def test_put_invalid_all_entity_history(
         json=entity_data,
     ).json()
 
-    assert "details" in result['result_data']
+    print(f"@@@@@@@@@@@@ {result}")
+
+    assert "details" in result["result_data"]
     assert result["result_code"] == HTTPStatus.UNPROCESSABLE_ENTITY

@@ -84,14 +84,14 @@ class TestProjectAPI:
         assert result["result_code"] == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.prjs.oda")
-    def test_get_single_invalid_prj_with_status(
-        self, mock_oda, client_get
-    ):
+    def test_get_single_invalid_prj_with_status(self, mock_oda, client_get):
         """Verifying that get_single_prj_with_status API returns
         requested prj with status"""
 
         uow_mock = mock.MagicMock()
-        uow_mock.prjs.get.side_effect = ODANotFound(identifier="prj-mvp01-20240426-5007")
+        uow_mock.prjs.get.side_effect = ODANotFound(
+            identifier="prj-mvp01-20240426-5007"
+        )
         mock_oda.uow().__enter__.return_value = uow_mock
 
         result = client_get(f"{API_PREFIX}/prjs/prj-mvp01-20240426-5007").json()
@@ -177,7 +177,7 @@ class TestProjectAPI:
         result = client_get(
             f"{API_PREFIX}/prjs/prj-mvp01-20240426-5004/status",
             params={"prj_version": "1"},
-        )
+        ).json()
 
         exclude_paths = ["root['metadata']"]
 
@@ -289,7 +289,7 @@ class TestProjectAPI:
         ).json()
 
         assert_json_is_equal(
-            result["result_data"],
+            result["result_data"][0],
             valid_prj_status,
             exclude_paths,
         )
@@ -331,7 +331,7 @@ class TestProjectAPI:
         ).json()
 
         assert_json_is_equal(
-            result["result_data"],
+            result["result_data"][0],
             valid_put_prj_history_version_response,
             exclude_paths,
         )

@@ -82,9 +82,7 @@ class TestExecutionBlockAPI:
         assert result["result_code"] == HTTPStatus.OK
 
     @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
-    def test_get_single_invalid_eb_with_status(
-        self, mock_oda, client_get
-    ):
+    def test_get_single_invalid_eb_with_status(self, mock_oda, client_get):
         """Verifying that get_single_eb_with_status API returns
         requested EB with status"""
 
@@ -137,7 +135,7 @@ class TestExecutionBlockAPI:
         assert_json_is_equal(
             result["result_data"][0],
             valid_eb_status_history[0],
-            exclude_paths=exclude_paths
+            exclude_paths=exclude_paths,
         )
         assert result["result_code"] == HTTPStatus.OK
 

@@ -131,9 +131,7 @@ def get_eb_status(eb_id: str, version: int = None) -> ApiResponse[OSOEBStatusHis
                 entity_id=eb_id,
                 entity_version=version,
             )
-            return convert_to_response_object(
-                eb_status, result_code=HTTPStatus.OK
-            )
+            return convert_to_response_object(eb_status, result_code=HTTPStatus.OK)
 
         except KeyError as error_msg:
 

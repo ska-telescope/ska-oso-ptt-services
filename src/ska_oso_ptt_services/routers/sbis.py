@@ -185,7 +185,9 @@ def put_sbi_history(
             persisted_sbi = uow.sbis_status_history.add(sbi_status_history)
             uow.commit()
 
-            return convert_to_response_object(persisted_sbi, result_code=HTTPStatus.OK)
+            return convert_to_response_object(
+                persisted_sbi.model_dump(mode="json"), result_code=HTTPStatus.OK
+            )
 
         except KeyError as error_msg:
 

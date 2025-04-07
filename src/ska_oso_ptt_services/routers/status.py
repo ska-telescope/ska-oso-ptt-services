@@ -44,6 +44,6 @@ def get_entity_status(entity_name: str) -> ApiResponse[EntityStatusResponse]:
         EntityStatusResponse(
             entity_type=entity_name.lower(),
             statuses={status.name: status.value for status in entity_class},
-        ),
+        ).model_dump(mode="json"),
         result_code=HTTPStatus.OK,
     )
