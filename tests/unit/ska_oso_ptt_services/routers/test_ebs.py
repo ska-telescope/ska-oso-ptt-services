@@ -3,10 +3,12 @@ import json
 from http import HTTPStatus
 from unittest import mock
 
+import pytest
 from ska_oso_pdm import OSOEBStatusHistory, OSOExecutionBlock
 
 from ska_oso_ptt_services.app import API_PREFIX
 from ska_oso_ptt_services.common.error_handling import ODANotFound
+from ska_oso_ptt_services.common.utils import convert_to_response_object
 from tests.unit.ska_oso_ptt_services.common.constant import (
     MULTIPLE_EBS,
     MULTIPLE_EBS_STATUS,
@@ -67,23 +69,56 @@ class TestExecutionBlockAPI:
 
         uow_mock = mock.MagicMock()
         uow_mock.ebs.get.return_value = eb_mock
-        # breakpoint()
+
         mock_get_eb_status().current_status = "Fully Observed"
-        mock_oda.uow().__enter__.eb_mock.eb_id = "eb-mvp01-20240426-5004"
-        mock_oda.uow().__enter__.return_value = uow_mock
-        
+        mock_oda.uow.return_value.__enter__.return_value = uow_mock
 
         result = client_get(f"{API_PREFIX}/ebs/eb-mvp01-20240426-5004").json()
 
         exclude_paths = ["root['metadata']['pdm_version']"]
 
-        print(f"@@@@@@@@@@@@@@@@@@@@@@@@1 {result['result_data']}")
-        print(f"@@@@@@@@@@@@@@@@@@@@@@@@1 {valid_eb_with_status}")
-
         assert_json_is_equal(
             result["result_data"][0], valid_eb_with_status, exclude_paths
         )
+
         assert result["result_code"] == HTTPStatus.OK
+
+    @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
+    @mock.patch("ska_oso_ptt_services.routers.ebs.common_get_entity_status")
+    def test_get_single_invalid_eb_with_status(
+        self, mock_get_eb_status, mock_oda, client_get
+    ):
+        """Verifying that get_single_eb_with_status API returns
+        requested EB with status"""
+
+        # eb_mock = mock.MagicMock()
+        # eb_mock.model_dump.return_value = {}
+
+        # uow_mock = mock.MagicMock()
+        # uow_mock.ebs.get.side_effect = ODANotFound(identifier="eb-mvp01-20240426-5004")
+
+        # mock_get_eb_status().current_status = "Fully Observed"
+        # mock_oda.uow.return_value.__enter__.return_value = uow_mock
+        msg = "The requested identifier eb-mvp01-20240426-500 could not be found."
+
+        with pytest.raises(Exception) as e:
+            result = client_get(f"{API_PREFIX}/ebs/eb-mvp01-20240426-5004")
+
+            assert e.value.message == msg
+            # print(f"!!!!!!!!!!!!!!!!!!!!!!!!!1 {result}")
+
+        # result = client_get(f"{API_PREFIX}/ebs/eb-mvp01-20240426-5004").json()
+
+        # exclude_paths = ["root['metadata']['pdm_version']"]
+
+        # print(f"!!!!!!!!!!!!!!!!!!!!!!!!!1 {result}")
+
+        # assert_json_is_equal(
+        #     result["result_data"][0], valid_eb_with_status, exclude_paths
+        # )
+
+        # assert result["result_code"] == HTTPStatus.OK
+        # assert 1 == 2
 
     @mock.patch("ska_oso_ptt_services.routers.ebs.oda")
     def test_get_single_eb_with_invalid_status(self, mock_oda, client_get):

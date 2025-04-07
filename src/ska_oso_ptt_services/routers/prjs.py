@@ -75,20 +75,21 @@ def get_prj_with_status(prj_id: str) -> ApiResponse[ProjectStatusModel]:
     """
     with oda.uow() as uow:
 
-        if prj_id not in uow.prjs:
-            return convert_to_response_object(
-                ODANotFound(identifier=prj_id).message, result_code=HTTPStatus.NOT_FOUND
-            )
+        try:
 
-        prj = uow.prjs.get(prj_id)
-        prj_json = prj.model_dump(mode="json")
-        prj_json["status"] = common_get_entity_status(
-            entity_object=uow.prjs_status_history,
-            entity_id=prj_id,
-            entity_version=prj_json["metadata"]["version"],
-        ).current_status
+            prj = uow.prjs.get(prj_id)
+            prj_json = prj.model_dump(mode="json")
+            prj_json["status"] = common_get_entity_status(
+                entity_object=uow.prjs_status_history,
+                entity_id=prj_id,
+                entity_version=prj_json["metadata"]["version"],
+            ).current_status
 
-    return convert_to_response_object(prj_json, result_code=HTTPStatus.OK)
+            return convert_to_response_object(prj_json, result_code=HTTPStatus.OK)
+
+        except KeyError as e:
+
+            return convert_to_response_object(e, result_code=HTTPStatus.NOT_FOUND)
 
 
 @prj_router.get(
@@ -112,17 +113,19 @@ def get_prj_status(
     """
     with oda.uow() as uow:
 
-        if prj_id not in uow.prjs:
-            return convert_to_response_object(
-                ODANotFound(identifier=prj_id).message, result_code=HTTPStatus.NOT_FOUND
+        try:
+
+            prj_status = common_get_entity_status(
+                entity_object=uow.prjs_status_history,
+                entity_id=prj_id,
+                entity_version=version,
             )
 
-        prj_status = common_get_entity_status(
-            entity_object=uow.prjs_status_history,
-            entity_id=prj_id,
-            entity_version=version,
-        )
-    return convert_to_response_object(prj_status, result_code=HTTPStatus.OK)
+            return convert_to_response_object(prj_status, result_code=HTTPStatus.OK)
+
+        except KeyError as e:
+
+            return convert_to_response_object(e, result_code=HTTPStatus.NOT_FOUND)
 
 
 @prj_router.put(
@@ -151,14 +154,16 @@ def put_prj_history(
 
     with oda.uow() as uow:
 
-        if prj_id not in uow.prjs:
-            return convert_to_response_object(
-                ODANotFound(identifier=prj_id).message, result_code=HTTPStatus.NOT_FOUND
-            )
+        try:
 
-        persisted_prj = uow.prjs_status_history.add(prj_status_history)
-        uow.commit()
-    return convert_to_response_object(persisted_prj, result_code=HTTPStatus.OK)
+            persisted_prj = uow.prjs_status_history.add(prj_status_history)
+            uow.commit()
+
+            return convert_to_response_object(persisted_prj, result_code=HTTPStatus.OK)
+
+        except KeyError as e:
+
+            return convert_to_response_object(e, result_code=HTTPStatus.NOT_FOUND)
 
 
 @prj_router.get(

@@ -75,19 +75,21 @@ def get_sbd_with_status(sbd_id: str) -> ApiResponse[SBDefinitionStatusModel]:
     """
     with oda.uow() as uow:
 
-        if sbd_id not in uow.sbds:
-            return convert_to_response_object(
-                ODANotFound(identifier=sbd_id).message, result_code=HTTPStatus.NOT_FOUND
-            )
+        try:
 
-        sbd = uow.sbds.get(sbd_id)
-        sbd_json = sbd.model_dump(mode="json")
-        sbd_json["status"] = common_get_entity_status(
-            entity_object=uow.sbds_status_history,
-            entity_id=sbd_id,
-            entity_version=sbd_json["metadata"]["version"],
-        ).current_status
-    return convert_to_response_object(sbd_json, result_code=HTTPStatus.OK)
+            sbd = uow.sbds.get(sbd_id)
+            sbd_json = sbd.model_dump(mode="json")
+            sbd_json["status"] = common_get_entity_status(
+                entity_object=uow.sbds_status_history,
+                entity_id=sbd_id,
+                entity_version=sbd_json["metadata"]["version"],
+            ).current_status
+
+            return convert_to_response_object(sbd_json, result_code=HTTPStatus.OK)
+
+        except KeyError as e:
+
+            return convert_to_response_object(e, result_code=HTTPStatus.NOT_FOUND)
 
 
 @sbd_router.get(
@@ -109,18 +111,19 @@ def get_sbd_status(sbd_id: str, version: str = None) -> ApiResponse[SBDStatusHis
     """
     with oda.uow() as uow:
 
-        if sbd_id not in uow.sbds:
-            return convert_to_response_object(
-                ODANotFound(identifier=sbd_id).message, result_code=HTTPStatus.NOT_FOUND
+        try:
+
+            sbd_status = common_get_entity_status(
+                entity_object=uow.sbds_status_history,
+                entity_id=sbd_id,
+                entity_version=version,
             )
 
-        sbd_status = common_get_entity_status(
-            entity_object=uow.sbds_status_history,
-            entity_id=sbd_id,
-            entity_version=version,
-        )
+            return convert_to_response_object(sbd_status, result_code=HTTPStatus.OK)
 
-    return convert_to_response_object(sbd_status, result_code=HTTPStatus.OK)
+        except KeyError as e:
+
+            return convert_to_response_object(e, result_code=HTTPStatus.NOT_FOUND)
 
 
 @sbd_router.put(
@@ -149,15 +152,17 @@ def put_sbd_history(
 
     with oda.uow() as uow:
 
-        if sbd_id not in uow.sbds:
-            return convert_to_response_object(
-                ODANotFound(identifier=sbd_id).message, result_code=HTTPStatus.NOT_FOUND
-            )
+        try:
 
-        persisted_sbd = uow.sbds_status_history.add(sbd_status_history)
+            persisted_sbd = uow.sbds_status_history.add(sbd_status_history)
 
-        uow.commit()
-    return convert_to_response_object(persisted_sbd, result_code=HTTPStatus.OK)
+            uow.commit()
+
+            return convert_to_response_object(persisted_sbd, result_code=HTTPStatus.OK)
+
+        except KeyError as e:
+
+            return convert_to_response_object(e, result_code=HTTPStatus.NOT_FOUND)
 
 
 @sbd_router.get(
