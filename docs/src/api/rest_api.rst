@@ -13,6 +13,6 @@ The host depends on the environment that the server is deployed to, and may incl
 The PTT API endpoints, with the accepted requests and expected responses, are documented below:
 
 .. Will be taken care in NAK-1231 MR
-.. .. openapi:: ../../openapi/openapi.json
+.. openapi:: ../../openapi/openapi.json
 ..    :examples:
 
