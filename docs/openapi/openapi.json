@@ -130,11 +130,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/SBDefinitionStatusModel-Input"
-                  },
-                  "title": "Response 200 Get Sbds With Status Ska Oso Ptt Services Ptt Api V0 Sbds Get"
+                  "$ref": "#/components/schemas/ApiResponse_SBDefinitionStatusModel_-Input"
                 }
               }
             }
@@ -177,7 +173,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SBDefinitionStatusModel-Input"
+                  "$ref": "#/components/schemas/ApiResponse_SBDefinitionStatusModel_-Input"
                 }
               }
             }
@@ -229,7 +225,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SBDStatusHistory-Input"
+                  "$ref": "#/components/schemas/ApiResponse_SBDStatusHistory_-Input"
                 }
               }
             }
@@ -280,7 +276,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SBDStatusHistory-Input"
+                  "$ref": "#/components/schemas/ApiResponse_SBDStatusHistory_-Input"
                 }
               }
             }
@@ -339,11 +335,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/SBDStatusHistory-Input"
-                  },
-                  "title": "Response 200 Get Sbd Status History Ska Oso Ptt Services Ptt Api V0 Sbds Status History Get"
+                  "$ref": "#/components/schemas/ApiResponse_SBDStatusHistory_-Input"
                 }
               }
             }
@@ -486,11 +478,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/SBInstanceStatusModel-Input"
-                  },
-                  "title": "Response 200 Get Sbis With Status Ska Oso Ptt Services Ptt Api V0 Sbis Get"
+                  "$ref": "#/components/schemas/ApiResponse_SBInstanceStatusModel_-Input"
                 }
               }
             }
@@ -533,7 +521,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SBInstanceStatusModel-Input"
+                  "$ref": "#/components/schemas/ApiResponse_SBInstanceStatusModel_-Input"
                 }
               }
             }
@@ -585,7 +573,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SBIStatusHistory-Input"
+                  "$ref": "#/components/schemas/ApiResponse_SBIStatusHistory_-Input"
                 }
               }
             }
@@ -636,7 +624,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SBIStatusHistory-Input"
+                  "$ref": "#/components/schemas/ApiResponse_SBIStatusHistory_-Input"
                 }
               }
             }
@@ -695,11 +683,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/SBIStatusHistory-Input"
-                  },
-                  "title": "Response 200 Get Sbi Status History Ska Oso Ptt Services Ptt Api V0 Sbis Status History Get"
+                  "$ref": "#/components/schemas/ApiResponse_SBIStatusHistory_-Input"
                 }
               }
             }
@@ -842,11 +826,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/EBStatusModel-Input"
-                  },
-                  "title": "Response 200 Get Ebs With Status Ska Oso Ptt Services Ptt Api V0 Ebs Get"
+                  "$ref": "#/components/schemas/ApiResponse_EBStatusModel_-Input"
                 }
               }
             }
@@ -889,7 +869,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/EBStatusModel-Input"
+                  "$ref": "#/components/schemas/ApiResponse_EBStatusModel_-Input"
                 }
               }
             }
@@ -941,7 +921,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/OSOEBStatusHistory-Input"
+                  "$ref": "#/components/schemas/ApiResponse_OSOEBStatusHistory_-Input"
                 }
               }
             }
@@ -992,7 +972,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/OSOEBStatusHistory-Input"
+                  "$ref": "#/components/schemas/ApiResponse_OSOEBStatusHistory_-Input"
                 }
               }
             }
@@ -1051,11 +1031,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/OSOEBStatusHistory-Input"
-                  },
-                  "title": "Response 200 Get Eb Status History Ska Oso Ptt Services Ptt Api V0 Ebs Status History Get"
+                  "$ref": "#/components/schemas/ApiResponse_OSOEBStatusHistory_-Input"
                 }
               }
             }
@@ -1198,11 +1174,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/ProjectStatusModel-Input"
-                  },
-                  "title": "Response 200 Get Prjs With Status Ska Oso Ptt Services Ptt Api V0 Prjs Get"
+                  "$ref": "#/components/schemas/ApiResponse_ProjectStatusModel_-Input"
                 }
               }
             }
@@ -1245,7 +1217,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProjectStatusModel-Input"
+                  "$ref": "#/components/schemas/ApiResponse_ProjectStatusModel_-Input"
                 }
               }
             }
@@ -1297,7 +1269,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProjectStatusHistory-Input"
+                  "$ref": "#/components/schemas/ApiResponse_ProjectStatusHistory_-Input"
                 }
               }
             }
@@ -1348,7 +1320,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProjectStatusHistory-Input"
+                  "$ref": "#/components/schemas/ApiResponse_ProjectStatusHistory_-Input"
                 }
               }
             }
@@ -1407,11 +1379,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/ProjectStatusHistory-Input"
-                  },
-                  "title": "Response 200 Get Prj Status History Ska Oso Ptt Services Ptt Api V0 Prjs Status History Get"
+                  "$ref": "#/components/schemas/ApiResponse_ProjectStatusHistory_-Input"
                 }
               }
             }
@@ -1454,7 +1422,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/EntityStatusResponse"
+                  "$ref": "#/components/schemas/ApiResponse_EntityStatusResponse_"
                 }
               }
             }
@@ -1475,7 +1443,7 @@
   },
   "components": {
     "schemas": {
-      "ActivityCall": {
+      "ActivityCall-Input": {
         "properties": {
           "activity_ref": {
             "anyOf": [
@@ -1495,7 +1463,7 @@
           },
           "runtime_args": {
             "items": {
-              "$ref": "#/components/schemas/FunctionArgs"
+              "$ref": "#/components/schemas/FunctionArgs-Input"
             },
             "type": "array",
             "title": "Runtime Args"
@@ -1503,6 +1471,9 @@
         },
         "type": "object",
         "title": "ActivityCall"
+      },
+      "ActivityCall-Output": {
+        "type": "object"
       },
       "AltAzCoordinates-Input": {
         "properties": {
@@ -1566,7 +1537,7 @@
         "title": "AngleUnits",
         "description": "Enumeration of units used to measure angles."
       },
-      "Aperture": {
+      "Aperture-Input": {
         "properties": {
           "station_id": {
             "type": "integer",
@@ -1592,7 +1563,656 @@
         "title": "Aperture",
         "description": "Aperture specifies how the aperture of a subarray beam should be\nconfigured.\n\n:param station_id: ID of station\n:param substation_id: ID of sub station\n:param weighting_key: weighting key value"
       },
-      "Author": {
+      "Aperture-Output": {
+        "type": "object"
+      },
+      "ApiResponse_EBStatusModel_-Input": {
+        "properties": {
+          "result_data": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/EBStatusModel-Input"
+                },
+                "type": "array"
+              },
+              {
+                "additionalProperties": {
+                  "$ref": "#/components/schemas/EBStatusModel-Input"
+                },
+                "type": "object"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Result Data"
+          },
+          "result_status": {
+            "type": "string",
+            "title": "Result Status"
+          },
+          "result_code": {
+            "$ref": "#/components/schemas/HTTPStatus",
+            "default": 200
+          }
+        },
+        "type": "object",
+        "required": [
+          "result_data",
+          "result_status"
+        ],
+        "title": "ApiResponse[EBStatusModel]"
+      },
+      "ApiResponse_EBStatusModel_-Output": {
+        "properties": {
+          "result_data": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/EBStatusModel-Output"
+                },
+                "type": "array"
+              },
+              {
+                "additionalProperties": {
+                  "$ref": "#/components/schemas/EBStatusModel-Output"
+                },
+                "type": "object"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Result Data"
+          },
+          "result_status": {
+            "type": "string",
+            "title": "Result Status"
+          },
+          "result_code": {
+            "$ref": "#/components/schemas/HTTPStatus",
+            "default": 200
+          }
+        },
+        "type": "object",
+        "required": [
+          "result_data",
+          "result_status"
+        ],
+        "title": "ApiResponse[EBStatusModel]"
+      },
+      "ApiResponse_EntityStatusResponse_": {
+        "properties": {
+          "result_data": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/EntityStatusResponse"
+                },
+                "type": "array"
+              },
+              {
+                "additionalProperties": {
+                  "$ref": "#/components/schemas/EntityStatusResponse"
+                },
+                "type": "object"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Result Data"
+          },
+          "result_status": {
+            "type": "string",
+            "title": "Result Status"
+          },
+          "result_code": {
+            "$ref": "#/components/schemas/HTTPStatus",
+            "default": 200
+          }
+        },
+        "type": "object",
+        "required": [
+          "result_data",
+          "result_status"
+        ],
+        "title": "ApiResponse[EntityStatusResponse]"
+      },
+      "ApiResponse_OSOEBStatusHistory_-Input": {
+        "properties": {
+          "result_data": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/OSOEBStatusHistory-Input"
+                },
+                "type": "array"
+              },
+              {
+                "additionalProperties": {
+                  "$ref": "#/components/schemas/OSOEBStatusHistory-Input"
+                },
+                "type": "object"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Result Data"
+          },
+          "result_status": {
+            "type": "string",
+            "title": "Result Status"
+          },
+          "result_code": {
+            "$ref": "#/components/schemas/HTTPStatus",
+            "default": 200
+          }
+        },
+        "type": "object",
+        "required": [
+          "result_data",
+          "result_status"
+        ],
+        "title": "ApiResponse[OSOEBStatusHistory]"
+      },
+      "ApiResponse_OSOEBStatusHistory_-Output": {
+        "properties": {
+          "result_data": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/OSOEBStatusHistory-Output"
+                },
+                "type": "array"
+              },
+              {
+                "additionalProperties": {
+                  "$ref": "#/components/schemas/OSOEBStatusHistory-Output"
+                },
+                "type": "object"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Result Data"
+          },
+          "result_status": {
+            "type": "string",
+            "title": "Result Status"
+          },
+          "result_code": {
+            "$ref": "#/components/schemas/HTTPStatus",
+            "default": 200
+          }
+        },
+        "type": "object",
+        "required": [
+          "result_data",
+          "result_status"
+        ],
+        "title": "ApiResponse[OSOEBStatusHistory]"
+      },
+      "ApiResponse_ProjectStatusHistory_-Input": {
+        "properties": {
+          "result_data": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/ProjectStatusHistory-Input"
+                },
+                "type": "array"
+              },
+              {
+                "additionalProperties": {
+                  "$ref": "#/components/schemas/ProjectStatusHistory-Input"
+                },
+                "type": "object"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Result Data"
+          },
+          "result_status": {
+            "type": "string",
+            "title": "Result Status"
+          },
+          "result_code": {
+            "$ref": "#/components/schemas/HTTPStatus",
+            "default": 200
+          }
+        },
+        "type": "object",
+        "required": [
+          "result_data",
+          "result_status"
+        ],
+        "title": "ApiResponse[ProjectStatusHistory]"
+      },
+      "ApiResponse_ProjectStatusHistory_-Output": {
+        "properties": {
+          "result_data": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/ProjectStatusHistory-Output"
+                },
+                "type": "array"
+              },
+              {
+                "additionalProperties": {
+                  "$ref": "#/components/schemas/ProjectStatusHistory-Output"
+                },
+                "type": "object"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Result Data"
+          },
+          "result_status": {
+            "type": "string",
+            "title": "Result Status"
+          },
+          "result_code": {
+            "$ref": "#/components/schemas/HTTPStatus",
+            "default": 200
+          }
+        },
+        "type": "object",
+        "required": [
+          "result_data",
+          "result_status"
+        ],
+        "title": "ApiResponse[ProjectStatusHistory]"
+      },
+      "ApiResponse_ProjectStatusModel_-Input": {
+        "properties": {
+          "result_data": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/ProjectStatusModel-Input"
+                },
+                "type": "array"
+              },
+              {
+                "additionalProperties": {
+                  "$ref": "#/components/schemas/ProjectStatusModel-Input"
+                },
+                "type": "object"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Result Data"
+          },
+          "result_status": {
+            "type": "string",
+            "title": "Result Status"
+          },
+          "result_code": {
+            "$ref": "#/components/schemas/HTTPStatus",
+            "default": 200
+          }
+        },
+        "type": "object",
+        "required": [
+          "result_data",
+          "result_status"
+        ],
+        "title": "ApiResponse[ProjectStatusModel]"
+      },
+      "ApiResponse_ProjectStatusModel_-Output": {
+        "properties": {
+          "result_data": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/ProjectStatusModel-Output"
+                },
+                "type": "array"
+              },
+              {
+                "additionalProperties": {
+                  "$ref": "#/components/schemas/ProjectStatusModel-Output"
+                },
+                "type": "object"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Result Data"
+          },
+          "result_status": {
+            "type": "string",
+            "title": "Result Status"
+          },
+          "result_code": {
+            "$ref": "#/components/schemas/HTTPStatus",
+            "default": 200
+          }
+        },
+        "type": "object",
+        "required": [
+          "result_data",
+          "result_status"
+        ],
+        "title": "ApiResponse[ProjectStatusModel]"
+      },
+      "ApiResponse_SBDStatusHistory_-Input": {
+        "properties": {
+          "result_data": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/SBDStatusHistory-Input"
+                },
+                "type": "array"
+              },
+              {
+                "additionalProperties": {
+                  "$ref": "#/components/schemas/SBDStatusHistory-Input"
+                },
+                "type": "object"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Result Data"
+          },
+          "result_status": {
+            "type": "string",
+            "title": "Result Status"
+          },
+          "result_code": {
+            "$ref": "#/components/schemas/HTTPStatus",
+            "default": 200
+          }
+        },
+        "type": "object",
+        "required": [
+          "result_data",
+          "result_status"
+        ],
+        "title": "ApiResponse[SBDStatusHistory]"
+      },
+      "ApiResponse_SBDStatusHistory_-Output": {
+        "properties": {
+          "result_data": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/SBDStatusHistory-Output"
+                },
+                "type": "array"
+              },
+              {
+                "additionalProperties": {
+                  "$ref": "#/components/schemas/SBDStatusHistory-Output"
+                },
+                "type": "object"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Result Data"
+          },
+          "result_status": {
+            "type": "string",
+            "title": "Result Status"
+          },
+          "result_code": {
+            "$ref": "#/components/schemas/HTTPStatus",
+            "default": 200
+          }
+        },
+        "type": "object",
+        "required": [
+          "result_data",
+          "result_status"
+        ],
+        "title": "ApiResponse[SBDStatusHistory]"
+      },
+      "ApiResponse_SBDefinitionStatusModel_-Input": {
+        "properties": {
+          "result_data": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/SBDefinitionStatusModel-Input"
+                },
+                "type": "array"
+              },
+              {
+                "additionalProperties": {
+                  "$ref": "#/components/schemas/SBDefinitionStatusModel-Input"
+                },
+                "type": "object"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Result Data"
+          },
+          "result_status": {
+            "type": "string",
+            "title": "Result Status"
+          },
+          "result_code": {
+            "$ref": "#/components/schemas/HTTPStatus",
+            "default": 200
+          }
+        },
+        "type": "object",
+        "required": [
+          "result_data",
+          "result_status"
+        ],
+        "title": "ApiResponse[SBDefinitionStatusModel]"
+      },
+      "ApiResponse_SBDefinitionStatusModel_-Output": {
+        "properties": {
+          "result_data": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/SBDefinitionStatusModel-Output"
+                },
+                "type": "array"
+              },
+              {
+                "additionalProperties": {
+                  "$ref": "#/components/schemas/SBDefinitionStatusModel-Output"
+                },
+                "type": "object"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Result Data"
+          },
+          "result_status": {
+            "type": "string",
+            "title": "Result Status"
+          },
+          "result_code": {
+            "$ref": "#/components/schemas/HTTPStatus",
+            "default": 200
+          }
+        },
+        "type": "object",
+        "required": [
+          "result_data",
+          "result_status"
+        ],
+        "title": "ApiResponse[SBDefinitionStatusModel]"
+      },
+      "ApiResponse_SBIStatusHistory_-Input": {
+        "properties": {
+          "result_data": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/SBIStatusHistory-Input"
+                },
+                "type": "array"
+              },
+              {
+                "additionalProperties": {
+                  "$ref": "#/components/schemas/SBIStatusHistory-Input"
+                },
+                "type": "object"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Result Data"
+          },
+          "result_status": {
+            "type": "string",
+            "title": "Result Status"
+          },
+          "result_code": {
+            "$ref": "#/components/schemas/HTTPStatus",
+            "default": 200
+          }
+        },
+        "type": "object",
+        "required": [
+          "result_data",
+          "result_status"
+        ],
+        "title": "ApiResponse[SBIStatusHistory]"
+      },
+      "ApiResponse_SBIStatusHistory_-Output": {
+        "properties": {
+          "result_data": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/SBIStatusHistory-Output"
+                },
+                "type": "array"
+              },
+              {
+                "additionalProperties": {
+                  "$ref": "#/components/schemas/SBIStatusHistory-Output"
+                },
+                "type": "object"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Result Data"
+          },
+          "result_status": {
+            "type": "string",
+            "title": "Result Status"
+          },
+          "result_code": {
+            "$ref": "#/components/schemas/HTTPStatus",
+            "default": 200
+          }
+        },
+        "type": "object",
+        "required": [
+          "result_data",
+          "result_status"
+        ],
+        "title": "ApiResponse[SBIStatusHistory]"
+      },
+      "ApiResponse_SBInstanceStatusModel_-Input": {
+        "properties": {
+          "result_data": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/SBInstanceStatusModel-Input"
+                },
+                "type": "array"
+              },
+              {
+                "additionalProperties": {
+                  "$ref": "#/components/schemas/SBInstanceStatusModel-Input"
+                },
+                "type": "object"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Result Data"
+          },
+          "result_status": {
+            "type": "string",
+            "title": "Result Status"
+          },
+          "result_code": {
+            "$ref": "#/components/schemas/HTTPStatus",
+            "default": 200
+          }
+        },
+        "type": "object",
+        "required": [
+          "result_data",
+          "result_status"
+        ],
+        "title": "ApiResponse[SBInstanceStatusModel]"
+      },
+      "ApiResponse_SBInstanceStatusModel_-Output": {
+        "properties": {
+          "result_data": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/SBInstanceStatusModel-Output"
+                },
+                "type": "array"
+              },
+              {
+                "additionalProperties": {
+                  "$ref": "#/components/schemas/SBInstanceStatusModel-Output"
+                },
+                "type": "object"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Result Data"
+          },
+          "result_status": {
+            "type": "string",
+            "title": "Result Status"
+          },
+          "result_code": {
+            "$ref": "#/components/schemas/HTTPStatus",
+            "default": 200
+          }
+        },
+        "type": "object",
+        "required": [
+          "result_data",
+          "result_status"
+        ],
+        "title": "ApiResponse[SBInstanceStatusModel]"
+      },
+      "Author-Input": {
         "properties": {
           "pis": {
             "items": {
@@ -1613,6 +2233,9 @@
         "title": "Author",
         "description": "The author of a Proposal"
       },
+      "Author-Output": {
+        "type": "object"
+      },
       "Beam-Output": {
         "type": "object"
       },
@@ -1628,7 +2251,7 @@
         "title": "BeamFunction",
         "description": "Enumeration of possible functions for an SDP Beam."
       },
-      "BeamMapping": {
+      "BeamMapping-Input": {
         "properties": {
           "beam_ref": {
             "type": "string",
@@ -1675,11 +2298,14 @@
         "title": "BeamMapping",
         "description": "Class to hold mapping of beam parameters to scans"
       },
-      "CBFConfiguration": {
+      "BeamMapping-Output": {
+        "type": "object"
+      },
+      "CBFConfiguration-Input": {
         "properties": {
           "fsps": {
             "items": {
-              "$ref": "#/components/schemas/FSPConfiguration"
+              "$ref": "#/components/schemas/FSPConfiguration-Input"
             },
             "type": "array",
             "title": "Fsps"
@@ -1687,7 +2313,7 @@
           "vlbi": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/VLBIConfiguration"
+                "$ref": "#/components/schemas/VLBIConfiguration-Input"
               },
               {
                 "type": "null"
@@ -1699,7 +2325,10 @@
         "title": "CBFConfiguration",
         "description": "Class to hold all FSP and VLBI configurations.\n\n:param fsps: List of the FSP configurations to set\n:param vlbi: the VLBI configuration to set (optional)"
       },
-      "CSPConfiguration": {
+      "CBFConfiguration-Output": {
+        "type": "object"
+      },
+      "CSPConfiguration-Input": {
         "properties": {
           "config_id": {
             "anyOf": [
@@ -1720,7 +2349,7 @@
           "subarray": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/SubarrayConfiguration"
+                "$ref": "#/components/schemas/SubarrayConfiguration-Input"
               },
               {
                 "type": "null"
@@ -1730,7 +2359,7 @@
           "common": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/CommonConfiguration"
+                "$ref": "#/components/schemas/CommonConfiguration-Input"
               },
               {
                 "type": "null"
@@ -1740,7 +2369,7 @@
           "cbf": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/CBFConfiguration"
+                "$ref": "#/components/schemas/CBFConfiguration-Input"
               },
               {
                 "type": "null"
@@ -1750,7 +2379,7 @@
           "midcbf": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/MidCBFConfiguration"
+                "$ref": "#/components/schemas/MidCBFConfiguration-Input"
               },
               {
                 "type": "null"
@@ -1760,7 +2389,7 @@
           "lowcbf": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/LowCBFConfiguration"
+                "$ref": "#/components/schemas/LowCBFConfiguration-Input"
               },
               {
                 "type": "null"
@@ -1770,7 +2399,7 @@
           "pst": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/PSTConfiguration"
+                "$ref": "#/components/schemas/PSTConfiguration-Input"
               },
               {
                 "type": "null"
@@ -1780,7 +2409,7 @@
           "pss": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/PSSConfiguration"
+                "$ref": "#/components/schemas/PSSConfiguration-Input"
               },
               {
                 "type": "null"
@@ -1792,12 +2421,15 @@
         "title": "CSPConfiguration",
         "description": "Class to hold all CSP configuration.\n\n:param config_id: an ID for CSP configuration\n:param name: a user-friendly name to identify the CSP configuration\n:param subarray_config: Sub-array configuration to set\n:param common_config: the common CSP elements to set\n:param cbf_config: the CBF configurations to set\n:param midcbf_config: the MidCBF configurations to set\n:param lowcbf_config: the LowCBF configurations to set\n:param pst_config: the PST configurations to set\n:param pss_config: the PSS configurations to set"
       },
+      "CSPConfiguration-Output": {
+        "type": "object"
+      },
       "ChannelAveragingFactor": {
         "type": "integer",
         "enum": [1, 2, 3, 4, 6, 8, 12, 16, 24, 31, 32, 48],
         "title": "ChannelAveragingFactor"
       },
-      "Channels": {
+      "Channels-Input": {
         "properties": {
           "channels_id": {
             "type": "string",
@@ -1805,7 +2437,7 @@
           },
           "spectral_windows": {
             "items": {
-              "$ref": "#/components/schemas/SpectralWindow"
+              "$ref": "#/components/schemas/SpectralWindow-Input"
             },
             "type": "array",
             "title": "Spectral Windows"
@@ -1819,7 +2451,10 @@
         "title": "Channels",
         "description": "Class to hold Channel configuration"
       },
-      "CommonConfiguration": {
+      "Channels-Output": {
+        "type": "object"
+      },
+      "CommonConfiguration-Input": {
         "properties": {
           "subarray_id": {
             "anyOf": [
@@ -1844,7 +2479,10 @@
         "title": "CommonConfiguration",
         "description": "Class to hold the CSP sub-elements.\n\n:param subarray_id: an ID of sub-array device (optional)\n:param band_5_tuning: list of integer (optional)"
       },
-      "CoordinatesOffset": {
+      "CommonConfiguration-Output": {
+        "type": "object"
+      },
+      "CoordinatesOffset-Input": {
         "properties": {
           "x": {
             "type": "number",
@@ -1861,7 +2499,10 @@
         "title": "CoordinatesOffset",
         "description": "CoordinatesOffset defines a unitless pointing offset from a reference\nposition. Units are expected to be provided in a separate field."
       },
-      "Correlation": {
+      "CoordinatesOffset-Output": {
+        "type": "object"
+      },
+      "Correlation-Input": {
         "properties": {
           "spw_id": {
             "type": "integer",
@@ -1911,7 +2552,10 @@
         "title": "Correlation",
         "description": "Class to hold the spectral windows that will be produced by the correlator\".\n\n:param spw_id: Integer identifying the spectral window within this CSP setup\n:param logical_fsp_ids: Frequency slice processors that will be used to produce this spectral window.\n:param zoom_factor: Integer (0-7) defining the zoom window to use. '0' means non-zoom i.e. standard continuum.\n:param centre_frequency: Centre frequency of the spectral window\n:param number_of_channels: Number of channels that the correlator will produce\n:param integration_time_ms: Averaging time after which the correlator will output a visibility"
       },
-      "CorrelationSPWConfiguration": {
+      "Correlation-Output": {
+        "type": "object"
+      },
+      "CorrelationSPWConfiguration-Input": {
         "properties": {
           "spw_id": {
             "type": "integer",
@@ -1970,7 +2614,10 @@
         "title": "CorrelationSPWConfiguration",
         "description": "CorrelationSPWConfiguration defines the configuration for a CSP Frequency Slice\nProcessor.\n\n:param swp_id: SWP configuration ID [1..27]\n:param logical_fsp_ids: Logical FPS Ids\n:param receptors: list of receptors\n:param zoom_factor: zoom factor [0..6]\n:param centre_frequency: Centre Frequency\n:param number_of_channels: Number of Channels\n:param channel_averaging_factor: Channel Average Factor\n:param time_integration_factor: integer multiple of correlation integration time (140ms) [1..10]"
       },
-      "CrossScanParameters": {
+      "CorrelationSPWConfiguration-Output": {
+        "type": "object"
+      },
+      "CrossScanParameters-Input": {
         "properties": {
           "kind": {
             "type": "string",
@@ -1988,6 +2635,9 @@
         "title": "CrossScanParameters",
         "description": "CrossScanParameters defines the properties of an observing pattern that\nuses a cross scan observing pattern, typically used for pointing\ncalibrations."
       },
+      "CrossScanParameters-Output": {
+        "type": "object"
+      },
       "DateQueryType": {
         "type": "string",
         "enum": [
@@ -1996,7 +2646,7 @@
         ],
         "title": "DateQueryType"
       },
-      "DishAllocation": {
+      "DishAllocation-Input": {
         "properties": {
           "dish_allocation_id": {
             "anyOf": [
@@ -2034,6 +2684,9 @@
         "title": "DishAllocation",
         "description": "Represents the required dish array for an observation described by an SBDefinition\n\n:param dish_allocation_id: The identifier of this object within the SBDefinition\n:param selected_subarray_definition: The subarray definition, e.g. AA1. This could be inferred from the\n    dish_ids but is stored here as well for UI purposes.\n:param dish_ids: The identifier of the dishes in the allocation, e.g. SKA063"
       },
+      "DishAllocation-Output": {
+        "type": "object"
+      },
       "EBStatusModel-Input": {
         "properties": {
           "interface": {
@@ -2061,7 +2714,7 @@
           "metadata": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/Metadata"
+                "$ref": "#/components/schemas/Metadata-Input"
               },
               {
                 "type": "null"
@@ -2106,7 +2759,7 @@
           },
           "request_responses": {
             "items": {
-              "$ref": "#/components/schemas/RequestResponse"
+              "$ref": "#/components/schemas/RequestResponse-Input"
             },
             "type": "array",
             "title": "Request Responses"
@@ -2301,7 +2954,7 @@
         "title": "EquatorialCoordinatesReferenceFrame",
         "description": "Enumeration of reference frames supported by an EquatorialCoordinates"
       },
-      "ErrorWrapper": {
+      "ErrorWrapper-Input": {
         "properties": {
           "detail": {
             "anyOf": [
@@ -2329,7 +2982,10 @@
         "type": "object",
         "title": "ErrorWrapper"
       },
-      "ExecutionBlock": {
+      "ErrorWrapper-Output": {
+        "type": "object"
+      },
+      "ExecutionBlock-Input": {
         "properties": {
           "eb_id": {
             "type": "string",
@@ -2345,28 +3001,28 @@
           },
           "beams": {
             "items": {
-              "$ref": "#/components/schemas/ska_oso_pdm__sb_definition__sdp__beam__Beam"
+              "$ref": "#/components/schemas/ska_oso_pdm__sb_definition__sdp__beam__Beam-Input"
             },
             "type": "array",
             "title": "Beams"
           },
           "scan_types": {
             "items": {
-              "$ref": "#/components/schemas/ScanType"
+              "$ref": "#/components/schemas/ScanType-Input"
             },
             "type": "array",
             "title": "Scan Types"
           },
           "channels": {
             "items": {
-              "$ref": "#/components/schemas/Channels"
+              "$ref": "#/components/schemas/Channels-Input"
             },
             "type": "array",
             "title": "Channels"
           },
           "polarisations": {
             "items": {
-              "$ref": "#/components/schemas/Polarisation"
+              "$ref": "#/components/schemas/Polarisation-Input"
             },
             "type": "array",
             "title": "Polarisations"
@@ -2384,7 +3040,10 @@
         "title": "ExecutionBlock",
         "description": "ExecutionBlock captures the Execution Block resources and pipeline configuration\nrequired to process an execution block.\n\n:param eb_id: execution block ID\n:param max_length: maximum length\n:param context: context\n:param beams: list of Beams\n:param scan_types: list of EB scan types\n:param channels: list of EB channels\n:param polarisations: list of polarisations"
       },
-      "FSPConfiguration": {
+      "ExecutionBlock-Output": {
+        "type": "object"
+      },
+      "FSPConfiguration-Input": {
         "properties": {
           "fsp_id": {
             "type": "integer",
@@ -2475,6 +3134,9 @@
         "title": "FSPConfiguration",
         "description": "FSPConfiguration defines the configuration for a CSP Frequency Slice\nProcessor.\n\nChannel averaging map is an optional list of 20 x (int,int) tuples.\n\n:param fsp_id: FSP configuration ID [1..27]\n:param function_mode: FSP function mode\n:param frequency_slice_id: frequency slicer ID [1..26]\n:param zoom_factor: zoom factor [0..6]\n:param integration_factor: integer multiple of correlation integration time (140ms) [1..10]\n:param channel_averaging_map: Optional channel averaging map\n:param output_link_map: Optional output_link_map\n:param channel_offset: Optional channel offset value in integer\n:param zoom_window_tuning: Optional zoom window tuning value in integer"
       },
+      "FSPConfiguration-Output": {
+        "type": "object"
+      },
       "FSPFunctionMode": {
         "type": "string",
         "enum": [
@@ -2486,7 +3148,7 @@
         "title": "FSPFunctionMode",
         "description": "FSPFunctionMode is an enumeration of the available FSP modes."
       },
-      "FilesystemScript": {
+      "FilesystemScript-Input": {
         "properties": {
           "function_args": {
             "additionalProperties": {
@@ -2513,7 +3175,10 @@
         "title": "FilesystemScript",
         "description": "Represents an FilesystemScript to be run as an activity in an SKA scheduling block."
       },
-      "FivePointParameters": {
+      "FilesystemScript-Output": {
+        "type": "object"
+      },
+      "FivePointParameters-Input": {
         "properties": {
           "kind": {
             "type": "string",
@@ -2531,7 +3196,10 @@
         "title": "FivePointParameters",
         "description": "FivePointParameters defines the properties of an observing pattern that\nuses a five-point observing pattern centred on a reference position."
       },
-      "FunctionArgs": {
+      "FivePointParameters-Output": {
+        "type": "object"
+      },
+      "FunctionArgs-Input": {
         "properties": {
           "function_name": {
             "anyOf": [
@@ -2558,6 +3226,9 @@
         "type": "object",
         "title": "FunctionArgs",
         "description": "Represents a Python function & its arguments"
+      },
+      "FunctionArgs-Output": {
+        "type": "object"
       },
       "GalacticCoordinates-Input": {
         "properties": {
@@ -2612,7 +3283,7 @@
       "GalacticCoordinates-Output": {
         "type": "object"
       },
-      "GitScript": {
+      "GitScript-Input": {
         "properties": {
           "function_args": {
             "additionalProperties": {
@@ -2665,6 +3336,15 @@
         ],
         "title": "GitScript",
         "description": "Represents an GitScript to be run as an activity in an SKA scheduling block."
+      },
+      "GitScript-Output": {
+        "type": "object"
+      },
+      "HTTPStatus": {
+        "type": "integer",
+        "enum": [100, 101, 102, 103, 200, 201, 202, 203, 204, 205, 206, 207, 208, 226, 300, 301, 302, 303, 304, 305, 307, 308, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414, 415, 416, 417, 418, 421, 422, 423, 424, 425, 426, 428, 429, 431, 451, 500, 501, 502, 503, 504, 505, 506, 507, 508, 510, 511],
+        "title": "HTTPStatus",
+        "description": "HTTP status codes and reason phrases\n\nStatus codes from the following RFCs are all observed:\n\n    * RFC 7231: Hypertext Transfer Protocol (HTTP/1.1), obsoletes 2616\n    * RFC 6585: Additional HTTP Status Codes\n    * RFC 3229: Delta encoding in HTTP\n    * RFC 4918: HTTP Extensions for WebDAV, obsoletes 2518\n    * RFC 5842: Binding Extensions to WebDAV\n    * RFC 7238: Permanent Redirect\n    * RFC 2295: Transparent Content Negotiation in HTTP\n    * RFC 2774: An HTTP Extension Framework\n    * RFC 7725: An HTTP Status Code to Report Legal Obstacles\n    * RFC 7540: Hypertext Transfer Protocol Version 2 (HTTP/2)\n    * RFC 2324: Hyper Text Coffee Pot Control Protocol (HTCPCP/1.0)\n    * RFC 8297: An HTTP Status Code for Indicating Hints\n    * RFC 8470: Using Early Data in HTTP"
       },
       "HTTPValidationError": {
         "properties": {
@@ -2814,7 +3494,7 @@
       "ICRSCoordinates-Output": {
         "type": "object"
       },
-      "InlineScript": {
+      "InlineScript-Input": {
         "properties": {
           "function_args": {
             "additionalProperties": {
@@ -2841,7 +3521,10 @@
         "title": "InlineScript",
         "description": "Represents an InlineScript to be ran as an activity in an SKA scheduling block."
       },
-      "LowCBFConfiguration": {
+      "InlineScript-Output": {
+        "type": "object"
+      },
+      "LowCBFConfiguration-Input": {
         "properties": {
           "do_pst": {
             "type": "boolean",
@@ -2851,7 +3534,7 @@
           },
           "correlation_spws": {
             "items": {
-              "$ref": "#/components/schemas/Correlation"
+              "$ref": "#/components/schemas/Correlation-Input"
             },
             "type": "array",
             "title": "Correlation Spws",
@@ -2865,7 +3548,10 @@
         "title": "LowCBFConfiguration",
         "description": "Class to hold the LOW CBF configuration specification.\n\n:param do_pst: Boolean indicating that pulsar-timing observations are to be performed.\n:param correlation_spws: List of Correlation objects"
       },
-      "MCCSAllocation": {
+      "LowCBFConfiguration-Output": {
+        "type": "object"
+      },
+      "MCCSAllocation-Input": {
         "properties": {
           "mccs_allocation_id": {
             "type": "string",
@@ -2876,7 +3562,7 @@
           },
           "subarray_beams": {
             "items": {
-              "$ref": "#/components/schemas/SubarrayBeamConfiguration"
+              "$ref": "#/components/schemas/SubarrayBeamConfiguration-Input"
             },
             "type": "array",
             "title": "Subarray Beams"
@@ -2891,6 +3577,9 @@
         "title": "MCCSAllocation",
         "description": "MCCSAllocation is a Python representation of the MCCS allocation segment\nof a scheduling block.\n\n:param mccs_allocation_id: stations ID's to allocate\n:param selected_subarray_definition: name of pre-defined/standard configuration\n:param subarray_beams: subarray beam list"
       },
+      "MCCSAllocation-Output": {
+        "type": "object"
+      },
       "MatchType": {
         "type": "string",
         "enum": [
@@ -2900,7 +3589,7 @@
         ],
         "title": "MatchType"
       },
-      "Metadata": {
+      "Metadata-Input": {
         "properties": {
           "version": {
             "type": "integer",
@@ -2951,14 +3640,17 @@
         "title": "Metadata",
         "description": "Represents metadata about other entities."
       },
-      "MidCBFConfiguration": {
+      "Metadata-Output": {
+        "type": "object"
+      },
+      "MidCBFConfiguration-Input": {
         "properties": {
           "frequency_band": {
             "$ref": "#/components/schemas/ReceiverBand"
           },
           "subbands": {
             "items": {
-              "$ref": "#/components/schemas/Subband"
+              "$ref": "#/components/schemas/Subband-Input"
             },
             "type": "array",
             "title": "Subbands"
@@ -2970,6 +3662,9 @@
         ],
         "title": "MidCBFConfiguration",
         "description": "Class to hold all Correlation SPW configurations.\n\n:param frequency_band: Frequency Band\n:param subbands: list of subbands configurations"
+      },
+      "MidCBFConfiguration-Output": {
+        "type": "object"
       },
       "OSOEBStatus": {
         "type": "string",
@@ -2983,7 +3678,7 @@
       "OSOEBStatusHistory-Input": {
         "properties": {
           "metadata": {
-            "$ref": "#/components/schemas/Metadata"
+            "$ref": "#/components/schemas/Metadata-Input"
           },
           "eb_ref": {
             "type": "string",
@@ -3019,7 +3714,7 @@
       "OSOEBStatusHistory-Output": {
         "type": "object"
       },
-      "ObservingBlock": {
+      "ObservingBlock-Input": {
         "properties": {
           "obs_block_id": {
             "type": "string",
@@ -3050,7 +3745,10 @@
         ],
         "title": "ObservingBlock"
       },
-      "PSSConfiguration": {
+      "ObservingBlock-Output": {
+        "type": "object"
+      },
+      "PSSConfiguration-Input": {
         "properties": {
 
         },
@@ -3058,7 +3756,10 @@
         "title": "PSSConfiguration",
         "description": "Class to hold PSS configurations."
       },
-      "PSTConfiguration": {
+      "PSSConfiguration-Output": {
+        "type": "object"
+      },
+      "PSTConfiguration-Input": {
         "properties": {
 
         },
@@ -3066,7 +3767,10 @@
         "title": "PSTConfiguration",
         "description": "Class to hold PST configurations."
       },
-      "PbDependency": {
+      "PSTConfiguration-Output": {
+        "type": "object"
+      },
+      "PbDependency-Input": {
         "properties": {
           "pb_ref": {
             "type": "string",
@@ -3088,7 +3792,10 @@
         "title": "PbDependency",
         "description": "Class to hold Dependencies for ProcessingBlock"
       },
-      "PointedMosaicParameters": {
+      "PbDependency-Output": {
+        "type": "object"
+      },
+      "PointedMosaicParameters-Input": {
         "properties": {
           "kind": {
             "type": "string",
@@ -3098,7 +3805,7 @@
           },
           "offsets": {
             "items": {
-              "$ref": "#/components/schemas/CoordinatesOffset"
+              "$ref": "#/components/schemas/CoordinatesOffset-Input"
             },
             "type": "array",
             "title": "Offsets"
@@ -3113,6 +3820,9 @@
         ],
         "title": "PointedMosaicParameters",
         "description": "PointedMosaicParameters defines the properties for an observing pattern\nconsisting of a single receptor pointing with n optional offsets from\nthe reference position."
+      },
+      "PointedMosaicParameters-Output": {
+        "type": "object"
       },
       "PointingCorrection": {
         "type": "string",
@@ -3137,7 +3847,7 @@
         ],
         "title": "PointingKind"
       },
-      "PointingPattern": {
+      "PointingPattern-Input": {
         "properties": {
           "active": {
             "$ref": "#/components/schemas/PointingKind",
@@ -3147,37 +3857,37 @@
             "items": {
               "oneOf": [
                 {
-                  "$ref": "#/components/schemas/FivePointParameters"
+                  "$ref": "#/components/schemas/FivePointParameters-Input"
                 },
                 {
-                  "$ref": "#/components/schemas/CrossScanParameters"
+                  "$ref": "#/components/schemas/CrossScanParameters-Input"
                 },
                 {
-                  "$ref": "#/components/schemas/SinglePointParameters"
+                  "$ref": "#/components/schemas/SinglePointParameters-Input"
                 },
                 {
-                  "$ref": "#/components/schemas/RasterParameters"
+                  "$ref": "#/components/schemas/RasterParameters-Input"
                 },
                 {
-                  "$ref": "#/components/schemas/StarRasterParameters"
+                  "$ref": "#/components/schemas/StarRasterParameters-Input"
                 },
                 {
-                  "$ref": "#/components/schemas/SpiralParameters"
+                  "$ref": "#/components/schemas/SpiralParameters-Input"
                 },
                 {
-                  "$ref": "#/components/schemas/PointedMosaicParameters"
+                  "$ref": "#/components/schemas/PointedMosaicParameters-Input"
                 }
               ],
               "discriminator": {
                 "propertyName": "kind",
                 "mapping": {
-                  "CrossScanParameters": "#/components/schemas/CrossScanParameters",
-                  "FivePointParameters": "#/components/schemas/FivePointParameters",
-                  "PointedMosaicParameters": "#/components/schemas/PointedMosaicParameters",
-                  "RasterParameters": "#/components/schemas/RasterParameters",
-                  "SinglePointParameters": "#/components/schemas/SinglePointParameters",
-                  "SpiralParameters": "#/components/schemas/SpiralParameters",
-                  "StarRasterParameters": "#/components/schemas/StarRasterParameters"
+                  "CrossScanParameters": "#/components/schemas/CrossScanParameters-Input",
+                  "FivePointParameters": "#/components/schemas/FivePointParameters-Input",
+                  "PointedMosaicParameters": "#/components/schemas/PointedMosaicParameters-Input",
+                  "RasterParameters": "#/components/schemas/RasterParameters-Input",
+                  "SinglePointParameters": "#/components/schemas/SinglePointParameters-Input",
+                  "SpiralParameters": "#/components/schemas/SpiralParameters-Input",
+                  "StarRasterParameters": "#/components/schemas/StarRasterParameters-Input"
                 }
               }
             },
@@ -3190,7 +3900,10 @@
         "title": "PointingPattern",
         "description": "PointingPattern holds the user-configured pointing patterns and current active\npattern for receptor pointing patterns associated with a target.\n\nOne of each pointing pattern type can be held in the parameters list. Only the\nactive pattern will be used for observing; the remainder provide an easy way to\nrecover previously edited observing parameters for the target."
       },
-      "Polarisation": {
+      "PointingPattern-Output": {
+        "type": "object"
+      },
+      "Polarisation-Input": {
         "properties": {
           "polarisations_id": {
             "type": "string",
@@ -3212,14 +3925,17 @@
         "title": "Polarisation",
         "description": "Class that defines an SDP Polarisation configuration"
       },
-      "ProcessingBlock": {
+      "Polarisation-Output": {
+        "type": "object"
+      },
+      "ProcessingBlock-Input": {
         "properties": {
           "pb_id": {
             "type": "string",
             "title": "Pb Id"
           },
           "script": {
-            "$ref": "#/components/schemas/Script"
+            "$ref": "#/components/schemas/Script-Input"
           },
           "sbi_refs": {
             "items": {
@@ -3234,7 +3950,7 @@
           },
           "dependencies": {
             "items": {
-              "$ref": "#/components/schemas/PbDependency"
+              "$ref": "#/components/schemas/PbDependency-Input"
             },
             "type": "array",
             "title": "Dependencies"
@@ -3247,6 +3963,9 @@
         ],
         "title": "ProcessingBlock",
         "description": "Class to hold ProcessingBlock configuration"
+      },
+      "ProcessingBlock-Output": {
+        "type": "object"
       },
       "ProjectStatus": {
         "type": "string",
@@ -3265,7 +3984,7 @@
       "ProjectStatusHistory-Input": {
         "properties": {
           "metadata": {
-            "$ref": "#/components/schemas/Metadata"
+            "$ref": "#/components/schemas/Metadata-Input"
           },
           "prj_ref": {
             "type": "string",
@@ -3339,7 +4058,7 @@
           "metadata": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/Metadata"
+                "$ref": "#/components/schemas/Metadata-Input"
               },
               {
                 "type": "null"
@@ -3349,7 +4068,7 @@
           "author": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/Author"
+                "$ref": "#/components/schemas/Author-Input"
               },
               {
                 "type": "null"
@@ -3358,7 +4077,7 @@
           },
           "obs_blocks": {
             "items": {
-              "$ref": "#/components/schemas/ObservingBlock"
+              "$ref": "#/components/schemas/ObservingBlock-Input"
             },
             "type": "array",
             "title": "Obs Blocks"
@@ -3427,10 +4146,10 @@
         },
         "type": "object"
       },
-      "RadialVelocity": {
+      "RadialVelocity-Input": {
         "properties": {
           "quantity": {
-            "$ref": "#/components/schemas/RadialVelocityQuantity"
+            "$ref": "#/components/schemas/RadialVelocityQuantity-Input"
           },
           "definition": {
             "$ref": "#/components/schemas/RadialVelocityDefinition",
@@ -3450,6 +4169,9 @@
         "title": "RadialVelocity",
         "description": "Radial velocity measures the line-of-sight velocity of an astronomical\nsource.\n\nIn principle, the radial velocity can be converted to and from the target\nredshift. However, these values are persisted separately to give the user\nthe option of inputting either value.\n\nA velocity must also define the reference frame and definition that are\napplicable to the velocity. By default, these have values of:\n\n- definition = RADIO\n- reference_frame = LSRK\n- redshift = 0.0"
       },
+      "RadialVelocity-Output": {
+        "type": "object"
+      },
       "RadialVelocityDefinition": {
         "type": "string",
         "enum": [
@@ -3460,7 +4182,7 @@
         "title": "RadialVelocityDefinition",
         "description": "Enumeration of reference definitions supported by a RadialVelocity.\n\nThe sky frequency (ν) at which we must observe a spectral line is derived\nfrom the rest frequency of the spectral line (ν₀), the line-of-sight\nvelocity of the source (V), and the speed of light (c). The relativistic\nvelocity, or true line-of-sight velocity, is related to the observed and\nrest frequencies by\n\n    V= c * (ν₀²− ν²) / (v₀² + v²)\n\nThis equation is a bit cumbersome to use; in astronomy two different\napproximations are typically used:\n\nOptical Velocity:\n\n    Voptical = c * (λ − λ₀) / λ₀ = cz\n\n(z is the redshift of the source; λ and λ₀ are the corresponding observed\nand rest wavelengths, respectively)\n\nRadio Velocity:\n\n    Vradio = c * (ν₀ − ν) / v₀ = c * (λ−λ₀) / λ\n\nThe radio and optical velocities are not identical. Particularly, Voptical\nand Vradio diverge for large velocities. Optical velocities are commonly\nused for (Helio/Barycentric) extragalactic observations; (LSRK) radio\nvelocities are typical for Galactic observations.\n\nTaken from https://science.nrao.edu/facilities/vla/docs/manuals/obsguide/modes/line"
       },
-      "RadialVelocityQuantity": {
+      "RadialVelocityQuantity-Input": {
         "properties": {
           "value": {
             "type": "number",
@@ -3481,6 +4203,19 @@
         ],
         "title": "RadialVelocityQuantity"
       },
+      "RadialVelocityQuantity-Output": {
+        "additionalProperties": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "type": "object"
+      },
       "RadialVelocityReferenceFrame": {
         "type": "string",
         "enum": [
@@ -3491,7 +4226,7 @@
         "title": "RadialVelocityReferenceFrame",
         "description": "Reference frame in which the radial velocity is defined.\n\nThe Earth rotates, revolves around the Sun, rotates around the Galaxy,\nmoves within the Local Group, and shows motion against the Cosmic\nMicrowave Background. As for the convention above, any source velocity\nmust therefore also always be specified relative to a reference frame.\n\nVarious velocity rest frames are used in the literature. The following\ntable lists their name, the motion that is corrected for, and the maximum\namplitude of the velocity correction. Each rest frame correction is\nincremental to the preceding row:\n\nVelocity                     Rest Frame                              Correct for + max correction (km/s)\n===========================  ======================================  ======================================\nTopocentric                  Telescope                                   Nothing (0)\nGeocentric                   Earth Center                            Earth rotation (0.5)\nEarth-Moon Barycentric       Earth+Moon center of mass               Motion around Earth+Moon center of mass (0.013)\nHeliocentric                 Center of the Sun                           Earth orbital motion (30)\nBarycentric                  Earth+Sun center of mass                    Earth+Sun center of mass (0.012)\nLocal Standard of Rest           Center of Mass of local stars               Solar motion relative to nearby stars (20)\nGalactocentric               Center of Milky Way                     Milky Way Rotation (230)\nLocal Group Barycentric      Local Group center of mass              Milky Way Motion (100)\nVirgocentric                     Center of the Local Virgo supercluster  Local Group motion (300)\nCosmic Microwave Background  CMB                                     Local Supercluster Motion (600)\n\nThe velocity frame should be chosen based on the science. For most\nobservations, however, one of the following three reference frames is\ncommonly used:\n\n- Topocentric is the reference frame of the observatory (defining the sky\n  frequency of the observations). Visibilities in a measurement set are\n  typically stored in this frame.\n\n- Local Standard of Rest is the native output of images in CASA. Note that\n  there are two varieties of LSR: the kinematic LSR (LSRK) and the dynamic\n  (LSRD) definitions for the kinematic and dynamic centers, respectively.\n  In almost all cases LSRK is being used and the less precise name LSR is\n  usually used synonymously with the more modern LSRK definition.\n\n- Barycentric is a commonly used frame that has virtually replaced the\n  older Heliocentric standard. Given the small difference between the\n  Barycentric and Heliocentric frames, they are frequently used\n  interchangeably.\n\nTaken from https://science.nrao.edu/facilities/vla/docs/manuals/obsguide/modes/line"
       },
-      "RasterParameters": {
+      "RasterParameters-Input": {
         "properties": {
           "kind": {
             "type": "string",
@@ -3529,6 +4264,9 @@
         "title": "RasterParameters",
         "description": "RasterParameters defines the properties of an observing pattern that\nuses a raster pattern centred on a reference position."
       },
+      "RasterParameters-Output": {
+        "type": "object"
+      },
       "ReceiverBand": {
         "type": "string",
         "enum": [
@@ -3540,7 +4278,7 @@
         "title": "ReceiverBand",
         "description": "ReceiverBand is an enumeration of SKA MID receiver bands."
       },
-      "RequestResponse": {
+      "RequestResponse-Input": {
         "properties": {
           "request": {
             "anyOf": [
@@ -3577,7 +4315,7 @@
           "response": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/ResponseWrapper"
+                "$ref": "#/components/schemas/ResponseWrapper-Input"
               },
               {
                 "type": "null"
@@ -3587,7 +4325,7 @@
           "error": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/ErrorWrapper"
+                "$ref": "#/components/schemas/ErrorWrapper-Input"
               },
               {
                 "type": "null"
@@ -3615,7 +4353,10 @@
         "type": "object",
         "title": "RequestResponse"
       },
-      "Resources": {
+      "RequestResponse-Output": {
+        "type": "object"
+      },
+      "Resources-Input": {
         "properties": {
           "csp_links": {
             "items": {
@@ -3647,7 +4388,10 @@
         "title": "Resources",
         "description": "Class to hold SDP Resources"
       },
-      "ResponseWrapper": {
+      "Resources-Output": {
+        "type": "object"
+      },
+      "ResponseWrapper-Input": {
         "properties": {
           "result": {
             "anyOf": [
@@ -3663,6 +4407,9 @@
         },
         "type": "object",
         "title": "ResponseWrapper"
+      },
+      "ResponseWrapper-Output": {
+        "type": "object"
       },
       "SBDStatus": {
         "type": "string",
@@ -3681,7 +4428,7 @@
       "SBDStatusHistory-Input": {
         "properties": {
           "metadata": {
-            "$ref": "#/components/schemas/Metadata"
+            "$ref": "#/components/schemas/Metadata-Input"
           },
           "sbd_ref": {
             "type": "string",
@@ -3777,7 +4524,7 @@
           "metadata": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/Metadata"
+                "$ref": "#/components/schemas/Metadata-Input"
               },
               {
                 "type": "null"
@@ -3801,21 +4548,21 @@
                 "additionalProperties": {
                   "oneOf": [
                     {
-                      "$ref": "#/components/schemas/InlineScript"
+                      "$ref": "#/components/schemas/InlineScript-Input"
                     },
                     {
-                      "$ref": "#/components/schemas/FilesystemScript"
+                      "$ref": "#/components/schemas/FilesystemScript-Input"
                     },
                     {
-                      "$ref": "#/components/schemas/GitScript"
+                      "$ref": "#/components/schemas/GitScript-Input"
                     }
                   ],
                   "discriminator": {
                     "propertyName": "kind",
                     "mapping": {
-                      "filesystem": "#/components/schemas/FilesystemScript",
-                      "git": "#/components/schemas/GitScript",
-                      "inline": "#/components/schemas/InlineScript"
+                      "filesystem": "#/components/schemas/FilesystemScript-Input",
+                      "git": "#/components/schemas/GitScript-Input",
+                      "inline": "#/components/schemas/InlineScript-Input"
                     }
                   }
                 },
@@ -3831,7 +4578,7 @@
             "anyOf": [
               {
                 "items": {
-                  "$ref": "#/components/schemas/Target"
+                  "$ref": "#/components/schemas/Target-Input"
                 },
                 "type": "array"
               },
@@ -3845,7 +4592,7 @@
             "anyOf": [
               {
                 "items": {
-                  "$ref": "#/components/schemas/ScanDefinition"
+                  "$ref": "#/components/schemas/ScanDefinition-Input"
                 },
                 "type": "array"
               },
@@ -3872,7 +4619,7 @@
           "sdp_configuration": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/SDPConfiguration"
+                "$ref": "#/components/schemas/SDPConfiguration-Input"
               },
               {
                 "type": "null"
@@ -3883,7 +4630,7 @@
             "anyOf": [
               {
                 "items": {
-                  "$ref": "#/components/schemas/CSPConfiguration"
+                  "$ref": "#/components/schemas/CSPConfiguration-Input"
                 },
                 "type": "array"
               },
@@ -3896,7 +4643,7 @@
           "dish_allocations": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/DishAllocation"
+                "$ref": "#/components/schemas/DishAllocation-Input"
               },
               {
                 "type": "null"
@@ -3906,7 +4653,7 @@
           "mccs_allocation": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/MCCSAllocation"
+                "$ref": "#/components/schemas/MCCSAllocation-Input"
               },
               {
                 "type": "null"
@@ -3939,7 +4686,7 @@
       "SBIStatusHistory-Input": {
         "properties": {
           "metadata": {
-            "$ref": "#/components/schemas/Metadata"
+            "$ref": "#/components/schemas/Metadata-Input"
           },
           "sbi_ref": {
             "type": "string",
@@ -4002,7 +4749,7 @@
           "metadata": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/Metadata"
+                "$ref": "#/components/schemas/Metadata-Input"
               },
               {
                 "type": "null"
@@ -4058,7 +4805,7 @@
           },
           "activities": {
             "items": {
-              "$ref": "#/components/schemas/ActivityCall"
+              "$ref": "#/components/schemas/ActivityCall-Input"
             },
             "type": "array",
             "title": "Activities"
@@ -4077,12 +4824,12 @@
       "SBInstanceStatusModel-Output": {
         "type": "object"
       },
-      "SDPConfiguration": {
+      "SDPConfiguration-Input": {
         "properties": {
           "execution_block": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/ExecutionBlock"
+                "$ref": "#/components/schemas/ExecutionBlock-Input"
               },
               {
                 "type": "null"
@@ -4092,7 +4839,7 @@
           "resources": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/Resources"
+                "$ref": "#/components/schemas/Resources-Input"
               },
               {
                 "type": "null"
@@ -4101,7 +4848,7 @@
           },
           "processing_blocks": {
             "items": {
-              "$ref": "#/components/schemas/ProcessingBlock"
+              "$ref": "#/components/schemas/ProcessingBlock-Input"
             },
             "type": "array",
             "title": "Processing Blocks"
@@ -4111,7 +4858,10 @@
         "title": "SDPConfiguration",
         "description": "SDPConfiguration captures the SDP resources and pipeline configuration\nrequired to process an execution block.\n\n:param execution_block: the SDP ExecutionBlock object\n:param resources: external resources\n:param processing_blocks: list of SDP ProcessingBlock objects"
       },
-      "ScanDefinition": {
+      "SDPConfiguration-Output": {
+        "type": "object"
+      },
+      "ScanDefinition-Input": {
         "properties": {
           "scan_definition_id": {
             "anyOf": [
@@ -4207,7 +4957,10 @@
         "title": "ScanDefinition",
         "description": "ScanDefinition represents the instrument configuration for a single scan.\n\n:param scan_definition_id: the unique ID for this scan definition\n:param scan_duration_ms: scan duration\n:target_ref: ID of target to observe\n:mccs_allocation_ref: ID of MCCS Config\n:target_beam_configuration_refs: SKA LOW sub-array beam configurations to apply during this scan.\n:dish_allocation_ref: SKA MID dish configuration ID during this scan.\n:scan_type_ref: SKA MID scan type ID\n:csp_configuration_ref: SKA MID  Central Signal Processor ID\n:pointing_correction: operation to apply to the pointing correction model."
       },
-      "ScanType": {
+      "ScanDefinition-Output": {
+        "type": "object"
+      },
+      "ScanType-Input": {
         "properties": {
           "scan_type_id": {
             "type": "string",
@@ -4226,7 +4979,7 @@
           },
           "beams": {
             "items": {
-              "$ref": "#/components/schemas/BeamMapping"
+              "$ref": "#/components/schemas/BeamMapping-Input"
             },
             "type": "array",
             "title": "Beams"
@@ -4239,7 +4992,10 @@
         "title": "ScanType",
         "description": "Class to hold ScanType configuration"
       },
-      "Script": {
+      "ScanType-Output": {
+        "type": "object"
+      },
+      "Script-Input": {
         "properties": {
           "name": {
             "type": "string",
@@ -4262,6 +5018,9 @@
         "title": "Script",
         "description": "Class to hold Script for ProcessingBlock"
       },
+      "Script-Output": {
+        "type": "object"
+      },
       "ScriptKind": {
         "type": "string",
         "enum": [
@@ -4271,7 +5030,7 @@
         "title": "ScriptKind",
         "description": "Enumeration class to hold the kind of processing script"
       },
-      "SinglePointParameters": {
+      "SinglePointParameters-Input": {
         "properties": {
           "kind": {
             "type": "string",
@@ -4293,6 +5052,9 @@
         "type": "object",
         "title": "SinglePointParameters",
         "description": "SinglePointParameters defines the properties for an observing pattern\nconsisting of a single receptor pointing with an optional offset from\nthe reference position."
+      },
+      "SinglePointParameters-Output": {
+        "type": "object"
       },
       "SolarSystemObject-Input": {
         "properties": {
@@ -4371,7 +5133,7 @@
       "SpecialCoordinates-Output": {
         "type": "object"
       },
-      "SpectralWindow": {
+      "SpectralWindow-Input": {
         "properties": {
           "spectral_window_id": {
             "type": "string",
@@ -4426,7 +5188,10 @@
         "title": "SpectralWindow",
         "description": "Class to hold Spectral Windows configuration"
       },
-      "SpiralParameters": {
+      "SpectralWindow-Output": {
+        "type": "object"
+      },
+      "SpiralParameters-Input": {
         "properties": {
           "kind": {
             "type": "string",
@@ -4470,7 +5235,10 @@
         "title": "SpiralParameters",
         "description": "SpiralParameters defines the properties of holography observations\nto support MID holography observing\n\nThese parameters are accepted by the MeerKAT holography script but are not\nincluded in the trajectory JSON.\n\n* scan_extent: Diameter of beam pattern to measure, in degrees (default 10.0).\n* track_time: Extra time in seconds for scanning antennas to track when\n  passing over the target (default 10.0)\n* cycle_track_time: Extra time or scanning antennas to track when passing\n  over target (default 30.0)\n* slow_time: Time in seconds to slow down at start and end of each spiral arm\n  (default 6.0)\n* sample_time: Time in seconds to spend on each sample point generated\n  (default 0.25)\n* scan_speed: Scan speed in degrees per second (default 0.1)\n* slew_speed: Speed at which to slew in degrees per second, or if negative number\n  then this multiplied by scan_speed (default -1.0)\n* twist_factor Spiral twist factor (0.0 for straight radial, 1.0 standard spiral)\n  (default standard spiral = 1.0)\n* high_el_slowdown_factor: Factor by which to slow down nominal scanning speed at\n  90 degree elevation, linearly scaled from factor of 1 at 60 degrees elevation\n  (default 2.0)"
       },
-      "StarRasterParameters": {
+      "SpiralParameters-Output": {
+        "type": "object"
+      },
+      "StarRasterParameters-Input": {
         "properties": {
           "kind": {
             "type": "string",
@@ -4503,6 +5271,9 @@
         "title": "StarRasterParameters",
         "description": "StarRasterParameters defines the properties of an observing pattern that\nuses a star raster pattern centred on a reference position."
       },
+      "StarRasterParameters-Output": {
+        "type": "object"
+      },
       "SubArrayLOW": {
         "type": "string",
         "enum": [
@@ -4519,11 +5290,11 @@
         ],
         "title": "SubArrayLOW"
       },
-      "SubarrayBeamConfiguration": {
+      "SubarrayBeamConfiguration-Input": {
         "properties": {
           "apertures": {
             "items": {
-              "$ref": "#/components/schemas/Aperture"
+              "$ref": "#/components/schemas/Aperture-Input"
             },
             "type": "array",
             "title": "Apertures"
@@ -4555,7 +5326,10 @@
         "title": "SubarrayBeamConfiguration",
         "description": "SubarrayBeamConfiguration specifies how SKA LOW sub-array should be\nconfigured.\n\n:param apertures: list of aperture in this subarray\n:param subarray_beam_id: ID of subarray beam this config maps to\n:param number_of_channels: number of channels in this subarray beam,\n    this field represents the maximum number of channels that the SBD\n    will require. It should be calculated from the set of CSP\n    configurations instead of being defined by the user but is optional\n    in SubarrayBeamConfiguration for now for backwards compatibility."
       },
-      "SubarrayConfiguration": {
+      "SubarrayBeamConfiguration-Output": {
+        "type": "object"
+      },
+      "SubarrayConfiguration-Input": {
         "properties": {
           "subarray_name": {
             "type": "string",
@@ -4569,7 +5343,10 @@
         "title": "SubarrayConfiguration",
         "description": "Class to hold the parameters relevant only for the current sub-array device.\n\n:param sub-array_name: Name of the sub-array"
       },
-      "Subband": {
+      "SubarrayConfiguration-Output": {
+        "type": "object"
+      },
+      "Subband-Input": {
         "properties": {
           "band_5_tuning": {
             "anyOf": [
@@ -4587,7 +5364,7 @@
           },
           "correlation_spws": {
             "items": {
-              "$ref": "#/components/schemas/CorrelationSPWConfiguration"
+              "$ref": "#/components/schemas/CorrelationSPWConfiguration-Input"
             },
             "type": "array",
             "title": "Correlation Spws"
@@ -4597,7 +5374,10 @@
         "title": "Subband",
         "description": "Class to hold sub-band\n\n:param band_5_tuning: Band 5 Tuning\n:param frequency_slice_offset: Optional Frequency Slice Offset in AstropyQuantity\n:param correlation_spws: List of Correlation Spws"
       },
-      "Target": {
+      "Subband-Output": {
+        "type": "object"
+      },
+      "Target-Input": {
         "properties": {
           "target_id": {
             "type": "string",
@@ -4610,7 +5390,7 @@
             "default": ""
           },
           "pointing_pattern": {
-            "$ref": "#/components/schemas/PointingPattern"
+            "$ref": "#/components/schemas/PointingPattern-Input"
           },
           "reference_coordinate": {
             "oneOf": [
@@ -4639,12 +5419,12 @@
             "title": "Reference Coordinate"
           },
           "radial_velocity": {
-            "$ref": "#/components/schemas/RadialVelocity"
+            "$ref": "#/components/schemas/RadialVelocity-Input"
           },
           "tied_array_beams": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/TiedArrayBeams"
+                "$ref": "#/components/schemas/TiedArrayBeams-Input"
               },
               {
                 "type": "null"
@@ -4656,6 +5436,9 @@
         "title": "Target",
         "description": "Target represents the receptor pointing for an SKA observation, consisting\nof a reference position and a pointing pattern to be used when observing\nthe target.\n\nDefault pointing patterns and equatorial coordinates will be set if not\nprovided."
       },
+      "Target-Output": {
+        "type": "object"
+      },
       "TelescopeType": {
         "type": "string",
         "enum": [
@@ -4665,7 +5448,7 @@
         ],
         "title": "TelescopeType"
       },
-      "TiedArrayBeams": {
+      "TiedArrayBeams-Input": {
         "properties": {
           "pst_beams": {
             "items": {
@@ -4693,13 +5476,19 @@
         "title": "TiedArrayBeams",
         "description": "Tied Array Beam argument lists."
       },
-      "VLBIConfiguration": {
+      "TiedArrayBeams-Output": {
+        "type": "object"
+      },
+      "VLBIConfiguration-Input": {
         "properties": {
 
         },
         "type": "object",
         "title": "VLBIConfiguration",
         "description": "Class to hold VLBI configurations."
+      },
+      "VLBIConfiguration-Output": {
+        "type": "object"
       },
       "ValidationError": {
         "properties": {
@@ -4800,7 +5589,7 @@
         "title": "Beam",
         "description": "Tied Array Beam arguments.\n\nArgs:\n    beam_id (int): integer identifying this tied-array beam. It should be unique within each tied-array-beam class\n    beam_name (str): string\n    beam_coordinate (EquatorialCoordinatesPST): position on sky at which beam will be formed. It should lie within the HPBW of the station beam\n    stn_weights (List(float)): array of weights, one for each station."
       },
-      "ska_oso_pdm__sb_definition__sdp__beam__Beam": {
+      "ska_oso_pdm__sb_definition__sdp__beam__Beam-Input": {
         "properties": {
           "beam_id": {
             "type": "string",

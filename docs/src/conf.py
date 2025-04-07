@@ -17,8 +17,12 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
+import json
 import os
 import sys
+
+from docs.openapi.openapi_utils import get_param_type
+from ska_oso_ptt_services.app import main as app
 sys.path.insert(0, os.path.abspath("../../src"))
 autodoc_mock_imports = ["gitlab"]
 
@@ -202,4 +206,27 @@ epub_exclude_files = ['search.html']
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {'python': ('https://docs.python.org/3/', None)}
+
+
+def generate_openapi_file():
+    """Dump FastAPI OpenAPI schema into openapi.json"""
+    schema = app.openapi()
+
+    # Optional: inspect parameters and print types safely
+    for path, methods in schema["paths"].items():
+        for method, op in methods.items():
+            for param in op.get("parameters", []):
+                name = param.get("name", "unknown")
+                try:
+                    param_type = get_param_type(param)
+                except Exception as e:
+                    print(f"⚠️ Error parsing type for {name}: {e}")
+                    param_type = "error"
+                print(f"{method.upper()} {path} → {name}: {param_type}")
+
+    with open("../openapi.json", "w") as f:
+        json.dump(schema, f, indent=2)
  
+
+def setup(app):
+    generate_openapi_file()
