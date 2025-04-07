@@ -38,6 +38,7 @@ def get_prjs_with_status(
     :param query_params: Parameters to query the ODA by.
     :return: All Project present with status wrapped in a Response,
          or appropriate error Response
+
     """
 
     try:
@@ -80,6 +81,7 @@ def get_prj_with_status(prj_id: str) -> ApiResponse[ProjectStatusModel]:
     :param prj_id: Requested identifier from the path parameter
     :return: The Project with status wrapped in a Response,
         or appropriate error Response
+
     """
 
     with oda.uow() as uow:
@@ -133,6 +135,7 @@ def get_prj_status(
     :param version: Requested identifier from the path parameter
     :return: The current entity status,ProjectStatusHistory wrapped in a
         Response, or appropriate error Response
+
     """
 
     with oda.uow() as uow:
@@ -182,6 +185,7 @@ def put_prj_history(
     :param prj_id: Requested identifier from the path parameter
     :param prj_status_history: Object of ProjectStatusHistory
     :return: The Project wrapped in a Response, or appropriate error Response
+
     """
 
     response = check_entity_id_mismatch(prj_id, prj_status_history.prj_ref)
@@ -237,6 +241,7 @@ def get_prj_status_history(
     :param query_params: Parameters to query the ODA by.
     :return: The status history, ProjectStatusHistory wrapped in a Response,
         or appropriate error Response
+
     """
 
     query_params = get_qry_params(query_params)

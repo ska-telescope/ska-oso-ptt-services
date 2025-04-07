@@ -38,6 +38,7 @@ def get_sbds_with_status(
     :param query_params: Parameters to query the ODA by.
     :return: All SBDefinitions present with status wrapped in a Response, or appropriate
      error Response
+
     """
 
     try:
@@ -80,6 +81,7 @@ def get_sbd_with_status(sbd_id: str) -> ApiResponse[SBDefinitionStatusModel]:
     :param sbd_id: Requested identifier from the path parameter
     :return: The SBDefinition with status wrapped in a Response, or appropriate error
      Response
+
     """
 
     with oda.uow() as uow:
@@ -131,6 +133,7 @@ def get_sbd_status(sbd_id: str, version: str = None) -> ApiResponse[SBDStatusHis
     :param version: Requested identifier from the path parameter
     :return: The current entity status, SBDStatusHistory wrapped in a Response, or
     appropriate error Response
+
     """
 
     with oda.uow() as uow:
@@ -180,6 +183,7 @@ def put_sbd_history(
     :param sbd_id: Requested identifier from the path parameter
     :param sbd_status_history: Object of SBDStatusHistory
     :return: The SBDefinition wrapped in a Response, or appropriate error Response
+
     """
 
     response = check_entity_id_mismatch(sbd_id, sbd_status_history.sbd_ref)
@@ -236,6 +240,7 @@ def get_sbd_status_history(
     :param query_params: Parameters to query the ODA by.
     :return: The status history, SBDStatusHistory wrapped in a Response, or appropriate
      error Response
+
     """
 
     query_params = get_qry_params(query_params)

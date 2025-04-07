@@ -38,6 +38,7 @@ def get_sbis_with_status(
     :param query_params: Parameters to query the ODA by.
     :return: All SBInstance present with status wrapped in a Response,
          or appropriate error Response
+
     """
 
     try:
@@ -80,6 +81,7 @@ def get_sbi_with_status(sbi_id: str) -> ApiResponse[SBInstanceStatusModel]:
     :param sbd_id: Requested identifier from the path parameter
     :return: The SBInstance with status wrapped in a Response,
          or appropriate error Response
+
     """
 
     with oda.uow() as uow:
@@ -131,6 +133,7 @@ def get_sbi_status(sbi_id: str, version: int = None) -> ApiResponse[SBIStatusHis
     :param version: Requested identifier from the path parameter
     :return: The current entity status,SBIStatusHistory wrapped in a
         Response, or appropriate error Response
+
     """
 
     with oda.uow() as uow:
@@ -180,6 +183,7 @@ def put_sbi_history(
     :param sbi_id: Requested identifier from the path parameter
     :param sbi_status_history: Object of SBIStatusHistory
     :return: The SBInstance wrapped in a Response, or appropriate error Response
+
     """
 
     response = check_entity_id_mismatch(sbi_id, sbi_status_history.sbi_ref)
@@ -235,6 +239,7 @@ def get_sbi_status_history(
     :param query_params: Parameters to query the ODA by.
     :return: The status history, SBIStatusHistory wrapped in a Response,
         or appropriate error Response
+
     """
 
     query_params = get_qry_params(query_params)

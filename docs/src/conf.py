@@ -44,7 +44,8 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx.ext.githubpages',
     'myst_parser',
-    'sphinxcontrib.openapi'
+    'sphinxcontrib.openapi',
+    'sphinxcontrib.httpdomain'
      ]
 
 # The suffix(es) of source filenames.

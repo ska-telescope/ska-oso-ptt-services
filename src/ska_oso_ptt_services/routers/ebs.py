@@ -37,7 +37,7 @@ def get_ebs_with_status(
 
     :param query_params: Parameters to query the ODA by.
     :return: All ExecutionBlocks present with status wrapped in a Response,
-         or appropriate error Response
+    or appropriate error Response
     """
 
     # TODO need to revisit this for a better approach
@@ -83,6 +83,7 @@ def get_eb_with_status(eb_id: str) -> ApiResponse[EBStatusModel]:
     :param eb_id: Requested identifier from the path parameter
     :return: The ExecutionBlock with status wrapped in a Response,
         or appropriate error Response
+
     """
 
     with oda.uow() as uow:
@@ -134,6 +135,7 @@ def get_eb_status(eb_id: str, version: int = None) -> ApiResponse[OSOEBStatusHis
     :param version: Requested identifier from the path parameter
     :return: The current entity status,OSOEBStatusHistory wrapped in a
         Response, or appropriate error Response
+
     """
 
     with oda.uow() as uow:
@@ -182,6 +184,7 @@ def put_eb_history(
     :param eb_id: Requested identifier from the path parameter
     :param eb_status_history: Object of OSOEBStatusHistory
     :return: The ExecutionBlock wrapped in a Response, or appropriate error Response
+
     """
 
     response = check_entity_id_mismatch(eb_id, eb_status_history.eb_ref)
@@ -232,6 +235,7 @@ def get_eb_status_history(
     """
     Function that a GET /status/history request is routed to.
     This method is used to GET status history for the given entity
+
 
     :param query_params: Parameters to query the ODA by.
     :return: The status history, OSOEBStatusHistory wrapped in a Response,

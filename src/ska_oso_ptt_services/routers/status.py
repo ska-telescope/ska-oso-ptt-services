@@ -32,6 +32,7 @@ def get_entity_status(entity_name: str) -> ApiResponse[EntityStatusResponse]:
 
     Raises:
         ValueError: If an invalid entity name is provided
+
     """
 
     entity_class = entity_map.get(entity_name.lower())
