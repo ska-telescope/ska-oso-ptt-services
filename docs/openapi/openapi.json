@@ -11,7 +11,7 @@
           "SBD"
         ],
         "summary": "Get All SB Definition with status appended, filter by the query parameter like created_before, created_after and user namer",
-        "description": "Function that a GET /sbds request is routed to.\n\n:param query_params: Parameters to query the ODA by.\n:return: All SBDefinitions present with status wrapped in a Response, or appropriate\n error Response",
+        "description": "Function that a GET /sbds request is routed to.\n\n:param query_params: Parameters to query the ODA by.\n:return: All SBDefinitions present with status wrapped in a Response, or appropriate error Response",
         "operationId": "get_sbds_with_status_ska_oso_ptt_services_ptt_api_v0_sbds_get",
         "parameters": [
           {
@@ -154,7 +154,7 @@
           "SBD"
         ],
         "summary": "Get specific SB Definition by identifier with status appended",
-        "description": "Function that a GET /sbds/\u003Csbd_id\u003E request is routed to.\n\n:param sbd_id: Requested identifier from the path parameter\n:return: The SBDefinition with status wrapped in a Response, or appropriate error\n Response",
+        "description": "Function that a GET /sbds/\u003Csbd_id\u003E request is routed to.\n\n:param sbd_id: Requested identifier from the path parameter\n:return: The SBDefinition with status wrapped in a Response, or appropriate error Response",
         "operationId": "get_sbd_with_status_ska_oso_ptt_services_ptt_api_v0_sbds__sbd_id__get",
         "parameters": [
           {
@@ -197,7 +197,7 @@
           "SBD"
         ],
         "summary": "Get specific SB Definition status by the identifier",
-        "description": "Function that a GET /sbds/\u003Csbd_id\u003E/status request is routed to.\nThis method is used to GET the current status for the given sbd_id\n\n:param sbd_id: Requested identifier from the path parameter\n:param version: Requested identifier from the path parameter\n:return: The current entity status, SBDStatusHistory wrapped in a Response, or\nappropriate error Response",
+        "description": "Function that a GET /sbds/\u003Csbd_id\u003E/status request is routed to.\nThis method is used to GET the current status for the given sbd_id\n\n:param sbd_id: Requested identifier from the path parameter\n:param version: Requested identifier from the path parameter\n:return: The current entity status, SBDStatusHistory wrapped in a Response, or appropriate error Response",
         "operationId": "get_sbd_status_ska_oso_ptt_services_ptt_api_v0_sbds__sbd_id__status_get",
         "parameters": [
           {
@@ -300,7 +300,7 @@
           "SBD"
         ],
         "summary": "Get specific SB Definition status history by identifier and version",
-        "description": "Function that a GET /status/history request is routed to.\nThis method is used to GET status history for the given entity\n\n:param query_params: Parameters to query the ODA by.\n:return: The status history, SBDStatusHistory wrapped in a Response, or appropriate\n error Response",
+        "description": "Function that a GET /status/history request is routed to.\nThis method is used to GET status history for the given entity\n\n:param query_params: Parameters to query the ODA by.\n:return: The status history, SBDStatusHistory wrapped in a Response, or appropriate error Response",
         "operationId": "get_sbd_status_history_ska_oso_ptt_services_ptt_api_v0_sbds_status_history_get",
         "parameters": [
           {
@@ -359,7 +359,7 @@
           "SBI"
         ],
         "summary": "Get All SB Instance with status appended, filter by the query parameter like created_before, created_after and user name",
-        "description": "Function that a GET /sbis request is routed to.\n\n:param query_params: Parameters to query the ODA by.\n:return: All SBInstance present with status wrapped in a Response,\n     or appropriate error Response",
+        "description": "Function that a GET /sbis request is routed to.\n\n:param query_params: Parameters to query the ODA by.\n:return: All SBInstance present with status wrapped in a Response, or appropriate error Response",
         "operationId": "get_sbis_with_status_ska_oso_ptt_services_ptt_api_v0_sbis_get",
         "parameters": [
           {
@@ -502,7 +502,7 @@
           "SBI"
         ],
         "summary": "Get specific SB Instance by identifier with status appended",
-        "description": "Function that a GET /sbis/\u003Csbi_id\u003E request is routed to.\n\n:param sbd_id: Requested identifier from the path parameter\n:return: The SBInstance with status wrapped in a Response,\n     or appropriate error Response",
+        "description": "Function that a GET /sbis/\u003Csbi_id\u003E request is routed to.\n\n:param sbd_id: Requested identifier from the path parameter\n:return: The SBInstance with status wrapped in a Response, or appropriate error Response",
         "operationId": "get_sbi_with_status_ska_oso_ptt_services_ptt_api_v0_sbis__sbi_id__get",
         "parameters": [
           {
@@ -545,7 +545,7 @@
           "SBI"
         ],
         "summary": "Get SB Instance status by the identifier",
-        "description": "Function that a GET /sbi/\u003Csbi_id\u003E/status request is routed to.\nThis method is used to GET the current status for the given sbi_id\n\n:param sbi_id: Requested identifier from the path parameter\n:param version: Requested identifier from the path parameter\n:return: The current entity status,SBIStatusHistory wrapped in a\n    Response, or appropriate error Response",
+        "description": "Function that a GET /sbi/\u003Csbi_id\u003E/status request is routed to.\nThis method is used to GET the current status for the given sbi_id\n\n:param sbi_id: Requested identifier from the path parameter\n:param version: Requested identifier from the path parameter\n:return: The current entity status,SBIStatusHistory wrapped in a Response, or appropriate error Response",
         "operationId": "get_sbi_status_ska_oso_ptt_services_ptt_api_v0_sbis__sbi_id__status_get",
         "parameters": [
           {
@@ -648,7 +648,7 @@
           "SBI"
         ],
         "summary": "Get specific SB Instance status history by identifier and version",
-        "description": "Function that a GET /status/history request is routed to.\nThis method is used to GET status history for the given entity\n\n:param query_params: Parameters to query the ODA by.\n:return: The status history, SBIStatusHistory wrapped in a Response,\n    or appropriate error Response",
+        "description": "Function that a GET /status/history request is routed to.\nThis method is used to GET status history for the given entity\n\n:param query_params: Parameters to query the ODA by.\n:return: The status history, SBIStatusHistory wrapped in a Response, or appropriate error Response",
         "operationId": "get_sbi_status_history_ska_oso_ptt_services_ptt_api_v0_sbis_status_history_get",
         "parameters": [
           {
@@ -707,7 +707,7 @@
           "EB"
         ],
         "summary": "Get All Execution Block with status appended, filter by the query parameter like created_before, created_after and user name",
-        "description": "Function that a GET /ebs request is routed to.\n\n:param query_params: Parameters to query the ODA by.\n:return: All ExecutionBlocks present with status wrapped in a Response,\n     or appropriate error Response",
+        "description": "Function that a GET /ebs request is routed to.\n\n:param query_params: Parameters to query the ODA by.\n:return: All ExecutionBlocks present with status wrapped in a Response, or appropriate error Response",
         "operationId": "get_ebs_with_status_ska_oso_ptt_services_ptt_api_v0_ebs_get",
         "parameters": [
           {
@@ -850,7 +850,7 @@
           "EB"
         ],
         "summary": "Get specific Execution Block by identifier with status appended",
-        "description": "Function that a GET /ebs/\u003Ceb_id\u003E request is routed to.\n\n:param eb_id: Requested identifier from the path parameter\n:return: The ExecutionBlock with status wrapped in a Response,\n    or appropriate error Response",
+        "description": "Function that a GET /ebs/\u003Ceb_id\u003E request is routed to.\n\n:param eb_id: Requested identifier from the path parameter\n:return: The ExecutionBlock with status wrapped in a Response, or appropriate error Response",
         "operationId": "get_eb_with_status_ska_oso_ptt_services_ptt_api_v0_ebs__eb_id__get",
         "parameters": [
           {
@@ -893,7 +893,7 @@
           "EB"
         ],
         "summary": "Get specific Execution Block status by the identifier",
-        "description": "Function that a GET /ebs/\u003Ceb_id\u003E/status request is routed to.\nThis method is used to GET the current status for the given eb_id\n\n:param eb_id: Requested identifier from the path parameter\n:param version: Requested identifier from the path parameter\n:return: The current entity status,OSOEBStatusHistory wrapped in a\n    Response, or appropriate error Response",
+        "description": "Function that a GET /ebs/\u003Ceb_id\u003E/status request is routed to.\nThis method is used to GET the current status for the given eb_id\n\n:param eb_id: Requested identifier from the path parameter\n:param version: Requested identifier from the path parameter\n:return: The current entity status,OSOEBStatusHistory wrapped in a Response, or appropriate error Response",
         "operationId": "get_eb_status_ska_oso_ptt_services_ptt_api_v0_ebs__eb_id__status_get",
         "parameters": [
           {
@@ -996,7 +996,7 @@
           "EB"
         ],
         "summary": "Get specific Execution Block status history by identifier and version",
-        "description": "Function that a GET /status/history request is routed to.\nThis method is used to GET status history for the given entity\n\n:param query_params: Parameters to query the ODA by.\n:return: The status history, OSOEBStatusHistory wrapped in a Response,\n    or appropriate error Response",
+        "description": "Function that a GET /status/history request is routed to.\nThis method is used to GET status history for the given entity\n\n:param query_params: Parameters to query the ODA by.\n:return: The status history, OSOEBStatusHistory wrapped in a Response, or appropriate error Response",
         "operationId": "get_eb_status_history_ska_oso_ptt_services_ptt_api_v0_ebs_status_history_get",
         "parameters": [
           {
@@ -1055,7 +1055,7 @@
           "PRJ"
         ],
         "summary": "Get All Project with status appended, filter by the query parameter like created_before, created_after and user name",
-        "description": "Function that a GET /prjs request is routed to.\n\n:param query_params: Parameters to query the ODA by.\n:return: All Project present with status wrapped in a Response,\n     or appropriate error Response",
+        "description": "Function that a GET /prjs request is routed to.\n\n:param query_params: Parameters to query the ODA by.\n:return: All Project present with status wrapped in a Response, or appropriate error Response",
         "operationId": "get_prjs_with_status_ska_oso_ptt_services_ptt_api_v0_prjs_get",
         "parameters": [
           {
@@ -1198,7 +1198,7 @@
           "PRJ"
         ],
         "summary": "Get specific Project by identifier with status appended",
-        "description": "Function that a GET /prjs/\u003Cprj_id\u003E request is routed to.\n\n:param prj_id: Requested identifier from the path parameter\n:return: The Project with status wrapped in a Response,\n    or appropriate error Response",
+        "description": "Function that a GET /prjs/\u003Cprj_id\u003E request is routed to.\n\n:param prj_id: Requested identifier from the path parameter\n:return: The Project with status wrapped in a Response, or appropriate error Response",
         "operationId": "get_prj_with_status_ska_oso_ptt_services_ptt_api_v0_prjs__prj_id__get",
         "parameters": [
           {
@@ -1241,7 +1241,7 @@
           "PRJ"
         ],
         "summary": "Get specific Project status by the identifier",
-        "description": "Function that a GET /prjs/\u003Cprj_id\u003E/status request is routed to.\nThis method is used to GET the current status for the given prj_id\n\n:param prj_id: Requested identifier from the path parameter\n:param version: Requested identifier from the path parameter\n:return: The current entity status,ProjectStatusHistory wrapped in a\n    Response, or appropriate error Response",
+        "description": "Function that a GET /prjs/\u003Cprj_id\u003E/status request is routed to.\nThis method is used to GET the current status for the given prj_id\n\n:param prj_id: Requested identifier from the path parameter\n:param version: Requested identifier from the path parameter\n:return: The current entity status,ProjectStatusHistory wrapped in a Response, or appropriate error Response",
         "operationId": "get_prj_status_ska_oso_ptt_services_ptt_api_v0_prjs__prj_id__status_get",
         "parameters": [
           {
@@ -1344,7 +1344,7 @@
           "PRJ"
         ],
         "summary": "Get specific Project status history by identifier and version",
-        "description": "Function that a GET /status/history request is routed to.\nThis method is used to GET status history for the given entity\n\n:param query_params: Parameters to query the ODA by.\n:return: The status history, ProjectStatusHistory wrapped in a Response,\n    or appropriate error Response",
+        "description": "Function that a GET /status/history request is routed to.\nThis method is used to GET status history for the given entity\n\n:param query_params: Parameters to query the ODA by.\n:return: The status history, ProjectStatusHistory wrapped in a Response, or appropriate error Response",
         "operationId": "get_prj_status_history_ska_oso_ptt_services_ptt_api_v0_prjs_status_history_get",
         "parameters": [
           {
@@ -1443,7 +1443,7 @@
   },
   "components": {
     "schemas": {
-      "ActivityCall-Input": {
+      "ActivityCall": {
         "properties": {
           "activity_ref": {
             "anyOf": [
@@ -1463,7 +1463,7 @@
           },
           "runtime_args": {
             "items": {
-              "$ref": "#/components/schemas/FunctionArgs-Input"
+              "$ref": "#/components/schemas/FunctionArgs"
             },
             "type": "array",
             "title": "Runtime Args"
@@ -1471,9 +1471,6 @@
         },
         "type": "object",
         "title": "ActivityCall"
-      },
-      "ActivityCall-Output": {
-        "type": "object"
       },
       "AltAzCoordinates-Input": {
         "properties": {
@@ -1525,6 +1522,7 @@
         "title": "AltAzCoordinates"
       },
       "AltAzCoordinates-Output": {
+        "additionalProperties": true,
         "type": "object"
       },
       "AngleUnits": {
@@ -1537,7 +1535,7 @@
         "title": "AngleUnits",
         "description": "Enumeration of units used to measure angles."
       },
-      "Aperture-Input": {
+      "Aperture": {
         "properties": {
           "station_id": {
             "type": "integer",
@@ -1562,9 +1560,6 @@
         ],
         "title": "Aperture",
         "description": "Aperture specifies how the aperture of a subarray beam should be\nconfigured.\n\n:param station_id: ID of station\n:param substation_id: ID of sub station\n:param weighting_key: weighting key value"
-      },
-      "Aperture-Output": {
-        "type": "object"
       },
       "ApiResponse_EBStatusModel_-Input": {
         "properties": {
@@ -2212,7 +2207,7 @@
         ],
         "title": "ApiResponse[SBInstanceStatusModel]"
       },
-      "Author-Input": {
+      "Author": {
         "properties": {
           "pis": {
             "items": {
@@ -2233,10 +2228,8 @@
         "title": "Author",
         "description": "The author of a Proposal"
       },
-      "Author-Output": {
-        "type": "object"
-      },
       "Beam-Output": {
+        "additionalProperties": true,
         "type": "object"
       },
       "BeamFunction": {
@@ -2251,7 +2244,7 @@
         "title": "BeamFunction",
         "description": "Enumeration of possible functions for an SDP Beam."
       },
-      "BeamMapping-Input": {
+      "BeamMapping": {
         "properties": {
           "beam_ref": {
             "type": "string",
@@ -2298,14 +2291,11 @@
         "title": "BeamMapping",
         "description": "Class to hold mapping of beam parameters to scans"
       },
-      "BeamMapping-Output": {
-        "type": "object"
-      },
-      "CBFConfiguration-Input": {
+      "CBFConfiguration": {
         "properties": {
           "fsps": {
             "items": {
-              "$ref": "#/components/schemas/FSPConfiguration-Input"
+              "$ref": "#/components/schemas/FSPConfiguration"
             },
             "type": "array",
             "title": "Fsps"
@@ -2313,7 +2303,7 @@
           "vlbi": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/VLBIConfiguration-Input"
+                "$ref": "#/components/schemas/VLBIConfiguration"
               },
               {
                 "type": "null"
@@ -2325,10 +2315,7 @@
         "title": "CBFConfiguration",
         "description": "Class to hold all FSP and VLBI configurations.\n\n:param fsps: List of the FSP configurations to set\n:param vlbi: the VLBI configuration to set (optional)"
       },
-      "CBFConfiguration-Output": {
-        "type": "object"
-      },
-      "CSPConfiguration-Input": {
+      "CSPConfiguration": {
         "properties": {
           "config_id": {
             "anyOf": [
@@ -2349,7 +2336,7 @@
           "subarray": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/SubarrayConfiguration-Input"
+                "$ref": "#/components/schemas/SubarrayConfiguration"
               },
               {
                 "type": "null"
@@ -2359,7 +2346,7 @@
           "common": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/CommonConfiguration-Input"
+                "$ref": "#/components/schemas/CommonConfiguration"
               },
               {
                 "type": "null"
@@ -2369,7 +2356,7 @@
           "cbf": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/CBFConfiguration-Input"
+                "$ref": "#/components/schemas/CBFConfiguration"
               },
               {
                 "type": "null"
@@ -2379,7 +2366,7 @@
           "midcbf": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/MidCBFConfiguration-Input"
+                "$ref": "#/components/schemas/MidCBFConfiguration"
               },
               {
                 "type": "null"
@@ -2389,7 +2376,7 @@
           "lowcbf": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/LowCBFConfiguration-Input"
+                "$ref": "#/components/schemas/LowCBFConfiguration"
               },
               {
                 "type": "null"
@@ -2399,7 +2386,7 @@
           "pst": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/PSTConfiguration-Input"
+                "$ref": "#/components/schemas/PSTConfiguration"
               },
               {
                 "type": "null"
@@ -2409,7 +2396,7 @@
           "pss": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/PSSConfiguration-Input"
+                "$ref": "#/components/schemas/PSSConfiguration"
               },
               {
                 "type": "null"
@@ -2421,15 +2408,12 @@
         "title": "CSPConfiguration",
         "description": "Class to hold all CSP configuration.\n\n:param config_id: an ID for CSP configuration\n:param name: a user-friendly name to identify the CSP configuration\n:param subarray_config: Sub-array configuration to set\n:param common_config: the common CSP elements to set\n:param cbf_config: the CBF configurations to set\n:param midcbf_config: the MidCBF configurations to set\n:param lowcbf_config: the LowCBF configurations to set\n:param pst_config: the PST configurations to set\n:param pss_config: the PSS configurations to set"
       },
-      "CSPConfiguration-Output": {
-        "type": "object"
-      },
       "ChannelAveragingFactor": {
         "type": "integer",
         "enum": [1, 2, 3, 4, 6, 8, 12, 16, 24, 31, 32, 48],
         "title": "ChannelAveragingFactor"
       },
-      "Channels-Input": {
+      "Channels": {
         "properties": {
           "channels_id": {
             "type": "string",
@@ -2437,7 +2421,7 @@
           },
           "spectral_windows": {
             "items": {
-              "$ref": "#/components/schemas/SpectralWindow-Input"
+              "$ref": "#/components/schemas/SpectralWindow"
             },
             "type": "array",
             "title": "Spectral Windows"
@@ -2451,10 +2435,7 @@
         "title": "Channels",
         "description": "Class to hold Channel configuration"
       },
-      "Channels-Output": {
-        "type": "object"
-      },
-      "CommonConfiguration-Input": {
+      "CommonConfiguration": {
         "properties": {
           "subarray_id": {
             "anyOf": [
@@ -2479,10 +2460,7 @@
         "title": "CommonConfiguration",
         "description": "Class to hold the CSP sub-elements.\n\n:param subarray_id: an ID of sub-array device (optional)\n:param band_5_tuning: list of integer (optional)"
       },
-      "CommonConfiguration-Output": {
-        "type": "object"
-      },
-      "CoordinatesOffset-Input": {
+      "CoordinatesOffset": {
         "properties": {
           "x": {
             "type": "number",
@@ -2499,10 +2477,7 @@
         "title": "CoordinatesOffset",
         "description": "CoordinatesOffset defines a unitless pointing offset from a reference\nposition. Units are expected to be provided in a separate field."
       },
-      "CoordinatesOffset-Output": {
-        "type": "object"
-      },
-      "Correlation-Input": {
+      "Correlation": {
         "properties": {
           "spw_id": {
             "type": "integer",
@@ -2552,10 +2527,7 @@
         "title": "Correlation",
         "description": "Class to hold the spectral windows that will be produced by the correlator\".\n\n:param spw_id: Integer identifying the spectral window within this CSP setup\n:param logical_fsp_ids: Frequency slice processors that will be used to produce this spectral window.\n:param zoom_factor: Integer (0-7) defining the zoom window to use. '0' means non-zoom i.e. standard continuum.\n:param centre_frequency: Centre frequency of the spectral window\n:param number_of_channels: Number of channels that the correlator will produce\n:param integration_time_ms: Averaging time after which the correlator will output a visibility"
       },
-      "Correlation-Output": {
-        "type": "object"
-      },
-      "CorrelationSPWConfiguration-Input": {
+      "CorrelationSPWConfiguration": {
         "properties": {
           "spw_id": {
             "type": "integer",
@@ -2614,10 +2586,7 @@
         "title": "CorrelationSPWConfiguration",
         "description": "CorrelationSPWConfiguration defines the configuration for a CSP Frequency Slice\nProcessor.\n\n:param swp_id: SWP configuration ID [1..27]\n:param logical_fsp_ids: Logical FPS Ids\n:param receptors: list of receptors\n:param zoom_factor: zoom factor [0..6]\n:param centre_frequency: Centre Frequency\n:param number_of_channels: Number of Channels\n:param channel_averaging_factor: Channel Average Factor\n:param time_integration_factor: integer multiple of correlation integration time (140ms) [1..10]"
       },
-      "CorrelationSPWConfiguration-Output": {
-        "type": "object"
-      },
-      "CrossScanParameters-Input": {
+      "CrossScanParameters": {
         "properties": {
           "kind": {
             "type": "string",
@@ -2635,9 +2604,6 @@
         "title": "CrossScanParameters",
         "description": "CrossScanParameters defines the properties of an observing pattern that\nuses a cross scan observing pattern, typically used for pointing\ncalibrations."
       },
-      "CrossScanParameters-Output": {
-        "type": "object"
-      },
       "DateQueryType": {
         "type": "string",
         "enum": [
@@ -2646,7 +2612,7 @@
         ],
         "title": "DateQueryType"
       },
-      "DishAllocation-Input": {
+      "DishAllocation": {
         "properties": {
           "dish_allocation_id": {
             "anyOf": [
@@ -2684,9 +2650,6 @@
         "title": "DishAllocation",
         "description": "Represents the required dish array for an observation described by an SBDefinition\n\n:param dish_allocation_id: The identifier of this object within the SBDefinition\n:param selected_subarray_definition: The subarray definition, e.g. AA1. This could be inferred from the\n    dish_ids but is stored here as well for UI purposes.\n:param dish_ids: The identifier of the dishes in the allocation, e.g. SKA063"
       },
-      "DishAllocation-Output": {
-        "type": "object"
-      },
       "EBStatusModel-Input": {
         "properties": {
           "interface": {
@@ -2714,7 +2677,7 @@
           "metadata": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/Metadata-Input"
+                "$ref": "#/components/schemas/Metadata"
               },
               {
                 "type": "null"
@@ -2759,7 +2722,7 @@
           },
           "request_responses": {
             "items": {
-              "$ref": "#/components/schemas/RequestResponse-Input"
+              "$ref": "#/components/schemas/RequestResponse"
             },
             "type": "array",
             "title": "Request Responses"
@@ -2776,6 +2739,7 @@
         "title": "EBStatusModel"
       },
       "EBStatusModel-Output": {
+        "additionalProperties": true,
         "type": "object"
       },
       "EntityStatusResponse": {
@@ -2871,9 +2835,10 @@
         "description": "SiderealTarget represents the argument for SKA scheduling block."
       },
       "EquatorialCoordinates-Output": {
+        "additionalProperties": true,
         "type": "object"
       },
-      "EquatorialCoordinatesPST-Input": {
+      "EquatorialCoordinatesPST": {
         "properties": {
           "ra_str": {
             "type": "string",
@@ -2942,9 +2907,6 @@
         ],
         "title": "EquatorialCoordinatesPST"
       },
-      "EquatorialCoordinatesPST-Output": {
-        "type": "object"
-      },
       "EquatorialCoordinatesReferenceFrame": {
         "type": "string",
         "enum": [
@@ -2954,7 +2916,7 @@
         "title": "EquatorialCoordinatesReferenceFrame",
         "description": "Enumeration of reference frames supported by an EquatorialCoordinates"
       },
-      "ErrorWrapper-Input": {
+      "ErrorWrapper": {
         "properties": {
           "detail": {
             "anyOf": [
@@ -2982,10 +2944,7 @@
         "type": "object",
         "title": "ErrorWrapper"
       },
-      "ErrorWrapper-Output": {
-        "type": "object"
-      },
-      "ExecutionBlock-Input": {
+      "ExecutionBlock": {
         "properties": {
           "eb_id": {
             "type": "string",
@@ -2996,33 +2955,34 @@
             "title": "Max Length"
           },
           "context": {
+            "additionalProperties": true,
             "type": "object",
             "title": "Context"
           },
           "beams": {
             "items": {
-              "$ref": "#/components/schemas/ska_oso_pdm__sb_definition__sdp__beam__Beam-Input"
+              "$ref": "#/components/schemas/ska_oso_pdm__sb_definition__sdp__beam__Beam"
             },
             "type": "array",
             "title": "Beams"
           },
           "scan_types": {
             "items": {
-              "$ref": "#/components/schemas/ScanType-Input"
+              "$ref": "#/components/schemas/ScanType"
             },
             "type": "array",
             "title": "Scan Types"
           },
           "channels": {
             "items": {
-              "$ref": "#/components/schemas/Channels-Input"
+              "$ref": "#/components/schemas/Channels"
             },
             "type": "array",
             "title": "Channels"
           },
           "polarisations": {
             "items": {
-              "$ref": "#/components/schemas/Polarisation-Input"
+              "$ref": "#/components/schemas/Polarisation"
             },
             "type": "array",
             "title": "Polarisations"
@@ -3040,10 +3000,7 @@
         "title": "ExecutionBlock",
         "description": "ExecutionBlock captures the Execution Block resources and pipeline configuration\nrequired to process an execution block.\n\n:param eb_id: execution block ID\n:param max_length: maximum length\n:param context: context\n:param beams: list of Beams\n:param scan_types: list of EB scan types\n:param channels: list of EB channels\n:param polarisations: list of polarisations"
       },
-      "ExecutionBlock-Output": {
-        "type": "object"
-      },
-      "FSPConfiguration-Input": {
+      "FSPConfiguration": {
         "properties": {
           "fsp_id": {
             "type": "integer",
@@ -3134,9 +3091,6 @@
         "title": "FSPConfiguration",
         "description": "FSPConfiguration defines the configuration for a CSP Frequency Slice\nProcessor.\n\nChannel averaging map is an optional list of 20 x (int,int) tuples.\n\n:param fsp_id: FSP configuration ID [1..27]\n:param function_mode: FSP function mode\n:param frequency_slice_id: frequency slicer ID [1..26]\n:param zoom_factor: zoom factor [0..6]\n:param integration_factor: integer multiple of correlation integration time (140ms) [1..10]\n:param channel_averaging_map: Optional channel averaging map\n:param output_link_map: Optional output_link_map\n:param channel_offset: Optional channel offset value in integer\n:param zoom_window_tuning: Optional zoom window tuning value in integer"
       },
-      "FSPConfiguration-Output": {
-        "type": "object"
-      },
       "FSPFunctionMode": {
         "type": "string",
         "enum": [
@@ -3148,11 +3102,11 @@
         "title": "FSPFunctionMode",
         "description": "FSPFunctionMode is an enumeration of the available FSP modes."
       },
-      "FilesystemScript-Input": {
+      "FilesystemScript": {
         "properties": {
           "function_args": {
             "additionalProperties": {
-              "$ref": "#/components/schemas/PythonArguments-Input"
+              "$ref": "#/components/schemas/PythonArguments"
             },
             "type": "object",
             "title": "Function Args"
@@ -3175,10 +3129,7 @@
         "title": "FilesystemScript",
         "description": "Represents an FilesystemScript to be run as an activity in an SKA scheduling block."
       },
-      "FilesystemScript-Output": {
-        "type": "object"
-      },
-      "FivePointParameters-Input": {
+      "FivePointParameters": {
         "properties": {
           "kind": {
             "type": "string",
@@ -3196,10 +3147,7 @@
         "title": "FivePointParameters",
         "description": "FivePointParameters defines the properties of an observing pattern that\nuses a five-point observing pattern centred on a reference position."
       },
-      "FivePointParameters-Output": {
-        "type": "object"
-      },
-      "FunctionArgs-Input": {
+      "FunctionArgs": {
         "properties": {
           "function_name": {
             "anyOf": [
@@ -3215,7 +3163,7 @@
           "function_args": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/PythonArguments-Input"
+                "$ref": "#/components/schemas/PythonArguments"
               },
               {
                 "type": "null"
@@ -3226,9 +3174,6 @@
         "type": "object",
         "title": "FunctionArgs",
         "description": "Represents a Python function & its arguments"
-      },
-      "FunctionArgs-Output": {
-        "type": "object"
       },
       "GalacticCoordinates-Input": {
         "properties": {
@@ -3281,13 +3226,14 @@
         "description": "Coordinates defined in a Galactic frame"
       },
       "GalacticCoordinates-Output": {
+        "additionalProperties": true,
         "type": "object"
       },
-      "GitScript-Input": {
+      "GitScript": {
         "properties": {
           "function_args": {
             "additionalProperties": {
-              "$ref": "#/components/schemas/PythonArguments-Input"
+              "$ref": "#/components/schemas/PythonArguments"
             },
             "type": "object",
             "title": "Function Args"
@@ -3336,9 +3282,6 @@
         ],
         "title": "GitScript",
         "description": "Represents an GitScript to be run as an activity in an SKA scheduling block."
-      },
-      "GitScript-Output": {
-        "type": "object"
       },
       "HTTPStatus": {
         "type": "integer",
@@ -3409,6 +3352,7 @@
         "title": "HorizontalCoordinates"
       },
       "HorizontalCoordinates-Output": {
+        "additionalProperties": true,
         "type": "object"
       },
       "HorizontalCoordinatesReferenceFrame": {
@@ -3492,13 +3436,14 @@
         "title": "ICRSCoordinates"
       },
       "ICRSCoordinates-Output": {
+        "additionalProperties": true,
         "type": "object"
       },
-      "InlineScript-Input": {
+      "InlineScript": {
         "properties": {
           "function_args": {
             "additionalProperties": {
-              "$ref": "#/components/schemas/PythonArguments-Input"
+              "$ref": "#/components/schemas/PythonArguments"
             },
             "type": "object",
             "title": "Function Args"
@@ -3521,10 +3466,7 @@
         "title": "InlineScript",
         "description": "Represents an InlineScript to be ran as an activity in an SKA scheduling block."
       },
-      "InlineScript-Output": {
-        "type": "object"
-      },
-      "LowCBFConfiguration-Input": {
+      "LowCBFConfiguration": {
         "properties": {
           "do_pst": {
             "type": "boolean",
@@ -3534,7 +3476,7 @@
           },
           "correlation_spws": {
             "items": {
-              "$ref": "#/components/schemas/Correlation-Input"
+              "$ref": "#/components/schemas/Correlation"
             },
             "type": "array",
             "title": "Correlation Spws",
@@ -3548,10 +3490,7 @@
         "title": "LowCBFConfiguration",
         "description": "Class to hold the LOW CBF configuration specification.\n\n:param do_pst: Boolean indicating that pulsar-timing observations are to be performed.\n:param correlation_spws: List of Correlation objects"
       },
-      "LowCBFConfiguration-Output": {
-        "type": "object"
-      },
-      "MCCSAllocation-Input": {
+      "MCCSAllocation": {
         "properties": {
           "mccs_allocation_id": {
             "type": "string",
@@ -3562,7 +3501,7 @@
           },
           "subarray_beams": {
             "items": {
-              "$ref": "#/components/schemas/SubarrayBeamConfiguration-Input"
+              "$ref": "#/components/schemas/SubarrayBeamConfiguration"
             },
             "type": "array",
             "title": "Subarray Beams"
@@ -3577,9 +3516,6 @@
         "title": "MCCSAllocation",
         "description": "MCCSAllocation is a Python representation of the MCCS allocation segment\nof a scheduling block.\n\n:param mccs_allocation_id: stations ID's to allocate\n:param selected_subarray_definition: name of pre-defined/standard configuration\n:param subarray_beams: subarray beam list"
       },
-      "MCCSAllocation-Output": {
-        "type": "object"
-      },
       "MatchType": {
         "type": "string",
         "enum": [
@@ -3589,7 +3525,7 @@
         ],
         "title": "MatchType"
       },
-      "Metadata-Input": {
+      "Metadata": {
         "properties": {
           "version": {
             "type": "integer",
@@ -3640,17 +3576,14 @@
         "title": "Metadata",
         "description": "Represents metadata about other entities."
       },
-      "Metadata-Output": {
-        "type": "object"
-      },
-      "MidCBFConfiguration-Input": {
+      "MidCBFConfiguration": {
         "properties": {
           "frequency_band": {
             "$ref": "#/components/schemas/ReceiverBand"
           },
           "subbands": {
             "items": {
-              "$ref": "#/components/schemas/Subband-Input"
+              "$ref": "#/components/schemas/Subband"
             },
             "type": "array",
             "title": "Subbands"
@@ -3662,9 +3595,6 @@
         ],
         "title": "MidCBFConfiguration",
         "description": "Class to hold all Correlation SPW configurations.\n\n:param frequency_band: Frequency Band\n:param subbands: list of subbands configurations"
-      },
-      "MidCBFConfiguration-Output": {
-        "type": "object"
       },
       "OSOEBStatus": {
         "type": "string",
@@ -3678,7 +3608,7 @@
       "OSOEBStatusHistory-Input": {
         "properties": {
           "metadata": {
-            "$ref": "#/components/schemas/Metadata-Input"
+            "$ref": "#/components/schemas/Metadata"
           },
           "eb_ref": {
             "type": "string",
@@ -3712,9 +3642,10 @@
         "title": "OSOEBStatusHistory"
       },
       "OSOEBStatusHistory-Output": {
+        "additionalProperties": true,
         "type": "object"
       },
-      "ObservingBlock-Input": {
+      "ObservingBlock": {
         "properties": {
           "obs_block_id": {
             "type": "string",
@@ -3745,10 +3676,7 @@
         ],
         "title": "ObservingBlock"
       },
-      "ObservingBlock-Output": {
-        "type": "object"
-      },
-      "PSSConfiguration-Input": {
+      "PSSConfiguration": {
         "properties": {
 
         },
@@ -3756,10 +3684,7 @@
         "title": "PSSConfiguration",
         "description": "Class to hold PSS configurations."
       },
-      "PSSConfiguration-Output": {
-        "type": "object"
-      },
-      "PSTConfiguration-Input": {
+      "PSTConfiguration": {
         "properties": {
 
         },
@@ -3767,10 +3692,7 @@
         "title": "PSTConfiguration",
         "description": "Class to hold PST configurations."
       },
-      "PSTConfiguration-Output": {
-        "type": "object"
-      },
-      "PbDependency-Input": {
+      "PbDependency": {
         "properties": {
           "pb_ref": {
             "type": "string",
@@ -3792,10 +3714,7 @@
         "title": "PbDependency",
         "description": "Class to hold Dependencies for ProcessingBlock"
       },
-      "PbDependency-Output": {
-        "type": "object"
-      },
-      "PointedMosaicParameters-Input": {
+      "PointedMosaicParameters": {
         "properties": {
           "kind": {
             "type": "string",
@@ -3805,7 +3724,7 @@
           },
           "offsets": {
             "items": {
-              "$ref": "#/components/schemas/CoordinatesOffset-Input"
+              "$ref": "#/components/schemas/CoordinatesOffset"
             },
             "type": "array",
             "title": "Offsets"
@@ -3820,9 +3739,6 @@
         ],
         "title": "PointedMosaicParameters",
         "description": "PointedMosaicParameters defines the properties for an observing pattern\nconsisting of a single receptor pointing with n optional offsets from\nthe reference position."
-      },
-      "PointedMosaicParameters-Output": {
-        "type": "object"
       },
       "PointingCorrection": {
         "type": "string",
@@ -3847,7 +3763,7 @@
         ],
         "title": "PointingKind"
       },
-      "PointingPattern-Input": {
+      "PointingPattern": {
         "properties": {
           "active": {
             "$ref": "#/components/schemas/PointingKind",
@@ -3857,37 +3773,37 @@
             "items": {
               "oneOf": [
                 {
-                  "$ref": "#/components/schemas/FivePointParameters-Input"
+                  "$ref": "#/components/schemas/FivePointParameters"
                 },
                 {
-                  "$ref": "#/components/schemas/CrossScanParameters-Input"
+                  "$ref": "#/components/schemas/CrossScanParameters"
                 },
                 {
-                  "$ref": "#/components/schemas/SinglePointParameters-Input"
+                  "$ref": "#/components/schemas/SinglePointParameters"
                 },
                 {
-                  "$ref": "#/components/schemas/RasterParameters-Input"
+                  "$ref": "#/components/schemas/RasterParameters"
                 },
                 {
-                  "$ref": "#/components/schemas/StarRasterParameters-Input"
+                  "$ref": "#/components/schemas/StarRasterParameters"
                 },
                 {
-                  "$ref": "#/components/schemas/SpiralParameters-Input"
+                  "$ref": "#/components/schemas/SpiralParameters"
                 },
                 {
-                  "$ref": "#/components/schemas/PointedMosaicParameters-Input"
+                  "$ref": "#/components/schemas/PointedMosaicParameters"
                 }
               ],
               "discriminator": {
                 "propertyName": "kind",
                 "mapping": {
-                  "CrossScanParameters": "#/components/schemas/CrossScanParameters-Input",
-                  "FivePointParameters": "#/components/schemas/FivePointParameters-Input",
-                  "PointedMosaicParameters": "#/components/schemas/PointedMosaicParameters-Input",
-                  "RasterParameters": "#/components/schemas/RasterParameters-Input",
-                  "SinglePointParameters": "#/components/schemas/SinglePointParameters-Input",
-                  "SpiralParameters": "#/components/schemas/SpiralParameters-Input",
-                  "StarRasterParameters": "#/components/schemas/StarRasterParameters-Input"
+                  "CrossScanParameters": "#/components/schemas/CrossScanParameters",
+                  "FivePointParameters": "#/components/schemas/FivePointParameters",
+                  "PointedMosaicParameters": "#/components/schemas/PointedMosaicParameters",
+                  "RasterParameters": "#/components/schemas/RasterParameters",
+                  "SinglePointParameters": "#/components/schemas/SinglePointParameters",
+                  "SpiralParameters": "#/components/schemas/SpiralParameters",
+                  "StarRasterParameters": "#/components/schemas/StarRasterParameters"
                 }
               }
             },
@@ -3900,10 +3816,7 @@
         "title": "PointingPattern",
         "description": "PointingPattern holds the user-configured pointing patterns and current active\npattern for receptor pointing patterns associated with a target.\n\nOne of each pointing pattern type can be held in the parameters list. Only the\nactive pattern will be used for observing; the remainder provide an easy way to\nrecover previously edited observing parameters for the target."
       },
-      "PointingPattern-Output": {
-        "type": "object"
-      },
-      "Polarisation-Input": {
+      "Polarisation": {
         "properties": {
           "polarisations_id": {
             "type": "string",
@@ -3925,17 +3838,14 @@
         "title": "Polarisation",
         "description": "Class that defines an SDP Polarisation configuration"
       },
-      "Polarisation-Output": {
-        "type": "object"
-      },
-      "ProcessingBlock-Input": {
+      "ProcessingBlock": {
         "properties": {
           "pb_id": {
             "type": "string",
             "title": "Pb Id"
           },
           "script": {
-            "$ref": "#/components/schemas/Script-Input"
+            "$ref": "#/components/schemas/Script"
           },
           "sbi_refs": {
             "items": {
@@ -3945,12 +3855,13 @@
             "title": "Sbi Refs"
           },
           "parameters": {
+            "additionalProperties": true,
             "type": "object",
             "title": "Parameters"
           },
           "dependencies": {
             "items": {
-              "$ref": "#/components/schemas/PbDependency-Input"
+              "$ref": "#/components/schemas/PbDependency"
             },
             "type": "array",
             "title": "Dependencies"
@@ -3963,9 +3874,6 @@
         ],
         "title": "ProcessingBlock",
         "description": "Class to hold ProcessingBlock configuration"
-      },
-      "ProcessingBlock-Output": {
-        "type": "object"
       },
       "ProjectStatus": {
         "type": "string",
@@ -3984,7 +3892,7 @@
       "ProjectStatusHistory-Input": {
         "properties": {
           "metadata": {
-            "$ref": "#/components/schemas/Metadata-Input"
+            "$ref": "#/components/schemas/Metadata"
           },
           "prj_ref": {
             "type": "string",
@@ -4018,6 +3926,7 @@
         "title": "ProjectStatusHistory"
       },
       "ProjectStatusHistory-Output": {
+        "additionalProperties": true,
         "type": "object"
       },
       "ProjectStatusModel-Input": {
@@ -4058,7 +3967,7 @@
           "metadata": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/Metadata-Input"
+                "$ref": "#/components/schemas/Metadata"
               },
               {
                 "type": "null"
@@ -4068,7 +3977,7 @@
           "author": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/Author-Input"
+                "$ref": "#/components/schemas/Author"
               },
               {
                 "type": "null"
@@ -4077,7 +3986,7 @@
           },
           "obs_blocks": {
             "items": {
-              "$ref": "#/components/schemas/ObservingBlock-Input"
+              "$ref": "#/components/schemas/ObservingBlock"
             },
             "type": "array",
             "title": "Obs Blocks"
@@ -4093,9 +4002,10 @@
         "title": "ProjectStatusModel"
       },
       "ProjectStatusModel-Output": {
+        "additionalProperties": true,
         "type": "object"
       },
-      "PythonArguments-Input": {
+      "PythonArguments": {
         "properties": {
           "args": {
             "items": {
@@ -4105,6 +4015,7 @@
             "title": "Args"
           },
           "kwargs": {
+            "additionalProperties": true,
             "type": "object",
             "title": "Kwargs"
           }
@@ -4112,9 +4023,6 @@
         "type": "object",
         "title": "PythonArguments",
         "description": "Represents the arguments for a Python callable."
-      },
-      "PythonArguments-Output": {
-        "type": "object"
       },
       "Quantity-Input": {
         "properties": {
@@ -4146,10 +4054,10 @@
         },
         "type": "object"
       },
-      "RadialVelocity-Input": {
+      "RadialVelocity": {
         "properties": {
           "quantity": {
-            "$ref": "#/components/schemas/RadialVelocityQuantity-Input"
+            "$ref": "#/components/schemas/RadialVelocityQuantity"
           },
           "definition": {
             "$ref": "#/components/schemas/RadialVelocityDefinition",
@@ -4169,9 +4077,6 @@
         "title": "RadialVelocity",
         "description": "Radial velocity measures the line-of-sight velocity of an astronomical\nsource.\n\nIn principle, the radial velocity can be converted to and from the target\nredshift. However, these values are persisted separately to give the user\nthe option of inputting either value.\n\nA velocity must also define the reference frame and definition that are\napplicable to the velocity. By default, these have values of:\n\n- definition = RADIO\n- reference_frame = LSRK\n- redshift = 0.0"
       },
-      "RadialVelocity-Output": {
-        "type": "object"
-      },
       "RadialVelocityDefinition": {
         "type": "string",
         "enum": [
@@ -4182,7 +4087,7 @@
         "title": "RadialVelocityDefinition",
         "description": "Enumeration of reference definitions supported by a RadialVelocity.\n\nThe sky frequency (ν) at which we must observe a spectral line is derived\nfrom the rest frequency of the spectral line (ν₀), the line-of-sight\nvelocity of the source (V), and the speed of light (c). The relativistic\nvelocity, or true line-of-sight velocity, is related to the observed and\nrest frequencies by\n\n    V= c * (ν₀²− ν²) / (v₀² + v²)\n\nThis equation is a bit cumbersome to use; in astronomy two different\napproximations are typically used:\n\nOptical Velocity:\n\n    Voptical = c * (λ − λ₀) / λ₀ = cz\n\n(z is the redshift of the source; λ and λ₀ are the corresponding observed\nand rest wavelengths, respectively)\n\nRadio Velocity:\n\n    Vradio = c * (ν₀ − ν) / v₀ = c * (λ−λ₀) / λ\n\nThe radio and optical velocities are not identical. Particularly, Voptical\nand Vradio diverge for large velocities. Optical velocities are commonly\nused for (Helio/Barycentric) extragalactic observations; (LSRK) radio\nvelocities are typical for Galactic observations.\n\nTaken from https://science.nrao.edu/facilities/vla/docs/manuals/obsguide/modes/line"
       },
-      "RadialVelocityQuantity-Input": {
+      "RadialVelocityQuantity": {
         "properties": {
           "value": {
             "type": "number",
@@ -4203,19 +4108,6 @@
         ],
         "title": "RadialVelocityQuantity"
       },
-      "RadialVelocityQuantity-Output": {
-        "additionalProperties": {
-          "anyOf": [
-            {
-              "type": "number"
-            },
-            {
-              "type": "string"
-            }
-          ]
-        },
-        "type": "object"
-      },
       "RadialVelocityReferenceFrame": {
         "type": "string",
         "enum": [
@@ -4226,7 +4118,7 @@
         "title": "RadialVelocityReferenceFrame",
         "description": "Reference frame in which the radial velocity is defined.\n\nThe Earth rotates, revolves around the Sun, rotates around the Galaxy,\nmoves within the Local Group, and shows motion against the Cosmic\nMicrowave Background. As for the convention above, any source velocity\nmust therefore also always be specified relative to a reference frame.\n\nVarious velocity rest frames are used in the literature. The following\ntable lists their name, the motion that is corrected for, and the maximum\namplitude of the velocity correction. Each rest frame correction is\nincremental to the preceding row:\n\nVelocity                     Rest Frame                              Correct for + max correction (km/s)\n===========================  ======================================  ======================================\nTopocentric                  Telescope                                   Nothing (0)\nGeocentric                   Earth Center                            Earth rotation (0.5)\nEarth-Moon Barycentric       Earth+Moon center of mass               Motion around Earth+Moon center of mass (0.013)\nHeliocentric                 Center of the Sun                           Earth orbital motion (30)\nBarycentric                  Earth+Sun center of mass                    Earth+Sun center of mass (0.012)\nLocal Standard of Rest           Center of Mass of local stars               Solar motion relative to nearby stars (20)\nGalactocentric               Center of Milky Way                     Milky Way Rotation (230)\nLocal Group Barycentric      Local Group center of mass              Milky Way Motion (100)\nVirgocentric                     Center of the Local Virgo supercluster  Local Group motion (300)\nCosmic Microwave Background  CMB                                     Local Supercluster Motion (600)\n\nThe velocity frame should be chosen based on the science. For most\nobservations, however, one of the following three reference frames is\ncommonly used:\n\n- Topocentric is the reference frame of the observatory (defining the sky\n  frequency of the observations). Visibilities in a measurement set are\n  typically stored in this frame.\n\n- Local Standard of Rest is the native output of images in CASA. Note that\n  there are two varieties of LSR: the kinematic LSR (LSRK) and the dynamic\n  (LSRD) definitions for the kinematic and dynamic centers, respectively.\n  In almost all cases LSRK is being used and the less precise name LSR is\n  usually used synonymously with the more modern LSRK definition.\n\n- Barycentric is a commonly used frame that has virtually replaced the\n  older Heliocentric standard. Given the small difference between the\n  Barycentric and Heliocentric frames, they are frequently used\n  interchangeably.\n\nTaken from https://science.nrao.edu/facilities/vla/docs/manuals/obsguide/modes/line"
       },
-      "RasterParameters-Input": {
+      "RasterParameters": {
         "properties": {
           "kind": {
             "type": "string",
@@ -4264,9 +4156,6 @@
         "title": "RasterParameters",
         "description": "RasterParameters defines the properties of an observing pattern that\nuses a raster pattern centred on a reference position."
       },
-      "RasterParameters-Output": {
-        "type": "object"
-      },
       "ReceiverBand": {
         "type": "string",
         "enum": [
@@ -4278,7 +4167,7 @@
         "title": "ReceiverBand",
         "description": "ReceiverBand is an enumeration of SKA MID receiver bands."
       },
-      "RequestResponse-Input": {
+      "RequestResponse": {
         "properties": {
           "request": {
             "anyOf": [
@@ -4294,7 +4183,7 @@
           "request_args": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/PythonArguments-Input"
+                "$ref": "#/components/schemas/PythonArguments"
               },
               {
                 "type": "null"
@@ -4315,7 +4204,7 @@
           "response": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/ResponseWrapper-Input"
+                "$ref": "#/components/schemas/ResponseWrapper"
               },
               {
                 "type": "null"
@@ -4325,7 +4214,7 @@
           "error": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/ErrorWrapper-Input"
+                "$ref": "#/components/schemas/ErrorWrapper"
               },
               {
                 "type": "null"
@@ -4353,10 +4242,7 @@
         "type": "object",
         "title": "RequestResponse"
       },
-      "RequestResponse-Output": {
-        "type": "object"
-      },
-      "Resources-Input": {
+      "Resources": {
         "properties": {
           "csp_links": {
             "items": {
@@ -4388,10 +4274,7 @@
         "title": "Resources",
         "description": "Class to hold SDP Resources"
       },
-      "Resources-Output": {
-        "type": "object"
-      },
-      "ResponseWrapper-Input": {
+      "ResponseWrapper": {
         "properties": {
           "result": {
             "anyOf": [
@@ -4407,9 +4290,6 @@
         },
         "type": "object",
         "title": "ResponseWrapper"
-      },
-      "ResponseWrapper-Output": {
-        "type": "object"
       },
       "SBDStatus": {
         "type": "string",
@@ -4428,7 +4308,7 @@
       "SBDStatusHistory-Input": {
         "properties": {
           "metadata": {
-            "$ref": "#/components/schemas/Metadata-Input"
+            "$ref": "#/components/schemas/Metadata"
           },
           "sbd_ref": {
             "type": "string",
@@ -4462,6 +4342,7 @@
         "title": "SBDStatusHistory"
       },
       "SBDStatusHistory-Output": {
+        "additionalProperties": true,
         "type": "object"
       },
       "SBDefinitionStatusModel-Input": {
@@ -4524,7 +4405,7 @@
           "metadata": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/Metadata-Input"
+                "$ref": "#/components/schemas/Metadata"
               },
               {
                 "type": "null"
@@ -4548,21 +4429,21 @@
                 "additionalProperties": {
                   "oneOf": [
                     {
-                      "$ref": "#/components/schemas/InlineScript-Input"
+                      "$ref": "#/components/schemas/InlineScript"
                     },
                     {
-                      "$ref": "#/components/schemas/FilesystemScript-Input"
+                      "$ref": "#/components/schemas/FilesystemScript"
                     },
                     {
-                      "$ref": "#/components/schemas/GitScript-Input"
+                      "$ref": "#/components/schemas/GitScript"
                     }
                   ],
                   "discriminator": {
                     "propertyName": "kind",
                     "mapping": {
-                      "filesystem": "#/components/schemas/FilesystemScript-Input",
-                      "git": "#/components/schemas/GitScript-Input",
-                      "inline": "#/components/schemas/InlineScript-Input"
+                      "filesystem": "#/components/schemas/FilesystemScript",
+                      "git": "#/components/schemas/GitScript",
+                      "inline": "#/components/schemas/InlineScript"
                     }
                   }
                 },
@@ -4578,7 +4459,7 @@
             "anyOf": [
               {
                 "items": {
-                  "$ref": "#/components/schemas/Target-Input"
+                  "$ref": "#/components/schemas/Target"
                 },
                 "type": "array"
               },
@@ -4592,7 +4473,7 @@
             "anyOf": [
               {
                 "items": {
-                  "$ref": "#/components/schemas/ScanDefinition-Input"
+                  "$ref": "#/components/schemas/ScanDefinition"
                 },
                 "type": "array"
               },
@@ -4619,7 +4500,7 @@
           "sdp_configuration": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/SDPConfiguration-Input"
+                "$ref": "#/components/schemas/SDPConfiguration"
               },
               {
                 "type": "null"
@@ -4630,7 +4511,7 @@
             "anyOf": [
               {
                 "items": {
-                  "$ref": "#/components/schemas/CSPConfiguration-Input"
+                  "$ref": "#/components/schemas/CSPConfiguration"
                 },
                 "type": "array"
               },
@@ -4643,7 +4524,7 @@
           "dish_allocations": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/DishAllocation-Input"
+                "$ref": "#/components/schemas/DishAllocation"
               },
               {
                 "type": "null"
@@ -4653,7 +4534,7 @@
           "mccs_allocation": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/MCCSAllocation-Input"
+                "$ref": "#/components/schemas/MCCSAllocation"
               },
               {
                 "type": "null"
@@ -4671,6 +4552,7 @@
         "title": "SBDefinitionStatusModel"
       },
       "SBDefinitionStatusModel-Output": {
+        "additionalProperties": true,
         "type": "object"
       },
       "SBIStatus": {
@@ -4686,7 +4568,7 @@
       "SBIStatusHistory-Input": {
         "properties": {
           "metadata": {
-            "$ref": "#/components/schemas/Metadata-Input"
+            "$ref": "#/components/schemas/Metadata"
           },
           "sbi_ref": {
             "type": "string",
@@ -4720,6 +4602,7 @@
         "title": "SBIStatusHistory"
       },
       "SBIStatusHistory-Output": {
+        "additionalProperties": true,
         "type": "object"
       },
       "SBInstanceStatusModel-Input": {
@@ -4749,7 +4632,7 @@
           "metadata": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/Metadata-Input"
+                "$ref": "#/components/schemas/Metadata"
               },
               {
                 "type": "null"
@@ -4805,7 +4688,7 @@
           },
           "activities": {
             "items": {
-              "$ref": "#/components/schemas/ActivityCall-Input"
+              "$ref": "#/components/schemas/ActivityCall"
             },
             "type": "array",
             "title": "Activities"
@@ -4822,14 +4705,15 @@
         "title": "SBInstanceStatusModel"
       },
       "SBInstanceStatusModel-Output": {
+        "additionalProperties": true,
         "type": "object"
       },
-      "SDPConfiguration-Input": {
+      "SDPConfiguration": {
         "properties": {
           "execution_block": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/ExecutionBlock-Input"
+                "$ref": "#/components/schemas/ExecutionBlock"
               },
               {
                 "type": "null"
@@ -4839,7 +4723,7 @@
           "resources": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/Resources-Input"
+                "$ref": "#/components/schemas/Resources"
               },
               {
                 "type": "null"
@@ -4848,7 +4732,7 @@
           },
           "processing_blocks": {
             "items": {
-              "$ref": "#/components/schemas/ProcessingBlock-Input"
+              "$ref": "#/components/schemas/ProcessingBlock"
             },
             "type": "array",
             "title": "Processing Blocks"
@@ -4858,10 +4742,7 @@
         "title": "SDPConfiguration",
         "description": "SDPConfiguration captures the SDP resources and pipeline configuration\nrequired to process an execution block.\n\n:param execution_block: the SDP ExecutionBlock object\n:param resources: external resources\n:param processing_blocks: list of SDP ProcessingBlock objects"
       },
-      "SDPConfiguration-Output": {
-        "type": "object"
-      },
-      "ScanDefinition-Input": {
+      "ScanDefinition": {
         "properties": {
           "scan_definition_id": {
             "anyOf": [
@@ -4957,10 +4838,7 @@
         "title": "ScanDefinition",
         "description": "ScanDefinition represents the instrument configuration for a single scan.\n\n:param scan_definition_id: the unique ID for this scan definition\n:param scan_duration_ms: scan duration\n:target_ref: ID of target to observe\n:mccs_allocation_ref: ID of MCCS Config\n:target_beam_configuration_refs: SKA LOW sub-array beam configurations to apply during this scan.\n:dish_allocation_ref: SKA MID dish configuration ID during this scan.\n:scan_type_ref: SKA MID scan type ID\n:csp_configuration_ref: SKA MID  Central Signal Processor ID\n:pointing_correction: operation to apply to the pointing correction model."
       },
-      "ScanDefinition-Output": {
-        "type": "object"
-      },
-      "ScanType-Input": {
+      "ScanType": {
         "properties": {
           "scan_type_id": {
             "type": "string",
@@ -4979,7 +4857,7 @@
           },
           "beams": {
             "items": {
-              "$ref": "#/components/schemas/BeamMapping-Input"
+              "$ref": "#/components/schemas/BeamMapping"
             },
             "type": "array",
             "title": "Beams"
@@ -4992,10 +4870,7 @@
         "title": "ScanType",
         "description": "Class to hold ScanType configuration"
       },
-      "ScanType-Output": {
-        "type": "object"
-      },
-      "Script-Input": {
+      "Script": {
         "properties": {
           "name": {
             "type": "string",
@@ -5018,9 +4893,6 @@
         "title": "Script",
         "description": "Class to hold Script for ProcessingBlock"
       },
-      "Script-Output": {
-        "type": "object"
-      },
       "ScriptKind": {
         "type": "string",
         "enum": [
@@ -5030,7 +4902,7 @@
         "title": "ScriptKind",
         "description": "Enumeration class to hold the kind of processing script"
       },
-      "SinglePointParameters-Input": {
+      "SinglePointParameters": {
         "properties": {
           "kind": {
             "type": "string",
@@ -5052,9 +4924,6 @@
         "type": "object",
         "title": "SinglePointParameters",
         "description": "SinglePointParameters defines the properties for an observing pattern\nconsisting of a single receptor pointing with an optional offset from\nthe reference position."
-      },
-      "SinglePointParameters-Output": {
-        "type": "object"
       },
       "SolarSystemObject-Input": {
         "properties": {
@@ -5085,6 +4954,7 @@
         "description": "Planet represents the argument for SKA scheduling block."
       },
       "SolarSystemObject-Output": {
+        "additionalProperties": true,
         "type": "object"
       },
       "SolarSystemObjectName": {
@@ -5131,9 +5001,10 @@
         "title": "SpecialCoordinates"
       },
       "SpecialCoordinates-Output": {
+        "additionalProperties": true,
         "type": "object"
       },
-      "SpectralWindow-Input": {
+      "SpectralWindow": {
         "properties": {
           "spectral_window_id": {
             "type": "string",
@@ -5188,10 +5059,7 @@
         "title": "SpectralWindow",
         "description": "Class to hold Spectral Windows configuration"
       },
-      "SpectralWindow-Output": {
-        "type": "object"
-      },
-      "SpiralParameters-Input": {
+      "SpiralParameters": {
         "properties": {
           "kind": {
             "type": "string",
@@ -5235,10 +5103,7 @@
         "title": "SpiralParameters",
         "description": "SpiralParameters defines the properties of holography observations\nto support MID holography observing\n\nThese parameters are accepted by the MeerKAT holography script but are not\nincluded in the trajectory JSON.\n\n* scan_extent: Diameter of beam pattern to measure, in degrees (default 10.0).\n* track_time: Extra time in seconds for scanning antennas to track when\n  passing over the target (default 10.0)\n* cycle_track_time: Extra time or scanning antennas to track when passing\n  over target (default 30.0)\n* slow_time: Time in seconds to slow down at start and end of each spiral arm\n  (default 6.0)\n* sample_time: Time in seconds to spend on each sample point generated\n  (default 0.25)\n* scan_speed: Scan speed in degrees per second (default 0.1)\n* slew_speed: Speed at which to slew in degrees per second, or if negative number\n  then this multiplied by scan_speed (default -1.0)\n* twist_factor Spiral twist factor (0.0 for straight radial, 1.0 standard spiral)\n  (default standard spiral = 1.0)\n* high_el_slowdown_factor: Factor by which to slow down nominal scanning speed at\n  90 degree elevation, linearly scaled from factor of 1 at 60 degrees elevation\n  (default 2.0)"
       },
-      "SpiralParameters-Output": {
-        "type": "object"
-      },
-      "StarRasterParameters-Input": {
+      "StarRasterParameters": {
         "properties": {
           "kind": {
             "type": "string",
@@ -5271,9 +5136,6 @@
         "title": "StarRasterParameters",
         "description": "StarRasterParameters defines the properties of an observing pattern that\nuses a star raster pattern centred on a reference position."
       },
-      "StarRasterParameters-Output": {
-        "type": "object"
-      },
       "SubArrayLOW": {
         "type": "string",
         "enum": [
@@ -5290,11 +5152,11 @@
         ],
         "title": "SubArrayLOW"
       },
-      "SubarrayBeamConfiguration-Input": {
+      "SubarrayBeamConfiguration": {
         "properties": {
           "apertures": {
             "items": {
-              "$ref": "#/components/schemas/Aperture-Input"
+              "$ref": "#/components/schemas/Aperture"
             },
             "type": "array",
             "title": "Apertures"
@@ -5326,10 +5188,7 @@
         "title": "SubarrayBeamConfiguration",
         "description": "SubarrayBeamConfiguration specifies how SKA LOW sub-array should be\nconfigured.\n\n:param apertures: list of aperture in this subarray\n:param subarray_beam_id: ID of subarray beam this config maps to\n:param number_of_channels: number of channels in this subarray beam,\n    this field represents the maximum number of channels that the SBD\n    will require. It should be calculated from the set of CSP\n    configurations instead of being defined by the user but is optional\n    in SubarrayBeamConfiguration for now for backwards compatibility."
       },
-      "SubarrayBeamConfiguration-Output": {
-        "type": "object"
-      },
-      "SubarrayConfiguration-Input": {
+      "SubarrayConfiguration": {
         "properties": {
           "subarray_name": {
             "type": "string",
@@ -5343,10 +5202,7 @@
         "title": "SubarrayConfiguration",
         "description": "Class to hold the parameters relevant only for the current sub-array device.\n\n:param sub-array_name: Name of the sub-array"
       },
-      "SubarrayConfiguration-Output": {
-        "type": "object"
-      },
-      "Subband-Input": {
+      "Subband": {
         "properties": {
           "band_5_tuning": {
             "anyOf": [
@@ -5364,7 +5220,7 @@
           },
           "correlation_spws": {
             "items": {
-              "$ref": "#/components/schemas/CorrelationSPWConfiguration-Input"
+              "$ref": "#/components/schemas/CorrelationSPWConfiguration"
             },
             "type": "array",
             "title": "Correlation Spws"
@@ -5374,10 +5230,7 @@
         "title": "Subband",
         "description": "Class to hold sub-band\n\n:param band_5_tuning: Band 5 Tuning\n:param frequency_slice_offset: Optional Frequency Slice Offset in AstropyQuantity\n:param correlation_spws: List of Correlation Spws"
       },
-      "Subband-Output": {
-        "type": "object"
-      },
-      "Target-Input": {
+      "Target": {
         "properties": {
           "target_id": {
             "type": "string",
@@ -5390,7 +5243,7 @@
             "default": ""
           },
           "pointing_pattern": {
-            "$ref": "#/components/schemas/PointingPattern-Input"
+            "$ref": "#/components/schemas/PointingPattern"
           },
           "reference_coordinate": {
             "oneOf": [
@@ -5419,12 +5272,12 @@
             "title": "Reference Coordinate"
           },
           "radial_velocity": {
-            "$ref": "#/components/schemas/RadialVelocity-Input"
+            "$ref": "#/components/schemas/RadialVelocity"
           },
           "tied_array_beams": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/TiedArrayBeams-Input"
+                "$ref": "#/components/schemas/TiedArrayBeams"
               },
               {
                 "type": "null"
@@ -5436,9 +5289,6 @@
         "title": "Target",
         "description": "Target represents the receptor pointing for an SKA observation, consisting\nof a reference position and a pointing pattern to be used when observing\nthe target.\n\nDefault pointing patterns and equatorial coordinates will be set if not\nprovided."
       },
-      "Target-Output": {
-        "type": "object"
-      },
       "TelescopeType": {
         "type": "string",
         "enum": [
@@ -5448,7 +5298,7 @@
         ],
         "title": "TelescopeType"
       },
-      "TiedArrayBeams-Input": {
+      "TiedArrayBeams": {
         "properties": {
           "pst_beams": {
             "items": {
@@ -5476,19 +5326,13 @@
         "title": "TiedArrayBeams",
         "description": "Tied Array Beam argument lists."
       },
-      "TiedArrayBeams-Output": {
-        "type": "object"
-      },
-      "VLBIConfiguration-Input": {
+      "VLBIConfiguration": {
         "properties": {
 
         },
         "type": "object",
         "title": "VLBIConfiguration",
         "description": "Class to hold VLBI configurations."
-      },
-      "VLBIConfiguration-Output": {
-        "type": "object"
       },
       "ValidationError": {
         "properties": {
@@ -5543,7 +5387,7 @@
           "beam_coordinate": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/EquatorialCoordinatesPST-Input"
+                "$ref": "#/components/schemas/EquatorialCoordinatesPST"
               },
               {
                 "oneOf": [
@@ -5589,7 +5433,7 @@
         "title": "Beam",
         "description": "Tied Array Beam arguments.\n\nArgs:\n    beam_id (int): integer identifying this tied-array beam. It should be unique within each tied-array-beam class\n    beam_name (str): string\n    beam_coordinate (EquatorialCoordinatesPST): position on sky at which beam will be formed. It should lie within the HPBW of the station beam\n    stn_weights (List(float)): array of weights, one for each station."
       },
-      "ska_oso_pdm__sb_definition__sdp__beam__Beam-Input": {
+      "ska_oso_pdm__sb_definition__sdp__beam__Beam": {
         "properties": {
           "beam_id": {
             "type": "string",
