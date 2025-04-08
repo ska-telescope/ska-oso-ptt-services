@@ -77,6 +77,9 @@ def convert_to_response_object(
 
     """
 
+    if not isinstance(response, (list, dict, str)) and response.message:
+        response = response.message
+
     if isinstance(response, list):
 
         return ApiResponse(
@@ -94,7 +97,6 @@ def convert_to_response_object(
         )
 
     if isinstance(response, str):
-
         return ApiResponse(
             result_data=response,
             result_code=result_code,

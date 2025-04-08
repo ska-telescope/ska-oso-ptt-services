@@ -42,29 +42,27 @@ def get_sbis_with_status(
     """
 
     try:
-
         query_params = get_qry_params(query_params)
+        with oda.uow() as uow:
+            sbis = uow.sbis.query(query_params)
+            sbi_with_status = [
+                {
+                    **sbi.model_dump(mode="json"),
+                    "status": common_get_entity_status(
+                        entity_object=uow.sbis_status_history,
+                        entity_id=sbi.sbi_id,
+                        entity_version=sbi.metadata.version,
+                    ).current_status,
+                }
+                for sbi in sbis
+            ]
+            return convert_to_response_object(
+                sbi_with_status, result_code=HTTPStatus.OK
+            )
 
     except Exception as error_msg:  # pylint: disable=W0718
 
-        return convert_to_response_object(
-            str(error_msg), result_code=HTTPStatus.NOT_FOUND
-        )
-
-    with oda.uow() as uow:
-        sbis = uow.sbis.query(query_params)
-        sbi_with_status = [
-            {
-                **sbi.model_dump(mode="json"),
-                "status": common_get_entity_status(
-                    entity_object=uow.sbis_status_history,
-                    entity_id=sbi.sbi_id,
-                    entity_version=sbi.metadata.version,
-                ).current_status,
-            }
-            for sbi in sbis
-        ]
-    return convert_to_response_object(sbi_with_status, result_code=HTTPStatus.OK)
+        return convert_to_response_object(error_msg, result_code=HTTPStatus.NOT_FOUND)
 
 
 @sbi_router.get(
@@ -84,10 +82,8 @@ def get_sbi_with_status(sbi_id: str) -> ApiResponse[SBInstanceStatusModel]:
 
     """
 
-    with oda.uow() as uow:
-
-        try:
-
+    try:
+        with oda.uow() as uow:
             sbi = uow.sbis.get(sbi_id)
             sbi_json = sbi.model_dump(mode="json")
             sbi_json["status"] = common_get_entity_status(
@@ -98,23 +94,9 @@ def get_sbi_with_status(sbi_id: str) -> ApiResponse[SBInstanceStatusModel]:
 
             return convert_to_response_object(sbi_json, result_code=HTTPStatus.OK)
 
-        except KeyError as error_msg:
+    except Exception as error_msg:  # pylint: disable=W0718
 
-            return convert_to_response_object(
-                str(error_msg), result_code=HTTPStatus.NOT_FOUND
-            )
-
-        except ODANotFound as error_msg:
-
-            return convert_to_response_object(
-                error_msg.message, result_code=HTTPStatus.NOT_FOUND
-            )
-
-        except Exception as error_msg:  # pylint: disable=W0718
-
-            return convert_to_response_object(
-                str(error_msg), result_code=HTTPStatus.NOT_FOUND
-            )
+        return convert_to_response_object(error_msg, result_code=HTTPStatus.NOT_FOUND)
 
 
 @sbi_router.get(
@@ -136,9 +118,8 @@ def get_sbi_status(sbi_id: str, version: int = None) -> ApiResponse[SBIStatusHis
 
     """
 
-    with oda.uow() as uow:
-
-        try:
+    try:
+        with oda.uow() as uow:
 
             sbi_status = common_get_entity_status(
                 entity_object=uow.sbis_status_history,
@@ -148,23 +129,9 @@ def get_sbi_status(sbi_id: str, version: int = None) -> ApiResponse[SBIStatusHis
 
             return convert_to_response_object(sbi_status, result_code=HTTPStatus.OK)
 
-        except KeyError as error_msg:
+    except Exception as error_msg:  # pylint: disable=W0718
 
-            return convert_to_response_object(
-                str(error_msg), result_code=HTTPStatus.NOT_FOUND
-            )
-
-        except ODANotFound as error_msg:
-
-            return convert_to_response_object(
-                error_msg.message, result_code=HTTPStatus.NOT_FOUND
-            )
-
-        except Exception as error_msg:  # pylint: disable=W0718
-
-            return convert_to_response_object(
-                str(error_msg), result_code=HTTPStatus.NOT_FOUND
-            )
+        return convert_to_response_object(error_msg, result_code=HTTPStatus.NOT_FOUND)
 
 
 @sbi_router.put(
@@ -186,15 +153,14 @@ def put_sbi_history(
 
     """
 
-    response = check_entity_id_mismatch(sbi_id, sbi_status_history.sbi_ref)
+    try:
+        response = check_entity_id_mismatch(sbi_id, sbi_status_history.sbi_ref)
 
-    if response:
+        if response:
 
-        return response
+            return response
 
-    with oda.uow() as uow:
-
-        try:
+        with oda.uow() as uow:
 
             persisted_sbi = uow.sbis_status_history.add(sbi_status_history)
             uow.commit()
@@ -203,23 +169,9 @@ def put_sbi_history(
                 persisted_sbi.model_dump(mode="json"), result_code=HTTPStatus.OK
             )
 
-        except KeyError as error_msg:
+    except Exception as error_msg:  # pylint: disable=W0718
 
-            return convert_to_response_object(
-                str(error_msg), result_code=HTTPStatus.NOT_FOUND
-            )
-
-        except ODANotFound as error_msg:
-
-            return convert_to_response_object(
-                error_msg.message, result_code=HTTPStatus.NOT_FOUND
-            )
-
-        except Exception as error_msg:  # pylint: disable=W0718
-
-            return convert_to_response_object(
-                str(error_msg), result_code=HTTPStatus.NOT_FOUND
-            )
+        return convert_to_response_object(error_msg, result_code=HTTPStatus.NOT_FOUND)
 
 
 @sbi_router.get(

@@ -46,28 +46,24 @@ def get_ebs_with_status(
     try:
 
         query_params = get_qry_params(query_params)
+        with oda.uow() as uow:
+            ebs = uow.ebs.query(query_params)
+            eb_with_status = [
+                {
+                    **eb.model_dump(mode="json"),
+                    "status": common_get_entity_status(
+                        entity_object=uow.ebs_status_history,
+                        entity_id=eb.eb_id,
+                        entity_version=eb.metadata.version,
+                    ).current_status,
+                }
+                for eb in ebs
+            ]
+            return convert_to_response_object(eb_with_status, result_code=HTTPStatus.OK)
 
     except Exception as error_msg:  # pylint: disable=W0718
 
-        return convert_to_response_object(
-            str(error_msg), result_code=HTTPStatus.NOT_FOUND
-        )
-
-    with oda.uow() as uow:
-
-        ebs = uow.ebs.query(query_params)
-        eb_with_status = [
-            {
-                **eb.model_dump(mode="json"),
-                "status": common_get_entity_status(
-                    entity_object=uow.ebs_status_history,
-                    entity_id=eb.eb_id,
-                    entity_version=eb.metadata.version,
-                ).current_status,
-            }
-            for eb in ebs
-        ]
-        return convert_to_response_object(eb_with_status, result_code=HTTPStatus.OK)
+        return convert_to_response_object(error_msg, result_code=HTTPStatus.NOT_FOUND)
 
 
 @eb_router.get(
@@ -87,9 +83,8 @@ def get_eb_with_status(eb_id: str) -> ApiResponse[EBStatusModel]:
 
     """
 
-    with oda.uow() as uow:
-
-        try:
+    try:
+        with oda.uow() as uow:
 
             eb = uow.ebs.get(eb_id)
             eb_json = eb.model_dump(mode="json")
@@ -101,23 +96,9 @@ def get_eb_with_status(eb_id: str) -> ApiResponse[EBStatusModel]:
 
             return convert_to_response_object(eb_json, result_code=HTTPStatus.OK)
 
-        except KeyError as error_msg:
+    except Exception as error_msg:  # pylint: disable=W0718
 
-            return convert_to_response_object(
-                str(error_msg), result_code=HTTPStatus.NOT_FOUND
-            )
-
-        except ODANotFound as error_msg:
-
-            return convert_to_response_object(
-                error_msg.message, result_code=HTTPStatus.NOT_FOUND
-            )
-
-        except Exception as error_msg:  # pylint: disable=W0718
-
-            return convert_to_response_object(
-                str(error_msg), result_code=HTTPStatus.NOT_FOUND
-            )
+        return convert_to_response_object(error_msg, result_code=HTTPStatus.NOT_FOUND)
 
 
 @eb_router.get(
@@ -139,9 +120,8 @@ def get_eb_status(eb_id: str, version: int = None) -> ApiResponse[OSOEBStatusHis
 
     """
 
-    with oda.uow() as uow:
-
-        try:
+    try:
+        with oda.uow() as uow:
 
             eb_status = common_get_entity_status(
                 entity_object=uow.ebs_status_history,
@@ -150,23 +130,9 @@ def get_eb_status(eb_id: str, version: int = None) -> ApiResponse[OSOEBStatusHis
             )
             return convert_to_response_object(eb_status, result_code=HTTPStatus.OK)
 
-        except KeyError as error_msg:
+    except Exception as error_msg:  # pylint: disable=W0718
 
-            return convert_to_response_object(
-                str(error_msg), result_code=HTTPStatus.NOT_FOUND
-            )
-
-        except ODANotFound as error_msg:
-
-            return convert_to_response_object(
-                error_msg.message, result_code=HTTPStatus.NOT_FOUND
-            )
-
-        except Exception as error_msg:  # pylint: disable=W0718
-
-            return convert_to_response_object(
-                str(error_msg), result_code=HTTPStatus.NOT_FOUND
-            )
+        return convert_to_response_object(error_msg, result_code=HTTPStatus.NOT_FOUND)
 
 
 @eb_router.put(
@@ -188,15 +154,14 @@ def put_eb_history(
 
     """
 
-    response = check_entity_id_mismatch(eb_id, eb_status_history.eb_ref)
+    try:
+        response = check_entity_id_mismatch(eb_id, eb_status_history.eb_ref)
 
-    if response:
+        if response:
 
-        return response
+            return response
 
-    with oda.uow() as uow:
-
-        try:
+        with oda.uow() as uow:
 
             persisted_eb = uow.ebs_status_history.add(eb_status_history)
             uow.commit()
@@ -204,23 +169,9 @@ def put_eb_history(
                 persisted_eb.model_dump(mode="json"), result_code=HTTPStatus.OK
             )
 
-        except KeyError as error_msg:
+    except Exception as error_msg:  # pylint: disable=W0718
 
-            return convert_to_response_object(
-                str(error_msg), result_code=HTTPStatus.NOT_FOUND
-            )
-
-        except ODANotFound as error_msg:
-
-            return convert_to_response_object(
-                error_msg.message, result_code=HTTPStatus.NOT_FOUND
-            )
-
-        except Exception as error_msg:  # pylint: disable=W0718
-
-            return convert_to_response_object(
-                str(error_msg), result_code=HTTPStatus.NOT_FOUND
-            )
+        return convert_to_response_object(error_msg, result_code=HTTPStatus.NOT_FOUND)
 
 
 @eb_router.get(
