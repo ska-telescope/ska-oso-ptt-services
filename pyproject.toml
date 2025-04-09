@@ -42,6 +42,7 @@ ska-db-oda = "7.3.3"
 deepdiff = "^7.0.1"
 fastapi = "^0.111.0"
 pydantic = "^2.9"
+pytest-postgresql="^7.0.1"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.2.2"
