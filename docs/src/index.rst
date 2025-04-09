@@ -1,5 +1,6 @@
+=====================================
 SKAO Project Tracking Tool Services
-========================================
+=====================================
 
 The Project Tracking Tool will provide the user with a summary view of the status of their project and
 associated Observing Blocks and Scheduling Blocks.
@@ -13,7 +14,6 @@ It provides backend service for the PTT UI in order to manage its current functi
 Current Project Tracking Tool Services allow users to query SKA's OSO Data Archive for information on Project, Scheduling Block Definition(SBD),Scheduling Block Instance(SBI) and Execution Block(EB) stored in the database
 and links between them and display the results on the GUI.
 
-
 .. toctree::
    :maxdepth: 1
    :caption: Releases
@@ -21,12 +21,25 @@ and links between them and display the results on the GUI.
    CHANGELOG.rst
 
 .. toctree::
-  :maxdepth: 1
-  :caption: Table of Contents
-  :hidden:
+   :maxdepth: 2
+   :caption: Table of Contents
 
-  persistence
-  restapi
+.. toctree::
+   :maxdepth: 3
+   :caption: API Usage
+
+   api/rest_api.rst
+
+.. toctree::
+   :maxdepth: 4
+   :caption: Persistent Storage
+
+   persistence
 
 
+Indices and tables
+==================
 
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`

@@ -19,7 +19,9 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../..'))
+
+sys.path.insert(0, os.path.abspath("../../src"))
+autodoc_mock_imports = ["gitlab"]
 
 # -- General configuration ------------------------------------------------
 
@@ -30,8 +32,9 @@ sys.path.insert(0, os.path.abspath('../..'))
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ['sphinx.ext.autodoc',
-              'sphinx.ext.napoleon',
+extensions = [
+    'sphinx.ext.napoleon',
+    'sphinx.ext.autodoc',
     'sphinx.ext.doctest',
     'sphinx.ext.intersphinx',
     'sphinx.ext.todo',
@@ -40,7 +43,10 @@ extensions = ['sphinx.ext.autodoc',
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
     'sphinx.ext.githubpages',
-              "sphinxcontrib.openapi"]
+    'myst_parser',
+    'sphinxcontrib.openapi',
+    'sphinxcontrib.httpdomain'
+     ]
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
@@ -199,3 +205,5 @@ epub_exclude_files = ['search.html']
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {'python': ('https://docs.python.org/3/', None)}
+
+openapi_default_renderer='httpdomain'
