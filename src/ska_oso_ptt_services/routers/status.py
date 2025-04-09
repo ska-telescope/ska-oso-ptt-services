@@ -1,17 +1,12 @@
 import logging
-from enum import EnumMeta
-from typing import Dict
+from http import HTTPStatus
 
 from fastapi import APIRouter
-from ska_oso_pdm.entity_status_history import (
-    OSOEBStatus,
-    ProjectStatus,
-    SBDStatus,
-    SBIStatus,
-)
 
-from ska_oso_ptt_services.common.constant import GET_ALL_ENTITY_MODEL
-from ska_oso_ptt_services.models.models import EntityStatusResponse
+from ska_oso_ptt_services.common.constant import entity_map
+from ska_oso_ptt_services.common.error_handling import EntityNotFound
+from ska_oso_ptt_services.common.utils import convert_to_response_object, get_responses
+from ska_oso_ptt_services.models.models import ApiResponse, EntityStatusResponse
 
 LOGGER = logging.getLogger(__name__)
 
@@ -22,10 +17,10 @@ status_router = APIRouter(prefix="/status")
     "/get_entity",
     tags=["Status"],
     summary="Get status dictionary by the entity parameter",
-    response_model=EntityStatusResponse,
-    responses=GET_ALL_ENTITY_MODEL,
+    response_model=ApiResponse[EntityStatusResponse],
+    responses=get_responses(ApiResponse[EntityStatusResponse]),
 )
-def get_entity_status(entity_name: str) -> EntityStatusResponse:
+def get_entity_status(entity_name: str) -> ApiResponse[EntityStatusResponse]:
     """
     Function that returns the status dictionary for a given entity type.
 
@@ -37,19 +32,19 @@ def get_entity_status(entity_name: str) -> EntityStatusResponse:
 
     Raises:
         ValueError: If an invalid entity name is provided
+
     """
-    entity_map: Dict[str, EnumMeta] = {
-        "sbi": SBIStatus,
-        "eb": OSOEBStatus,
-        "prj": ProjectStatus,
-        "sbd": SBDStatus,
-    }
 
     entity_class = entity_map.get(entity_name.lower())
     if not entity_class:
-        raise ValueError(f"Invalid entity name: {entity_name}")
+        return convert_to_response_object(
+            EntityNotFound(entity=entity_name).message, result_code=HTTPStatus.NOT_FOUND
+        )
 
-    return EntityStatusResponse(
-        entity_type=entity_name.lower(),
-        statuses={status.name: status.value for status in entity_class},
+    return convert_to_response_object(
+        EntityStatusResponse(
+            entity_type=entity_name.lower(),
+            statuses={status.name: status.value for status in entity_class},
+        ).model_dump(mode="json"),
+        result_code=HTTPStatus.OK,
     )

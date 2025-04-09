@@ -1,27 +1,51 @@
-ARG BUILD_IMAGE="artefact.skao.int/ska-tango-images-pytango-builder:9.5.0"
-ARG BASE_IMAGE="artefact.skao.int/ska-tango-images-pytango-runtime:9.5.0"
+ARG BUILD_IMAGE="artefact.skao.int/ska-cicd-k8s-tools-build-deploy:0.12.0"
+ARG RUNTIME_BASE_IMAGE="artefact.skao.int/ska-cicd-k8s-tools-build-deploy:0.12.0"
 
 FROM $BUILD_IMAGE AS buildenv
-FROM $BASE_IMAGE AS runtime
 
-ARG CAR_PYPI_REPOSITORY_URL=https://artefact.skao.int/repository/pypi-internal
-ENV PIP_INDEX_URL=${CAR_PYPI_REPOSITORY_URL}
+ENV POETRY_NO_INTERACTION=1 \
+    POETRY_VIRTUALENVS_IN_PROJECT=1 \
+    POETRY_VIRTUALENVS_CREATE=1 \
+    POETRY_CACHE_DIR=/tmp/poetry_cache
 
-USER root
+ENV APP_DIR="/app"
 
-WORKDIR /app
+WORKDIR $APP_DIR
 
-# Copy poetry.lock* in case it doesn't exist in the repo
-COPY pyproject.toml poetry.lock* ./
+COPY pyproject.toml poetry.lock ./
 
-# Install runtime dependencies and the app
-RUN poetry config virtualenvs.create false
-# Developers may want to add --dev to the poetry export for testing inside a container
-RUN poetry export --format requirements.txt --output poetry-requirements.txt --without-hashes && \
-    pip install -r poetry-requirements.txt && \
-    pip install . && \
-    rm poetry-requirements.txt
+RUN touch README.md
 
-USER tango
+# Install no-root here so we get a docker layer cached with dependencies
+# but not app code, to rebuild quickly.
+RUN poetry install --without dev --no-root && rm -rf $POETRY_CACHE_DIR
 
-CMD ["python3", "-m", "ska_oso_ptt_services.rest.wsgi"]
+# The runtime image, used to just run the code provided its virtual environment
+FROM $RUNTIME_BASE_IMAGE AS runtime
+
+ENV APP_USER="tango"
+ENV APP_DIR="/app"
+
+RUN adduser $APP_USER --disabled-password --home $APP_DIR
+
+WORKDIR $APP_DIR
+
+ENV VIRTUAL_ENV=/app/.venv \
+    PATH="/app/.venv/bin:$PATH"
+
+COPY --chown=$APP_USER:$APP_USER --from=buildenv ${VIRTUAL_ENV} ${VIRTUAL_ENV}
+
+# Now we copy and install the application code:
+COPY --chown=$APP_USER:$APP_USER . ./
+
+RUN python -m pip --require-virtualenv install --no-deps -e .
+
+USER ${APP_USER}
+
+CMD ["fastapi", \
+    "run", \
+    "src/ska_oso_ptt_services/app.py", \
+    # Trust TLS headers set by nginx ingress:
+    "--proxy-headers", \
+    "--port", "5000" \
+]

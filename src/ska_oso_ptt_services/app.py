@@ -12,6 +12,7 @@ from ska_db_oda.persistence.domain.errors import StatusHistoryException
 from ska_ser_logging import configure_logging
 
 from ska_oso_ptt_services.common.error_handling import (
+    EntityNotFound,
     ODANotFound,
     QueryParameterError,
     dangerous_internal_server_handler,
@@ -65,6 +66,7 @@ def create_app(production=PRODUCTION) -> FastAPI:
 
     # Add handles for different types of error
     app.exception_handler(ODANotFound)(oda_not_found_handler)
+    app.exception_handler(EntityNotFound)(oda_not_found_handler)
     app.exception_handler(ValueError)(oda_validation_error_handler)
     app.exception_handler(QueryParameterError)(oda_validation_error_handler)
     app.exception_handler(StatusHistoryException)(oda_status_error_handler)
